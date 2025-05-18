@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🥩 เสนาธิการหมูปิ้ง AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Noto+Sans+Thai:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+      background: var(--bg, #f1f8e9);
+      color: var(--text, #1b5e20);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    .app-container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background: linear-gradient(135deg, #2D8F47, #FF6B35);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .header h1 { font-size: 24px; font-weight: 700; }
+    .status-panel {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .price { font-size: 36px; font-weight: bold; color: #FF6B35; }
+    .factors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .factor-card {
+      background: #f1f8e9;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1px solid #c8e6c9;
+    }
+    canvas {
+      width: 100%;
+      height: 200px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .controls button {
+      background: #2d8f47;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="header">
+      <h1>🥩 เสนาธิการหมูปิ้ง AI</h1>
+      <p id="subtitle">ระบบกำหนดราคาอัตโนมัติ</p>
+    </div>
+
+    <div class="status-panel">
+      <div>ราคาขายปัจจุบัน</div>
+      <div class="price" id="current-price">--</div>
+    </div>
+
+    <div class="factors-grid">
+      <div class="factor-card">🐷 ราคาหมู</div>
+      <div class="factor-card">🔥 ค่าแก๊ส</div>
+      <div class="factor-card">🌦 อากาศ</div>
+      <div class="factor-card">📉 เศรษฐกิจ</div>
+      <div class="factor-card">📆 เทศกาล</div>
+      <div class="factor-card">📰 ข่าวสุขภาพ</div>
+    </div>
+
+    <canvas id="price-chart"></canvas>
+
+    <div class="controls">
+      <button onclick="calculatePrice()">🎯 เริ่มคำนวณราคา</button>
+      <div class="toggle-row">
+        <button onclick="toggleTheme()">🌓 ธีม</button>
+        <button onclick="toggleLang()">🌐 ภาษา</button>
+        <button onclick="saveData()">💾 บันทึก</button>
+        <button onclick="loadData()">📂 เรียกคืน</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let lang = 'th';
+    let dark = false;
+
+    const priceEl = document.getElementById('current-price');
+    const subtitle = document.getElementById('subtitle');
+
+    function calculatePrice() {
+      const base = 10;
+      const weather = Math.random() * 2 - 1; // -1 to +1
+      const economy = Math.random() * 2 - 1;
+      const price = Math.max(10, Math.round((base + weather + economy) * 2) / 2);
+      priceEl.textContent = price + ' บาท';
+    }
+
+    function toggleTheme() {
+      dark = !dark;
+      document.body.style.setProperty('--bg', dark ? '#121212' : '#f1f8e9');
+      document.body.style.setProperty('--text', dark ? '#fff' : '#1b5e20');
+    }
+
+    function toggleLang() {
+      lang = lang === 'th' ? 'en' : 'th';
+      document.querySelector('h1').textContent = lang === 'th' ? '🥩 เสนาธิการหมูปิ้ง AI' : '🥩 Moo Ping AI System';
+      subtitle.textContent = lang === 'th' ? 'ระบบกำหนดราคาอัตโนมัติ' : 'Smart Auto-Pricing System';
+      document.querySelector('button').textContent = lang === 'th' ? '🎯 เริ่มคำนวณราคา' : '🎯 Calculate Price';
+    }
+
+    function saveData() {
+      const data = {
+        price: priceEl.textContent,
+        lang,
+        dark
+      };
+      localStorage.setItem('moo-ping-ai', JSON.stringify(data));
+      alert('✅ บันทึกข้อมูลแล้ว');
+    }
+
+    function loadData() {
+      const data = JSON.parse(localStorage.getItem('moo-ping-ai'));
+      if (data) {
+        lang = data.lang;
+        dark = data.dark;
+        priceEl.textContent = data.price;
+        if (dark) toggleTheme();
+        if (lang !== 'th') toggleLang();
+        alert('📂 โหลดข้อมูลเรียบร้อย');
+      } else {
+        alert('❌ ไม่พบข้อมูลที่บันทึกไว้');
+      }
+    }
+  </script>
+</body>
+</html>

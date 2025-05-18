@@ -310,29 +310,36 @@
             opacity: 0.9;
             line-height: 1.5;
         }
-        
         .risk-indicator {
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: 2px solid transparent;
         }
-        
+
         .risk-low {
-            background: rgba(34, 139, 34, 0.2);
+            background: #ffffff;
             color: #228b22;
+            border-color: #228b22;
+            box-shadow: 0 2px 8px rgba(34, 139, 34, 0.1);
         }
-        
+
         .risk-medium {
-            background: rgba(255, 165, 0, 0.2);
+            background: #ffffff;
             color: #ff8c00;
+            border-color: #ff8c00;
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.1);
         }
-        
+
         .risk-high {
-            background: rgba(220, 20, 60, 0.2);
+            background: #ffffff;
             color: #dc143c;
+            border-color: #dc143c;
+            box-shadow: 0 2px 8px rgba(220, 20, 60, 0.1);
         }
         
         .log-entry {

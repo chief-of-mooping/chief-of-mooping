@@ -1,0 +1,516 @@
+        function makeAIDecision() {
+            if (!autoMode) return;
+
+            const data = updateMarketData();
+            let basePrice = data.costs.total * (1 + businessSettings.targetMargin / 100);
+            let adjustedPrice = basePrice;
+            let reasons = [];
+            let riskLevel = 'low';
+
+            // Weather impact
+            if (data.weather < 0) {
+                adjustedPrice += data.weather;
+                reasons.push(`Weather impact (${data.weather.toFixed(1)})`);
+                riskLevel = data.weather < -0.3 ? 'high' : 'medium';
+            } else if (data.weather > 0) {
+                adjustedPrice += data.weather * 0.5;
+                reasons.push(`Good weather (+${(data.weather * 0.5).toFixed(1)})`);
+            }
+
+            // Economic impact
+            if (data.economy < 0) {
+                adjustedPrice += data.economy;
+                reasons.push(`Economic downturn (${data.economy.toFixed(1)})`);
+                riskLevel = riskLevel === 'low' ? 'medium' : 'high';
+            } else if (data.economy > 0) {
+                adjustedPrice += data.economy * 0.3;
+                reasons.push(`Good economy (+${(data.economy * 0.3).toFixed(1)})`);
+            }
+
+            // Seasonal impact
+            if (data.season !== 0) {
+                const seasonAdjust = data.season * 0.4;
+                adjustedPrice += seasonAdjust;
+                reasons.push(`Seasonal factor (${seasonAdjust > 0 ? '+' : ''}${seasonAdjust.toFixed(1)})`);
+            }
+
+            // Health/news impact
+            if (data.health < 0) {
+                adjustedPrice += data.health;
+                reasons.push(`Health concerns (${data.health.toFixed(1)})`);
+                riskLevel = 'high';
+            }
+
+            // Time-based factors
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+
+            if (day === 1 && hour < 11) { // Monday morning
+                adjustedPrice -= 0.5;
+                reasons.push('Monday morning (-0.5)');
+            }
+
+            if (hour >= 17 && hour <= 19) { // Evening rush
+                adjustedPrice += 0.3;
+                reasons.push('Evening rush (+0.3)');
+            }
+
+            // Round to appropriate price
+            adjustedPrice = Math.round(adjustedPrice * 2) / 2; // Round to 0.5
+            adjustedPrice = Math.max(adjustedPrice, data.costs.total + 1); // Minimum 1 THB profit
+
+            // Calculate profit
+            const profit = adjustedPrice - data.costs.total;
+            const marginPercent = (profit / data.costs.total * 100).toFixed(1);
+
+            // Update recommendation
+            const lang = currentLanguage;
+            const currency = lang === 'en' ? 'THB/stick' : lang === 'zh' ? '泰铢/串' : 'บาท/ไม้';
+            document.getElementById('recommended-price').textContent = `${adjustedPrice} ${currency}`;
+            
+            let reasonText = reasons.length > 0 ? 
+                `Factors: ${reasons.join(', ')}. ` : 
+                'Optimal price based on market conditions. ';
+            reasonText += `Net profit ${profit.toFixed(1)} ${lang === 'en' ? 'THB' : lang === 'zh' ? '泰铢' : 'บาท'}/stick (${marginPercent}%)`;
+            
+            document.getElementById('recommendation-reason').textContent = reasonText;
+
+            // Update risk indicator
+            const riskIndicator = document.getElementById('risk-indicator');
+            riskIndicator.className = `risk-indicator risk-${riskLevel}`;
+            const riskTexts = {
+                low: translations[lang]['risk-low'],
+                medium: translations[lang]['risk-medium'],
+                high: translations[lang]['risk-high']
+            };
+            riskIndicator.innerHTML = `<span>📊 ${riskTexts[riskLevel]}</span>`;
+
+            // Decide to change price if significantly different
+            if (Math.abs(adjustedPrice - currentPrice) >= 0.5) {
+                updatePrice(adjustedPrice, reasonText);
+            }
+
+            // Update price history for chart
+            priceHistory.push({
+                time: now,
+                price: adjustedPrice,
+                cost: data.costs.total
+            });
+
+            // Keep only last 24 hours of data
+            const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            priceHistory = priceHistory.filter(entry => entry.time > oneDayAgo);
+
+            updatePriceChart();
+        }
+
+        function updatePrice(newPrice, reason) {
+            const oldPrice = currentPrice;
+            currentPrice = newPrice;
+            
+            // Update UI with animation
+            const priceElement = document.getElementById('current-price');
+            priceElement.textContent = currentPrice;
+            priceElement.parentElement.classList.add('price-update');
+            
+            setTimeout(() => {
+                priceElement.parentElement.classList.remove('price-update');
+            }, 500);
+
+            // Update price trend indicator
+            updatePriceTrend(oldPrice, newPrice);
+            
+            // Add to decision log
+            addToDecisionLog(oldPrice, newPrice, reason);
+            
+            // Show notification
+            const message = `${translations[currentLanguage]['toast-price-updated']} ${currentPrice} ${currentLanguage === 'en' ? 'THB' : currentLanguage === 'zh' ? '泰铢' : 'บาท'}`;
+            showToast(message, 'success');
+            
+            // Play sound and send notification
+            playSound('price-update');
+            
+            if (notificationsEnabled && Math.abs(newPrice - oldPrice) >= 1) {
+                showNotificationAlert('Price Alert', `Price changed from ${oldPrice} to ${newPrice}`);
+            }
+        }
+
+        function updatePriceTrend(oldPrice, newPrice) {
+            const trendElement = document.getElementById('price-trend');
+            const diff = newPrice - oldPrice;
+            
+            if (diff > 0) {
+                trendElement.innerHTML = '<span class="price-trend-up">📈 Rising</span>';
+            } else if (diff < 0) {
+                trendElement.innerHTML = '<span class="price-trend-down">📉 Falling</span>';
+            } else {
+                trendElement.innerHTML = '<span class="price-trend-stable">📊 Stable</span>';
+            }
+        }
+
+        function addToDecisionLog(oldPrice, newPrice, reason) {
+            const logContainer = document.getElementById('decision-log');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString(currentLanguage === 'th' ? 'th-TH' : currentLanguage === 'zh' ? 'zh-CN' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            let dayName, dateString;
+            if (currentLanguage === 'th') {
+                const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+                dayName = dayNames[now.getDay()];
+                const buddhistYear = now.getFullYear() + 543;
+                dateString = `${now.getDate()} ${now.toLocaleDateString('th-TH', { month: 'long' })} ${buddhistYear}`;
+            } else if (currentLanguage === 'zh') {
+                dayName = now.toLocaleDateString('zh-CN', { weekday: 'long' });
+                dateString = now.toLocaleDateString('zh-CN');
+            } else {
+                dayName = now.toLocaleDateString('en-US', { weekday: 'long' });
+                dateString = now.toLocaleDateString('en-US');
+            }
+            
+            const actionText = oldPrice === newPrice ? 
+                (currentLanguage === 'en' ? 'Price maintained' : currentLanguage === 'zh' ? '维持价格' : 'คงราคา') :
+                (currentLanguage === 'en' ? 'Price adjusted' : currentLanguage === 'zh' ? '调整价格' : 'ปรับราคา');
+            
+            const currency = currentLanguage === 'en' ? 'THB' : currentLanguage === 'zh' ? '泰铢' : 'บาท';
+            
+            logEntry.innerHTML = `
+                <div class="log-action">${actionText} ${oldPrice} → ${newPrice} ${currency}</div>
+                <div class="log-reason">${reason}</div>
+                <div class="log-time">${timeString} • ${dayName} ${dateString}</div>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Keep only 5 entries
+            const entries = logContainer.getElementsByClassName('log-entry');
+            if (entries.length > 5) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        // ===== CHART FUNCTIONS =====
+        function initializePriceChart() {
+            const canvas = document.getElementById('price-chart');
+            const ctx = canvas.getContext('2d');
+            
+            // Simple chart implementation
+            chart = {
+                canvas: canvas,
+                ctx: ctx,
+                width: canvas.offsetWidth,
+                height: canvas.offsetHeight
+            };
+            
+            // Set canvas dimensions
+            canvas.width = chart.width;
+            canvas.height = chart.height;
+            
+            updatePriceChart();
+        }
+
+        function updatePriceChart() {
+            if (!chart || priceHistory.length === 0) return;
+            
+            const ctx = chart.ctx;
+            const width = chart.width;
+            const height = chart.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw background
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, width, height);
+            
+            if (priceHistory.length < 2) return;
+            
+            // Calculate scales
+            const prices = priceHistory.map(entry => entry.price);
+            const minPrice = Math.min(...prices) * 0.95;
+            const maxPrice = Math.max(...prices) * 1.05;
+            const priceRange = maxPrice - minPrice;
+            
+            const xStep = width / (priceHistory.length - 1);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // Horizontal grid lines
+            for (let i = 0; i <= 5; i++) {
+                const y = (height * i) / 5;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+            
+            // Draw price line
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-green');
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            priceHistory.forEach((entry, index) => {
+                const x = index * xStep;
+                const y = height - ((entry.price - minPrice) / priceRange) * height;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Draw cost line
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-orange');
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            
+            priceHistory.forEach((entry, index) => {
+                const x = index * xStep;
+                const y = height - ((entry.cost - minPrice) / priceRange) * height;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw current price point
+            const lastEntry = priceHistory[priceHistory.length - 1];
+            const lastX = (priceHistory.length - 1) * xStep;
+            const lastY = height - ((lastEntry.price - minPrice) / priceRange) * height;
+            
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-green');
+            ctx.beginPath();
+            ctx.arc(lastX, lastY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw price labels
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'right';
+            
+            for (let i = 0; i <= 5; i++) {
+                const price = minPrice + (priceRange * i) / 5;
+                const y = height - (height * i) / 5 + 4;
+                ctx.fillText(price.toFixed(1), width - 5, y);
+            }
+        }
+
+        // ===== UI CONTROL FUNCTIONS =====
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        function showNotificationAlert(title, message) {
+            const alert = document.getElementById('notification-alert');
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        function toggleMode() {
+            autoMode = !autoMode;
+            const btn = document.getElementById('auto-btn');
+            const status = document.getElementById('mode-status');
+            const container = document.querySelector('.app-container');
+            
+            if (autoMode) {
+                btn.innerHTML = `<span id="auto-btn-text">${translations[currentLanguage]['auto-btn-text']}</span>`;
+                btn.className = 'btn btn-primary';
+                status.innerHTML = `<span class="status-indicator"></span><span id="mode-text">${translations[currentLanguage]['mode-text']}</span>`;
+                container.classList.remove('offline');
+                startAutoMode();
+                showToast(translations[currentLanguage]['toast-auto-on'], 'success');
+            } else {
+                btn.innerHTML = `<span id="auto-btn-text">${translations[currentLanguage]['auto-btn-manual']}</span>`;
+                btn.className = 'btn btn-secondary';
+                status.innerHTML = `<span class="status-indicator"></span><span id="mode-text">${translations[currentLanguage]['mode-manual']}</span>`;
+                container.classList.add('offline');
+                stopAutoMode();
+                showToast(translations[currentLanguage]['toast-auto-off'], 'warning');
+            }
+            
+            // Update button text in real-time
+            updateUILanguage();
+        }
+
+        function startAutoMode() {
+            const intervalMinutes = businessSettings.checkInterval;
+            checkInterval = setInterval(() => {
+                makeAIDecision();
+                nextCheckTime = intervalMinutes * 60; // reset countdown
+                updateCountdown();
+            }, intervalMinutes * 60 * 1000);
+            
+            nextCheckTime = intervalMinutes * 60;
+            updateCountdown();
+        }
+
+        function stopAutoMode() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+            document.getElementById('next-check').textContent = translations[currentLanguage]['system-stopped'];
+        }
+
+        function updateCountdown() {
+            const countdownInterval = setInterval(() => {
+                if (autoMode && nextCheckTime > 0) {
+                    nextCheckTime--;
+                    const hours = Math.floor(nextCheckTime / 3600);
+                    const minutes = Math.floor((nextCheckTime % 3600) / 60);
+                    const seconds = nextCheckTime % 60;
+                    
+                    let timeText = '';
+                    if (hours > 0) {
+                        timeText += `${hours} ${currentLanguage === 'en' ? 'hr' : currentLanguage === 'zh' ? '小时' : 'ชั่วโมง'} `;
+                    }
+                    if (minutes > 0) {
+                        timeText += `${minutes} ${currentLanguage === 'en' ? 'min' : currentLanguage === 'zh' ? '分钟' : 'นาที'} `;
+                    }
+                    timeText += `${seconds} ${currentLanguage === 'en' ? 'sec' : currentLanguage === 'zh' ? '秒' : 'วินาที'}`;
+                    
+                    document.getElementById('next-check').textContent = timeText;
+                } else {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        function forceCheck() {
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            // Loading state
+            const btn = event.target.closest('button');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '⏳';
+            btn.classList.add('loading');
+            
+            setTimeout(() => {
+                makeAIDecision();
+                nextCheckTime = businessSettings.checkInterval * 60; // reset countdown
+                updateCountdown();
+                btn.innerHTML = originalContent;
+                btn.classList.remove('loading');
+                showToast(translations[currentLanguage]['toast-checked'], 'success');
+            }, 800);
+        }
+
+        // ===== THEME AND LANGUAGE FUNCTIONS =====
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            saveToLocalStorage('darkMode', isDarkMode);
+            
+            // Update chart colors
+            if (chart) {
+                updatePriceChart();
+            }
+        }
+
+        function toggleLanguage() {
+            const selector = document.getElementById('language-selector');
+            selector.classList.toggle('show');
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            updateUILanguage();
+            saveToLocalStorage('language', currentLanguage);
+            document.getElementById('language-selector').classList.remove('show');
+            
+            // Update market data with new language
+            updateMarketData();
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-toggle');
+            btn.textContent = soundEnabled ? '🔊' : '🔇';
+            btn.classList.toggle('muted', !soundEnabled);
+            
+            const message = soundEnabled ? 'toast-sound-on' : 'toast-sound-off';
+            showToast(translations[currentLanguage][message]);
+            saveToLocalStorage('soundEnabled', soundEnabled);
+        }
+
+        // ===== SETTINGS FUNCTIONS =====
+        function openSettings() {
+            // Load current settings
+            document.getElementById('shop-name').value = businessSettings.shopName;
+            document.getElementById('pork-size').value = businessSettings.porkSize;
+            document.getElementById('target-margin').value = businessSettings.targetMargin;
+            document.getElementById('gas-price-setting').value = businessSettings.gasPriceSetting;
+            document.getElementById('fixed-cost').value = businessSettings.fixedCost;
+            document.getElementById('check-interval').value = businessSettings.checkInterval;
+            
+            // Update switch states
+            document.getElementById('notifications-switch').classList.toggle('active', notificationsEnabled);
+            document.getElementById('auto-backup-switch').classList.toggle('active', autoBackupEnabled);
+            
+            document.getElementById('settings-modal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.remove('show');
+        }
+
+        function toggleNotifications() {
+            notificationsEnabled = !notificationsEnabled;
+            document.getElementById('notifications-switch').classList.toggle('active', notificationsEnabled);
+            saveToLocalStorage('notificationsEnabled', notificationsEnabled);
+        }
+
+        function toggleAutoBackup() {
+            autoBackupEnabled = !autoBackupEnabled;
+            document.getElementById('auto-backup-switch').classList.toggle('active', autoBackupEnabled);
+            saveToLocalStorage('autoBackupEnabled', autoBackupEnabled);
+        }
+
+        // ===== EXPORT AND BACKUP FUNCTIONS =====
+        function exportToPDF() {
+            // Simple PDF export implementation
+            const content = generateReportContent();
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Moo Ping AI Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .section { margin-bottom: 20px; }
+                        .decision-log { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+                </html>

@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥩 เสนาธิการหมูปิ้ง AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a2d 25%, #4a9f4a 50%, #ff6b35 75%, #ff8c42 100%);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        /* Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px, 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 40px rgba(26, 95, 63, 0.2);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a2d 50%, #ff6b35 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 4s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* DateTime Panel */
+        .datetime-panel {
+            background: linear-gradient(135deg, rgba(26, 95, 63, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin: 20px 25px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(26, 95, 63, 0.1);
+            border: 1px solid rgba(26, 95, 63, 0.2);
+        }
+        
+        .datetime-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .current-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a5f3f;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+        
+        .current-date {
+            font-size: 15px;
+            color: #2d7a2d;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            padding: 25px;
+            padding-bottom: 140px;
+        }
+        
+        .status-panel {
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a2d 50%, #ff6b35 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(26, 95, 63, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        .mode-status {
+            font-size: 18px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .current-price {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .price-label {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .price-value {
+            font-size: 48px;
+            font-weight: 800;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .factors-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title-main {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a5f3f;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .factor-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(26, 95, 63, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 6px 25px rgba(26, 95, 63, 0.1);
+            border: 1px solid rgba(26, 95, 63, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .factor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(26, 95, 63, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .factor-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(26, 95, 63, 0.15);
+        }
+        
+        .factor-card:hover::before {
+            left: 100%;
+        }
+        
+        .factor-card:active {
+            transform: translateY(-1px);
+        }
+        
+        .factor-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+        
+        .factor-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a5f3f;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .factor-value {
+            font-size: 14px;
+            color: #2d7a2d;
+            line-height: 1.6;
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .ai-analysis-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(26, 95, 63, 0.05) 100%);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(26, 95, 63, 0.12);
+            border: 1px solid rgba(26, 95, 63, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #1a5f3f 0%, #ff6b35 100%);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            font-size: 22px;
+            box-shadow: 0 6px 20px rgba(26, 95, 63, 0.3);
+        }
+        
+        .section-title {
+            font-weight: 700;
+            font-size: 22px;
+            color: #1a5f3f;
+        }
+        
+        .cost-breakdown {
+            background: rgba(26, 95, 63, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(26, 95, 63, 0.1);
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(26, 95, 63, 0.1);
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: #1a5f3f;
+            font-size: 17px;
+            padding-top: 15px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(26, 95, 63, 0.2);
+        }
+        
+        .cost-label {
+            color: #2d7a2d;
+            font-weight: 500;
+        }
+        
+        .cost-value {
+            color: #1a5f3f;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .ai-recommendation {
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a2d 50%, #ff6b35 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(26, 95, 63, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-recommendation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 4s infinite;
+        }
+        
+        .recommendation-title {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .recommendation-price {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .recommendation-reason {
+            font-size: 15px;
+            opacity: 0.95;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 2px solid transparent;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .risk-low {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a5f3f;
+            border-color: #1a5f3f;
+            box-shadow: 0 4px 15px rgba(26, 95, 63, 0.2);
+        }
+        
+        .risk-medium {
+            background: rgba(255, 255, 255, 0.95);
+            color: #ff8c00;
+            border-color: #ff8c00;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
+        }
+        
+        .risk-high {
+            background: rgba(255, 255, 255, 0.95);
+            color: #dc143c;
+            border-color: #dc143c;
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.2);
+        }
+        
+        .log-entry {
+            background: rgba(26, 95, 63, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 18px;
+            border-left: 4px solid #ff6b35;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(26, 95, 63, 0.1);
+        }
+        
+        .log-entry:hover {
+            background: rgba(26, 95, 63, 0.08);
+            transform: translateX(6px);
+            box-shadow: 0 4px 20px rgba(26, 95, 63, 0.1);
+        }
+        
+        .log-entry:last-child {
+            margin-bottom: 0;
+        }
+        
+        .log-action {
+            font-weight: 700;
+            color: #1a5f3f;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+        
+        .log-reason {
+            color: #2d7a2d;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        
+        .log-time {
+            color: #4a9f4a;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-top: 1px solid rgba(26, 95, 63, 0.2);
+            box-shadow: 0 -8px 30px rgba(26, 95, 63, 0.1);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            padding: 18px 28px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .btn:active::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .btn:active {
+            transform: scale(0.96);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a2d 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(26, 95, 63, 0.3);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 8px 35px rgba(26, 95, 63, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(26, 95, 63, 0.05) 100%);
+            color: #1a5f3f;
+            border: 2px solid rgba(26, 95, 63, 0.2);
+            box-shadow: 0 6px 25px rgba(26, 95, 63, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, rgba(26, 95, 63, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+            box-shadow: 0 8px 35px rgba(26, 95, 63, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-settings {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            grid-column: 1 / -1;
+            margin-top: 12px;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .btn-settings:hover {
+            box-shadow: 0 8px 35px rgba(255, 107, 53, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .next-check {
+            text-align: center;
+            padding: 18px;
+            background: rgba(26, 95, 63, 0.05);
+            backdrop-filter: blur(10px);
+            margin: 30px -25px -25px -25px;
+            border-radius: 20px 20px 0 0;
+            font-size: 15px;
+            color: #2d7a2d;
+            border-top: 1px solid rgba(26, 95, 63, 0.1);
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1a5f3f;
+            margin-right: 12px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(26, 95, 63, 0.6);
+        }
+        
+        @keyframes pulse {
+            0% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(26, 95, 63, 0.6);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.15);
+                box-shadow: 0 0 25px rgba(26, 95, 63, 0.8);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(26, 95, 63, 0.6);
+            }
+        }
+        
+        .offline .status-indicator {
+            background: #dc143c;
+            animation: none;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+        }
+        
+        .quick-action {
+            position: fixed;
+            bottom: 120px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #1a5f3f 0%, #ff6b35 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 8px 30px rgba(26, 95, 63, 0.4);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .quick-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(26, 95, 63, 0.5);
+        }
+        
+        .quick-action:active {
+            transform: scale(0.9);
+        }
+        
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 480px;
+                margin: 25px auto;
+                border-radius: 28px;
+                overflow: hidden;
+                box-shadow: 0 20px 60px rgba(26, 95, 63, 0.3);
+                min-height: auto;
+            }
+            
+            .header {
+                position: static;
+            }
+            
+            .controls {
+                position: static;
+                border-top: none;
+                box-shadow: none;
+                padding-top: 0;
+                background: transparent;
+                backdrop-filter: none;
+            }
+            
+            .main-content {
+                padding-bottom: 25px;
+            }
+            
+            .quick-action {
+                display: none;
+            }
+            
+            .factors-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .datetime-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .current-time {
+                font-size: 24px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .factors-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+        
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, rgba(26, 95, 63, 0.1) 25%, rgba(255, 107, 53, 0.1) 50%, rgba(26, 95, 63, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 12px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Animation for price updates */
+        .price-update {
+            animation: priceUpdate 0.6s ease;
+        }
+        
+        @keyframes priceUpdate {
+            0% { 
+                transform: scale(1); 
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            50% { 
+                transform: scale(1.15); 
+                text-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
+                color: #ff6b35;
+            }
+            100% { 
+                transform: scale(1); 
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        }
+        
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #1a5f3f 0%, #ff6b35 100%);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(26, 95, 63, 0.4);
+            z-index: 1001;
+            transform: translateX(450px);
+            transition: transform 0.4s ease;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        /* Settings Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        
+        .modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(26, 95, 63, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 75vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(26, 95, 63, 0.3);
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+            border: 1px solid rgba(26, 95, 63, 0.2);
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a5f3f;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #1a5f3f;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(26, 95, 63, 0.2);
+            border-radius: 14px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            color: #1a5f3f;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #1a5f3f;
+            box-shadow: 0 0 0 4px rgba(26, 95, 63, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 95, 63, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #1a5f3f 0%, #ff6b35 100%);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2d7a2d 0%, #ff8c42 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>🥩 เสนาธิการหมูปิ้ง AI</h1>
+            <p>ระบบกำหนดราคาอัตโนมัติด้วยปัญญาประดิษฐ์</p>
+        </div>
+        
+        <!-- DateTime Panel -->
+        <div class="datetime-panel">
+            <div class="datetime-content">
+                <div class="current-time" id="current-time">00:00:00</div>
+                <div class="current-date" id="current-date">วันจันทร์ที่ 1 มกราคม 2567</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <div class="mode-status" id="mode-status">
+                    <span class="status-indicator"></span>
+                    โหมดอัตโนมัติเปิดใช้งาน
+                </div>
+                <div class="current-price">
+                    <div class="price-label">ราคาขายปัจจุบัน</div>
+                    <div class="price-value"><span id="current-price">15</span> บาท/ไม้</div>
+                </div>
+            </div>
+
+            <!-- Market Factors -->
+            <div class="factors-section">
+                <h3 class="section-title-main">📊 ปัจจัยตลาด</h3>
+                <div class="factors-grid">
+                    <div class="factor-card">
+                        <span class="factor-icon">🥩</span>
+                        <div class="factor-title">ราคาหมูสด</div>
+                        <div class="factor-value" id="pork-price">160 บาท/กก.<br>(+10 บาท)</div>
+                    </div>
+                    <div class="factor-card">
+                        <span class="factor-icon">⛽</span>
+                        <div class="factor-title">ราคาแก๊ส</div>
+                        <div class="factor-value" id="gas-price">380 บาท/ถัง<br>(ปกติ)</div>
+                    </div>
+                    <div class="factor-card">
+                        <span class="factor-icon">🌤️</span>
+                        <div class="factor-title">สภาพอากาศ</div>
+                        <div class="factor-value" id="weather">แสงแดดอ่อน<br>เหมาะขาย</div>
+                    </div>
+                    <div class="factor-card">
+                        <span class="factor-icon">💰</span>
+                        <div class="factor-title">ภาวะเศรษฐกิจ</div>
+                        <div class="factor-value" id="economy">กำลังซื้อดี<br>ปกติ</div>
+                    </div>
+                    <div class="factor-card">
+                        <span class="factor-icon">🗓️</span>
+                        <div class="factor-title">ฤดูกาล/เทศกาล</div>
+                        <div class="factor-value" id="season">วันธรรมดา<br>ปกติ</div>
+                    </div>
+                    <div class="factor-card">
+                        <span class="factor-icon">🏥</span>
+                        <div class="factor-title">สุขภาพ/ข่าว</div>
+                        <div class="factor-value" id="health">ไม่มีข่าวลบ<br>ปลอดภัย</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Analysis Section -->
+            <div class="ai-analysis-section">
+                <div class="section-header">
+                    <div class="section-icon">🤖</div>
+                    <div class="section-title">การวิเคราะห์ AI</div>
+                </div>
+                
+                <!-- Cost Breakdown -->
+                <div class="cost-breakdown">
+                    <h4 style="color: #1a5f3f; margin-bottom: 15px; font-weight: 700;">การคำนวณต้นทุน</h4>
+                    <div class="cost-item">
+                        <span class="cost-label">หมูสด (100g)</span>
+                        <span class="cost-value" id="cost-pork">8.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">แก๊ส/ถ่าน</span>
+                        <span class="cost-value" id="cost-gas">1.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">ไม้เสียบ/ถุง</span>
+                        <span class="cost-value" id="cost-supplies">0.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">ค่าคงที่อื่นๆ</span>
+                        <span class="cost-value" id="cost-overhead">1.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label"><strong>ต้นทุนรวม</strong></span>
+                        <span class="cost-value" id="total-cost"><strong>11.00 บาท</strong></span>
+                    </div>
+                </div>
+
+                <!-- AI Recommendation -->
+                <div class="ai-recommendation">
+                    <div class="recommendation-title">💡 คำแนะนำจาก AI</div>
+                    <div class="recommendation-price" id="recommended-price">15 บาท/ไม้</div>
+                    <div class="recommendation-reason" id="recommendation-reason">
+                        ราคาเหมาะสมตามภาวะตลาด หมูขึ้นราคาเล็กน้อยแต่ยังแข่งขันได้ 
+                        กำไรสุทธิ 4 บาท/ไม้ (36.4%)
+                    </div>
+                    <div class="risk-indicator risk-low" id="risk-indicator">
+                        <span>📊 ความเสี่ยง: ต่ำ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Log -->
+            <div class="ai-analysis-section">
+                <div class="section-header">
+                    <div class="section-icon">📝</div>
+                    <div class="section-title">ประวัติการตัดสินใจ</div>
+                </div>
+                <div id="decision-log">
+                    <div class="log-entry">
+                        <div class="log-action">ปรับราคา 16 → 15 บาท</div>
+                        <div class="log-reason">หมูขึ้นราคาเล็กน้อย แต่วันจันทร์ลูกค้าน้อย ลดราคาเพื่อเพิ่มยอดขาย ประเมินกำไรยังคงที่ 26.7%</div>
+                        <div class="log-time">17:25 น. • วันจันทร์</div>
+                    </div>
+                    <div class="log-entry">
+                        <div class="log-action">คงราคา 15 บาท</div>
+                        <div class="log-reason">ปัจจัยทั้งหมดอยู่ในเกณฑ์ปกติ ราคาเหมาะสมกับตลาด คาดการณ์ขายได้ดี</div>
+                        <div class="log-time">14:15 น. • วันจันทร์</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Check Info -->
+            <div class="next-check">
+                <span class="status-indicator"></span>
+                ระบบจะตรวจสอบอีกครั้งใน: <span id="next-check">15 นาที</span>
+            </div>
+        </div>
+
+        <!-- Quick Action Button -->
+        <button class="quick-action" onclick="forceCheck()" title="ตรวจสอบทันที">
+            🔄
+        </button>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <div class="controls-grid">
+                <button id="auto-btn" class="btn btn-primary" onclick="toggleMode()">
+                    หยุดอัตโนมัติ
+                </button>
+                <button class="btn btn-secondary" onclick="forceCheck()">
+                    ตรวจสอบทันที
+                </button>
+                <button class="btn btn-settings" onclick="openSettings()">
+                    ⚙️ ตั้งค่าธุรกิจ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                ⚙️ ตั้งค่าธุรกิจ
+            </div>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label class="form-label">ชื่อร้าน</label>
+                    <input type="text" class="form-input" id="shop-name" value="หมูปิ้งลุงสมชาย">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ขนาดหมู (กรัม/ไม้)</label>
+                    <input type="number" class="form-input" id="pork-size" value="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">กำไรขั้นต้นที่ต้องการ (%)</label>
+                    <input type="number" class="form-input" id="target-margin" value="25">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ราคาแก๊ส (บาท/ถัง)</label>
+                    <input type="number" class="form-input" id="gas-price-setting" value="380">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ค่าใช้จ่ายคงที่ (บาท/ไม้)</label>
+                    <input type="number" class="form-input" id="fixed-cost" value="1.00" step="0.50">
+                </div>
+                <div class="controls-grid" style="margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeSettings()">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        บันทึก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ตัวแปรหลัก
+        let autoMode = true;
+        let currentPrice = 15;
+        let checkInterval;
+        let nextCheckTime = 15 * 60; // 15 minutes in seconds
+        
+        // การตั้งค่าธุรกิจ
+        let businessSettings = {
+            shopName: 'หมูปิ้งลุงสมชาย',
+            porkSize: 100, // grams per stick
+            targetMargin: 25, // percentage
+            gasPriceSetting: 380, // baht per tank
+            fixedCost: 1.00 // baht per stick
+        };
+
+        // ข้อมูลตลาดจำลอง
+        const marketData = {
+            porkPrices: [150, 160, 155, 165, 170, 175],
+            porkChanges: ['-10', '-5', '+0', '+5', '+10', '+15', '+20'],
+            gasPrices: [360, 370, 380, 390, 400],
+            weather: [
+                { text: 'แสงแดดอ่อน\nเหมาะขาย', impact: 0 },
+                { text: 'ฝนตก\nลูกค้าลดลง', impact: -0.5 },
+                { text: 'ครึ้ม อากาศดี\nเหมาะขาย', impact: 0.2 },
+                { text: 'แดดจัด\nเตรียมร่ม', impact: -0.2 },
+                { text: 'อากาศเป็นใจ\nลูกค้าเยอะ', impact: 0.3 }
+            ],
+            weatherIcons: ['🌤️', '🌧️', '☁️', '☀️', '😊'],
+            economy: [
+                { text: 'กำลังซื้อดี\nปกติ', impact: 0 },
+                { text: 'ค่าครองชีพสูง\nระวัง', impact: -0.3 },
+                { text: 'เศรษฐกิจดี\nใจกว้าง', impact: 0.4 },
+                { text: 'เงินเฟ้อสูง\nผู้บริโภครัดเข็มขัด', impact: -0.5 }
+            ],
+            season: [
+                { text: 'วันธรรมดา\nปกติ', impact: 0 },
+                { text: 'วันหยุด\nลูกค้าเยอะ', impact: 0.5 },
+                { text: 'เทศกาล\nคนออกมาเที่ยว', impact: 0.8 },
+                { text: 'หน้าฝน\nขายน้อย', impact: -0.4 },
+                { text: 'ช่วงเงินเดือนออก\nกำลังซื้อดี', impact: 0.3 }
+            ],
+            health: [
+                { text: 'ไม่มีข่าวลบ\nปลอดภัย', impact: 0 },
+                { text: 'ข่าวโรคหมู\nระวัง', impact: -0.8 },
+                { text: 'ข่าวดีสุขภาพ\nกินเนื้อดี', impact: 0.2 },
+                { text: 'รณรงค์สุขภาพ\nลดเนื้อแดง', impact: -0.3 }
+            ]
+        };
+
+        // ฟังก์ชันแสดงวันที่และเวลาแบบไทย
+        function updateDateTime() {
+            const now = new Date();
+            
+            // แปลงเป็น พ.ศ.
+            const buddhistYear = now.getFullYear() + 543;
+            
+            // ชื่อวันภาษาไทย
+            const dayNames = [
+                'วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 
+                'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'
+            ];
+            
+            // ชื่อเดือนภาษาไทย
+            const monthNames = [
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน',
+                'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม',
+                'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+            ];
+            
+            // จัดรูปแบบเวลา
+            const timeOptions = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+            const timeString = now.toLocaleTimeString('th-TH', timeOptions);
+            
+            // จัดรูปแบบวันที่
+            const dayName = dayNames[now.getDay()];
+            const day = now.getDate();
+            const month = monthNames[now.getMonth()];
+            const year = buddhistYear;
+            
+            const dateString = `${dayName}ที่ ${day} ${month} ${year}`;
+            
+            // อัปเดท DOM
+            document.getElementById('current-time').textContent = timeString;
+            document.getElementById('current-date').textContent = dateString;
+        }
+
+        // ฟังก์ชันคำนวณต้นทุน
+        function calculateCosts(porkPricePerKg, gasPricePerTank) {
+            const porkCost = (porkPricePerKg * businessSettings.porkSize) / 1000;
+            const gasCost = 1.5; // ประมาณการใช้แก๊สต่อไม้
+            const supplyCost = 0.5; // ไม้เสียบ, ถุง
+            const overhead = businessSettings.fixedCost;
+            
+            return {
+                pork: porkCost,
+                gas: gasCost,
+                supplies: supplyCost,
+                overhead: overhead,
+                total: porkCost + gasCost + supplyCost + overhead
+            };
+        }
+
+        // ฟังก์ชันอัปเดทข้อมูลตลาด
+        function updateMarketData() {
+            const porkPrice = marketData.porkPrices[Math.floor(Math.random() * marketData.porkPrices.length)];
+            const porkChange = marketData.porkChanges[Math.floor(Math.random() * marketData.porkChanges.length)];
+            const gasPrice = marketData.gasPrices[Math.floor(Math.random() * marketData.gasPrices.length)];
+            
+            const weatherIndex = Math.floor(Math.random() * marketData.weather.length);
+            const weather = marketData.weather[weatherIndex];
+            const weatherIcon = marketData.weatherIcons[weatherIndex];
+            
+            const economyIndex = Math.floor(Math.random() * marketData.economy.length);
+            const economy = marketData.economy[economyIndex];
+            
+            const seasonIndex = Math.floor(Math.random() * marketData.season.length);
+            const season = marketData.season[seasonIndex];
+            
+            const healthIndex = Math.floor(Math.random() * marketData.health.length);
+            const health = marketData.health[healthIndex];
+            
+            // อัปเดท UI
+            document.getElementById('pork-price').innerHTML = `${porkPrice} บาท/กก.<br>(${porkChange} บาท)`;
+            document.getElementById('gas-price').innerHTML = `${gasPrice} บาท/ถัง<br>${gasPrice > 380 ? '(แพง)' : gasPrice < 380 ? '(ถูก)' : '(ปกติ)'}`;
+            document.querySelector('.factor-card:nth-child(3) .factor-icon').textContent = weatherIcon;
+            document.getElementById('weather').innerHTML = weather.text;
+            document.getElementById('economy').innerHTML = economy.text;
+            document.getElementById('season').innerHTML = season.text;
+            document.getElementById('health').innerHTML = health.text;
+            
+            // คำนวณและอัปเดทต้นทุน
+            const costs = calculateCosts(porkPrice, gasPrice);
+            document.getElementById('cost-pork').textContent = `${costs.pork.toFixed(2)} บาท`;
+            document.getElementById('cost-gas').textContent = `${costs.gas.toFixed(2)} บาท`;
+            document.getElementById('cost-supplies').textContent = `${costs.supplies.toFixed(2)} บาท`;
+            document.getElementById('cost-overhead').textContent = `${costs.overhead.toFixed(2)} บาท`;
+            document.getElementById('total-cost').innerHTML = `<strong>${costs.total.toFixed(2)} บาท</strong>`;
+            
+            return {
+                porkPrice,
+                porkChange,
+                gasPrice,
+                weather: weather.impact,
+                economy: economy.impact,
+                season: season.impact,
+                health: health.impact,
+                costs
+            };
+        }
+
+        // ฟังก์ชันการตัดสินใจของ AI
+        function makeAIDecision() {
+            if (!autoMode) return;
+
+            const data = updateMarketData();
+            let basePrice = data.costs.total * (1 + businessSettings.targetMargin / 100);
+            let adjustedPrice = basePrice;
+            let reasons = [];
+            let riskLevel = 'low';
+
+            // ปรับราคาตามปัจจัยต่างๆ
+            
+            // ผลกระทบจากอากาศ
+            if (data.weather < 0) {
+                adjustedPrice += data.weather;
+                reasons.push(`อากาศไม่เอื้อ (${data.weather.toFixed(1)})`);
+                riskLevel = data.weather < -0.3 ? 'high' : 'medium';
+            } else {
+                btn.textContent = 'เปิดอัตโนมัติ';
+                btn.className = 'btn btn-secondary';
+                status.innerHTML = '<span class="status-indicator"></span>โหมดควบคุมด้วยตนเอง';
+                container.classList.add('offline');
+                stopAutoMode();
+                showToast('ปิดโหมดอัตโนมัติ');
+            }
+        }
+
+        // ฟังก์ชันเริ่มโหมดอัตโนมัติ
+        function startAutoMode() {
+            checkInterval = setInterval(() => {
+                makeAIDecision();
+                nextCheckTime = 15 * 60; // reset to 15 minutes
+                updateCountdown();
+            }, 15 * 60 * 1000); // every 15 minutes
+            
+            updateCountdown();
+        }
+
+        // ฟังก์ชันหยุดโหมดอัตโนมัติ
+        function stopAutoMode() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+            document.getElementById('next-check').textContent = 'ระบบหยุดทำงาน';
+        }
+
+        // ฟังก์ชันอัปเดทการนับถอยหลัง
+        function updateCountdown() {
+            const countdownInterval = setInterval(() => {
+                if (autoMode && nextCheckTime > 0) {
+                    nextCheckTime--;
+                    const minutes = Math.floor(nextCheckTime / 60);
+                    const seconds = nextCheckTime % 60;
+                    document.getElementById('next-check').textContent = 
+                        `${minutes} นาที ${seconds} วินาที`;
+                } else {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        // ฟังก์ชันตรวจสอบทันที
+        function forceCheck() {
+            // เพิ่ม haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            // Loading state
+            const btn = event.target;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '⏳';
+            btn.classList.add('loading');
+            
+            setTimeout(() => {
+                makeAIDecision();
+                nextCheckTime = 15 * 60; // reset countdown
+                updateCountdown();
+                btn.innerHTML = originalContent;
+                btn.classList.remove('loading');
+                showToast('ตรวจสอบข้อมูลแล้ว');
+            }, 800);
+        }
+
+        // ฟังก์ชันเปิด/ปิดหน้าต่างตั้งค่า
+        function openSettings() {
+            // Load current settings
+            document.getElementById('shop-name').value = businessSettings.shopName;
+            document.getElementById('pork-size').value = businessSettings.porkSize;
+            document.getElementById('target-margin').value = businessSettings.targetMargin;
+            document.getElementById('gas-price-setting').value = businessSettings.gasPriceSetting;
+            document.getElementById('fixed-cost').value = businessSettings.fixedCost;
+            
+            document.getElementById('settings-modal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.remove('show');
+        }
+
+        // จัดการ form ตั้งค่า
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Update settings
+            businessSettings.shopName = document.getElementById('shop-name').value;
+            businessSettings.porkSize = parseFloat(document.getElementById('pork-size').value);
+            businessSettings.targetMargin = parseFloat(document.getElementById('target-margin').value);
+            businessSettings.gasPriceSetting = parseFloat(document.getElementById('gas-price-setting').value);
+            businessSettings.fixedCost = parseFloat(document.getElementById('fixed-cost').value);
+            
+            // Save to localStorage
+            localStorage.setItem('mooPingSettings', JSON.stringify(businessSettings));
+            
+            closeSettings();
+            showToast('บันทึกการตั้งค่าแล้ว');
+            
+            // Recalculate with new settings
+            updateMarketData();
+        });
+
+        // ปิด modal เมื่อคลิกพื้นหลัง
+        document.getElementById('settings-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSettings();
+            }
+        });
+
+        // โหลดการตั้งค่าจาก localStorage
+        function loadSettings() {
+            const saved = localStorage.getItem('mooPingSettings');
+            if (saved) {
+                try {
+                    businessSettings = { ...businessSettings, ...JSON.parse(saved) };
+                } catch (e) {
+                    console.error('Error loading settings:', e);
+                }
+            }
+        }
+
+        // ฟังก์ชันเริ่มต้นระบบ
+        function initializeSystem() {
+            loadSettings();
+            updateDateTime();
+            updateMarketData();
+            makeAIDecision(); // Initial AI decision
+            startAutoMode();
+            
+            // เรียกใช้ฟังก์ชันแสดงเวลาทันที
+            setInterval(updateDateTime, 1000);
+        }
+
+        // จัดการ touch events สำหรับ mobile
+        document.addEventListener('touchstart', function() {}, {passive: true});
+
+        // ป้องกัน zoom เมื่อ double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // เริ่มต้นระบบเมื่อโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', initializeSystem);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ') { // Space bar
+                e.preventDefault();
+                forceCheck();
+            }
+            if (e.key === 'Enter' && e.ctrlKey) { // Ctrl+Enter
+                toggleMode();
+            }
+            if (e.key === 's' && e.ctrlKey) { // Ctrl+S
+                e.preventDefault();
+                openSettings();
+            }
+        });
+
+        // Prevent context menu on long press
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html> if (data.weather > 0) {
+                adjustedPrice += data.weather * 0.5; // เพิ่มราคาน้อยกว่า
+                reasons.push(`อากาศดี (+${(data.weather * 0.5).toFixed(1)})`);
+            }
+
+            // ผลกระทบจากเศรษฐกิจ
+            if (data.economy < 0) {
+                adjustedPrice += data.economy;
+                reasons.push(`เศรษฐกิจไม่ดี (${data.economy.toFixed(1)})`);
+                riskLevel = riskLevel === 'low' ? 'medium' : 'high';
+            } else if (data.economy > 0) {
+                adjustedPrice += data.economy * 0.3;
+                reasons.push(`เศรษฐกิจดี (+${(data.economy * 0.3).toFixed(1)})`);
+            }
+
+            // ผลกระทบจากฤดูกาล
+            if (data.season !== 0) {
+                const seasonAdjust = data.season * 0.4;
+                adjustedPrice += seasonAdjust;
+                reasons.push(`ปัจจัยฤดูกาล (${seasonAdjust > 0 ? '+' : ''}${seasonAdjust.toFixed(1)})`);
+            }
+
+            // ผลกระทบจากสุขภาพ/ข่าว
+            if (data.health < 0) {
+                adjustedPrice += data.health;
+                reasons.push(`ข่าวลบเกี่ยวกับเนื้อ (${data.health.toFixed(1)})`);
+                riskLevel = 'high';
+            }
+
+            // ปัจจัยเวลา
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+
+            if (day === 1 && hour < 11) { // วันจันทร์เช้า
+                adjustedPrice -= 0.5;
+                reasons.push('วันจันทร์เช้า (-0.5)');
+            }
+
+            if (hour >= 17 && hour <= 19) { // ช่วงเย็น
+                adjustedPrice += 0.3;
+                reasons.push('ช่วงเย็น (+0.3)');
+            }
+
+            // ปัดราคาให้เหมาะสม
+            adjustedPrice = Math.round(adjustedPrice * 2) / 2; // ปัดเป็น 0.5
+            adjustedPrice = Math.max(adjustedPrice, data.costs.total + 1); // กำไรขั้นต้น 1 บาท
+
+            // คำนวณกำไร
+            const profit = adjustedPrice - data.costs.total;
+            const marginPercent = (profit / data.costs.total * 100).toFixed(1);
+
+            // อัปเดทคำแนะนำ
+            document.getElementById('recommended-price').textContent = `${adjustedPrice} บาท/ไม้`;
+            
+            let reasonText = reasons.length > 0 ? 
+                `ปัจจัย: ${reasons.join(', ')}. ` : 
+                'ราคาเหมาะสมตามภาวะตลาด. ';
+            reasonText += `กำไรสุทธิ ${profit.toFixed(1)} บาท/ไม้ (${marginPercent}%)`;
+            
+            document.getElementById('recommendation-reason').textContent = reasonText;
+
+            // อัปเดทระดับความเสี่ยง
+            const riskIndicator = document.getElementById('risk-indicator');
+            riskIndicator.className = `risk-indicator risk-${riskLevel}`;
+            const riskTexts = {
+                low: '📊 ความเสี่ยง: ต่ำ',
+                medium: '⚠️ ความเสี่ยง: ปานกลาง',
+                high: '🚨 ความเสี่ยง: สูง'
+            };
+            riskIndicator.innerHTML = `<span>${riskTexts[riskLevel]}</span>`;
+
+            // ตัดสินใจเปลี่ยนราคาถ้าแตกต่างมาก
+            if (Math.abs(adjustedPrice - currentPrice) >= 0.5) {
+                updatePrice(adjustedPrice, reasonText);
+            }
+        }
+
+        // ฟังก์ชันอัปเดทราคา
+        function updatePrice(newPrice, reason) {
+            const oldPrice = currentPrice;
+            currentPrice = newPrice;
+            
+            // อัปเดท UI พร้อม animation
+            const priceElement = document.getElementById('current-price');
+            priceElement.textContent = currentPrice;
+            priceElement.parentElement.classList.add('price-update');
+            
+            setTimeout(() => {
+                priceElement.parentElement.classList.remove('price-update');
+            }, 600);
+            
+            // เพิ่มลงใน log
+            addToDecisionLog(oldPrice, currentPrice, reason);
+            
+            // แสดง notification
+            showToast(`ปรับราคาใหม่: ${currentPrice} บาท`);
+        }
+
+        // ฟังก์ชันเพิ่มประวัติการตัดสินใจ
+        function addToDecisionLog(oldPrice, newPrice, reason) {
+            const logContainer = document.getElementById('decision-log');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            const dayName = dayNames[now.getDay()];
+            
+            logEntry.innerHTML = `
+                <div class="log-action">${oldPrice === newPrice ? 'คงราคา' : 'ปรับราคา'} ${oldPrice} → ${newPrice} บาท</div>
+                <div class="log-reason">${reason}</div>
+                <div class="log-time">${timeString} น. • ${dayName}</div>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // เก็บแค่ 5 รายการ
+            const entries = logContainer.getElementsByClassName('log-entry');
+            if (entries.length > 5) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        // ฟังก์ชันแสดง toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ฟังก์ชันสลับโหมด
+        function toggleMode() {
+            autoMode = !autoMode;
+            const btn = document.getElementById('auto-btn');
+            const status = document.getElementById('mode-status');
+            const container = document.querySelector('.app-container');
+            
+            if (autoMode) {
+                btn.textContent = 'หยุดอัตโนมัติ';
+                btn.className = 'btn btn-primary';
+                status.innerHTML = '<span class="status-indicator"></span>โหมดอัตโนมัติเปิดใช้งาน';
+                container.classList.remove('offline');
+                startAutoMode();
+                showToast('เปิดโหมดอัตโนมัติ');
+            } else

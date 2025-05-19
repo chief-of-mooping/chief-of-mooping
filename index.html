@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ระบบตั้งราคาหมูปิ้งอัจฉริยะ</title>
+    <title>ระบบที่ปรึกษาช่วยตั้งราคาขายหมูปิ้งอัจฉริยะ</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -659,7 +659,7 @@
                 </div>
 
                 <button class="button" onclick="calculatePricing()">
-                    <i class="fas fa-brain"></i> คำนวณด้วย AI
+                    <i class="fas fa-brain"></i> คำนวณด้วย AGENT AI
                 </button>
             </div>
         </div>
@@ -670,13 +670,13 @@
                 <i class="fas fa-cog"></i> ตั้งค่าธุรกิจ
             </button>
             <button class="button secondary" onclick="toggleHistory()">
-                <i class="fas fa-history"></i> ประวัติการตัดสินใจ AI
+                <i class="fas fa-history"></i> ประวัติการตัดสินใจด้วย AGENT AI
             </button>
         </div>
 
         <!-- Results Section -->
         <div class="result-section" id="results" style="display: none;">
-            <h2><i class="fas fa-chart-pie"></i> ผลการวิเคราะห์ AI</h2>
+            <h2><i class="fas fa-chart-pie"></i> ผลการวิเคราะห์ด้วย AGENT AI</h2>
             
             <div class="result-grid">
                 <div class="result-card">
@@ -710,18 +710,18 @@
 
             <!-- AI Analysis -->
             <div class="ai-analysis">
-                <h3><i class="fas fa-robot"></i> การวิเคราะห์ปัจจัยทั้ง 6 มิติ</h3>
+                <h3><i class="fas fa-robot"></i> ปัจจัยวิเคราะห์ 6 ด้าน</h3>
                 <div class="factor-analysis" id="factorAnalysis">
                     <!-- จะถูกใส่ข้อมูลโดย JavaScript -->
                 </div>
                 <div id="aiReasoning" style="margin-top: 15px;">
-                    <!-- คำแนะนำจาก AI -->
+                    <!-- คำแนะนำจาก AGENT AI -->
                 </div>
             </div>
 
             <!-- Marketing Strategies -->
             <div class="ai-analysis">
-                <h3><i class="fas fa-bullhorn"></i> กลยุทธ์การตลาดดิจิทัล (Customer Journey)</h3>
+                <h3><i class="fas fa-bullhorn"></i> กลยุทธ์การตลาดดิจิทัล </h3>
                 <div class="marketing-strategies" id="marketingStrategies">
                     <!-- จะถูกใส่ข้อมูลโดย JavaScript -->
                 </div>
@@ -730,7 +730,7 @@
 
         <!-- History Panel -->
         <div class="history-panel" id="historyPanel" style="display: none;">
-            <h2><i class="fas fa-history"></i> ประวัติการตัดสินใจ AI</h2>
+            <h2><i class="fas fa-history"></i> ประวัติการตัดสินใจ AGENT AI</h2>
             <div id="historyContent">
                 <p style="text-align: center; color: #666;">ยังไม่มีประวัติการคำนวณ</p>
             </div>
@@ -744,7 +744,7 @@
             
             <div class="input-group">
                 <label for="businessName">ชื่อร้าน</label>
-                <input type="text" id="businessName" value="หมูปิ้งดีลักษ์">
+                <input type="text" id="businessName" value="หมูปิ้งจัมโบ้">
             </div>
 
             <div class="input-group">
@@ -780,7 +780,7 @@
         // Global variables
         let calculationHistory = [];
         let businessSettings = {
-            name: 'หมูปิ้งดีลักษ์',
+            name: 'หมูปิ้งจัมโบ้',
             targetProfit: 40,
             location: 'market',
             workingHours: 10

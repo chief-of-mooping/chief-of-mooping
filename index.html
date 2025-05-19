@@ -1,0 +1,2152 @@
+                <div class="current-price">
+                    <div class="price-label" id="price-label">ราคาขายปัจจุบัน</div>
+                    <div class="price-value"><span id="current-price">15</span> <span id="price-unit">บาท/ไม้</span></div>
+                    <div class="price-trend" id="price-trend">📊 คงที่</div>
+                </div>
+            </div>
+
+            <!-- ===== 3.2 MARKET FACTORS ===== -->
+            <div class="section-title" id="factors-title">📊 ปัจจัยตลาด</div>
+            <div class="factors-grid">
+                <div class="factor-card" onclick="showFactorInfo('pork')">
+                    <span class="factor-icon">🥩</span>
+                    <div class="factor-title" id="factor-pork-title">ราคาหมูสด</div>
+                    <div class="factor-value" id="pork-price">160 บาท/กก.<br>(+10 บาท)</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('gas')">
+                    <span class="factor-icon">⛽</span>
+                    <div class="factor-title" id="factor-gas-title">ราคาแก๊ส</div>
+                    <div class="factor-value" id="gas-price">380 บาท/ถัง<br>(ปกติ)</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('weather')">
+                    <span class="factor-icon">🌤️</span>
+                    <div class="factor-title" id="factor-weather-title">สภาพอากาศ</div>
+                    <div class="factor-value" id="weather">แสงแดดอ่อน<br>เหมาะขาย</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('economy')">
+                    <span class="factor-icon">💰</span>
+                    <div class="factor-title" id="factor-economy-title">ภาวะเศรษฐกิจ</div>
+                    <div class="factor-value" id="economy">กำลังซื้อดี<br>ปกติ</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('season')">
+                    <span class="factor-icon">🗓️</span>
+                    <div class="factor-title" id="factor-season-title">ฤดูกาล/เทศกาล</div>
+                    <div class="factor-value" id="season">วันธรรมดา<br>ปกติ</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('health')">
+                    <span class="factor-icon">🏥</span>
+                    <div class="factor-title" id="factor-health-title">สุขภาพ/ข่าว</div>
+                    <div class="factor-value" id="health">ไม่มีข่าวลบ<br>ปลอดภัย</div>
+                </div>
+            </div>
+
+            <!-- ===== 3.3 PRICE CHART ===== -->
+            <div class="chart-container">
+                <div class="chart-title" id="chart-title">💹 แนวโน้มราคาย้อนหลัง 24 ชั่วโมง</div>
+                <div class="chart" id="price-chart">กราฟราคาจะแสดงที่นี่</div>
+            </div>
+
+            <!-- ===== 3.4 COST BREAKDOWN ===== -->
+            <div class="ai-section">
+                <div class="section-header">
+                    <div class="section-icon">💰</div>
+                    <div class="section-title-icon" id="cost-title">การคำนวณต้นทุน</div>
+                </div>
+                
+                <div class="cost-breakdown">
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-pork-label">หมูสด (100g)</span>
+                        <span class="cost-value" id="cost-pork">8.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-gas-label">แก๊ส/ถ่าน</span>
+                        <span class="cost-value" id="cost-gas">1.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-supplies-label">ไม้เสียบ/ถุง</span>
+                        <span class="cost-value" id="cost-supplies">0.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-overhead-label">ค่าคงที่อื่นๆ</span>
+                        <span class="cost-value" id="cost-overhead">1.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label"><strong id="total-cost-label">ต้นทุนรวม</strong></span>
+                        <span class="cost-value" id="total-cost"><strong>11.00 บาท</strong></span>
+                    </div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="export-grid">
+                    <button class="export-btn" onclick="showInfo()">📄 ส่งออก PDF</button>
+                    <button class="export-btn" onclick="showInfo()">📊 ส่งออก Excel</button>
+                    <button class="export-btn" onclick="showInfo()">📤 แชร์รายงาน</button>
+                    <button class="export-btn" onclick="showInfo()">🖨️ พิมพ์รายงาน</button>
+                </div>
+            </div>
+
+            <!-- ===== 3.5 DECISION LOG ===== -->
+            <div class="ai-section">
+                <div class="section-header">
+                    <div class="section-icon">📝</div>
+                    <div class="section-title-icon" id="log-title">ประวัติการตัดสินใจ</div>
+                </div>
+                <div id="decision-log">
+                    <div class="log-entry">
+                        <div class="log-action">ปรับราคา 16 → 15 บาท</div>
+                        <div class="log-reason">หมูขึ้นราคาเล็กน้อย แต่วันจันทร์ลูกค้าน้อย ลดราคาเพื่อเพิ่มยอดขาย</div>
+                        <div class="log-time">17:25 น. • วันจันทร์ที่ 19 พฤษภาคม 2568</div>
+                    </div>
+                    <div class="log-entry">
+                        <div class="log-action">คงราคา 15 บาท</div>
+                        <div class="log-reason">ปัจจัยทั้งหมดอยู่ในเกณฑ์ปกติ ราคาเหมาะสมกับตลาด</div>
+                        <div class="log-time">14:15 น. • วันจันทร์ที่ 19 พฤษภาคม 2568</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 3.6 NEXT CHECK INFO ===== -->
+            <div class="next-check">
+                <span class="status-indicator"></span>
+                <span id="next-check-text">ระบบจะตรวจสอบอีกครั้งใน:</span> <span id="next-check">1 ชั่วโมง</span>
+            </div>
+        </div>
+
+        <!-- ===== 4. QUICK ACTION BUTTON ===== -->
+        <button class="quick-action" onclick="forceCheck()" title="ตรวจสอบทันที">🔄</button>
+
+        <!-- ===== 5. CONTROL BUTTONS ===== -->
+        <div class="controls">
+            <div class="controls-grid">
+                <button id="auto-btn" class="btn btn-primary" onclick="toggleMode()">
+                    <span id="auto-btn-text">หยุดอัตโนมัติ</span>
+                </button>
+                <button class="btn btn-secondary" onclick="forceCheck()">
+                    <span id="force-check-text">ตรวจสอบทันที</span>
+                </button>
+                <button class="btn btn-settings" onclick="showInfo()">
+                    ⚙️ <span id="settings-text">ตั้งค่าธุรกิจ</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 6. TOAST NOTIFICATION ===== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== JAVASCRIPT CODE ===== -->
+    <script>
+        // ===== 1. GLOBAL VARIABLES =====
+        let currentLanguage = 'th';
+        let isDarkMode = false;
+        let autoMode = true;
+        let currentPrice = 15;
+        let nextCheckTime = 3600; // seconds
+        let checkInterval = null;
+        let countdownInterval = null;
+
+        // ===== 2. BUSINESS SETTINGS =====
+        const businessSettings = {
+            shopName: 'หมูปิ้งลุงสมชาย',
+            porkSize: 100, // grams per stick
+            targetMargin: 25, // percentage
+            gasPriceSetting: 380, // THB per tank
+            fixedCost: 1.00, // THB per stick
+            checkInterval: 60 // minutes
+        };
+
+        // ===== 3. TRANSLATION SYSTEM =====
+        const translations = {
+            th: {
+                'header-title': '🥩 เสนาธิการหมูปิ้ง AI',
+                'header-subtitle': 'ระบบกำหนดราคาอัตโนมัติด้วยปัญญาประดิษฐ์',
+                'mode-text': 'โหมดอัตโนมัติเปิดใช้งาน',
+                'mode-manual': 'โหมดควบคุมด้วยตนเอง',
+                'price-label': 'ราคาขายปัจจุบัน',
+                'price-unit': 'บาท/ไม้',
+                'factors-title': '📊 ปัจจัยตลาด',
+                'factor-pork-title': 'ราคาหมูสด',
+                'factor-gas-title': 'ราคาแก๊ส',
+                'factor-weather-title': 'สภาพอากาศ',
+                'factor-economy-title': 'ภาวะเศรษฐกิจ',
+                'factor-season-title': 'ฤดูกาล/เทศกาล',
+                'factor-health-title': 'สุขภาพ/ข่าว',
+                'chart-title': '💹 แนวโน้มราคาย้อนหลัง 24 ชั่วโมง',
+                'cost-title': 'การคำนวณต้นทุน',
+                'cost-pork-label': 'หมูสด (100g)',
+                'cost-gas-label': 'แก๊ส/ถ่าน',
+                'cost-supplies-label': 'ไม้เสียบ/ถุง',
+                'cost-overhead-label': 'ค่าคงที่อื่นๆ',
+                'total-cost-label': 'ต้นทุนรวม',
+                'log-title': 'ประวัติการตัดสินใจ',
+                'auto-btn-text': 'หยุดอัตโนมัติ',
+                'auto-btn-manual': 'เปิดอัตโนมัติ',
+                'force-check-text': 'ตรวจสอบทันที',
+                'settings-text': 'ตั้งค่าธุรกิจ',
+                'next-check-text': 'ระบบจะตรวจสอบอีกครั้งใน:',
+                'system-stopped': 'ระบบหยุดทำงาน'
+            },
+            en: {
+                'header-title': '🥩 Moo Ping AI Advisor',
+                'header-subtitle': 'Automated Pricing System with AI',
+                'mode-text': 'Automatic Mode Enabled',
+                'mode-manual': 'Manual Control Mode',
+                'price-label': 'Current Selling Price',
+                'price-unit': 'THB/stick',
+                'factors-title': '📊 Market Factors',
+                'factor-pork-title': 'Pork Price',
+                'factor-gas-title': 'Gas Price',
+                'factor-weather-title': 'Weather',
+                'factor-economy-title': 'Economy',
+                'factor-season-title': 'Season/Festival',
+                'factor-health-title': 'Health/News',
+                'chart-title': '💹 24-Hour Price Trend',
+                'cost-title': 'Cost Breakdown',
+                'cost-pork-label': 'Fresh Pork (100g)',
+                'cost-gas-label': 'Gas/Charcoal',
+                'cost-supplies-label': 'Skewers/Bags',
+                'cost-overhead-label': 'Other Fixed Costs',
+                'total-cost-label': 'Total Cost',
+                'log-title': 'Decision History',
+                'auto-btn-text': 'Stop Auto',
+                'auto-btn-manual': 'Start Auto',
+                'force-check-text': 'Check Now',
+                'settings-text': 'Business Settings',
+                'next-check-text': 'Next check in:',
+                'system-stopped': 'System Stopped'
+            },
+            zh: {
+                'header-title': '🥩 烤猪肉串AI顾问',
+                'header-subtitle': '人工智能自动定价系统',
+                'mode-text': '自动模式已启用',
+                'mode-manual': '手动控制模式',
+                'price-label': '当前销售价格',
+                'price-unit': '泰铢/串',
+                'factors-title': '📊 市场因素',
+                'factor-pork-title': '猪肉价格',
+                'factor-gas-title': '煤气价格',
+                'factor-weather-title': '天气',
+                'factor-economy-title': '经济状况',
+                'factor-season-title': '季节/节庆',
+                'factor-health-title': '健康/新闻',
+                'chart-title': '💹 24小时价格趋势',
+                'cost-title': '成本分解',
+                'cost-pork-label': '新鲜猪肉 (100g)',
+                'cost-gas-label': '煤气/木炭',
+                'cost-supplies-label': '竹签/袋子',
+                'cost-overhead-label': '其他固定成本',
+                'total-cost-label': '总成本',
+                'log-title': '决策历史',
+                'auto-btn-text': '停止自动',
+                'auto-btn-manual': '开始自动',
+                'force-check-text': '立即检查',
+                'settings-text': '商业设置',
+                'next-check-text': '下次检查:',
+                'system-stopped': '系统已停止'
+            }
+        };
+
+        // ===== 4. UTILITY FUNCTIONS =====
+        
+        // 4.1 Date/Time Functions
+        function updateDateTime() {
+            const now = new Date();
+            let displayText = '';
+            
+            if (currentLanguage === 'th') {
+                const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+                const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                                  'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+                const buddhistYear = now.getFullYear() + 543;
+                displayText = `วัน${dayNames[now.getDay()]}ที่ ${now.getDate()} ${monthNames[now.getMonth()]} ${buddhistYear} เวลา ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} น.`;
+            } else if (currentLanguage === 'zh') {
+                displayText = now.toLocaleDateString('zh-CN', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } else {
+                displayText = now.toLocaleDateString('en-US', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+            
+            document.getElementById('datetime').textContent = displayText;
+        }
+
+        // 4.2 Toast Notification
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // 4.3 UI Language Update
+        function updateUILanguage() {
+            Object.entries(translations[currentLanguage]).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = value;
+                }
+            });
+        }
+
+        // ===== 5. MARKET DATA SIMULATION =====
+        function updateMarketData() {
+            // Generate realistic market data simulation
+            const data = {
+                pork: {
+                    price: 160 + (Math.random() - 0.5) * 20,
+                    change: (Math.random() - 0.5) * 10
+                },
+                gas: {
+                    price: businessSettings.gasPriceSetting + (Math.random() - 0.5) * 40,
+                    change: (Math.random() - 0.5) * 20
+                },
+                weather: (Math.random() - 0.5) * 2, // -1 to 1
+                economy: (Math.random() - 0.5) * 1.5, // -0.75 to 0.75
+                season: Math.sin(Date.now() / (1000 * 60 * 60 * 24 * 30)) * 0.5, // Monthly cycle
+                health: Math.random() > 0.9 ? -1 : 0 // 10% chance of health concern
+            };
+
+            // Calculate costs
+            data.costs = {
+                pork: (data.pork.price / 1000) * businessSettings.porkSize,
+                gas: 1.5,
+                supplies: 0.5,
+                overhead: businessSettings.fixedCost,
+                total: 0
+            };
+            data.costs.total = data.costs.pork + data.costs.gas + data.costs.supplies + data.costs.overhead;
+
+            // Update UI with current language
+            const lang = currentLanguage;
+            const currency = lang === 'en' ? 'THB' : lang === 'zh' ? '泰铢' : 'บาท';
+            const unit = lang === 'en' ? '/kg' : lang === 'zh' ? '/公斤' : '/กก.';
+            const tankUnit = lang === 'en' ? '/tank' : lang === 'zh' ? '/罐' : '/ถัง';
+
+            // Update pork and gas prices
+            document.getElementById('pork-price').innerHTML = 
+                `${data.pork.price.toFixed(0)} ${currency}${unit}<br>(${data.pork.change > 0 ? '+' : ''}${data.pork.change.toFixed(0)} ${currency})`;
+            
+            document.getElementById('gas-price').innerHTML = 
+                `${data.gas.price.toFixed(0)} ${currency}${tankUnit}<br>(${data.gas.change > 0 ? '+' : ''}${data.gas.change.toFixed(0)} ${currency})`;
+
+            // Update weather descriptions
+            const weatherDescriptions = {
+                th: data.weather > 0.5 ? 'แสงแดดดี<br>เหมาะขาย' : 
+                    data.weather < -0.5 ? 'ฝนตก<br>ลูกค้าน้อย' : 'แสงแดดอ่อน<br>เหมาะขาย',
+                en: data.weather > 0.5 ? 'Sunny<br>Good for sales' : 
+                    data.weather < -0.5 ? 'Rainy<br>Fewer customers' : 'Partly sunny<br>Good for sales',
+                zh: data.weather > 0.5 ? '晴天<br>适合销售' : 
+                    data.weather < -0.5 ? '下雨<br>客人较少' : '微晴<br>适合销售'
+            };
+            document.getElementById('weather').innerHTML = weatherDescriptions[lang];
+
+            // Update economy descriptions
+            const economyDescriptions = {
+                th: data.economy > 0.3 ? 'กำลังซื้อดี<br>เศรษฐกิจโต' : 
+                    data.economy < -0.3 ? 'กำลังซื้อลด<br>เศรษฐกิจชะลอ' : 'กำลังซื้อดี<br>ปกติ',
+                en: data.economy > 0.3 ? 'Strong purchasing<br>Economy growing' : 
+                    data.economy < -0.3 ? 'Weak purchasing<br>Economy slowing' : 'Normal purchasing<br>Stable',
+                zh: data.economy > 0.3 ? '购买力强<br>经济增长' : 
+                    data.economy < -0.3 ? '购买力弱<br>经济放缓' : '购买力正常<br>稳定'
+            };
+            document.getElementById('economy').innerHTML = economyDescriptions[lang];
+
+            // Update season descriptions
+            const seasonDescriptions = {
+                th: data.season > 0.3 ? 'เทศกาล/วันหยุด<br>ลูกค้าเยอะ' : 
+                    data.season < -0.3 ? 'ช่วงเรียน<br>ลูกค้าน้อย' : 'วันธรรมดา<br>ปกติ',
+                en: data.season > 0.3 ? 'Festival/Holiday<br>Many customers' : 
+                    data.season < -0.3 ? 'School period<br>Fewer customers' : 'Regular day<br>Normal',
+                zh: data.season > 0.3 ? '节庆/假期<br>客人很多' : 
+                    data.season < -0.3 ? '上学期间<br>客人较少' : '平常日<br>正常'
+            };
+            document.getElementById('season').innerHTML = seasonDescriptions[lang];
+
+            // Update health descriptions
+            const healthDescriptions = {
+                th: data.health < 0 ? 'มีข่าวลบ<br>ระวังยอดขาย' : 'ไม่มีข่าวลบ<br>ปลอดภัย',
+                en: data.health < 0 ? 'Negative news<br>Watch sales' : 'No negative news<br>Safe',
+                zh: data.health < 0 ? '负面新闻<br>注意销量' : '无负面新闻<br>安全'
+            };
+            document.getElementById('health').innerHTML = healthDescriptions[lang];
+
+            // Update cost breakdown
+            document.getElementById('cost-pork').textContent = `${data.costs.pork.toFixed(2)} ${currency}`;
+            document.getElementById('cost-gas').textContent = `${data.costs.gas.toFixed(2)} ${currency}`;
+            document.getElementById('cost-supplies').textContent = `${data.costs.supplies.toFixed(2)} ${currency}`;
+            document.getElementById('cost-overhead').textContent = `${data.costs.overhead.toFixed(2)} ${currency}`;
+            document.getElementById('total-cost').innerHTML = `<strong>${data.costs.total.toFixed(2)} ${currency}</strong>`;
+
+            return data;
+        }
+
+        // ===== 6. AI DECISION MAKING =====
+        function makeAIDecision() {
+            if (!autoMode) return;
+
+            const data = updateMarketData();
+            let basePrice = data.costs.total * (1 + businessSettings.targetMargin / 100);
+            let adjustedPrice = basePrice;
+            let reasons = [];
+
+            // Apply weather impact
+            if (data.weather < 0) {
+                adjustedPrice += data.weather;
+                reasons.push(`Weather impact (${data.weather.toFixed(1)})`);
+            } else if (data.weather > 0) {
+                adjustedPrice += data.weather * 0.5;
+                reasons.push(`Good weather (+${(data.weather * 0.5).toFixed(1)})`);
+            }
+
+            // Apply economic impact
+            if (data.economy < 0) {
+                adjustedPrice += data.economy;
+                reasons.push(`Economic downturn (${data.economy.toFixed(1)})`);
+            } else if (data.economy > 0) {
+                adjustedPrice += data.economy * 0.3;
+                reasons.push(`Good economy (+${(data.economy * 0.3).toFixed(1)})`);
+            }
+
+            // Apply seasonal impact
+            if (data.season !== 0) {
+                const seasonAdjust = data.season * 0.4;
+                adjustedPrice += seasonAdjust;
+                reasons.push(`Seasonal factor (${seasonAdjust > 0 ? '+' : ''}${seasonAdjust.toFixed(1)})`);
+            }
+
+            // Apply health/news impact
+            if (data.health < 0) {
+                adjustedPrice += data.health;
+                reasons.push(`Health concerns (${data.health.toFixed(1)})`);
+            }
+
+            // Apply time-based factors
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+
+            if (day === 1 && hour < 11) { // Monday morning
+                adjustedPrice -= 0.5;
+                reasons.push('Monday morning (-0.5)');
+            }
+
+            if (hour >= 17 && hour <= 19) { // Evening rush
+                adjustedPrice += 0.3;
+                reasons.push('Evening rush (+0.3)');
+            }
+
+            // Round to appropriate price and ensure minimum profit
+            adjustedPrice = Math.round(adjustedPrice * 2) / 2; // Round to 0.5
+            adjustedPrice = Math.max(adjustedPrice, data.costs.total + 1); // Minimum 1 THB profit
+
+            // Update price if significantly different
+            if (Math.abs(adjustedPrice - currentPrice) >= 0.5) {
+                const profit = adjustedPrice - data.costs.total;
+                const marginPercent = (profit / data.costs.total * 100).toFixed(1);
+                
+                let reasonText = reasons.length > 0 ? 
+                    `Factors: ${reasons.join(', ')}. ` : 
+                    'Optimal price based on market conditions. ';
+                reasonText += `Net profit ${profit.toFixed(1)} THB/stick (${marginPercent}%)`;
+                
+                updatePrice(adjustedPrice, reasonText);
+            }
+        }
+
+        // ===== 7. PRICE UPDATE FUNCTIONS =====
+        function updatePrice(newPrice, reason) {
+            const oldPrice = currentPrice;
+            currentPrice = newPrice;
+            
+            // Update UI with animation
+            const priceElement = document.getElementById('current-price');
+            priceElement.textContent = currentPrice;
+            priceElement.parentElement.classList.add('price-update');
+            
+            setTimeout(() => {
+                priceElement.parentElement.classList.remove('price-update');
+            }, 500);
+
+            // Update price trend indicator
+            updatePriceTrend(oldPrice, newPrice);
+            
+            // Add to decision log
+            addToDecisionLog(oldPrice, newPrice, reason);
+            
+            // Show notification
+            const message = `ราคาอัปเดตเป็น ${currentPrice} บาท`;
+            showToast(message, 'success');
+        }
+
+        function updatePriceTrend(oldPrice, newPrice) {
+            const trendElement = document.getElementById('price-trend');
+            const diff = newPrice - oldPrice;
+            
+            if (diff > 0) {
+                trendElement.innerHTML = '📈 ขึ้น';
+            } else if (diff < 0) {
+                trendElement.innerHTML = '📉 ลง';
+            } else {
+                trendElement.innerHTML = '📊 คงที่';
+            }
+        }
+
+        function addToDecisionLog(oldPrice, newPrice, reason) {
+            const logContainer = document.getElementById('decision-log');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            const dayName = dayNames[now.getDay()];
+            const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                              'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+            const dateString = `${now.getDate()} ${monthNames[now.getMonth()]} ${now.getFullYear() + 543}`;
+            
+            const actionText = oldPrice === newPrice ? 'คงราคา' : 'ปรับราคา';
+            
+            logEntry.innerHTML = `
+                <div class="log-action">${actionText} ${oldPrice} → ${newPrice} บาท</div>
+                <div class="log-reason">${reason}</div>
+                <div class="log-time">${timeString} • วัน${dayName} ${dateString}</div>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Keep only last 3 entries
+            const entries = logContainer.getElementsByClassName('log-entry');
+            if (entries.length > 3) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        // ===== 8. UI CONTROL FUNCTIONS =====
+        
+        // 8.1 Mode Toggle
+        function toggleMode() {
+            autoMode = !autoMode;
+            const btn = document.getElementById('auto-btn');
+            const status = document.getElementById('mode-status');
+            const container = document.querySelector('.container');
+            
+            if (autoMode) {
+                btn.innerHTML = `<span>${translations[currentLanguage]['auto-btn-text']}</span>`;
+                btn.className = 'btn btn-primary';
+                status.innerHTML = `<span class="status-indicator"></span><span>${translations[currentLanguage]['mode-text']}</span>`;
+                container.classList.remove('offline');
+                startAutoMode();
+                showToast('เปิดโหมดอัตโนมัติแล้ว', 'success');
+            } else {
+                btn.innerHTML = `<span>${translations[currentLanguage]['auto-btn-manual']}</span>`;
+                btn.className = 'btn btn-secondary';
+                status.innerHTML = `<span class="status-indicator"></span><span>${translations[currentLanguage]['mode-manual']}</span>`;
+                container.classList.add('offline');
+                stopAutoMode();
+                showToast('ปิดโหมดอัตโนมัติแล้ว', 'warning');
+            }
+        }
+
+        // 8.2 Auto Mode Management
+        function startAutoMode() {
+            const intervalMinutes = businessSettings.checkInterval;
+            checkInterval = setInterval(() => {
+                makeAIDecision();
+                nextCheckTime = intervalMinutes * 60;
+                updateCountdown();
+            }, intervalMinutes * 60 * 1000);
+            
+            nextCheckTime = intervalMinutes * 60;
+            updateCountdown();
+        }
+
+        function stopAutoMode() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            document.getElementById('next-check').textContent = translations[currentLanguage]['system-stopped'];
+        }
+
+        function updateCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            countdownInterval = setInterval(() => {
+                if (autoMode && nextCheckTime > 0) {
+                    nextCheckTime--;
+                    const hours = Math.floor(nextCheckTime / 3600);
+                    const minutes = Math.floor((nextCheckTime % 3600) / 60);
+                    const seconds = nextCheckTime % 60;
+                    
+                    let timeText = '';
+                    if (hours > 0) {
+                        timeText += `${hours} ${currentLanguage === 'en' ? 'hr' : currentLanguage === 'zh' ? '小时' : 'ชั่วโมง'} `;
+                    }
+                    if (minutes > 0) {
+                        timeText += `${minutes} ${currentLanguage === 'en' ? 'min' : currentLanguage === 'zh' ? '分钟' : 'นาที'} `;
+                    }
+                    timeText += `${seconds} ${currentLanguage === 'en' ? 'sec' : currentLanguage === 'zh' ? '秒' : 'วินาที'}`;
+                    
+                    document.getElementById('next-check').textContent = timeText;
+                } else {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        // 8.3 Force Check
+        function forceCheck() {
+            const btn = event?.target?.closest('button');
+            if (btn) {
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '⏳';
+                btn.classList.add('loading');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('loading');
+                }, 800);
+            }
+            
+            makeAIDecision();
+            if (autoMode) {
+                nextCheckTime = businessSettings.checkInterval * 60;
+                updateCountdown();
+            }
+            showToast('ตรวจสอบเสร็จสิ้น', 'success');
+        }
+
+        // ===== 9. THEME AND LANGUAGE FUNCTIONS =====
+        
+        // 9.1 Theme Toggle
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            showToast(isDarkMode ? 'เปลี่ยนเป็น Dark Mode' : 'เปลี่ยนเป็น Light Mode');
+        }
+
+        // 9.2 Language Management
+        function toggleLanguage() {
+            const selector = document.getElementById('language-selector');
+            selector.classList.toggle('show');
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            updateUILanguage();
+            document.getElementById('language-selector').classList.remove('show');
+            
+            // Update language selector active state
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.lang === lang);
+            });
+            
+            // Update market data with new language
+            updateMarketData();
+            
+            // Update countdown with new language
+            if (autoMode) {
+                updateCountdown();
+            }
+            
+            showToast(`เปลี่ยนภาษาเป็น ${lang === 'th' ? 'ไทย' : lang === 'en' ? 'English' : '中文'}`);
+        }
+
+        // ===== 10. INFORMATION FUNCTIONS =====
+        function showFactorInfo(factorType) {
+            const factorMessages = {
+                pork: 'ราคาหมูส่งผลต่อต้นทุนโดยตรง เมื่อหมูแพงขึ้นควรปรับราคาขาย',
+                gas: 'ราคาแก๊สส่งผลต่อค่าใช้จ่ายในการย่าง ถ้าแก๊สแพงอาจต้องปรับราคา',
+                weather: 'อากาศดีลูกค้าออกมาเยอะ ฝนตกลูกค้าน้อย ส่งผลต่อยอดขาย',
+                economy: 'ภาวะเศรษฐกิจส่งผลต่อกำลังซื้อของลูกค้า',
+                season: 'วันหยุดและเทศกาลลูกค้าเยอะ ช่วงเรียนลูกค้าน้อย',
+                health: 'ข่าวสุขภาพส่งผลต่อความเชื่อมั่นในการซื้อ'
+            };
+            
+            showToast(factorMessages[factorType] || 'ข้อมูลเพิ่มเติม', 'info');
+        }
+
+        function showInfo() {
+            showToast('นี่คือเวอร์ชันสาธิต ฟีเจอร์เต็มจะมีในแอปจริง', 'info');
+        }
+
+        // ===== 11. EVENT LISTENERS =====
+        
+        // 11.1 Language Selector Events
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                setLanguage(this.dataset.lang);
+            });
+        });
+
+        // 11.2 Click Outside Events
+        document.addEventListener('click', function(e) {
+            // Close language selector when clicking outside
+            if (!e.target.closest('#language-selector') && !e.target.closest('button[onclick="toggleLanguage()"]')) {
+                document.getElementById('language-selector').classList.remove('show');
+            }
+        });
+
+        // 11.3 Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Space: Toggle auto mode
+            if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                toggleMode();
+            }
+            
+            // Ctrl+Enter: Force check
+            if (e.ctrlKey && e.code === 'Enter') {
+                e.preventDefault();
+                forceCheck();
+            }
+            
+            // Escape: Close modals/selectors
+            if (e.code === 'Escape') {
+                document.getElementById('language-selector').classList.remove('show');
+            }
+        });
+
+        // ===== 12. INITIALIZATION =====
+        function initializeSystem() {
+            console.log('🥩 Initializing Moo Ping AI System...');
+            
+            // Initialize UI language
+            updateUILanguage();
+            
+            // Load initial market data
+            updateMarketData();
+            
+            // Make initial AI decision
+            makeAIDecision();
+            
+            // Start auto mode
+            startAutoMode();
+            
+            // Start datetime updates
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Fade in the app
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            // Log initialization complete
+            console.log('✅ Moo Ping AI System Initialized Successfully');
+            
+            // Show welcome message
+            setTimeout(() => {
+                showToast('ระบบพร้อมใช้งาน! 🚀', 'success');
+            }, 1000);
+        }
+
+        // ===== 13. STARTUP SEQUENCE =====
+        
+        // Set initial loading state
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📱 DOM Content Loaded');
+            initializeSystem();
+        });
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                // App became visible again, update data
+                updateDateTime();
+                if (autoMode) {
+                    makeAIDecision();
+                }
+            }
+        });
+        
+        // Handle orientation changes
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                // Refresh UI after orientation change
+                updateDateTime();
+            }, 100);
+        });
+        
+        // Handle before unload
+        window.addEventListener('beforeunload', function() {
+            // Clean up intervals
+            if (checkInterval) clearInterval(checkInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+        });
+        
+        console.log('🔄 Script loaded, waiting for DOM...');
+    </script>
+</body>
+</html>
+                        <!-- Next Check -->
+            <div class="next-check">
+                <span class="status-indicator"></span>
+                <span id="next-check-text">ระบบจะตรวจสอบอีกครั้งใน:</span> <span id="next-check">1 ชั่วโมง</span>
+            </div>
+        </div>
+
+        <!-- Quick Action Button -->
+        <button class="quick-action" onclick="forceCheck()" title="ตรวจสอบทันที">🔄</button>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="controls-grid">
+                <button id="auto-btn" class="btn btn-primary" onclick="toggleMode()">
+                    <span id="auto-btn-text">หยุดอัตโนมัติ</span>
+                </button>
+                <button class="btn btn-secondary" onclick="forceCheck()">
+                    <span id="force-check-text">ตรวจสอบทันที</span>
+                </button>
+                <button class="btn btn-settings" onclick="showInfo()">
+                    ⚙️ <span id="settings-text">ตั้งค่าธุรกิจ</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== GLOBAL VARIABLES =====
+        let currentLanguage = 'th';
+        let isDarkMode = false;
+        let autoMode = true;
+        let currentPrice = 15;
+        let nextCheckTime = 3600;
+        let checkInterval = null;
+
+        // ===== TRANSLATIONS =====
+        const translations = {
+            th: {
+                'header-title': '🥩 เสนาธิการหมูปิ้ง AI',
+                'header-subtitle': 'ระบบกำหนดราคาอัตโนมัติด้วยปัญญาประดิษฐ์',
+                'mode-text': 'โหมดอัตโนมัติเปิดใช้งาน',
+                'mode-manual': 'โหมดควบคุมด้วยตนเอง',
+                'price-label': 'ราคาขายปัจจุบัน',
+                'price-unit': 'บาท/ไม้',
+                'factors-title': '📊 ปัจจัยตลาด',
+                'factor-pork-title': 'ราคาหมูสด',
+                'factor-gas-title': 'ราคาแก๊ส',
+                'factor-weather-title': 'สภาพอากาศ',
+                'factor-economy-title': 'ภาวะเศรษฐกิจ',
+                'factor-season-title': 'ฤดูกาล/เทศกาล',
+                'factor-health-title': 'สุขภาพ/ข่าว',
+                'chart-title': '💹 แนวโน้มราคาย้อนหลัง 24 ชั่วโมง',
+                'ai-title': 'การวิเคราะห์ AI',
+                'cost-title': 'การคำนวณต้นทุน',
+                'cost-pork-label': 'หมูสด (100g)',
+                'cost-gas-label': 'แก๊ส/ถ่าน',
+                'cost-supplies-label': 'ไม้เสียบ/ถุง',
+                'cost-overhead-label': 'ค่าคงที่อื่นๆ',
+                'total-cost-label': 'ต้นทุนรวม',
+                'rec-title': 'คำแนะนำจาก AI',
+                'log-title': 'ประวัติการตัดสินใจ',
+                'auto-btn-text': 'หยุดอัตโนมัติ',
+                'auto-btn-manual': 'เปิดอัตโนมัติ',
+                'force-check-text': 'ตรวจสอบทันที',
+                'settings-text': 'ตั้งค่าธุรกิจ',
+                'next-check-text': 'ระบบจะตรวจสอบอีกครั้งใน:',
+                'system-stopped': 'ระบบหยุดทำงาน'
+            },
+            en: {
+                'header-title': '🥩 Moo Ping AI Advisor',
+                'header-subtitle': 'Automated Pricing System with AI',
+                'mode-text': 'Automatic Mode Enabled',
+                'mode-manual': 'Manual Control Mode',
+                'price-label': 'Current Selling Price',
+                'price-unit': 'THB/stick',
+                'factors-title': '📊 Market Factors',
+                'factor-pork-title': 'Pork Price',
+                'factor-gas-title': 'Gas Price',
+                'factor-weather-title': 'Weather',
+                'factor-economy-title': 'Economy',
+                'factor-season-title': 'Season/Festival',
+                'factor-health-title': 'Health/News',
+                'chart-title': '💹 24-Hour Price Trend',
+                'ai-title': 'AI Analysis',
+                'cost-title': 'Cost Breakdown',
+                'cost-pork-label': 'Fresh Pork (100g)',
+                'cost-gas-label': 'Gas/Charcoal',
+                'cost-supplies-label': 'Skewers/Bags',
+                'cost-overhead-label': 'Other Fixed Costs',
+                'total-cost-label': 'Total Cost',
+                'rec-title': 'AI Recommendation',
+                'log-title': 'Decision History',
+                'auto-btn-text': 'Stop Auto',
+                'auto-btn-manual': 'Start Auto',
+                'force-check-text': 'Check Now',
+                'settings-text': 'Business Settings',
+                'next-check-text': 'Next check in:',
+                'system-stopped': 'System Stopped'
+            },
+            zh: {
+                'header-title': '🥩 烤猪肉串AI顾问',
+                'header-subtitle': '人工智能自动定价系统',
+                'mode-text': '自动模式已启用',
+                'mode-manual': '手动控制模式',
+                'price-label': '当前销售价格',
+                'price-unit': '泰铢/串',
+                'factors-title': '📊 市场因素',
+                'factor-pork-title': '猪肉价格',
+                'factor-gas-title': '煤气价格',
+                'factor-weather-title': '天气',
+                'factor-economy-title': '经济状况',
+                'factor-season-title': '季节/节庆',
+                'factor-health-title': '健康/新闻',
+                'chart-title': '💹 24小时价格趋势',
+                'ai-title': 'AI分析',
+                'cost-title': '成本分解',
+                'cost-pork-label': '新鲜猪肉 (100g)',
+                'cost-gas-label': '煤气/木炭',
+                'cost-supplies-label': '竹签/袋子',
+                'cost-overhead-label': '其他固定成本',
+                'total-cost-label': '总成本',
+                'rec-title': 'AI建议',
+                'log-title': '决策历史',
+                'auto-btn-text': '停止自动',
+                'auto-btn-manual': '开始自动',
+                'force-check-text': '立即检查',
+                'settings-text': '商业设置',
+                'next-check-text': '下次检查:',
+                'system-stopped': '系统已停止'
+            }
+        };
+
+        // ===== BUSINESS SETTINGS =====
+        const businessSettings = {
+            porkSize: 100,
+            targetMargin: 25,
+            gasPriceSetting: 380,
+            fixedCost: 1.00,
+            checkInterval: 60
+        };
+
+        // ===== UTILITY FUNCTIONS =====
+        function updateDateTime() {
+            const now = new Date();
+            let displayText = '';
+            
+            if (currentLanguage === 'th') {
+                const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+                const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                                  'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+                const buddhistYear = now.getFullYear() + 543;
+                displayText = `วัน${dayNames[now.getDay()]}ที่ ${now.getDate()} ${monthNames[now.getMonth()]} ${buddhistYear} เวลา ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} น.`;
+            } else if (currentLanguage === 'zh') {
+                displayText = now.toLocaleDateString('zh-CN', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } else {
+                displayText = now.toLocaleDateString('en-US', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+            
+            document.getElementById('datetime').textContent = displayText;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        function updateUILanguage() {
+            Object.entries(translations[currentLanguage]).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = value;
+                }
+            });
+        }
+
+        // ===== MARKET DATA SIMULATION =====
+        function updateMarketData() {
+            const data = {
+                pork: {
+                    price: 160 + (Math.random() - 0.5) * 20,
+                    change: (Math.random() - 0.5) * 10
+                },
+                gas: {
+                    price: businessSettings.gasPriceSetting + (Math.random() - 0.5) * 40,
+                    change: (Math.random() - 0.5) * 20
+                },
+                weather: (Math.random() - 0.5) * 2,
+                economy: (Math.random() - 0.5) * 1.5,
+                season: Math.sin(Date.now() / (1000 * 60 * 60 * 24 * 30)) * 0.5,
+                health: Math.random() > 0.9 ? -1 : 0
+            };
+
+            // Calculate costs
+            data.costs = {
+                pork: (data.pork.price / 1000) * businessSettings.porkSize,
+                gas: 1.5,
+                supplies: 0.5,
+                overhead: businessSettings.fixedCost,
+                total: 0
+            };
+            data.costs.total = data.costs.pork + data.costs.gas + data.costs.supplies + data.costs.overhead;
+
+            // Update UI
+            const lang = currentLanguage;
+            const currency = lang === 'en' ? 'THB' : lang === 'zh' ? '泰铢' : 'บาท';
+            const unit = lang === 'en' ? '/kg' : lang === 'zh' ? '/公斤' : '/กก.';
+            const tankUnit = lang === 'en' ? '/tank' : lang === 'zh' ? '/罐' : '/ถัง';
+
+            document.getElementById('pork-price').innerHTML = 
+                `${data.pork.price.toFixed(0)} ${currency}${unit}<br>(${data.pork.change > 0 ? '+' : ''}${data.pork.change.toFixed(0)} ${currency})`;
+            
+            document.getElementById('gas-price').innerHTML = 
+                `${data.gas.price.toFixed(0)} ${currency}${tankUnit}<br>(${data.gas.change > 0 ? '+' : ''}${data.gas.change.toFixed(0)} ${currency})`;
+
+            // Weather descriptions
+            const weatherDescriptions = {
+                th: data.weather > 0.5 ? 'แสงแดดดี<br>เหมาะขาย' : 
+                    data.weather < -0.5 ? 'ฝนตก<br>ลูกค้าน้อย' : 'แสงแดดอ่อน<br>เหมาะขาย',
+                en: data.weather > 0.5 ? 'Sunny<br>Good for sales' : 
+                    data.weather < -0.5 ? 'Rainy<br>Fewer customers' : 'Partly sunny<br>Good for sales',
+                zh: data.weather > 0.5 ? '晴天<br>适合销售' : 
+                    data.weather < -0.5 ? '下雨<br>客人较少' : '微晴<br>适合销售'
+            };
+            document.getElementById('weather').innerHTML = weatherDescriptions[lang];
+
+            // Economy descriptions
+            const economyDescriptions = {
+                th: data.economy > 0.3 ? 'กำลังซื้อดี<br>เศรษฐกิจโต' : 
+                    data.economy < -0.3 ? 'กำลังซื้อลด<br>เศรษฐกิจชะลอ' : 'กำลังซื้อดี<br>ปกติ',
+                en: data.economy > 0.3 ? 'Strong purchasing<br>Economy growing' : 
+                    data.economy < -0.3 ? 'Weak purchasing<br>Economy slowing' : 'Normal purchasing<br>Stable',
+                zh: data.economy > 0.3 ? '购买力强<br>经济增长' : 
+                    data.economy < -0.3 ? '购买力弱<br>经济放缓' : '购买力正常<br>稳定'
+            };
+            document.getElementById('economy').innerHTML = economyDescriptions[lang];
+
+            // Season descriptions
+            const seasonDescriptions = {
+                th: data.season > 0.3 ? 'เทศกาล/วันหยุด<br>ลูกค้าเยอะ' : 
+                    data.season < -0.3 ? 'ช่วงเรียน<br>ลูกค้าน้อย' : 'วันธรรมดา<br>ปกติ',
+                en: data.season > 0.3 ? 'Festival/Holiday<br>Many customers' : 
+                    data.season < -0.3 ? 'School period<br>Fewer customers' : 'Regular day<br>Normal',
+                zh: data.season > 0.3 ? '节庆/假期<br>客人很多' : 
+                    data.season < -0.3 ? '上学期间<br>客人较少' : '平常日<br>正常'
+            };
+            document.getElementById('season').innerHTML = seasonDescriptions[lang];
+
+            // Health descriptions
+            const healthDescriptions = {
+                th: data.health < 0 ? 'มีข่าวลบ<br>ระวังยอดขาย' : 'ไม่มีข่าวลบ<br>ปลอดภัย',
+                en: data.health < 0 ? 'Negative news<br>Watch sales' : 'No negative news<br>Safe',
+                zh: data.health < 0 ? '负面新闻<br>注意销量' : '无负面新闻<br>安全'
+            };
+            document.getElementById('health').innerHTML = healthDescriptions[lang];
+
+            // Update cost breakdown
+            document.getElementById('cost-pork').textContent = `${data.costs.pork.toFixed(2)} ${currency}`;
+            document.getElementById('cost-gas').textContent = `${data.costs.gas.toFixed(2)} ${currency}`;
+            document.getElementById('cost-supplies').textContent = `${data.costs.supplies.toFixed(2)} ${currency}`;
+            document.getElementById('cost-overhead').textContent = `${data.costs.overhead.toFixed(2)} ${currency}`;
+            document.getElementById('total-cost').innerHTML = `<strong>${data.costs.total.toFixed(2)} ${currency}</strong>`;
+
+            return data;
+        }
+
+        // ===== AI DECISION MAKING =====
+        function makeAIDecision() {
+            if (!autoMode) return;
+
+            const data = updateMarketData();
+            let basePrice = data.costs.total * (1 + businessSettings.targetMargin / 100);
+            let adjustedPrice = basePrice;
+            let reasons = [];
+            let riskLevel = 'low';
+
+            // Weather impact
+            if (data.weather < 0) {
+                adjustedPrice += data.weather;
+                reasons.push(`Weather impact (${data.weather.toFixed(1)})`);
+                riskLevel = data.weather < -0.3 ? 'high' : 'medium';
+            } else if (data.weather > 0) {
+                adjustedPrice += data.weather * 0.5;
+                reasons.push(`Good weather (+${(data.weather * 0.5).toFixed(1)})`);
+            }
+
+            // Economic impact
+            if (data.economy < 0) {
+                adjustedPrice += data.economy;
+                reasons.push(`Economic downturn (${data.economy.toFixed(1)})`);
+                riskLevel = riskLevel === 'low' ? 'medium' : 'high';
+            } else if (data.economy > 0) {
+                adjustedPrice += data.economy * 0.3;
+                reasons.push(`Good economy (+${(data.economy * 0.3).toFixed(1)})`);
+            }
+
+            // Seasonal impact
+            if (data.season !== 0) {
+                const seasonAdjust = data.season * 0.4;
+                adjustedPrice += seasonAdjust;
+                reasons.push(`Seasonal factor (${seasonAdjust > 0 ? '+' : ''}${seasonAdjust.toFixed(1)})`);
+            }
+
+            // Health/news impact
+            if (data.health < 0) {
+                adjustedPrice += data.health;
+                reasons.push(`Health concerns (${data.health.toFixed(1)})`);
+                riskLevel = 'high';
+            }
+
+            // Round to appropriate price
+            adjustedPrice = Math.round(adjustedPrice * 2) / 2;
+            adjustedPrice = Math.max(adjustedPrice, data.costs.total + 1);
+
+            // Calculate profit
+            const profit = adjustedPrice - data.costs.total;
+            const marginPercent = (profit / data.costs.total * 100).toFixed(1);
+
+            // Update recommendation
+            const lang = currentLanguage;
+            const currency = lang === 'en' ? 'THB/stick' : lang === 'zh' ? '泰铢/串' : 'บาท/ไม้';
+            document.getElementById('recommended-price').textContent = `${adjustedPrice} ${currency}`;
+            
+            let reasonText = reasons.length > 0 ? 
+                `Factors: ${reasons.join(', ')}. ` : 
+                'Optimal price based on market conditions. ';
+            reasonText += `Net profit ${profit.toFixed(1)} ${lang === 'en' ? 'THB' : lang === 'zh' ? '泰铢' : 'บาท'}/stick (${marginPercent}%)`;
+            
+            document.getElementById('rec-reason').textContent = reasonText;
+
+            // Update risk indicator
+            const riskIndicator = document.getElementById('risk-indicator');
+            riskIndicator.className = `risk-indicator risk-${riskLevel}`;
+            const riskTexts = {
+                low: 'ความเสี่ยง: ต่ำ',
+                medium: 'ความเสี่ยง: ปานกลาง',
+                high: 'ความเสี่ยง: สูง'
+            };
+            riskIndicator.innerHTML = `<span>📊 ${riskTexts[riskLevel]}</span>`;
+
+            // Update price if significantly different
+            if (Math.abs(adjustedPrice - currentPrice) >= 0.5) {
+                updatePrice(adjustedPrice, reasonText);
+            }
+        }
+
+        function updatePrice(newPrice, reason) {
+            const oldPrice = currentPrice;
+            currentPrice = newPrice;
+            
+            // Update UI with animation
+            const priceElement = document.getElementById('current-price');
+            priceElement.textContent = currentPrice;
+            priceElement.parentElement.classList.add('price-update');
+            
+            setTimeout(() => {
+                priceElement.parentElement.classList.remove('price-update');
+            }, 500);
+
+            // Update price trend
+            const trendElement = document.getElementById('price-trend');
+            const diff = newPrice - oldPrice;
+            
+            if (diff > 0) {
+                trendElement.innerHTML = '📈 ขึ้น';
+            } else if (diff < 0) {
+                trendElement.innerHTML = '📉 ลง';
+            } else {
+                trendElement.innerHTML = '📊 คงที่';
+            }
+            
+            // Add to decision log
+            addToDecisionLog(oldPrice, newPrice, reason);
+            
+            const message = `ราคาอัปเดตเป็น ${currentPrice} บาท`;
+            showToast(message, 'success');
+        }
+
+        function addToDecisionLog(oldPrice, newPrice, reason) {
+            const logContainer = document.getElementById('decision-log');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+            const dayNames = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            const dayName = dayNames[now.getDay()];
+            const dateString = `${now.getDate()} ${now.toLocaleDateString('th-TH', { month: 'long' })} ${now.getFullYear() + 543}`;
+            
+            const actionText = oldPrice === newPrice ? 'คงราคา' : 'ปรับราคา';
+            
+            logEntry.innerHTML = `
+                <div class="log-action">${actionText} ${oldPrice} → ${newPrice} บาท</div>
+                <div class="log-reason">${reason}</div>
+                <div class="log-time">${timeString} • วัน${dayName} ${dateString}</div>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Keep only 3 entries
+            const entries = logContainer.getElementsByClassName('log-entry');
+            if (entries.length > 3) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        // ===== UI CONTROL FUNCTIONS =====
+        function toggleMode() {
+            autoMode = !autoMode;
+            const btn = document.getElementById('auto-btn');
+            const status = document.getElementById('mode-status');
+            const container = document.querySelector('.container');
+            
+            if (autoMode) {
+                btn.innerHTML = `<span>${translations[currentLanguage]['auto-btn-text']}</span>`;
+                btn.className = 'btn btn-primary';
+                status.innerHTML = `<span class="status-indicator"></span><span>${translations[currentLanguage]['mode-text']}</span>`;
+                container.classList.remove('offline');
+                startAutoMode();
+                showToast('เปิดโหมดอัตโนมัติแล้ว', 'success');
+            } else {
+                btn.innerHTML = `<span>${translations[currentLanguage]['auto-btn-manual']}</span>`;
+                btn.className = 'btn btn-secondary';
+                status.innerHTML = `<span class="status-indicator"></span><span>${translations[currentLanguage]['mode-manual']}</span>`;
+                container.classList.add('offline');
+                stopAutoMode();
+                showToast('ปิดโหมดอัตโนมัติแล้ว', 'warning');
+            }
+        }
+
+        function startAutoMode() {
+            const intervalMinutes = businessSettings.checkInterval;
+            checkInterval = setInterval(() => {
+                makeAIDecision();
+                nextCheckTime = intervalMinutes * 60;
+                updateCountdown();
+            }, intervalMinutes * 60 * 1000);
+            
+            nextCheckTime = intervalMinutes * 60;
+            updateCountdown();
+        }
+
+        function stopAutoMode() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+            document.getElementById('next-check').textContent = translations[currentLanguage]['system-stopped'];
+        }
+
+        function updateCountdown() {
+            const countdownInterval = setInterval(() => {
+                if (autoMode && nextCheckTime > 0) {
+                    nextCheckTime--;
+                    const hours = Math.floor(nextCheckTime / 3600);
+                    const minutes = Math.floor((nextCheckTime % 3600) / 60);
+                    const seconds = nextCheckTime % 60;
+                    
+                    let timeText = '';
+                    if (hours > 0) {
+                        timeText += `${hours} ชั่วโมง `;
+                    }
+                    if (minutes > 0) {
+                        timeText += `${minutes} นาที `;
+                    }
+                    timeText += `${seconds} วินาที`;
+                    
+                    document.getElementById('next-check').textContent = timeText;
+                } else {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        function forceCheck() {
+            const btn = event?.target?.closest('button');
+            if (btn) {
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '⏳';
+                btn.classList.add('loading');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('loading');
+                }, 800);
+            }
+            
+            makeAIDecision();
+            nextCheckTime = businessSettings.checkInterval * 60;
+            updateCountdown();
+            showToast('ตรวจสอบเสร็จสิ้น', 'success');
+        }
+
+        // ===== THEME AND LANGUAGE FUNCTIONS =====
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            showToast(isDarkMode ? 'เปลี่ยนเป็น Dark Mode' : 'เปลี่ยนเป็น Light Mode');
+        }
+
+        function toggleLanguage() {
+            const selector = document.getElementById('language-selector');
+            selector.classList.toggle('show');
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            updateUILanguage();
+            document.getElementById('language-selector').classList.remove('show');
+            
+            // Update language selector active state
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.toggle('active', option.dataset.lang === lang);
+            });
+            
+            updateMarketData();
+            showToast(`เปลี่ยนภาษาเป็น ${lang === 'th' ? 'ไทย' : lang === 'en' ? 'English' : '中文'}`);
+        }
+
+        function showFactorInfo(factorType) {
+            const factorMessages = {
+                pork: 'ราคาหมูส่งผลต่อต้นทุนโดยตรง เมื่อหมูแพงขึ้นควรปรับราคาขาย',
+                gas: 'ราคาแก๊สส่งผลต่อค่าใช้จ่ายในการย่าง ถ้าแก๊สแพงอาจต้องปรับราคา',
+                weather: 'อากาศดีลูกค้าออกมาเยอะ ฝนตกลูกค้าน้อย ส่งผลต่อยอดขาย',
+                economy: 'ภาวะเศรษฐกิจส่งผลต่อกำลังซื้อของลูกค้า',
+                season: 'วันหยุดและเทศกาลลูกค้าเยอะ ช่วงเรียนลูกค้าน้อย',
+                health: 'ข่าวสุขภาพส่งผลต่อความเชื่อมั่นในการซื้อ'
+            };
+            
+            showToast(factorMessages[factorType] || 'ข้อมูลเพิ่มเติม', 'info');
+        }
+
+        function showInfo() {
+            showToast('นี่คือเวอร์ชันสาธิต ฟีเจอร์เต็มจะมีในแอปจริง', 'info');
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                setLanguage(this.dataset.lang);
+            });
+        });
+
+        // Close language selector when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#language-selector') && !e.target.closest('button[onclick="toggleLanguage()"]')) {
+                document.getElementById('language-selector').classList.remove('show');
+            }
+        });
+
+        // ===== INITIALIZATION =====
+        function initializeSystem() {
+            updateUILanguage();
+            updateMarketData();
+            makeAIDecision();
+            startAutoMode();
+            
+            // Start datetime updates
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Visual fade-in effect
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            console.log('🥩 Moo Ping AI System Initialized');
+        }
+
+        // ===== STARTUP =====
+        document.addEventListener('DOMContentLoaded', initializeSystem);
+        
+        // Add loading animation
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥩 เสนาธิการหมูปิ้ง AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-green: #2D8F47;
+            --secondary-green: #45B26B;
+            --light-green: #E8F5E9;
+            --primary-orange: #FF6B35;
+            --border-color: #C8E6C9;
+            --shadow-color: rgba(45, 143, 71, 0.15);
+            --dark-text: #1B5E20;
+            --medium-text: #2E7D32;
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 50%, var(--primary-orange) 100%);
+            min-height: 100vh;
+            color: var(--dark-text);
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px var(--shadow-color);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .header-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .datetime {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 15px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        .main-content {
+            padding: 15px;
+            padding-bottom: 100px;
+        }
+        
+        .status-panel {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        
+        .mode-status {
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .current-price {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .price-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .price-value {
+            font-size: 36px;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .price-trend {
+            margin-top: 8px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--medium-text);
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .factor-card {
+            background: linear-gradient(135deg, var(--light-green) 0%, white 100%);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .factor-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        
+        .factor-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .factor-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--dark-text);
+            margin-bottom: 5px;
+        }
+        
+        .factor-value {
+            font-size: 12px;
+            color: var(--medium-text);
+            line-height: 1.4;
+        }
+        
+        .ai-section {
+            background: linear-gradient(135deg, var(--light-green) 0%, white 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 15px var(--shadow-color);
+            border: 2px solid var(--border-color);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .section-title-icon {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--dark-text);
+        }
+        
+        .cost-breakdown {
+            background: rgba(45, 143, 71, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+        }
+        
+        .cost-label {
+            color: var(--medium-text);
+        }
+        
+        .cost-value {
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+        
+        .ai-recommendation {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .recommendation-price {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        .recommendation-reason {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .risk-low {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+        
+        .risk-medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+        
+        .risk-high {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+        }
+        
+        .log-entry {
+            background: rgba(45, 143, 71, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--primary-orange);
+        }
+        
+        .log-action {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+        
+        .log-reason {
+            color: var(--medium-text);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        
+        .log-time {
+            color: #666;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .next-check {
+            text-align: center;
+            padding: 15px;
+            background: rgba(45, 143, 71, 0.05);
+            margin: 20px -15px -15px -15px;
+            border-radius: 0 0 12px 12px;
+            font-size: 13px;
+            color: var(--medium-text);
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(to top, var(--light-green) 0%, rgba(255, 255, 255, 0.95) 100%);
+            padding: 15px;
+            box-shadow: 0 -3px 15px var(--shadow-color);
+            backdrop-filter: blur(10px);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            box-shadow: 0 3px 10px var(--shadow-color);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--dark-text);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-green);
+            transform: translateY(-1px);
+        }
+        
+        .btn-settings {
+            background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            grid-column: 1 / -1;
+            margin-top: 8px;
+        }
+        
+        .quick-action {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .quick-action:hover {
+            transform: scale(1.1);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+        
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 150px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 13px;
+        }
+        
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .export-btn {
+            padding: 10px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        
+        .export-btn:hover {
+            background: var(--light-green);
+            border-color: var(--primary-green);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-orange) 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+        }
+        
+        .toast.warning {
+            background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+        }
+        
+        .toast.error {
+            background: linear-gradient(135deg, #F44336 0%, #EF5350 100%);
+        }
+        
+        .language-selector {
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 5px;
+            display: none;
+            box-shadow: 0 3px 15px var(--shadow-color);
+            z-index: 1001;
+        }
+        
+        .language-selector.show {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-option:hover {
+            background: var(--light-green);
+        }
+        
+        .language-option.active {
+            background: var(--primary-green);
+            color: white;
+        }
+        
+        [data-theme="dark"] {
+            --light-green: #1a2e1d;
+            --border-color: #2e7d32;
+        }
+        
+        [data-theme="dark"] .container {
+            background: #0d1b0f;
+            color: #e8f5e9;
+        }
+        
+        [data-theme="dark"] .factor-card,
+        [data-theme="dark"] .ai-section,
+        [data-theme="dark"] .chart-container {
+            background: #1a2e1d;
+            color: #e8f5e9;
+        }
+        
+        [data-theme="dark"] .export-btn,
+        [data-theme="dark"] .language-selector {
+            background: #1a2e1d;
+            color: #e8f5e9;
+            border-color: #2e7d32;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .controls {
+                left: 0;
+                transform: none;
+                width: 100%;
+            }
+        }
+        
+        .offline .status-indicator {
+            background: #F44336;
+            animation: none;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .price-update {
+            animation: priceUpdate 0.5s ease;
+        }
+        
+        @keyframes priceUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-controls">
+                <button class="header-btn" onclick="toggleLanguage()" title="เปลี่ยนภาษา">🌐</button>
+                <button class="header-btn" onclick="toggleTheme()" title="เปลี่ยน Theme">🌙</button>
+                <button class="header-btn" onclick="showInfo()" title="คู่มือ">❓</button>
+            </div>
+            <h1 id="header-title">🥩 เสนาธิการหมูปิ้ง AI</h1>
+            <p id="header-subtitle">ระบบกำหนดราคาอัตโนมัติด้วยปัญญาประดิษฐ์</p>
+            <div class="datetime" id="datetime">กำลังโหลด...</div>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="language-selector" id="language-selector">
+            <div class="language-option active" data-lang="th">🇹🇭 ไทย</div>
+            <div class="language-option" data-lang="en">🇺🇸 English</div>
+            <div class="language-option" data-lang="zh">🇨🇳 中文</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Status Panel -->
+            <div class="status-panel">
+                <div class="mode-status" id="mode-status">
+                    <span class="status-indicator"></span>
+                    <span id="mode-text">โหมดอัตโนมัติเปิดใช้งาน</span>
+                </div>
+                <div class="current-price">
+                    <div class="price-label" id="price-label">ราคาขายปัจจุบัน</div>
+                    <div class="price-value"><span id="current-price">15</span> <span id="price-unit">บาท/ไม้</span></div>
+                    <div class="price-trend" id="price-trend">📊 คงที่</div>
+                </div>
+            </div>
+
+            <!-- Market Factors -->
+            <div class="section-title" id="factors-title">📊 ปัจจัยตลาด</div>
+            <div class="factors-grid">
+                <div class="factor-card" onclick="showFactorInfo('pork')">
+                    <span class="factor-icon">🥩</span>
+                    <div class="factor-title" id="factor-pork-title">ราคาหมูสด</div>
+                    <div class="factor-value" id="pork-price">160 บาท/กก.<br>(+10 บาท)</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('gas')">
+                    <span class="factor-icon">⛽</span>
+                    <div class="factor-title" id="factor-gas-title">ราคาแก๊ส</div>
+                    <div class="factor-value" id="gas-price">380 บาท/ถัง<br>(ปกติ)</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('weather')">
+                    <span class="factor-icon">🌤️</span>
+                    <div class="factor-title" id="factor-weather-title">สภาพอากาศ</div>
+                    <div class="factor-value" id="weather">แสงแดดอ่อน<br>เหมาะขาย</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('economy')">
+                    <span class="factor-icon">💰</span>
+                    <div class="factor-title" id="factor-economy-title">ภาวะเศรษฐกิจ</div>
+                    <div class="factor-value" id="economy">กำลังซื้อดี<br>ปกติ</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('season')">
+                    <span class="factor-icon">🗓️</span>
+                    <div class="factor-title" id="factor-season-title">ฤดูกาล/เทศกาล</div>
+                    <div class="factor-value" id="season">วันธรรมดา<br>ปกติ</div>
+                </div>
+                <div class="factor-card" onclick="showFactorInfo('health')">
+                    <span class="factor-icon">🏥</span>
+                    <div class="factor-title" id="factor-health-title">สุขภาพ/ข่าว</div>
+                    <div class="factor-value" id="health">ไม่มีข่าวลบ<br>ปลอดภัย</div>
+                </div>
+            </div>
+
+            <!-- Price Chart -->
+            <div class="chart-container">
+                <div class="chart-title" id="chart-title">💹 แนวโน้มราคาย้อนหลัง 24 ชั่วโมง</div>
+                <div class="chart" id="price-chart">กราฟราคาจะแสดงที่นี่</div>
+            </div>
+
+            <!-- AI Analysis -->
+            <div class="ai-section">
+                <div class="section-header">
+                    <div class="section-icon">🤖</div>
+                    <div class="section-title-icon" id="ai-title">การวิเคราะห์ AI</div>
+                </div>
+                
+                <div class="cost-breakdown">
+                    <h4 style="margin-bottom: 10px; font-weight: 600;" id="cost-title">การคำนวณต้นทุน</h4>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-pork-label">หมูสด (100g)</span>
+                        <span class="cost-value" id="cost-pork">8.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-gas-label">แก๊ส/ถ่าน</span>
+                        <span class="cost-value" id="cost-gas">1.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-supplies-label">ไม้เสียบ/ถุง</span>
+                        <span class="cost-value" id="cost-supplies">0.50 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label" id="cost-overhead-label">ค่าคงที่อื่นๆ</span>
+                        <span class="cost-value" id="cost-overhead">1.00 บาท</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label"><strong id="total-cost-label">ต้นทุนรวม</strong></span>
+                        <span class="cost-value" id="total-cost"><strong>11.00 บาท</strong></span>
+                    </div>
+                </div>
+
+                <div class="ai-recommendation">
+                    <div class="recommendation-title">💡 <span id="rec-title">คำแนะนำจาก AI</span></div>
+                    <div class="recommendation-price" id="recommended-price">15 บาท/ไม้</div>
+                    <div class="recommendation-reason" id="rec-reason">
+                        ราคาเหมาะสมตามภาวะตลาด หมูขึ้นราคาเล็กน้อยแต่ยังแข่งขันได้ 
+                        กำไรสุทธิ 4 บาท/ไม้ (36.4%)
+                    </div>
+                    <div class="risk-indicator risk-low" id="risk-indicator">
+                        <span>📊 ความเสี่ยง: ต่ำ</span>
+                    </div>
+                </div>
+
+                <div class="export-grid">
+                    <button class="export-btn" onclick="showInfo()">📄 ส่งออก PDF</button>
+                    <button class="export-btn" onclick="showInfo()">📊 ส่งออก Excel</button>
+                    <button class="export-btn" onclick="showInfo()">📤 แชร์รายงาน</button>
+                    <button class="export-btn" onclick="showInfo()">🖨️ พิมพ์รายงาน</button>
+                </div>
+            </div>
+
+            <!-- Decision Log -->
+            <div class="ai-section">
+                <div class="section-header">
+                    <div class="section-icon">📝</div>
+                    <div class="section-title-icon" id="log-title">ประวัติการตัดสินใจ</div>
+                </div>
+                <div id="decision-log">
+                    <div class="log-entry">
+                        <div class="log-action">ปรับราคา 16 → 15 บาท</div>
+                        <div class="log-reason">หมูขึ้นราคาเล็กน้อย แต่วันจันทร์ลูกค้าน้อย ลดราคาเพื่อเพิ่มยอดขาย</div>
+                        <div class="log-time">17:25 น. • วันจันทร์ที่ 19 พฤษภาคม 2568</div>
+                    </div>
+                    <div class="log-entry">
+                        <div class="log-action">คงราคา 15 บาท</div>
+                        <div class="log-reason">ปัจจัยทั้งหมดอยู่ในเกณฑ์ปกติ ราคาเหมาะสมกับตลาด</div>
+                        <div class="log-time">14:15 น. • วันจันทร์ที่ 19 พฤษภาคม 2568</div>
+                    </div>
+                </div>
+            </div>
+
+            

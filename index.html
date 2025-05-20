@@ -3,108 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> ระบบที่ปรึกษาช่วยตั้งราคาขายหมูปิ้งอัจฉริยะ </title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</title>
     <style>
+        :root {
+            --gold: #d4af37;
+            --dark-gold: #9c7c38;
+            --light-gold: #f1d78a;
+            --brown: #4e2406;
+            --light-brown: #8c6946;
+            --orange: #ff7e00;
+            --red: #c92d28;
+            --charcoal: #333333;
+            --cream: #fffaf0;
+            --smoke: rgba(0, 0, 0, 0.7);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         * {
+            box-sizing: border-box;
+            font-family: 'Sarabun', 'Prompt', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Sarabun', sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c1810 25%, #3d2914 50%, #4a3018 75%, #1a1a1a 100%);
-            min-height: 100vh;
-            color: #2c1810; /* เปลี่ยนจากสีขาวเป็นสีเข้ม */
-            position: relative;
+            background-color: var(--cream);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="%23fffaf0"/><path d="M0 0L100 100M100 0L0 100" stroke="%23d4af37" stroke-width="0.5" stroke-opacity="0.1"/></svg>');
+            color: var(--charcoal);
+            line-height: 1.6;
+            padding-bottom: 60px;
         }
 
-        body::before {
+        header {
+            background: linear-gradient(135deg, var(--gold), var(--dark-gold), var(--light-gold), var(--dark-gold));
+            background-size: 400% 100%;
+            animation: shimmer 8s infinite linear;
+            color: var(--brown);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 4px solid var(--brown);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
             content: '';
-            position: fixed;
-            top: 0;
+            position: absolute;
             left: 0;
+            bottom: -5px;
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 223, 0, 0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 80%, rgba(255, 193, 7, 0.06) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
+            height: 3px;
+            background: var(--brown);
+            transform: scaleX(0.8);
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover::after {
+            transform: scaleX(1);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            position: relative;
-        }
-
-        .header {
-            text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 193, 7, 0.98) 50%, rgba(255, 171, 0, 0.95) 100%);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3), 
-                        0 12px 40px rgba(0, 0, 0, 0.4),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shimmer 3s infinite;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        .header .subtitle {
-            font-size: 1.2rem;
-            color: #2c1810;
-            font-weight: 500;
-            position: relative;
-            z-index: 1;
-        }
-
-        .main-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .card {
-            background: linear-gradient(135deg, rgba(240, 240, 240, 0.95) 0%, rgba(235, 235, 235, 0.98) 100%); /* เปลี่ยนเป็นพื้นหลังสีอ่อน */
+            background: #fff;
             border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
-                        0 4px 16px rgba(255, 215, 0, 0.1),
-                        inset 0 1px 0 rgba(255, 215, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.3);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px);
         }
 
         .card::before {
@@ -113,498 +134,495 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FFD700, #FFC107, #FFAB00);
+            height: 6px;
+            background: linear-gradient(90deg, var(--gold), var(--orange), var(--red), var(--orange), var(--gold));
+            background-size: 300% 100%;
+            animation: shimmer 5s infinite linear;
         }
 
-        .card::after {
+        .card h2 {
+            color: var(--brown);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card h2::after {
             content: '';
             position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--brown);
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            outline: none;
+        }
+
+        .market-factors {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(to right bottom, rgba(212, 175, 55, 0.1), rgba(255, 126, 0, 0.05));
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .result-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--gold);
+            transition: all 0.3s;
+        }
+
+        .result-box strong {
+            color: var(--orange);
+        }
+
+        .result-box.highlight {
+            background-color: rgba(255, 250, 240, 0.9);
+            border-left: 4px solid var(--red);
+            animation: pulse 2s infinite;
+        }
+
+        .recommendation {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--charcoal);
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid var(--orange);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .recommendation::before {
+            content: '"';
+            font-size: 60px;
+            color: rgba(212, 175, 55, 0.2);
+            position: absolute;
+            top: -15px;
+            left: 5px;
+        }
+
+        .recommendation::after {
+            content: '"';
+            font-size: 60px;
+            color: rgba(212, 175, 55, 0.2);
+            position: absolute;
+            bottom: -50px;
+            right: 5px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out forwards;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: var(--light-brown);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot-message {
+            background-color: rgba(241, 215, 138, 0.4);
+            color: var(--brown);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .bot-message::before {
+            content: '🍖';
+            font-size: 20px;
+            position: absolute;
+            left: -30px;
+            top: 5px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 15px;
+            background-color: rgba(241, 215, 138, 0.3);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--brown);
+            border-radius: 50%;
+            margin: 0 2px;
+            opacity: 0.6;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--gold), var(--orange));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, var(--dark-gold), var(--red));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin: 0 10px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.05), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 
-                        0 8px 24px rgba(255, 215, 0, 0.2),
-                        inset 0 1px 0 rgba(255, 215, 0, 0.3);
-            border-color: rgba(255, 215, 0, 0.5);
-        }
-
-        .card:hover::after {
-            opacity: 1;
-        }
-
-        .card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #8B4513; /* เปลี่ยนจากสีทองเป็นสีน้ำตาลเข้ม */
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: none; /* ลบ text shadow */
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #654321; /* เปลี่ยนจากสีทองเป็นสีน้ำตาลเข้ม */
-            text-shadow: none; /* ลบ text shadow */
-        }
-
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(139, 69, 19, 0.5); /* เปลี่ยนสี border เป็นสีน้ำตาล */
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            background: rgba(245, 245, 245, 0.9); /* เปลี่ยนพื้นหลังเป็นสีอ่อน */
-            color: #2c1810; /* เปลี่ยนข้อความเป็นสีเข้ม */
-            backdrop-filter: blur(10px);
-        }
-
-        .input-group input:focus,
-        .input-group select:focus {
-            outline: none;
-            border-color: #8B4513; /* เปลี่ยนสี focus เป็นสีน้ำตาล */
-            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2),
-                        inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: rgba(250, 250, 250, 0.95);
-        }
-
-        .input-group input::placeholder {
-            color: rgba(139, 69, 19, 0.6); /* เปลี่ยน placeholder เป็นสีน้ำตาลอ่อน */
-        }
-
-        .button {
-            background: linear-gradient(135deg, #FFD700 0%, #FFC107 50%, #FFAB00 100%);
-            color: #1a1a1a;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            margin: 10px 0;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .button::before {
-            content: '';
+        .slider:before {
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .button:hover::before {
-            left: 100%;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4),
-                        0 4px 8px rgba(0, 0, 0, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            background: linear-gradient(135deg, #FFDC00 0%, #FFD700 50%, #FFC107 100%);
-        }
-
-        .button.secondary {
-            background: linear-gradient(135deg, #B8860B 0%, #DAA520 50%, #FFD700 100%);
-            color: #1a1a1a;
-        }
-
-        .button.secondary:hover {
-            background: linear-gradient(135deg, #DAA520 0%, #FFD700 50%, #FFDC00 100%);
-        }
-
-        .button.danger {
-            background: linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #FF6347 100%);
-            color: #1a1a1a; /* เปลี่ยนจากขาวเป็นดำ */
-        }
-
-        .button.danger:hover {
-            background: linear-gradient(135deg, #A0000A 0%, #FF1744 50%, #FF6B6B 100%);
-        }
-
-        .result-section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-        }
-
-        .result-section h2 {
-            color: #654321; /* เปลี่ยนหัวข้อเป็นสีน้ำตาลเข้ม */
-        }
-
-        .result-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .result-card {
-            background: linear-gradient(135deg, #F5F5DC, #FFF8DC);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            border: 2px solid #DEB887;
-            transition: all 0.3s ease;
-        }
-
-        .result-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(222, 184, 135, 0.3);
-        }
-
-        .result-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #8B4513;
-            margin-bottom: 5px;
-        }
-
-        .result-label {
-            font-size: 1rem;
-            color: #A0522D;
-            font-weight: 500;
-        }
-
-        .ai-analysis {
-            background: linear-gradient(135deg, #E6F3E6, #F0FFF0);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 5px solid #228B22;
-            color: #2F4F2F; /* เพิ่มสีเข้มสำหรับข้อความในส่วนนี้ */
-        }
-
-        .ai-analysis h3 {
-            color: #228B22;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .factor-analysis {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .factor-item {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #CD853F;
-            color: #2c1810; /* เพิ่มสีเข้มสำหรับข้อความในปัจจัย */
-        }
-
-        .factor-item strong {
-            color: #8B4513;
-        }
-
-        .risk-meter {
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .risk-bar {
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(90deg, #228B22, #FFD700, #FF6347);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .risk-indicator {
-            position: absolute;
-            top: -5px;
-            width: 10px;
-            height: 30px;
-            background: #333;
-            border-radius: 5px;
-            transition: left 0.5s ease;
-        }
-
-        .marketing-strategies {
-            margin-top: 25px;
-        }
-
-        .strategy-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #FFA500;
-            transition: all 0.3s ease;
-            color: #2c1810; /* เพิ่มสีเข้มสำหรับข้อความ */
-        }
-
-        .strategy-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 3px 15px rgba(255, 165, 0, 0.2);
-        }
-
-        .settings-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
-        .settings-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            color: #2c1810; /* เพิ่มสีเข้มสำหรับข้อความ */
-        }
-
-        .settings-content h2 {
-            color: #654321; /* สีน้ำตาลเข้มสำหรับหัวข้อ */
-        }
-
-        .history-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 25px;
-            max-height: 400px;
-            overflow-y: auto;
-            color: #2c1810; /* เพิ่มสีเข้มสำหรับข้อความ */
-        }
-
-        .history-panel h2 {
-            color: #654321; /* สีน้ำตาลเข้มสำหรับหัวข้อ */
-        }
-
-        .history-item {
-            background: #F8F8FF;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #9370DB;
-            color: #2c1810; /* เพิ่มสีเข้มสำหรับข้อความ */
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(44, 24, 16, 0.3); /* เปลี่ยนสีของ loading เป็นเข้ม */
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
             border-radius: 50%;
-            border-top-color: #654321; /* เปลี่ยนสีด้านบนเป็นน้ำตาล */
-            animation: spin 1s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        input:checked + .slider {
+            background-color: var(--gold);
         }
 
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--gold);
         }
 
-        .animate-slide-up {
-            animation: slideInUp 0.5s ease-out;
+        input:checked + .slider:before {
+            transform: translateX(30px);
         }
 
-        @media (max-width: 768px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .card {
-                padding: 20px;
-            }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--light-brown);
+            font-size: 0.9rem;
         }
 
-        .tooltip {
-            position: relative;
+        .floating-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold), var(--orange));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1000;
+            animation: float 3s infinite ease-in-out;
+            transition: all 0.3s;
+        }
+
+        .floating-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .floating-icon i {
+            color: white;
+            font-size: 24px;
+        }
+
+        /* Icons */
+        .icon {
             display: inline-block;
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        /* Additional styles for animation effects */
+        @keyframes glowing {
+            0% { box-shadow: 0 0 5px var(--gold); }
+            50% { box-shadow: 0 0 20px var(--gold); }
+            100% { box-shadow: 0 0 5px var(--gold); }
+        }
+
+        .glow-effect {
+            animation: glowing 2s infinite;
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
             cursor: help;
         }
 
-        .tooltip:hover::after {
+        [data-tooltip]:before {
             content: attr(data-tooltip);
             position: absolute;
-            background: linear-gradient(135deg, #f5f5f5, #e8e8e8); /* เปลี่ยนพื้นหลัง tooltip เป็นสีอ่อน */
-            color: #2c1810; /* เปลี่ยนข้อความเป็นสีเข้ม */
-            padding: 8px 12px;
-            border-radius: 8px;
-            white-space: nowrap;
-            z-index: 100;
-            top: -40px;
+            bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.9rem;
-            border: 1px solid rgba(139, 69, 19, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            background-color: var(--smoke);
+            color: white;
+            border-radius: 6px;
+            white-space: nowrap;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            font-size: 14px;
+            z-index: 1000;
         }
 
-        /* Add shimmer animation for gold effect */
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        [data-tooltip]:hover:before {
+            visibility: visible;
+            opacity: 1;
         }
 
-        /* Custom scrollbar for gold theme */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .card-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: var(--gold);
+            opacity: 0.4;
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(139, 69, 19, 0.2); /* เปลี่ยนเป็นน้ำตาลอ่อน */
-            border-radius: 4px;
+        .export-import {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #B8860B, #8B7355); /* เปลี่ยนเป็นโทนสีน้ำตาล */
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #DAA520, #A0522D);
-        }
-
-        /* เพิ่มสไตล์เพื่อให้แน่ใจว่าข้อความทั้งหมดเป็นสีเข้ม */
-        p, span, div:not(.loading) {
-            color: inherit;
-        }
-
-        #riskLevel {
-            color: #2c1810;
-        }
-
-        #aiReasoning {
-            color: #2c1810;
-        }
-
-        .factor-item span {
-            color: inherit;
-        }
-
-        .strategy-item span {
-            color: inherit;
+        .export-import button {
+            font-size: 14px;
+            padding: 8px 15px;
         }
     </style>
+
+    <!-- Google Font: Sarabun (Thai) -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Google Font: Prompt (Thai) -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <header>
+        <h1>🍖 ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ 🍖</h1>
+        <p>คำนวณราคาที่เหมาะสม วิเคราะห์ตลาด เพิ่มกำไรให้ร้านหมูปิ้งของคุณ</p>
+    </header>
+
     <div class="container">
-        <div class="header animate-slide-up">
-            <h1><i class="fas fa-robot"></i> ระบบที่ปรึกษาช่วยตั้งราคาขายหมูปิ้งอัจฉริยะ</h1>
-            <p class="subtitle">วิเคราะห์ด้วย 6 ปัจจัยสำคัญ เพื่อกำไรสูงสุด</p>
-        </div>
+        <div class="card">
+            <i class="fa fa-calculator card-icon"></i>
+            <h2>คำนวณต้นทุนและราคาขาย</h2>
+            
+            <div class="toggle-container">
+                <span>คำนวณอัตโนมัติ</span>
+                <label class="toggle">
+                    <input type="checkbox" id="realtime-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span>เปิด</span>
+            </div>
 
-        <div class="main-grid">
-            <!-- Input Factors Section -->
-            <div class="card animate-slide-up">
-                <h2><i class="fas fa-chart-line"></i> ปัจจัยตลาด</h2>
-                
-                <div class="input-group">
-                    <label for="porkPrice">ราคาเนื้อหมูภาคเหนือ (บาท/กก.) 
-                        <span class="tooltip" data-tooltip="ราคาเนื้อหมูสดในตลาดท้องถิ่น">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                    </label>
-                    <input type="number" id="porkPrice" value="180" min="100" max="500">
-                </div>
-
-                <div class="input-group">
-                    <label for="fuelCost">ค่าแก๊ส/ถ่าน (บาท/วัน)</label>
-                    <input type="number" id="fuelCost" value="150" min="50" max="500">
-                </div>
-
+            <div class="input-group">
+                <label for="meat-cost">ราคาเนื้อหมูต่อไม้ (บาท)</label>
+                <input type="number" id="meat-cost" value="8" min="0" step="0.5">
+            </div>
+            
+            <div class="input-group">
+                <label for="stick-cost">ราคาไม้ต่อไม้ (บาท)</label>
+                <input type="number" id="stick-cost" value="0.2" min="0" step="0.1">
+            </div>
+            
+            <div class="input-group">
+                <label for="seasoning-cost">ราคาน้ำจิ้มและเครื่องปรุงต่อไม้ (บาท)</label>
+                <input type="number" id="seasoning-cost" value="1" min="0" step="0.5">
+            </div>
+            
+            <div class="input-group">
+                <label for="labor-cost">ค่าแรงต่อวัน (บาท)</label>
+                <input type="number" id="labor-cost" value="400" min="0" step="10">
+            </div>
+            
+            <div class="input-group">
+                <label for="fixed-cost">ค่าใช้จ่ายคงที่ต่อวัน (ค่าเช่า, ค่าขนส่ง, ฯลฯ) (บาท)</label>
+                <input type="number" id="fixed-cost" value="150" min="0" step="10">
+            </div>
+            
+            <div class="input-group">
+                <label for="profit-margin">เป้าหมายกำไร (%)</label>
+                <input type="number" id="profit-margin" value="30" min="0" max="100" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="daily-volume">จำนวนหมูปิ้งที่คาดว่าจะขายต่อวัน (ไม้)</label>
+                <input type="number" id="daily-volume" value="300" min="0" step="10">
+            </div>
+            
+            <h3>ปัจจัยตลาด</h3>
+            <div class="market-factors">
                 <div class="input-group">
                     <label for="weather">สภาพอากาศ</label>
                     <select id="weather">
                         <option value="sunny">แดดจัด</option>
                         <option value="rainy">ฝนตก</option>
-                        <option value="cloudy">ครึ้ม</option>
-                        <option value="cold">หนาว</option>
+                        <option value="cool">อากาศเย็น</option>
                     </select>
                 </div>
-
+                
                 <div class="input-group">
-                    <label for="economic">สภาพเศรษฐกิจ</label>
-                    <select id="economic">
+                    <label for="economy">สภาพเศรษฐกิจ</label>
+                    <select id="economy">
                         <option value="good">ดี</option>
-                        <option value="normal">ปกติ</option>
-                        <option value="poor">ไม่ดี</option>
+                        <option value="normal" selected>ปกติ</option>
+                        <option value="poor">แย่</option>
                     </select>
                 </div>
-
+                
                 <div class="input-group">
                     <label for="season">ฤดูกาล</label>
                     <select id="season">
@@ -613,979 +631,172 @@
                         <option value="cool">หนาว</option>
                     </select>
                 </div>
-
+                
                 <div class="input-group">
-                    <label for="political">สถานการณ์การเมือง</label>
-                    <select id="political">
-                        <option value="stable">มั่นคง</option>
-                        <option value="uncertain">ไม่แน่นอน</option>
-                        <option value="crisis">วิกฤติ</option>
+                    <label for="politics">เสถียรภาพทางการเมือง</label>
+                    <select id="politics">
+                        <option value="stable" selected>มั่นคง</option>
+                        <option value="unstable">ไม่มั่นคง</option>
+                        <option value="crisis">วิกฤต</option>
                     </select>
                 </div>
             </div>
-
-            <!-- Cost Calculation Section -->
-            <div class="card animate-slide-up">
-                <h2><i class="fas fa-calculator"></i> คำนวณต้นทุน</h2>
+            
+            <button id="calculate-btn">คำนวณราคา</button>
+            
+            <div class="export-import">
+                <button id="export-btn"><i class="fas fa-file-export"></i> ส่งออกข้อมูล</button>
+                <button id="import-btn"><i class="fas fa-file-import"></i> นำเข้าข้อมูล</button>
+                <input type="file" id="import-file" style="display: none;">
+            </div>
+            
+            <div class="result-section">
+                <div class="result-box">
+                    <p>ต้นทุนต่อไม้: <strong id="cost-per-skewer">-- บาท</strong></p>
+                </div>
                 
-                <div class="input-group">
-                    <label for="meatWeight">น้ำหนักเนื้อหมู (กรัม/ไม้)</label>
-                    <input type="number" id="meatWeight" value="80" min="50" max="150">
+                <div class="result-box">
+                    <p>รวมต้นทุนคงที่และแรงงานต่อไม้: <strong id="full-cost-per-skewer">-- บาท</strong></p>
                 </div>
-
-                <div class="input-group">
-                    <label for="stickCost">ค่าไม้ไผ่ (บาท/100 ไม้)</label>
-                    <input type="number" id="stickCost" value="50" min="20" max="100">
+                
+                <div class="result-box highlight">
+                    <p>ราคาขายที่แนะนำ: <strong id="recommended-price">-- บาท</strong></p>
                 </div>
-
-                <div class="input-group">
-                    <label for="seasoningCost">ค่าเครื่องปรุง (บาท/ไม้)</label>
-                    <input type="number" id="seasoningCost" value="5" min="2" max="15">
+                
+                <div class="result-box">
+                    <p>จุดคุ้มทุน: <strong id="break-even">-- ไม้ต่อวัน</strong></p>
                 </div>
-
-                <div class="input-group">
-                    <label for="laborCost">ค่าแรงงาน (บาท/ชั่วโมง)</label>
-                    <input type="number" id="laborCost" value="80" min="50" max="200">
+                
+                <div class="result-box">
+                    <p>กำไรประมาณการต่อวัน: <strong id="daily-profit">-- บาท</strong></p>
                 </div>
-
-                <div class="input-group">
-                    <label for="overheadCost">ค่าใช้จ่ายคงที่ (บาท/วัน)</label>
-                    <input type="number" id="overheadCost" value="500" min="200" max="2000">
+                
+                <div class="recommendation" id="ai-recommendation">
+                    คำนวณราคาเพื่อรับคำแนะนำจากระบบอัจฉริยะ
                 </div>
-
-                <div class="input-group">
-                    <label for="dailySticks">ยอดขายต่อวัน (ไม้)</label>
-                    <input type="number" id="dailySticks" value="200" min="50" max="1000">
-                </div>
-
-                <button class="button" onclick="calculatePricing()">
-                    <i class="fas fa-brain"></i> คำนวณด้วยผู้ช่วยอัจฉริยะ
-                </button>
             </div>
         </div>
-
-        <!-- Control Buttons -->
-        <div class="main-grid">
-            <button class="button secondary" onclick="openSettings()">
-                <i class="fas fa-cog"></i> ตั้งค่าธุรกิจ
-            </button>
-            <button class="button secondary" onclick="toggleHistory()">
-                <i class="fas fa-history"></i> ประวัติการตัดสินใจด้วยผู้ช่วยอัจฉริยะ
-            </button>
-        </div>
-
-        <!-- Results Section -->
-        <div class="result-section" id="results" style="display: none;">
-            <h2><i class="fas fa-chart-pie"></i> ผลการวิเคราะห์ด้วยผู้ช่วยอัจฉริยะ</h2>
+        
+        <div class="card">
+            <i class="fa fa-comments card-icon"></i>
+            <h2>ปรึกษาผู้เชี่ยวชาญหมูปิ้งอัจฉริยะ</h2>
             
-            <div class="result-grid">
-                <div class="result-card">
-                    <div class="result-value" id="costPerStick">-</div>
-                    <div class="result-label">ต้นทุนต่อไม้ (บาท)</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-value" id="suggestedPrice">-</div>
-                    <div class="result-label">ราคาแนะนำ (บาท)</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-value" id="profitMargin">-</div>
-                    <div class="result-label">กำไรต่อไม้ (บาท)</div>
-                </div>
-                <div class="result-card">
-                    <div class="result-value" id="dailyProfit">-</div>
-                    <div class="result-label">กำไรต่อวัน (บาท)</div>
-                </div>
-            </div>
-
-            <!-- Risk Assessment -->
-            <div class="ai-analysis">
-                <h3><i class="fas fa-shield-alt"></i> การประเมินความเสี่ยง</h3>
-                <div class="risk-meter">
-                    <div class="risk-bar">
-                        <div class="risk-indicator" id="riskIndicator"></div>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        สวัสดีค่ะ! ฉันคือผู้เชี่ยวชาญหมูปิ้งอัจฉริยะ พร้อมให้คำปรึกษาและแนะนำเกี่ยวกับการตั้งราคาและกลยุทธ์การขายหมูปิ้งของคุณ ถามอะไรก็ได้เลยค่ะ
                     </div>
-                    <p id="riskLevel">กำลังประเมิน...</p>
                 </div>
-            </div>
-
-            <!-- AI Analysis -->
-            <div class="ai-analysis">
-                <h3><i class="fas fa-robot"></i> ปัจจัยวิเคราะห์ 6 ด้าน</h3>
-                <div class="factor-analysis" id="factorAnalysis">
-                    <!-- จะถูกใส่ข้อมูลโดย JavaScript -->
+                
+                <div class="typing-indicator" id="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <div id="aiReasoning" style="margin-top: 15px;">
-                    <!-- คำแนะนำจาก AGENT AI -->
+                
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="พิมพ์คำถามที่นี่...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i> ส่ง</button>
                 </div>
-            </div>
-
-            <!-- Marketing Strategies -->
-            <div class="ai-analysis">
-                <h3><i class="fas fa-bullhorn"></i> กลยุทธ์การตลาดดิจิทัล </h3>
-                <div class="marketing-strategies" id="marketingStrategies">
-                    <!-- จะถูกใส่ข้อมูลโดย JavaScript -->
-                </div>
-            </div>
-        </div>
-
-        <!-- History Panel -->
-        <div class="history-panel" id="historyPanel" style="display: none;">
-            <h2><i class="fas fa-history"></i> ประวัติการตัดสินใจกับผู้ช่วยอัจฉริยะ</h2>
-            <div id="historyContent">
-                <p style="text-align: center; color: #666;">ยังไม่มีประวัติการคำนวณ</p>
             </div>
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="settings-panel" id="settingsPanel">
-        <div class="settings-content">
-            <h2><i class="fas fa-cog"></i> ตั้งค่าธุรกิจ</h2>
-            
-            <div class="input-group">
-                <label for="businessName">ชื่อร้าน</label>
-                <input type="text" id="businessName" value="หมูปิ้งจัมโบ้">
-            </div>
-
-            <div class="input-group">
-                <label for="targetProfit">เป้าหมายกำไร (%)</label>
-                <input type="number" id="targetProfit" value="40" min="10" max="100">
-            </div>
-
-            <div class="input-group">
-                <label for="businessLocation">ที่ตั้งร้าน</label>
-                <select id="businessLocation">
-                    <option value="market">ตลาด</option>
-                    <option value="street">ริมถนน</option>
-                    <option value="mall">ห้างสรรพสินค้า</option>
-                    <option value="university">มหาวิทยาลัย</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="workingHours">ชั่วโมงทำงาน/วัน</label>
-                <input type="number" id="workingHours" value="10" min="6" max="16">
-            </div>
-
-            <button class="button" onclick="saveSettings()">
-                <i class="fas fa-save"></i> บันทึกการตั้งค่า
-            </button>
-            <button class="button danger" onclick="closeSettings()">
-                <i class="fas fa-times"></i> ปิด
-            </button>
-        </div>
+    <div class="floating-icon" id="info-btn">
+        <i class="fas fa-info"></i>
     </div>
+
+    <footer>
+        ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ &copy; 2025 - เครื่องมือช่วยเหลือผู้ประกอบการรายย่อย
+    </footer>
 
     <script>
-        // Global variables
-        let calculationHistory = [];
-        let businessSettings = {
-            name: 'หมูปิ้งจัมโบ้',
-            targetProfit: 40,
-            location: 'market',
-            workingHours: 10
-        };
-
-        // Load settings (default values only)
-        function loadSettings() {
-            // Just set default values to form fields
-            document.getElementById('businessName').value = businessSettings.name;
-            document.getElementById('targetProfit').value = businessSettings.targetProfit;
-            document.getElementById('businessLocation').value = businessSettings.location;
-            document.getElementById('workingHours').value = businessSettings.workingHours;
-        }
-
-        // Save settings (in memory only)
-        function saveSettings() {
-            businessSettings = {
-                name: document.getElementById('businessName').value,
-                targetProfit: parseFloat(document.getElementById('targetProfit').value),
-                location: document.getElementById('businessLocation').value,
-                workingHours: parseFloat(document.getElementById('workingHours').value)
-            };
-            alert('บันทึกการตั้งค่าเรียบร้อยแล้ว! (เก็บไว้ในเซสชันปัจจุบันเท่านั้น)');
-            closeSettings();
-        }
-
-        // Modal functions
-        function openSettings() {
-            document.getElementById('settingsPanel').style.display = 'block';
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsPanel').style.display = 'none';
-        }
-
-        // History functions
-        function toggleHistory() {
-            const panel = document.getElementById('historyPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            if (panel.style.display === 'block') {
-                displayHistory();
+        // =====================================================================
+        // โมดูลสำหรับระบบพลั๊กอิน (Extensible Architecture - Plugin System)
+        // =====================================================================
+        class PluginSystem {
+            constructor() {
+                this.plugins = {};
+            }
+            
+            register(type, name, plugin) {
+                if (!this.plugins[type]) {
+                    this.plugins[type] = {};
+                }
+                this.plugins[type][name] = plugin;
+            }
+            
+            get(type, name) {
+                if (this.plugins[type] && this.plugins[type][name]) {
+                    return this.plugins[type][name];
+                }
+                return null;
+            }
+            
+            getAll(type) {
+                return this.plugins[type] || {};
             }
         }
 
-        function displayHistory() {
-            const content = document.getElementById('historyContent');
-            if (calculationHistory.length === 0) {
-                content.innerHTML = '<p style="text-align: center; color: #666;">ยังไม่มีประวัติการคำนวณ</p>';
-                return;
+        // =====================================================================
+        // แพทเทิร์นกลยุทธ์ (Strategy Pattern) สำหรับการคำนวณราคา
+        // =====================================================================
+        class PricingStrategy {
+            calculatePrice(costs, factors) {
+                throw new Error("Method calculatePrice must be implemented by derived classes");
             }
-
-            content.innerHTML = calculationHistory.map((item, index) => `
-                <div class="history-item">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <strong>การคำนวณครั้งที่ ${calculationHistory.length - index}</strong>
-                        <span style="color: #666; font-size: 0.9rem;">${item.timestamp}</span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                        <div><strong>ต้นทุน:</strong> ${item.cost} บาท</div>
-                        <div><strong>ราคาแนะนำ:</strong> ${item.price} บาท</div>
-                        <div><strong>กำไร:</strong> ${item.profit} บาท</div>
-                        <div><strong>ความเสี่ยง:</strong> ${item.risk}</div>
-                    </div>
-                </div>
-            `).reverse().join('');
         }
 
-        // Main calculation function
-        function calculatePricing() {
-            // Show loading state
-            const resultsSection = document.getElementById('results');
-            resultsSection.style.display = 'block';
-            resultsSection.classList.add('animate-slide-up');
-
-            // Get input values
-            const inputs = {
-                porkPrice: parseFloat(document.getElementById('porkPrice').value),
-                fuelCost: parseFloat(document.getElementById('fuelCost').value),
-                weather: document.getElementById('weather').value,
-                economic: document.getElementById('economic').value,
-                season: document.getElementById('season').value,
-                political: document.getElementById('political').value,
-                meatWeight: parseFloat(document.getElementById('meatWeight').value),
-                stickCost: parseFloat(document.getElementById('stickCost').value),
-                seasoningCost: parseFloat(document.getElementById('seasoningCost').value),
-                laborCost: parseFloat(document.getElementById('laborCost').value),
-                overheadCost: parseFloat(document.getElementById('overheadCost').value),
-                dailySticks: parseFloat(document.getElementById('dailySticks').value)
-            };
-
-            // Simulate AI processing delay
-            setTimeout(() => {
-                const result = performAIAnalysis(inputs);
-                displayResults(result);
+        class StandardPricingStrategy extends PricingStrategy {
+            calculatePrice(costs, factors) {
+                const baseCostPerSkewer = costs.meatCost + costs.stickCost + costs.seasoningCost;
+                const fixedCostPerSkewer = (costs.laborCost + costs.fixedCost) / costs.dailyVolume;
+                const totalCostPerSkewer = baseCostPerSkewer + fixedCostPerSkewer;
+                const recommendedPrice = totalCostPerSkewer * (1 + (costs.profitMargin / 100));
                 
-                // Save to history
-                calculationHistory.push({
-                    timestamp: new Date().toLocaleString('th-TH'),
-                    cost: result.costPerStick.toFixed(2),
-                    price: result.suggestedPrice.toFixed(2),
-                    profit: result.profitMargin.toFixed(2),
-                    risk: result.riskLevel,
-                    inputs: inputs
-                });
-            }, 1500);
-        }
-
-        // AI Analysis Engine
-        function performAIAnalysis(inputs) {
-            // Calculate basic costs
-            const meatCostPerStick = (inputs.porkPrice * inputs.meatWeight) / 1000;
-            const stickCostPerStick = inputs.stickCost / 100;
-            const overheadCostPerStick = inputs.overheadCost / inputs.dailySticks;
-            const laborCostPerStick = (inputs.laborCost * businessSettings.workingHours) / inputs.dailySticks;
-            
-            const baseCostPerStick = meatCostPerStick + stickCostPerStick + 
-                                   inputs.seasoningCost + overheadCostPerStick + 
-                                   laborCostPerStick + (inputs.fuelCost / inputs.dailySticks);
-
-            // AI Factor Analysis
-            const factors = analyzeFactors(inputs);
-            const riskAssessment = calculateRisk(inputs, factors);
-            const demandMultiplier = calculateDemandMultiplier(inputs, factors);
-            const priceAdjustment = calculatePriceAdjustment(inputs, factors);
-
-            // Calculate suggested price with AI adjustments
-            const targetProfitMultiplier = 1 + (businessSettings.targetProfit / 100);
-            const adjustedCost = baseCostPerStick * priceAdjustment.costMultiplier;
-            const suggestedPrice = adjustedCost * targetProfitMultiplier * demandMultiplier;
-
-            // Round to appropriate price point
-            const finalPrice = roundToAppropriatePrice(suggestedPrice);
-            const actualProfit = finalPrice - adjustedCost;
-            const dailyProfit = actualProfit * inputs.dailySticks * priceAdjustment.volumeMultiplier;
-
-            return {
-                costPerStick: adjustedCost,
-                suggestedPrice: finalPrice,
-                profitMargin: actualProfit,
-                dailyProfit: dailyProfit,
-                factors: factors,
-                riskLevel: riskAssessment.level,
-                riskScore: riskAssessment.score,
-                marketingStrategies: generateMarketingStrategies(inputs, factors),
-                aiReasoning: generateAIReasoning(inputs, factors, riskAssessment)
-            };
-        }
-
-        // Analyze 6 key factors
-        function analyzeFactors(inputs) {
-            const factors = {};
-
-            // 1. Pork Price Analysis (ราคาเนื้อหมู)
-            if (inputs.porkPrice < 150) {
-                factors.porkPrice = { score: 0.8, impact: 'positive', description: 'ราคาเนื้อหมูต่ำ เหมาะสำหรับเพิ่มกำไร' };
-            } else if (inputs.porkPrice > 200) {
-                factors.porkPrice = { score: 0.3, impact: 'negative', description: 'ราคาเนื้อหมูสูง ควรปรับราคาขายหรือหาซัพพลายเออร์ใหม่' };
-            } else {
-                factors.porkPrice = { score: 0.6, impact: 'neutral', description: 'ราคาเนื้อหมูในระดับปกติ' };
-            }
-
-            // 2. Fuel Cost Analysis (ค่าแก๊ส/ถ่าน)
-            if (inputs.fuelCost < 100) {
-                factors.fuelCost = { score: 0.7, impact: 'positive', description: 'ค่าเชื้อเพลิงต่ำ ช่วยลดต้นทุน' };
-            } else if (inputs.fuelCost > 200) {
-                factors.fuelCost = { score: 0.4, impact: 'negative', description: 'ค่าเชื้อเพลิงสูง พิจารณาเปลี่ยนประเภทเชื้อเพลิง' };
-            } else {
-                factors.fuelCost = { score: 0.6, impact: 'neutral', description: 'ค่าเชื้อเพลิงในระดับปกติ' };
-            }
-
-            // 3. Weather Analysis (สภาพอากาศ)
-            switch (inputs.weather) {
-                case 'sunny':
-                    factors.weather = { score: 0.8, impact: 'positive', description: 'อากาศแดดจัด เพิ่มความต้องการหมูปิ้ง' };
-                    break;
-                case 'rainy':
-                    factors.weather = { score: 0.3, impact: 'negative', description: 'ฝนตก ลูกค้าลดลง ควรมีแผนป้องกัน' };
-                    break;
-                case 'cold':
-                    factors.weather = { score: 0.7, impact: 'positive', description: 'อากาศหนาว เพิ่มความต้องการอาหารร้อน' };
-                    break;
-                default:
-                    factors.weather = { score: 0.5, impact: 'neutral', description: 'สภาพอากาศปกติ' };
-            }
-
-            // 4. Economic Analysis (สภาพเศรษฐกิจ)
-            switch (inputs.economic) {
-                case 'good':
-                    factors.economic = { score: 0.8, impact: 'positive', description: 'เศรษฐกิจดี กำลังซื้อสูง สามารถขายราคาดี' };
-                    break;
-                case 'poor':
-                    factors.economic = { score: 0.3, impact: 'negative', description: 'เศรษฐกิจไม่ดี ลูกค้าซื้อน้อยลง ควรปรับราคาให้เข้าถึงได้' };
-                    break;
-                default:
-                    factors.economic = { score: 0.6, impact: 'neutral', description: 'สภาพเศรษฐกิจปกติ' };
-            }
-
-            // 5. Season Analysis (ฤดูกาล)
-            switch (inputs.season) {
-                case 'hot':
-                    factors.season = { score: 0.4, impact: 'negative', description: 'หน้าร้อน ความต้องการลดลง ควรโปรโมท' };
-                    break;
-                case 'cool':
-                    factors.season = { score: 0.8, impact: 'positive', description: 'หน้าหนาว ความต้องการสูง เพิ่มราคาได้' };
-                    break;
-                default:
-                    factors.season = { score: 0.6, impact: 'neutral', description: 'ฤดูกาลปกติ' };
-            }
-
-            // 6. Political Analysis (สถานการณ์การเมือง)
-            switch (inputs.political) {
-                case 'stable':
-                    factors.political = { score: 0.7, impact: 'positive', description: 'การเมืองมั่นคง ธุรกิจเติบโตได้' };
-                    break;
-                case 'crisis':
-                    factors.political = { score: 0.3, impact: 'negative', description: 'การเมืองไม่มั่นคง ควรระวังการลงทุน' };
-                    break;
-                default:
-                    factors.political = { score: 0.5, impact: 'neutral', description: 'สถานการณ์การเมืองไม่แน่นอน' };
-            }
-
-            return factors;
-        }
-
-        // Calculate risk assessment
-        function calculateRisk(inputs, factors) {
-            const scores = Object.values(factors).map(f => f.score);
-            const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-            
-            // Additional risk factors
-            let riskScore = averageScore;
-            
-            // High cost risks
-            if (inputs.porkPrice > 220) riskScore -= 0.1;
-            if (inputs.fuelCost > 250) riskScore -= 0.1;
-            
-            // Market risks
-            if (inputs.dailySticks < 100) riskScore -= 0.1; // Low volume risk
-            if (businessSettings.location === 'street') riskScore -= 0.05; // Street vendor risk
-            
-            // Determine risk level
-            let level, color;
-            if (riskScore >= 0.7) {
-                level = 'ต่ำ';
-                color = '#228B22';
-            } else if (riskScore >= 0.5) {
-                level = 'ปานกลาง';
-                color = '#FFD700';
-            } else {
-                level = 'สูง';
-                color = '#FF6347';
-            }
-
-            return { score: riskScore, level: level, color: color };
-        }
-
-        // Calculate demand multiplier based on factors
-        function calculateDemandMultiplier(inputs, factors) {
-            let multiplier = 1.0;
-
-            // Weather impact
-            if (inputs.weather === 'sunny' || inputs.weather === 'cold') multiplier += 0.1;
-            if (inputs.weather === 'rainy') multiplier -= 0.2;
-
-            // Economic impact
-            if (inputs.economic === 'good') multiplier += 0.15;
-            if (inputs.economic === 'poor') multiplier -= 0.15;
-
-            // Season impact
-            if (inputs.season === 'cool') multiplier += 0.1;
-            if (inputs.season === 'hot') multiplier -= 0.1;
-
-            // Location impact
-            switch (businessSettings.location) {
-                case 'university':
-                    multiplier += 0.05;
-                    break;
-                case 'mall':
-                    multiplier += 0.1;
-                    break;
-                case 'street':
-                    multiplier -= 0.05;
-                    break;
-            }
-
-            return Math.max(0.7, Math.min(1.3, multiplier));
-        }
-
-        // Calculate price adjustment factors
-        function calculatePriceAdjustment(inputs, factors) {
-            let costMultiplier = 1.0;
-            let volumeMultiplier = 1.0;
-
-            // High input costs require adjustment
-            if (inputs.porkPrice > 200) costMultiplier += 0.05;
-            if (inputs.fuelCost > 200) costMultiplier += 0.03;
-
-            // Political instability increases costs
-            if (inputs.political === 'crisis') costMultiplier += 0.02;
-
-            // Weather affects volume
-            if (inputs.weather === 'rainy') volumeMultiplier -= 0.15;
-            if (inputs.weather === 'sunny') volumeMultiplier += 0.05;
-
-            return { costMultiplier, volumeMultiplier };
-        }
-
-        // Round price to appropriate point
-        function roundToAppropriatePrice(price) {
-            if (price <= 10) return Math.round(price * 2) / 2; // Round to 0.5
-            if (price <= 50) return Math.round(price); // Round to 1
-            return Math.round(price / 5) * 5; // Round to 5
-        }
-
-        // Generate marketing strategies based on customer journey
-        function generateMarketingStrategies(inputs, factors) {
-            const strategies = [];
-
-            // Awareness Stage
-            strategies.push({
-                stage: 'Awareness (รับรู้)',
-                strategy: 'Social Media Marketing',
-                description: 'โพสต์รูปหมูปิ้งสวยๆ บน Facebook/Instagram พร้อมแฮชแท็กท้องถิ่น',
-                recommendation: inputs.weather === 'sunny' ? 'เน้นโพสต์เวลา 16:00-19:00' : 'โพสต์คลิป Live การปิ้ง'
-            });
-
-            // Interest Stage
-            if (factors.economic.score >= 0.6) {
-                strategies.push({
-                    stage: 'Interest (สนใจ)',
-                    strategy: 'Content Marketing',
-                    description: 'สร้างคอนเทนต์เรื่องความอร่อย วัตถุดิบคุณภาพ',
-                    recommendation: 'ทำคลิป Behind the scenes การเลือกเนื้อหมู และวิธีการปิ้ง'
-                });
-            }
-
-            // Consideration Stage
-            strategies.push({
-                stage: 'Consideration (พิจารณา)',
-                strategy: 'Promotional Offers',
-                description: inputs.season === 'hot' ? 'โปรโมชั่นซื้อ 10 แถม 1' : 'เซ็ตคู่กับเครื่องดื่มร้อน',
-                recommendation: inputs.economic.score < 0.5 ? 'เน้นราคาสุดคุ้ม' : 'เน้นคุณภาพพรีเมียม'
-            });
-
-            // Purchase Stage
-            strategies.push({
-                stage: 'Purchase (ซื้อ)',
-                strategy: 'Point of Sale',
-                description: 'ตกแต่งร้านให้น่าสนใจ มีป้ายราคาชัดเจน',
-                recommendation: inputs.weather === 'rainy' ? 'เพิ่มที่นั่งมีหลังคา' : 'จัดโปรโมชั่น Take away'
-            });
-
-            // Retention Stage
-            strategies.push({
-                stage: 'Retention (รักษาลูกค้า)',
-                strategy: 'Loyalty Program',
-                description: 'ระบบสะสมแสตมป์ หรือ Line Official Account',
-                recommendation: 'ส่งข้อความแจ้งโปรโมชั่นพิเศษแก่ลูกค้าประจำ'
-            });
-
-            // Advocacy Stage
-            if (factors.economic.score >= 0.7) {
-                strategies.push({
-                    stage: 'Advocacy (ประกาศเซลส์)',
-                    strategy: 'Referral Program',
-                    description: 'แนะนำเพื่อนมาซื้อ ได้ส่วนลด',
-                    recommendation: 'ให้ลูกค้าถ่ายรูป Review บน Social Media รับฟรี 1 ไม้'
-                });
-            }
-
-            return strategies;
-        }
-
-        // Generate AI reasoning
-        function generateAIReasoning(inputs, factors, riskAssessment) {
-            let reasoning = `<strong>AI วิเคราะห์แล้วพบว่า:</strong><br><br>`;
-
-            // Risk assessment summary
-            reasoning += `📊 <strong>ระดับความเสี่ยงโดยรวม: ${riskAssessment.level}</strong><br>`;
-
-            // Key insights
-            const positiveFactors = Object.entries(factors).filter(([key, factor]) => factor.impact === 'positive');
-            const negativeFactors = Object.entries(factors).filter(([key, factor]) => factor.impact === 'negative');
-
-            if (positiveFactors.length > 0) {
-                reasoning += `<br>✅ <strong>ปัจจัยบวก:</strong><br>`;
-                positiveFactors.forEach(([key, factor]) => {
-                    reasoning += `• ${factor.description}<br>`;
-                });
-            }
-
-            if (negativeFactors.length > 0) {
-                reasoning += `<br>⚠️ <strong>ปัจจัยที่ต้องระวัง:</strong><br>`;
-                negativeFactors.forEach(([key, factor]) => {
-                    reasoning += `• ${factor.description}<br>`;
-                });
-            }
-
-            // Strategic recommendations
-            reasoning += `<br>💡 <strong>คำแนะนำเชิงกลยุทธ์:</strong><br>`;
-            
-            if (inputs.porkPrice > 200) {
-                reasoning += `• พิจารณาหาซัพพลายเออร์เนื้อหมูราคาดีกว่า<br>`;
-            }
-            
-            if (inputs.weather === 'rainy') {
-                reasoning += `• เตรียมพื้นที่ในร่มหรือเต็นท์สำหรับลูกค้า<br>`;
-            }
-            
-            if (factors.economic.score < 0.5) {
-                reasoning += `• ปรับเมนูให้มีตัวเลือกราคาประหยัด<br>`;
-            }
-            
-            if (inputs.dailySticks < 150) {
-                reasoning += `• เพิ่มช่องทางการตลาดออนไลน์เพื่อเพิ่มยอดขาย<br>`;
-            }
-
-            reasoning += `<br>🎯 <strong>เป้าหมายระยะสั้น:</strong> เพิ่มยอดขายให้ได้ ${Math.ceil(inputs.dailySticks * 1.2)} ไม้/วัน<br>`;
-            reasoning += `🚀 <strong>เป้าหมายระยะยาว:</strong> สร้างฐานลูกค้าประจำและเพิ่มความได้เปรียบทางการแข่งขัน`;
-
-            return reasoning;
-        }
-
-        // Display results
-        function displayResults(result) {
-            document.getElementById('costPerStick').textContent = result.costPerStick.toFixed(2);
-            document.getElementById('suggestedPrice').textContent = result.suggestedPrice.toFixed(2);
-            document.getElementById('profitMargin').textContent = result.profitMargin.toFixed(2);
-            document.getElementById('dailyProfit').textContent = result.dailyProfit.toFixed(0);
-
-            // Update risk indicator
-            const riskIndicator = document.getElementById('riskIndicator');
-            const riskLevel = document.getElementById('riskLevel');
-            const riskPosition = result.riskScore * 100;
-            
-            riskIndicator.style.left = `${riskPosition}%`;
-            riskIndicator.style.backgroundColor = result.riskLevel === 'ต่ำ' ? '#228B22' : 
-                                                 result.riskLevel === 'ปานกลาง' ? '#FFD700' : '#FF6347';
-            riskLevel.textContent = `ความเสี่ยง: ${result.riskLevel} (${(result.riskScore * 100).toFixed(0)}%)`;
-
-            // Display factor analysis
-            const factorAnalysis = document.getElementById('factorAnalysis');
-            factorAnalysis.innerHTML = Object.entries(result.factors).map(([key, factor]) => `
-                <div class="factor-item">
-                    <strong>${getFactorName(key)}:</strong><br>
-                    <span style="color: ${factor.impact === 'positive' ? '#228B22' : factor.impact === 'negative' ? '#DC143C' : '#666'}">
-                        ${factor.description}
-                    </span>
-                </div>
-            `).join('');
-
-            // Display AI reasoning
-            document.getElementById('aiReasoning').innerHTML = result.aiReasoning;
-
-            // Display marketing strategies
-            const marketingStrategies = document.getElementById('marketingStrategies');
-            marketingStrategies.innerHTML = result.marketingStrategies.map(strategy => `
-                <div class="strategy-item">
-                    <strong>${strategy.stage}: ${strategy.strategy}</strong><br>
-                    <span style="color: #666; font-size: 0.9rem;">${strategy.description}</span><br>
-                    <span style="color: #8B4513; font-weight: 500;">💡 ${strategy.recommendation}</span>
-                </div>
-            `).join('');
-        }
-
-        // Helper function to get factor display names
-        function getFactorName(key) {
-            const names = {
-                porkPrice: 'ราคาเนื้อหมู',
-                fuelCost: 'ค่าแก๊ส/ถ่าน',
-                weather: 'สภาพอากาศ',
-                economic: 'สภาพเศรษฐกิจ',
-                season: 'ฤดูกาล',
-                political: 'สถานการณ์การเมือง'
-            };
-            return names[key] || key;
-        }
-
-        // Initialize application (simplified)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load default settings
-            loadSettings();
-
-            // Add smooth scrolling to results
-            window.addEventListener('scroll', function() {
-                const cards = document.querySelectorAll('.card, .result-section');
-                cards.forEach(card => {
-                    const cardTop = card.getBoundingClientRect().top;
-                    const cardBottom = card.getBoundingClientRect().bottom;
-                    const isVisible = cardTop < window.innerHeight && cardBottom > 0;
-                    
-                    if (isVisible && !card.classList.contains('animate-slide-up')) {
-                        card.classList.add('animate-slide-up');
-                    }
-                });
-            });
-
-            // Close modal when clicking outside
-            const settingsPanel = document.getElementById('settingsPanel');
-            if (settingsPanel) {
-                settingsPanel.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeSettings();
-                    }
-                });
-            }
-
-            // Real-time input validation and formatting
-            const numberInputs = document.querySelectorAll('input[type="number"]');
-            numberInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value < 0) this.value = 0;
-                    if (this.hasAttribute('max') && parseFloat(this.value) > parseFloat(this.getAttribute('max'))) {
-                        this.value = this.getAttribute('max');
-                    }
-                });
-            });
-
-            console.log('🍖 AI ระบบตั้งราคาหมูปิ้งอัจฉริยะ เริ่มต้นแล้ว!');
-        });
-
-        // Export/Import functionality (simplified - in memory only)
-        function exportData() {
-            try {
-                const data = {
-                    settings: businessSettings,
-                    history: calculationHistory,
-                    exportDate: new Date().toISOString()
+                // ปรับราคาตามปัจจัยตลาด
+                const marketFactor = this.calculateMarketFactor(factors);
+                
+                return {
+                    baseCostPerSkewer,
+                    fixedCostPerSkewer,
+                    totalCostPerSkewer,
+                    recommendedPrice: Math.ceil(recommendedPrice * marketFactor),
+                    breakEven: Math.ceil((costs.fixedCost + costs.laborCost) / (recommendedPrice - baseCostPerSkewer)),
+                    dailyProfit: Math.round((recommendedPrice - totalCostPerSkewer) * costs.dailyVolume),
+                    marketFactor
                 };
+            }
+            
+            calculateMarketFactor(factors) {
+                let factor = 1.0;
                 
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `moo-ping-data-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            } catch (error) {
-                console.error('Export failed:', error);
-                alert('เกิดข้อผิดพลาดในการ Export ข้อมูล');
-            }
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.settings) businessSettings = data.settings;
-                    if (data.history) calculationHistory = data.history;
-                    
-                    loadSettings();
-                    alert('นำเข้าข้อมูลสำเร็จ!');
-                } catch (error) {
-                    console.error('Import failed:', error);
-                    alert('ไฟล์ไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        // Performance optimization (removed console.log)
-        let resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(function() {
-                // Layout recalculation happens silently
-            }, 250);
-        });
-
-        // ========== REALTIME FEATURES ========== //
-        
-        // ตัวแปรสำหรับ realtime
-        let realtimeInterval;
-        let isRealtimeActive = false;
-        
-        // ฟังก์ชันสร้างราคาจำลองที่เหมือนจริง
-        function generateRealisticPrice(currentPrice, type) {
-            const variation = (Math.random() - 0.5) * 10; // เปลี่ยนแปลง ±5
-            let newPrice;
-            
-            if (type === 'pork') {
-                newPrice = Math.max(120, Math.min(280, currentPrice + variation));
-            } else if (type === 'fuel') {
-                newPrice = Math.max(80, Math.min(350, currentPrice + variation));
-            }
-            
-            return Math.round(newPrice * 100) / 100; // ปัดเศษ 2 ตำแหน่ง
-        }
-        
-        // ฟังก์ชันอัพเดตราคาแบบ realtime
-        function updateRealtimePrices() {
-            const porkInput = document.getElementById('porkPrice');
-            const fuelInput = document.getElementById('fuelCost');
-            
-            // เก็บราคาเก่า
-            const oldPorkPrice = parseFloat(porkInput.value);
-            const oldFuelPrice = parseFloat(fuelInput.value);
-            
-            // สร้างราคาใหม่
-            const newPorkPrice = generateRealisticPrice(oldPorkPrice, 'pork');
-            const newFuelPrice = generateRealisticPrice(oldFuelPrice, 'fuel');
-            
-            // อัพเดตถ้าเปลี่ยนแปลงมากกว่า 0.5 บาท
-            if (Math.abs(newPorkPrice - oldPorkPrice) > 0.5) {
-                animatePriceChange(porkInput, oldPorkPrice, newPorkPrice, 'หมู');
-            }
-            
-            if (Math.abs(newFuelPrice - oldFuelPrice) > 0.5) {
-                animatePriceChange(fuelInput, oldFuelPrice, newFuelPrice, 'เชื้อเพลิง');
-            }
-        }
-        
-        // ฟังก์ชันทำเอฟเฟคเมื่อราคาเปลี่ยน
-        function animatePriceChange(input, oldPrice, newPrice, itemName) {
-            // เปลี่ยนสีตามการขึ้น/ลงราคา
-            if (newPrice > oldPrice) {
-                input.style.borderColor = '#ff6b6b';
-                input.style.backgroundColor = '#ffebee';
-                showPriceAlert(itemName, 'เพิ่มขึ้น', newPrice - oldPrice, 'up');
-            } else {
-                input.style.borderColor = '#4caf50';
-                input.style.backgroundColor = '#e8f5e9';
-                showPriceAlert(itemName, 'ลดลง', oldPrice - newPrice, 'down');
-            }
-            
-            // อัพเดตราคา
-            input.value = newPrice;
-            
-            // ล้างสีหลัง 3 วินาที
-            setTimeout(() => {
-                input.style.borderColor = '';
-                input.style.backgroundColor = '';
-            }, 3000);
-            
-            // คำนวณใหม่อัตโนมัติ
-            calculatePricing();
-        }
-        
-        // ฟังก์ชันแสดงการแจ้งเตือน
-        function showPriceAlert(itemName, direction, amount, type) {
-            // สร้าง div สำหรับแจ้งเตือน
-            const alertDiv = document.createElement('div');
-            alertDiv.className = 'price-alert';
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 1000;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                animation: slideIn 0.3s ease;
-                max-width: 300px;
-                ${type === 'up' ? 
-                    'background: #ffebee; border-left: 4px solid #ff6b6b; color: #c62828;' : 
-                    'background: #e8f5e9; border-left: 4px solid #4caf50; color: #2e7d32;'}
-            `;
-            
-            alertDiv.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>ราคา${itemName}${direction}</strong><br>
-                        <small>${amount.toFixed(1)} บาท</small>
-                    </div>
-                    <button onclick="this.parentElement.parentElement.remove()" 
-                            style="background: none; border: none; font-size: 18px; cursor: pointer;">×</button>
-                </div>
-            `;
-            
-            document.body.appendChild(alertDiv);
-            
-            // ลบแจ้งเตือนอัตโนมัติหลัง 5 วินาที
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
-                }
-            }, 5000);
-        }
-        
-        // ฟังก์ชันเริ่ม realtime
-        function startRealtime() {
-            if (!isRealtimeActive) {
-                isRealtimeActive = true;
-                realtimeInterval = setInterval(updateRealtimePrices, 15000); // ทุก 15 วินาที
-                
-                // อัพเดตปุ่ม
-                const button = document.getElementById('realtimeToggle');
-                if (button) {
-                    button.innerHTML = '⏸️ หยุด Realtime';
-                    button.style.background = '#f44336';
+                // ปัจจัยสภาพอากาศ
+                switch (factors.weather) {
+                    case 'sunny': factor *= 1.05; break;   // คนหมูปิ้งเยอะในอากาศร้อน
+                    case 'rainy': factor *= 0.95; break;   // คนซื้อหมูปิ้งน้อยลงในวันฝนตก
+                    case 'cool': factor *= 1.1; break;     // อากาศเย็นคนชอบกินของร้อน
                 }
                 
-                console.log('🔄 Realtime started!');
-            }
-        }
-        
-        // ฟังก์ชันหยุด realtime
-        function stopRealtime() {
-            if (isRealtimeActive) {
-                isRealtimeActive = false;
-                clearInterval(realtimeInterval);
-                
-                // อัพเดตปุ่ม
-                const button = document.getElementById('realtimeToggle');
-                if (button) {
-                    button.innerHTML = '🔄 เริ่ม Realtime';
-                    button.style.background = '#4CAF50';
+                // ปัจจัยเศรษฐกิจ
+                switch (factors.economy) {
+                    case 'good': factor *= 1.1; break;     // เศรษฐกิจดี คนมีกำลังซื้อ
+                    case 'normal': factor *= 1.0; break;   // เศรษฐกิจปกติ
+                    case 'poor': factor *= 0.9; break;     // เศรษฐกิจแย่ ควรลดราคา
                 }
                 
-                console.log('⏸️ Realtime stopped!');
-            }
-        }
-        
-        // ฟังก์ชันสลับ realtime
-        function toggleRealtime() {
-            if (isRealtimeActive) {
-                stopRealtime();
-            } else {
-                startRealtime();
-            }
-        }
-        
-        // สร้างปุ่ม realtime
-        function createRealtimeButton() {
-            const button = document.createElement('button');
-            button.id = 'realtimeToggle';
-            button.innerHTML = '🔄 เริ่ม Realtime';
-            button.onclick = toggleRealtime;
-            button.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 1000;
-                padding: 12px 18px;
-                background: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-weight: 500;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                transition: all 0.3s ease;
-            `;
-            
-            // เอฟเฟค hover
-            button.addEventListener('mouseenter', () => {
-                button.style.transform = 'scale(1.05)';
-            });
-            
-            button.addEventListener('mouseleave', () => {
-                button.style.transform = 'scale(1)';
-            });
-            
-            document.body.appendChild(button);
-        }
-        
-        // สร้างสไตล์ CSS สำหรับ animation
-        function addRealtimeStyles() {
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { 
-                        transform: translateX(100%); 
-                        opacity: 0; 
-                    }
-                    to { 
-                        transform: translateX(0); 
-                        opacity: 1; 
-                    }
+                // ปัจจัยฤดูกาล
+                switch (factors.season) {
+                    case 'hot': factor *= 1.05; break;     // หน้าร้อนคนชอบกินหมูปิ้ง
+                    case 'rainy': factor *= 0.95; break;   // หน้าฝนยอดขายลดลง
+                    case 'cool': factor *= 1.1; break;     // หน้าหนาวขายดี
                 }
                 
-                .price-alert {
-                    animation: slideIn 0.3s ease;
+                // ปัจจัยการเมือง
+                switch (factors.politics) {
+                    case 'stable': factor *= 1.05; break;  // การเมืองมั่นคง เศรษฐกิจดี
+                    case 'unstable': factor *= 0.97; break; // ไม่แน่นอน ระมัดระวังราคา
+                    case 'crisis': factor *= 0.9; break;   // วิกฤต ลดราคาเพื่อดึงดูดลูกค้า
                 }
                 
-                input[type="number"] {
-                    transition: all 0.3s ease;
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // เริ่มต้นระบบ realtime เมื่อหน้าเว็บโหลดเสร็จ
-        document.addEventListener('DOMContentLoaded', function() {
-            // เพิ่มสไตล์
-            addRealtimeStyles();
-            
-            // สร้างปุ่ม realtime
-            createRealtimeButton();
-            
-            // เริ่ม realtime อัตโนมัติ (ถ้าต้องการ)
-            // startRealtime();
-        });
-        
-        // ปิด realtime เมื่อออกจากหน้า
-        window.addEventListener('beforeunload', () => {
-            stopRealtime();
-        });
-    </script>
-</body>
-</html>
-                
+                return factor;

@@ -1,9 +1,851 @@
-<!DOCTYPE html>
+ <div class="option-group">
+                            <div class="option-button" data-value="good">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                ดี
+                            </div>
+                            <div class="option-button selected" data-value="normal">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <line x1="8" y1="15" x2="16" y2="15"></line>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                ปกติ
+                            </div>
+                            <div class="option-button" data-value="bad">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                แย่
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <button type="button" class="calculate-btn" id="calculate-btn">คำนวณราคา AI</button>
+            </div>
+            
+            <div class="result-section" id="result-section">
+                <h3>ราคาแนะนำจาก AI</h3>
+                <div class="price-recommendation" id="price-recommendation">-- บาท/ไม้</div>
+                <div class="profit-estimate" id="profit-estimate">ประมาณการกำไร: -- บาท/วัน</div>
+                <div class="additional-tips" id="additional-tips">
+                    <h4>วิเคราะห์และเทคนิคเพิ่มกำไร</h4>
+                    <p id="analysis-text">กำลังวิเคราะห์...</p>
+                    <ul id="tips-list">
+                        <li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ที่ปรึกษา AI -->
+        <div id="advisor-tab" class="tab-content">
+            <div class="chat-ui">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai">
+                        สวัสดีครับ ผมคือที่ปรึกษาหมูปิ้งอัจฉริยะ พร้อมให้คำแนะนำทั้งเรื่องราคา กลยุทธ์การขาย หรือการรับมือกับสถานการณ์ต่างๆ ลองถามได้เลยครับ
+                        <div class="message-time">เมื่อสักครู่</div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="ถามคำถามเกี่ยวกับธุรกิจหมูปิ้ง...">
+                    <button class="chat-send-btn" id="chat-send-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="strategy-section">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    คำแนะนำตามสถานการณ์
+                </h3>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                            <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                            <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                            <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                            <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>วันฝนตก</h4>
+                        <p>ทำที่กันฝนเล็กๆ ให้ลูกค้ายืนไม่เปียก หรือมีบริการส่งถึงรถ เตรียมถุงพลาสติกให้ลูกค้าใส่หมูปิ้งกลับบ้าน</p>
+                        <p>ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า หรือทำโปรโมชั่นพิเศษเช่น "ซื้อ 10 แถม 1 เฉพาะวันฝนตก"</p>
+                    </div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>เศรษฐกิจแย่</h4>
+                        <p>ลดขนาดไม้เล็กน้อยแต่คงราคาเดิม หรือเพิ่มโปรโมชั่น เช่น ซื้อ 5 ไม้แถม 1</p>
+                        <p>เน้นการตลาดโดยใช้คำว่า "อิ่มคุ้ม" หรือ "ประหยัด" และนำเสนอชุดราคาพิเศษ เช่น หมูปิ้ง + ข้าวเหนียว</p>
+                    </div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>อากาศร้อนจัด</h4>
+                        <p>เตรียมน้ำดื่มเย็นๆ ไว้บริการฟรี หรือขายราคาถูก ใช้ร่มบังแดดให้ลูกค้า</p>
+                        <p>ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป และพิจารณาเพิ่มเมนูน้ำแข็งไสหรือเครื่องดื่มเย็นๆ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">วิเคราะห์ตลาดและคู่แข่ง</div>
+                <div id="competitor-analysis">
+                    <p>ราคาเฉลี่ยของคู่แข่งในย่าน <span id="area-name">--</span>: <strong><span id="avg-competitor-price">--</span> บาท/ไม้</strong></p>
+                    <p>จุดเด่นที่สามารถสร้างความแตกต่างได้:</p>
+                    <ul id="differentiation-points">
+                        <li>คุณภาพเนื้อหมู - เลือกใช้หมูคุณภาพดี สด สะอาด</li>
+                        <li>สูตรหมักพิเศษ - สร้างรสชาติเฉพาะตัวที่ลูกค้าจดจำได้</li>
+                        <li>บริการประทับใจ - ยิ้มแย้ม สร้างความคุ้นเคยกับลูกค้า</li>
+                        <li>ความสะอาด - แสดงให้เห็นถึงความใส่ใจในความสะอาด</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- การตั้งค่า -->
+        <div id="settings-tab" class="tab-content">
+            <div class="card api-key-section">
+                <div class="card-title">ตั้งค่า API Key สำหรับ AI</div>
+                <div class="form-group">
+                    <label for="api-provider">ผู้ให้บริการ AI</label>
+                    <select id="api-provider">
+                        <option value="openai">OpenAI (GPT-4)</option>
+                        <option value="anthropic">Anthropic (Claude)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="api-key">API Key</label>
+                    <input type="password" id="api-key" placeholder="ใส่ API Key ของคุณ">
+                </div>
+                <button class="action-btn" id="save-api-key">บันทึก API Key</button>
+                <p class="api-note" style="margin-top:10px; font-size:0.9rem; color:#666;">
+                    หมายเหตุ: API Key จะถูกเก็บในเครื่องของคุณเท่านั้น ไม่ถูกส่งไปยังเซิร์ฟเวอร์อื่นๆ
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">ข้อมูลร้านค้า</div>
+                <div class="form-group">
+                    <label for="business-name">ชื่อร้าน</label>
+                    <input type="text" id="business-name" placeholder="ชื่อร้านของคุณ">
+                </div>
+                <div class="form-group">
+                    <label for="business-location">ที่ตั้งร้าน</label>
+                    <input type="text" id="business-location" placeholder="เช่น เชียงราย, กรุงเทพ">
+                </div>
+                <div class="form-group">
+                    <label for="business-description">รายละเอียดร้าน</label>
+                    <textarea id="business-description" rows="3" placeholder="เล่าเกี่ยวกับร้านของคุณ, จุดเด่น, ประสบการณ์"></textarea>
+                </div>
+                <button class="action-btn" id="save-business-info">บันทึกข้อมูลร้าน</button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">การแจ้งเตือน</div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="weather-alert" checked> แจ้งเตือนสภาพอากาศ
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="price-alert" checked> แจ้งเตือนการเปลี่ยนแปลงราคาวัตถุดิบ
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="event-alert" checked> แจ้งเตือนกิจกรรมและเทศกาล
+                    </label>
+                </div>
+                <button class="action-btn" id="save-alert-settings">บันทึกการตั้งค่าแจ้งเตือน</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Smart Pork Skewer Pricing Advisor AI v1.0</p>
+            <p>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ - พัฒนาโดยใช้ AI</p>
+        </div>
+    </div>
+    
+    <script>
+        // =====================
+        // ฟังก์ชันแสดงวันที่ปัจจุบันในรูปแบบไทย
+        // =====================
+        function setThaiDate() {
+            const now = new Date();
+            const thaiDay = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            const thaiMonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+            
+            const day = thaiDay[now.getDay()];
+            const date = now.getDate();
+            const month = thaiMonth[now.getMonth()];
+            const year = now.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
+            
+            document.getElementById('current-date').textContent = `วัน${day}ที่ ${date} ${month} ${year}`;
+        }
+        
+        // =====================
+        // ระบบแท็บ
+        // =====================
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // ลบคลาส active จากทุกแท็บ
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // เพิ่มคลาส active ให้แท็บที่คลิก
+                    this.classList.add('active');
+                    
+                    // แสดงเนื้อหาที่ตรงกับแท็บ
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                });
+            });
+        }
+        
+        // =====================
+        // ระบบเลือกออปชั่น
+        // =====================
+        function setupOptionButtons() {
+            document.querySelectorAll('.option-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // หา option-group ที่เป็นพาเรนต์
+                    const parent = this.closest('.option-group');
+                    
+                    // ลบคลาส selected จากทุกปุ่มในกลุ่มเดียวกัน
+                    parent.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+                    
+                    // เพิ่มคลาส selected ให้ปุ่มที่คลิก
+                    this.classList.add('selected');
+                });
+            });
+        }
+        
+        // =====================
+        // ระบบจัดการข้อมูลผู้ใช้ (ไม่ใช้ localStorage)
+        // =====================
+        const UserDataManager = {
+            userData: {
+                profile: {
+                    businessName: '',
+                    location: '',
+                    description: ''
+                },
+                preferences: {
+                    weatherAlert: true,
+                    priceAlert: true,
+                    eventAlert: true
+                },
+                apiSettings: {
+                    provider: 'openai',
+                    apiKey: ''
+                }
+            },
+            
+            saveUserData: function() {
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                return true;
+            },
+            
+            loadUserData: function() {
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                return false;
+            },
+            
+            updateBusinessInfo: function(name, location, description) {
+                this.userData.profile.businessName = name;
+                this.userData.profile.location = location;
+                this.userData.profile.description = description;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            updateAlertSettings: function(weatherAlert, priceAlert, eventAlert) {
+                this.userData.preferences.weatherAlert = weatherAlert;
+                this.userData.preferences.priceAlert = priceAlert;
+                this.userData.preferences.eventAlert = eventAlert;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            updateApiSettings: function(provider, apiKey) {
+                this.userData.apiSettings.provider = provider;
+                this.userData.apiSettings.apiKey = apiKey;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            hasApiKey: function() {
+                return !!this.userData.apiSettings.apiKey;
+            }
+        };
+        
+        // =====================
+        // AI Engine Service - จำลองการเชื่อมต่อกับ AI
+        // =====================
+        const AIEngine = {
+            mockResponses: {
+                priceRecommendation: [
+                    "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
+                    "เนื่องจากสภาพอากาศดี และที่ตั้งอยู่ใกล้สถานศึกษา แนะนำให้ตั้งราคาที่ 12 บาทต่อไม้ คุณสามารถทำกำไรได้ดีเพราะนักเรียนและนักศึกษาเป็นกลุ่มที่ชื่นชอบหมูปิ้ง",
+                    "ด้วยราคาหมูที่ค่อนข้างสูงในช่วงนี้ แนะนำให้ตั้งราคาที่ 15 บาทต่อไม้ แต่เพิ่มขนาดหรือคุณภาพเล็กน้อยเพื่อสร้างความคุ้มค่า",
+                    "ในช่วงเศรษฐกิจไม่ดี แต่คุณอยู่ในทำเลที่มีกำลังซื้อสูง แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ และทำโปรโมชั่น 'ซื้อ 10 แถม 1' เพื่อกระตุ้นยอดขาย"
+                ],
+                businessTips: [
+                    "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                    "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                    "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
+                    "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
+                    "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
+                ],
+                weatherStrategies: {
+                    sunny: [
+                        "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า",
+                        "มีน้ำดื่มเย็นๆ ไว้บริการฟรีหรือราคาถูก",
+                        "ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป"
+                    ],
+                    cloudy: [
+                        "เน้นการปิ้งให้มีกลิ่นหอมเพื่อดึงดูดลูกค้า",
+                        "อากาศไม่ร้อนเกินไป เหมาะแก่การปิ้งหมูจำนวนมากเพื่อรองรับลูกค้า",
+                        "เตรียมพร้อมในกรณีที่อาจมีฝนตก"
+                    ],
+                    rainy: [
+                        "เตรียมที่กันฝนสำหรับลูกค้า",
+                        "มีบริการส่งถึงรถหรือให้ถุงพลาสติกกันน้ำ",
+                        "ทำโปรโมชั่นพิเศษช่วงฝนตก เช่น ซื้อ 10 แถม 1",
+                        "ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า"
+                    ]
+                },
+                chatResponses: [
+                    "จากประสบการณ์ ในช่วงเย็นหลังเลิกงานประมาณ 17.00-19.00 น. มักจะขายดีที่สุด โดยเฉพาะบริเวณที่มีคนเดินผ่านไปมามาก เช่น ใกล้สถานีรถไฟฟ้า หรือจุดรอรถเมล์",
+                    "สูตรหมักที่นิยมคือ ซีอิ๊วขาว น้ำตาล กระเทียม พริกไทย และเครื่องปรุงลับเฉพาะของแต่ละร้าน บางร้านเพิ่มน้ำผึ้งเพื่อให้หวานและมันวาว",
+                    "คุณสามารถเพิ่มกำไรได้โดยขายเครื่องเคียง เช่น ข้าวเหนียว น้ำจิ้ม หรือเครื่องดื่ม ซึ่งมักมีอัตรากำไรสูงกว่าหมูปิ้งเอง",
+                    "ในช่วงฝนตก ลองทำโปรโมชั่นพิเศษ เช่น ซื้อ 10 แถม 1 หรือลดราคาเล็กน้อย และมีบริการส่งถึงรถ จะช่วยรักษายอดขาย",
+                    "ระวังเรื่องสุขอนามัย ควรสวมถุงมือ หน้ากาก และรักษาความสะอาดของอุปกรณ์ นอกจากจะดีต่อสุขภาพลูกค้าแล้ว ยังสร้างความเชื่อมั่นด้วย"
+                ]
+            },
+            
+            getRandomElement: function(array) {
+                return array[Math.floor(Math.random() * array.length)];
+            },
+            
+            getPriceRecommendation: async function(userData, marketData) {
+                // จำลองการวิเคราะห์ด้วย AI
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // คำนวณราคาแนะนำจากปัจจัยต่างๆ
+                        let basePrice = 10; // ราคาพื้นฐาน
+                        
+                        // ปรับตามราคาหมู
+                        const meatPricePerGram = userData.meatPrice / 1000; // บาทต่อกรัม
+                        const meatCostPerSkewer = meatPricePerGram * userData.meatPerSkewer;
+                        
+                        // ปรับตามต้นทุน
+                        const totalCost = meatCostPerSkewer + userData.additionalCost;
+                        
+                        // ปรับตามตำแหน่งขาย
+                        const locationFactor = {
+                            'market': 0,
+                            'street': 1,
+                            'community': 1,
+                            'school': 2,
+                            'office': 2
+                        };
+                        
+                        // ปรับตามสภาพอากาศ
+                        const weatherFactor = {
+                            'sunny': 0,
+                            'cloudy': -0.5,
+                            'rainy': -1
+                        };
+                        
+                        // ปรับตามเศรษฐกิจ
+                        const economyFactor = {
+                            'good': 1,
+                            'normal': 0,
+                            'bad': -1
+                        };
+                        
+                        // คำนวณราคาแนะนำ
+                        basePrice = totalCost * 2; // กำไร 100%
+                        basePrice += locationFactor[marketData.location] || 0;
+                        basePrice += weatherFactor[marketData.weather] || 0;
+                        basePrice += economyFactor[marketData.economy] || 0;
+                        
+                        // ปรับให้เป็นจำนวนเต็ม
+                        const recommendedPrice = Math.round(basePrice);
+                        
+                        // คำนวณประมาณการกำไร
+                        const salesVolume = {
+                            'low': 80,
+                            'medium': 200,
+                            'high': 350
+                        };
+                        const dailySales = salesVolume[marketData.salesVolume] || 200;
+                        const profitPerSkewer = recommendedPrice - totalCost;
+                        const estimatedProfit = Math.round(profitPerSkewer * dailySales);
+                        
+                        // ดึงคำแนะนำและเทคนิค
+                        const analysisText = this.getRandomElement(this.mockResponses.priceRecommendation);
+                        const tips = [];
+                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                        while (tips.length < 3) {
+                            const tip = this.getRandomElement(this.mockResponses.businessTips);
+                            if (!tips.includes(tip)) {
+                                tips.push(tip);
+                            }
+                        }
+                        
+                        // เพิ่มเทคนิคตามสภาพอากาศ
+                        const weatherTips = this.mockResponses.weatherStrategies[marketData.weather] || [];
+                        if (weatherTips.length > 0) {
+                            tips.push(this.getRandomElement(weatherTips));
+                        }
+                        
+                        resolve({
+                            recommendedPrice,
+                            estimatedProfit,
+                            analysisText,
+                            tips
+                        });
+                    }, 1500); // จำลองการประมวลผล 1.5 วินาที
+                });
+            },
+            
+            getChatResponse: async function(message) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // จำลองการตอบคำถามด้วย AI
+                        const response = this.getRandomElement(this.mockResponses.chatResponses);
+                        resolve(response);
+                    }, 1000);
+                });
+            },
+            
+            generateDailyRecommendation: async function(location) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // จำลองสภาพอากาศ
+                        const weatherTypes = ['sunny', 'cloudy', 'rainy'];
+                        const weather = this.getRandomElement(weatherTypes);
+                        const weatherDesc = {
+                            'sunny': 'แดดออก',
+                            'cloudy': 'มีเมฆมาก',
+                            'rainy': 'ฝนตก'
+                        }[weather];
+                        
+                        // จำลองราคาตลาด
+                        const marketPrice = 100 + Math.floor(Math.random() * 50);
+                        
+                        // จำลองราคาแนะนำ
+                        const recommendedPrice = 10 + Math.floor(Math.random() * 5);
+                        
+                        // จำลองตำแหน่งที่แนะนำ
+                        const locations = ['ตลาด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
+                        const recommendedLocation = this.getRandomElement(locations);
+                        
+                        // จำลองเหตุผล
+                        const reasons = [
+                            'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
+                            'สภาพอากาศวันนี้และพฤติกรรมผู้บริโภค',
+                            'การแข่งขันในพื้นที่และต้นทุนการดำเนินงาน',
+                            'กำลังซื้อของผู้บริโภคในช่วงนี้'
+                        ];
+                        const reason = this.getRandomElement(reasons);
+                        
+                        // จำลองเทคนิคประจำวัน
+                        const dailyTips = [];
+                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                        while (dailyTips.length < 3) {
+                            const tip = this.getRandomElement(this.mockResponses.businessTips);
+                            if (!dailyTips.includes(tip)) {
+                                dailyTips.push(tip);
+                            }
+                        }
+                        
+                        // เพิ่มเทคนิคตามสภาพอากาศ
+                        const weatherTips = this.mockResponses.weatherStrategies[weather] || [];
+                        if (weatherTips.length > 0) {
+                            dailyTips.push(this.getRandomElement(weatherTips));
+                        }
+                        
+                        // จำลองประมาณการกำไร
+                        const estimatedProfit = 1500 + Math.floor(Math.random() * 1000);
+                        
+                        resolve({
+                            weather,
+                            weatherDesc,
+                            marketPrice,
+                            recommendedPrice,
+                            recommendedLocation,
+                            reason,
+                            dailyTips,
+                            estimatedProfit,
+                            humidity: 60 + Math.floor(Math.random() * 20)
+                        });
+                    }, 2000);
+                });
+            }
+        };
+        
+        // =====================
+        // ระบบคำนวณราคา
+        // =====================
+        async function calculatePrice() {
+            // แสดง loading
+            document.getElementById('result-section').style.display = 'block';
+            document.getElementById('price-recommendation').textContent = 'กำลังคำนวณ...';
+            document.getElementById('profit-estimate').textContent = 'กำลังวิเคราะห์...';
+            document.getElementById('analysis-text').textContent = 'กำลังวิเคราะห์...';
+            document.getElementById('tips-list').innerHTML = '<li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>';
+            
+            // เก็บข้อมูลจากฟอร์ม
+            const userData = {
+                meatPrice: parseFloat(document.getElementById('meat-price').value),
+                meatPerSkewer: parseFloat(document.getElementById('meat-per-skewer').value),
+                additionalCost: parseFloat(document.getElementById('additional-cost').value)
+            };
+            
+            const marketData = {
+                location: document.getElementById('location').value,
+                salesVolume: document.getElementById('sales-volume').value,
+                weather: document.querySelector('.option-group:nth-of-type(3) .option-button.selected').getAttribute('data-value'),
+                economy: document.querySelector('.option-group:nth-of-type(4) .option-button.selected').getAttribute('data-value')
+            };
+            
+            try {
+                // ขอคำแนะนำราคาจาก AI Engine
+                const result = await AIEngine.getPriceRecommendation(userData, marketData);
+                
+                // แสดงผลลัพธ์
+                document.getElementById('price-recommendation').textContent = `${result.recommendedPrice} บาท/ไม้`;
+                document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${result.estimatedProfit} บาท/วัน`;
+                document.getElementById('analysis-text').textContent = result.analysisText;
+                
+                // แสดงเทคนิค
+                const tipsList = document.getElementById('tips-list');
+                tipsList.innerHTML = '';
+                
+                result.tips.forEach(tip => {
+                    const li = document.createElement('li');
+                    li.textContent = tip;
+                    tipsList.appendChild(li);
+                });
+                
+                // อัปเดตแดชบอร์ด
+                document.getElementById('today-price').textContent = `${result.recommendedPrice} บาท`;
+                document.getElementById('estimated-profit').textContent = `${result.estimatedProfit} บาท`;
+                
+            } catch (error) {
+                console.error('Error calculating price:', error);
+                document.getElementById('price-recommendation').textContent = 'เกิดข้อผิดพลาด';
+                document.getElementById('profit-estimate').textContent = 'ไม่สามารถคำนวณได้';
+                document.getElementById('analysis-text').textContent = 'เกิดข้อผิดพลาดในการวิเคราะห์ โปรดลองใหม่อีกครั้ง';
+                document.getElementById('tips-list').innerHTML = '<li>ไม่สามารถแสดงเทคนิคได้ในขณะนี้</li>';
+            }
+        }
+        
+        // =====================
+        // ระบบแชทกับ AI
+        // =====================
+        async function setupChatSystem() {
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            
+            // ฟังก์ชันส่งข้อความ
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // เพิ่มข้อความของผู้ใช้
+                const userMessageElement = document.createElement('div');
+                userMessageElement.className = 'message user';
+                userMessageElement.textContent = message;
+                const timeElement = document.createElement('div');
+                timeElement.className = 'message-time';
+                timeElement.textContent = 'เมื่อสักครู่';
+                userMessageElement.appendChild(timeElement);
+                chatMessages.appendChild(userMessageElement);
+                
+                // ล้างช่องข้อความ
+                chatInput.value = '';
+                
+                // เลื่อนไปยังข้อความล่าสุด
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // แสดงว่ากำลังพิมพ์
+                const typingElement = document.createElement('div');
+                typingElement.className = 'message ai';
+                typingElement.textContent = 'กำลังพิมพ์...';
+                chatMessages.appendChild(typingElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // ขอคำตอบจาก AI
+                    const response = await AIEngine.getChatResponse(message);
+                    
+                    // ลบข้อความ "กำลังพิมพ์..."
+                    chatMessages.removeChild(typingElement);
+                    
+                    // เพิ่มข้อความของ AI
+                    const aiMessageElement = document.createElement('div');
+                    aiMessageElement.className = 'message ai';
+                    aiMessageElement.textContent = response;
+                    const aiTimeElement = document.createElement('div');
+                    aiTimeElement.className = 'message-time';
+                    aiTimeElement.textContent = 'เมื่อสักครู่';
+                    aiMessageElement.appendChild(aiTimeElement);
+                    chatMessages.appendChild(aiMessageElement);
+                    
+                    // เลื่อนไปยังข้อความล่าสุด
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error('Error getting AI response:', error);
+                    
+                    // ลบข้อความ "กำลังพิมพ์..."
+                    chatMessages.removeChild(typingElement);
+                    
+                    // แสดงข้อความแจ้งเตือนข้อผิดพลาด
+                    const errorElement = document.createElement('div');
+                    errorElement.className = 'message ai';
+                    errorElement.textContent = 'ขออภัย เกิดข้อผิดพลาดในการรับคำตอบ โปรดลองใหม่อีกครั้ง';
+                    chatMessages.appendChild(errorElement);
+                }
+            }
+            
+            // รับฟังการคลิกปุ่มส่ง
+            chatSendBtn.addEventListener('click', sendMessage);
+            
+            // รับฟังการกด Enter
+            chatInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        // =====================
+        // ระบบแดชบอร์ด
+        // =====================
+        async function setupDashboard() {
+            const refreshBtn = document.getElementById('refresh-recommendation');
+            
+            // ฟังก์ชันรีเฟรชคำแนะนำ
+            async function refreshRecommendation() {
+                // แสดง loading
+                document.getElementById('recommendation-loader').style.display = 'flex';
+                document.getElementById('recommendation-content').classList.add('hidden');
+                
+                try {
+                    // ดึงข้อมูลตำแหน่งจากการตั้งค่า หรือใช้ค่าเริ่มต้น
+                    const location = UserDataManager.userData.profile.location || 'กรุงเทพ';
+                    
+                    // ขอคำแนะนำประจำวัน
+                    const recommendation = await AIEngine.generateDailyRecommendation(location);
+                    
+                    // อัปเดตข้อมูลในแดชบอร์ด
+                    document.getElementById('weather-desc').textContent = recommendation.weatherDesc;
+                    document.getElementById('location-rec').textContent = recommendation.recommendedLocation;
+                    document.getElementById('price-rec').textContent = recommendation.recommendedPrice;
+                    document.getElementById('price-reason').textContent = recommendation.reason;
+                    
+                    // อัปเดตสถิติ
+                    document.getElementById('today-price').textContent = `${recommendation.recommendedPrice} บาท`;
+                    document.getElementById('market-price').textContent = `${recommendation.marketPrice} บาท`;
+                    document.getElementById('weather-status').textContent = recommendation.weatherDesc;
+                    document.getElementById('humidity').textContent = recommendation.humidity;
+                    document.getElementById('estimated-profit').textContent = `${recommendation.estimatedProfit} บาท`;
+                    
+                    // อัปเดตเทคนิค
+                    const tipsList = document.getElementById('daily-tips');
+                    tipsList.innerHTML = '';
+                    
+                    recommendation.dailyTips.forEach(tip => {
+                        const li = document.createElement('li');
+                        li.textContent = tip;
+                        tipsList.appendChild(li);
+                    });
+                    
+                    // ซ่อน loading และแสดงผลลัพธ์
+                    document.getElementById('recommendation-loader').style.display = 'none';
+                    document.getElementById('recommendation-content').classList.remove('hidden');
+                    
+                } catch (error) {
+                    console.error('Error refreshing recommendation:', error);
+                    document.getElementById('recommendation-loader').style.display = 'none';
+                    document.getElementById('recommendation-content').classList.remove('hidden');
+                    document.getElementById('recommendation-content').innerHTML = '<p>เกิดข้อผิดพลาดในการรับคำแนะนำ โปรดลองใหม่อีกครั้ง</p>';
+                }
+            }
+            
+            // รับฟังการคลิกปุ่มรีเฟรช
+            refreshBtn.addEventListener('click', refreshRecommendation);
+            
+            // โหลดคำแนะนำตอนเริ่มต้น
+            await refreshRecommendation();
+        }
+        
+        // =====================
+        // ระบบการตั้งค่า
+        // =====================
+        function setupSettings() {
+            const saveApiKeyBtn = document.getElementById('save-api-key');
+            const saveBusinessInfoBtn = document.getElementById('save-business-info');
+            const saveAlertSettingsBtn = document.getElementById('save-alert-settings');
+            
+            // โหลดข้อมูลการตั้งค่าเดิม
+            function loadSettings() {
+                if (UserDataManager.loadUserData()) {
+                    // โหลดการตั้งค่า API
+                    document.getElementById('api-provider').value = UserDataManager.userData.apiSettings.provider;
+                    document.getElementById('api-key').value = UserDataManager.userData.apiSettings.apiKey;
+                    
+                    // โหลดข้อมูลร้านค้า
+                    document.getElementById('business-name').value = UserDataManager.userData.profile.businessName;
+                    document.getElementById('business-location').value = UserDataManager.userData.profile.location;
+                    document.getElementById('business-description').value = UserDataManager.userData.profile.description;
+                    
+                    // โหลดการตั้งค่าแจ้งเตือน
+                    document.getElementById('weather-alert').checked = UserDataManager.userData.preferences.weatherAlert;
+                    document.getElementById('price-alert').checked = UserDataManager.userData.preferences.priceAlert;
+                    document.getElementById('event-alert').checked = UserDataManager.userData.preferences.eventAlert;
+                    
+                    // อัปเดตสถานะการแจ้งเตือน API Key
+                    updateApiKeyNotification();
+                }
+            }
+            
+            // อัปเดตสถานะการแจ้งเตือน API Key
+            function updateApiKeyNotification() {
+                const notification = document.getElementById('api-key-notification');
+                if (UserDataManager.hasApiKey()) {
+                    notification.style.display = 'none';
+                } else {
+                    notification.style.display = 'flex';
+                }
+            }
+            
+            // บันทึก API Key
+            saveApiKeyBtn.addEventListener('click', function() {
+                const provider = document.getElementById('api-provider').value;
+                const apiKey = document.getElementById('api-key').value;
+                
+                UserDataManager.updateApiSettings(provider, apiKey);
+                
+                alert('บันทึก API Key เรียบร้อยแล้ว');
+                updateApiKeyNotification();
+            });
+            
+            // บันทึกข้อมูลร้านค้า
+            saveBusinessInfoBtn.addEventListener('click', function() {
+                const name = document.getElementById('business-name').value;
+                const location = document.getElementById('business-location').value;
+                const description = document.getElementById('business-description').value;
+                
+                UserDataManager.updateBusinessInfo(name, location, description);
+                
+                alert('บันทึกข้อมูลร้านเรียบร้อยแล้ว');
+            });
+            
+            // บันทึกการตั้งค่าแจ้งเตือน
+            saveAlertSettingsBtn.addEventListener('click', function() {
+                const weatherAlert = document.getElementById('weather-alert').checked;
+                const priceAlert = document.getElementById('price-alert').checked;
+                const eventAlert = document.getElementById('event-alert').checked;
+                
+                UserDataManager.updateAlertSettings(weatherAlert, priceAlert, eventAlert);
+                
+                alert('บันทึกการตั้งค่าแจ้งเตือนเรียบร้อยแล้ว');
+            });
+            
+            // โหลดการตั้งค่า
+            loadSettings();
+        }
+        
+        // =====================
+        // เริ่มต้นแอปพลิเคชัน
+        // =====================
+        document.addEventListener('DOMContentLoaded', async function() {
+            // แสดงวันที่ปัจจุบัน
+            setThaiDate();
+            
+            // ตั้งค่าระบบแท็บ
+            setupTabs();
+            
+            // ตั้งค่าระบบปุ่มออปชั่น
+            setupOptionButtons();
+            
+            // ตั้งค่าระบบแชท
+            setupChatSystem();
+            
+            // ตั้งค่าแดชบอร์ด
+            setupDashboard();
+            
+            // ตั้งค่าระบบการตั้งค่า
+            setupSettings();
+            
+            // รับฟังการคลิกปุ่มคำนวณราคา
+            document.getElementById('calculate-btn').addEventListener('click', calculatePrice);
+            
+            // โหลดแท็บที่เลือกล่าสุด (ไม่ใช้ localStorage)
+            // เนื่องจากมีข้อจำกัดเรื่อง sandbox
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pork Skewer Pricing Advisor - ที่ปรึกษาราคาหมูปิ้ง</title>
+    <title>Smart Pork Skewer Pricing Advisor AI</title>
     <style>
         :root {
             --primary-color: #FF5722;
@@ -12,20 +854,23 @@
             --dark-color: #5D4037;
             --light-color: #FFF8E1;
             --success-color: #4CAF50;
+            --error-color: #F44336;
+            --info-color: #2196F3;
+            --warning-color: #FFC107;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Sarabun', 'Prompt', sans-serif;
+            font-family: 'Sarabun', 'Prompt', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         
         body {
             background-color: var(--light-color);
             color: var(--dark-color);
             line-height: 1.6;
-            padding-bottom: 60px;
+            padding-bottom: 80px;
         }
         
         .container {
@@ -128,13 +973,24 @@
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
         }
         
         .option-group {
@@ -150,7 +1006,7 @@
             background-color: #FFF;
             border: 2px solid #DDD;
             border-radius: 8px;
-            padding: 8px 5px;
+            padding: 12px 8px;
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
@@ -163,14 +1019,14 @@
             color: white;
         }
         
-        .option-button img {
+        .option-button img, .option-button svg {
             display: block;
             width: 30px;
             height: 30px;
             margin: 0 auto 5px;
         }
         
-        .calculate-btn {
+        .calculate-btn, .action-btn {
             display: block;
             width: 100%;
             background-color: var(--primary-color);
@@ -178,18 +1034,18 @@
             border: none;
             border-radius: 8px;
             padding: 15px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             margin: 20px 0;
             transition: all 0.3s;
             box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
         }
         
-        .calculate-btn:hover {
+        .calculate-btn:hover, .action-btn:hover {
             background-color: var(--secondary-color);
         }
         
-        .calculate-btn:active {
+        .calculate-btn:active, .action-btn:active {
             transform: translateY(4px);
             box-shadow: none;
         }
@@ -234,34 +1090,34 @@
         }
         
         .additional-tips li {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
         .strategy-section {
             margin-bottom: 20px;
             background-color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         
         .strategy-section h3 {
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
         }
         
-        .strategy-section h3 img {
-            width: 30px;
-            height: 30px;
+        .strategy-section h3 svg {
+            width: 24px;
+            height: 24px;
             margin-right: 10px;
         }
         
         .strategy-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px dashed #DDD;
         }
@@ -284,9 +1140,18 @@
             flex-shrink: 0;
         }
         
-        .strategy-icon img {
+        .strategy-icon svg {
             width: 30px;
             height: 30px;
+            color: var(--primary-color);
+        }
+        
+        .strategy-content {
+            flex: 1;
+        }
+        
+        .strategy-content h4 {
+            margin-bottom: 5px;
         }
         
         .situation-card {
@@ -299,15 +1164,210 @@
         
         .situation-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
         }
         
-        .situation-title img {
+        .situation-title svg {
             width: 20px;
             height: 20px;
             margin-right: 10px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .notification.info {
+            background-color: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .notification.warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .notification.error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .notification.success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .notification svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .chat-ui {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+        
+        .chat-send-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            margin-left: auto;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 18px 18px 0 18px;
+        }
+        
+        .message.ai {
+            margin-right: auto;
+            background-color: #f1f1f1;
+            color: var(--dark-color);
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 0;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .loader {
+            display: none;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .loader div {
+            width: 12px;
+            height: 12px;
+            margin: 0 4px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            animation: loader 1.4s infinite ease-in-out both;
+        }
+        
+        .loader div:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .loader div:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes loader {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .api-key-section {
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
         }
         
         .footer {
@@ -317,7 +1377,7 @@
             font-size: 0.9rem;
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             h1 {
                 font-size: 1.5rem;
             }
@@ -326,26 +1386,18 @@
                 font-size: 1rem;
             }
             
-            .option-group {
-                gap: 5px;
+            .dashboard-stats {
+                grid-template-columns: 1fr;
             }
             
             .option-button {
-                min-width: 70px;
-                padding: 8px 3px;
                 font-size: 0.8rem;
+                padding: 8px 5px;
             }
             
             .price-recommendation {
                 font-size: 2rem;
             }
-        }
-
-        /* SVG Icons */
-        .svg-icon {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
         }
     </style>
 </head>
@@ -353,588 +1405,200 @@
     <header>
         <div class="header-bg"></div>
         <div class="header-content container">
-            <h1>Smart Pork Skewer Pricing Advisor</h1>
-            <h2>ที่ปรึกษาราคาหมูปิ้ง</h2>
+            <h1>Smart Pork Skewer Pricing Advisor AI</h1>
+            <h2>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</h2>
             <div class="date-display" id="current-date">วันที่ ...</div>
         </div>
     </header>
     
     <div class="container">
+        <div class="notification info" id="api-key-notification">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12" y2="16"></line>
+            </svg>
+            <div class="notification-content">
+                <p>คุณกำลังทดลองใช้งานในเวอร์ชันทดสอบ หากต้องการใช้งาน AI เต็มรูปแบบ โปรดตั้งค่า API Key ใน "การตั้งค่า"</p>
+            </div>
+        </div>
+
         <div class="tabs">
-            <div class="tab active" data-tab="calculator">คำนวณราคา</div>
-            <div class="tab" data-tab="strategy">เทคนิคเพิ่มยอดขาย</div>
+            <div class="tab active" data-tab="dashboard">แดชบอร์ด</div>
+            <div class="tab" data-tab="calculator">คำนวณราคา</div>
+            <div class="tab" data-tab="advisor">ที่ปรึกษา AI</div>
+            <div class="tab" data-tab="settings">การตั้งค่า</div>
         </div>
         
-        <div id="calculator-tab" class="tab-content active">
-            <form id="calculator-form">
-                <div class="form-group">
-                    <label>ราคาหมูวันนี้</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="cheap">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5,15 L25,15 M12,8 L5,15 L12,22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            ถูก
-                        </div>
-                        <div class="option-button" data-value="medium">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="5" y1="15" x2="25" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ปานกลาง
-                        </div>
-                        <div class="option-button" data-value="expensive">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5,15 L25,15 M18,8 L25,15 L18,22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            แพง
-                        </div>
-                    </div>
+        <!-- แดชบอร์ด -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-label">ราคาแนะนำวันนี้</div>
+                    <div class="stat-value" id="today-price">-- บาท</div>
+                    <div class="stat-label">ต่อไม้</div>
                 </div>
-                
-                <div class="form-group">
-                    <label>ขนาดไม้หมูปิ้ง</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="small">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="10" y1="8" x2="10" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <circle cx="10" cy="15" r="3" fill="currentColor"/>
-                            </svg>
-                            เล็ก
-                        </div>
-                        <div class="option-button" data-value="medium">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="15" y1="5" x2="15" y2="25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <circle cx="15" cy="15" r="4" fill="currentColor"/>
-                            </svg>
-                            กลาง
-                        </div>
-                        <div class="option-button" data-value="large">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <line x1="20" y1="3" x2="20" y2="27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <circle cx="20" cy="15" r="5" fill="currentColor"/>
-                            </svg>
-                            ใหญ่
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-label">ราคาหมูในตลาด</div>
+                    <div class="stat-value" id="market-price">-- บาท</div>
+                    <div class="stat-label">ต่อกิโลกรัม</div>
                 </div>
-                
-                <div class="form-group">
-                    <label>ตำแหน่งขาย</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="market">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5,10 L5,25 L25,25 L25,10" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M3,10 L27,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M10,5 L10,10 M15,5 L15,10 M20,5 L20,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ตลาด
-                        </div>
-                        <div class="option-button" data-value="street">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5,20 L25,20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M15,10 L15,5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <rect x="10" y="10" width="10" height="10" fill="currentColor"/>
-                            </svg>
-                            ริมถนน
-                        </div>
-                        <div class="option-button" data-value="community">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7,25 L7,15 L13,10 L19,15 L19,25" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M23,25 L23,15 L19,15" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M7,15 L3,15 L3,25" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M3,25 L23,25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ชุมชน
-                        </div>
-                        <div class="option-button" data-value="school">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5,15 L15,8 L25,15" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <rect x="8" y="15" width="14" height="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            สถานศึกษา
-                        </div>
-                        <div class="option-button" data-value="office">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="5" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M5,10 L25,10" stroke="currentColor" stroke-width="2"/>
-                                <path d="M15,10 L15,25" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            ออฟฟิศ
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-label">สภาพอากาศ</div>
+                    <div class="stat-value" id="weather-status">--</div>
+                    <div class="stat-label">ความชื้น: <span id="humidity">--</span>%</div>
                 </div>
-                
-                <div class="form-group">
-                    <label>จำนวนขายต่อวัน</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="low">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="10" y="15" width="4" height="10" fill="currentColor"/>
-                                <rect x="18" y="20" width="4" height="5" fill="currentColor"/>
-                                <line x1="5" y1="25" x2="25" y2="25" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            น้อย
-                        </div>
-                        <div class="option-button" data-value="medium">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="6" y="10" width="4" height="15" fill="currentColor"/>
-                                <rect x="14" y="15" width="4" height="10" fill="currentColor"/>
-                                <rect x="22" y="7" width="4" height="18" fill="currentColor"/>
-                                <line x1="5" y1="25" x2="27" y2="25" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            ปานกลาง
-                        </div>
-                        <div class="option-button" data-value="high">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="5" width="3" height="20" fill="currentColor"/>
-                                <rect x="10" y="10" width="3" height="15" fill="currentColor"/>
-                                <rect x="15" y="7" width="3" height="18" fill="currentColor"/>
-                                <rect x="20" y="12" width="3" height="13" fill="currentColor"/>
-                                <rect x="25" y="5" width="3" height="20" fill="currentColor"/>
-                                <line x1="3" y1="25" x2="29" y2="25" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            มาก
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-label">กำไรประมาณการ</div>
+                    <div class="stat-value" id="estimated-profit">-- บาท</div>
+                    <div class="stat-label">ต่อวัน</div>
                 </div>
-                
-                <div class="form-group">
-                    <label>สภาพอากาศวันนี้</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="good">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="15" cy="15" r="7" fill="currentColor"/>
-                                <path d="M15,5 L15,7 M15,23 L15,25 M5,15 L7,15 M23,15 L25,15 M7,7 L9,9 M21,7 L19,9 M7,23 L9,21 M21,23 L19,21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ดี
-                        </div>
-                        <div class="option-button" data-value="rainy">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10,15 C7,15 5,13 5,10 C5,7 7,5 10,5 L20,5 C22,5 25,7 25,10 C25,13 22,15 20,15 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M10,18 L8,22 M15,18 L13,22 M20,18 L18,22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ฝนตก
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>สภาพเศรษฐกิจ</label>
-                    <div class="option-group">
-                        <div class="option-button" data-value="good">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="15" cy="15" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M12,15 C12,13 13,11 15,11 C17,11 18,13 18,15 L12,15 Z" fill="currentColor"/>
-                                <path d="M10,18 C11,20 13,21 15,21 C17,21 19,20 20,18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            ดี
-                        </div>
-                        <div class="option-button" data-value="bad">
-                            <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="15" cy="15" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M10,18 C11,16 13,15 15,15 C17,15 19,16 20,18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M12,11 C12,13 13,15 15,15 C17,15 18,13 18,11 L12,11 Z" fill="currentColor"/>
-                            </svg>
-                            แย่
-                        </div>
-                    </div>
-                </div>
-                
-                <button type="button" class="calculate-btn" id="calculate-btn">คำนวณราคาแนะนำ</button>
-            </form>
+            </div>
             
-            <div class="result-section" id="result-section">
-                <h3>ราคาแนะนำ</h3>
-                <div class="price-recommendation" id="price-recommendation">-- บาท/ไม้</div>
-                <div class="profit-estimate" id="profit-estimate">ประมาณการกำไร: -- บาท/วัน</div>
-                <div class="additional-tips" id="additional-tips">
-                    <h4>เทคนิคเพิ่มกำไร</h4>
-                    <ul id="tips-list">
-                        <li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>
-                    </ul>
+            <div class="card">
+                <div class="card-title">แนะนำประจำวัน</div>
+                <div id="daily-recommendation">
+                    <div class="loader" id="recommendation-loader">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div id="recommendation-content" class="hidden">
+                        <p>วันนี้สภาพอากาศ <span id="weather-desc">--</span> เหมาะกับการขายที่ <span id="location-rec">--</span></p>
+                        <p>แนะนำให้ตั้งราคาที่ <span id="price-rec">--</span> บาทต่อไม้</p>
+                        <p>เพราะ <span id="price-reason">--</span></p>
+                        
+                        <div class="additional-tips">
+                            <h4>เทคนิคพิเศษสำหรับวันนี้</h4>
+                            <ul id="daily-tips">
+                                <li>กำลังโหลด...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="action-btn" id="refresh-recommendation">รีเฟรชคำแนะนำ</button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">การแจ้งเตือน</div>
+                <div id="notifications-container">
+                    <!-- จะใส่การแจ้งเตือนทีหลัง -->
+                    <p class="empty-notification">ไม่มีการแจ้งเตือนในขณะนี้</p>
                 </div>
             </div>
         </div>
         
-        <div id="strategy-tab" class="tab-content">
-            <div class="strategy-section">
-                <h3>
-                    <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10,15 C10,12.5 12.5,10 15,10 C17.5,10 20,12.5 20,15 C20,15 20,17.5 15,20 C15,20 15,25 15,25" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <circle cx="15" cy="6" r="1.5" fill="currentColor"/>
-                    </svg>
-                    เทคนิคดึงดูดลูกค้า
-                </h3>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="5" y="13" width="20" height="12" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <path d="M10,13 L10,8 C10,6 12,5 15,5 C18,5 20,6 20,8 L20,13" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <circle cx="15" cy="19" r="3" stroke="#FF5722" stroke-width="2" fill="none"/>
-                        </svg>
+        <!-- คำนวณราคา -->
+        <div id="calculator-tab" class="tab-content">
+            <div class="card">
+                <div class="card-title">ข้อมูลต้นทุน</div>
+                <form id="calculator-form">
+                    <div class="form-group">
+                        <label for="meat-price">ราคาหมู (บาทต่อกิโลกรัม)</label>
+                        <input type="number" id="meat-price" min="50" value="120">
                     </div>
-                    <div>
-                        <strong>แจกฟรี 1 แถม 10</strong><br>
-                        แจกหมูปิ้งฟรี 1 ไม้ หากซื้อครบ 10 ไม้ จะช่วยกระตุ้นให้ลูกค้าซื้อเพิ่ม และบอกต่อคนรู้จัก
+                    
+                    <div class="form-group">
+                        <label for="meat-per-skewer">น้ำหนักหมูต่อไม้ (กรัม)</label>
+                        <input type="number" id="meat-per-skewer" min="10" max="50" value="25">
                     </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="15" cy="15" r="10" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <path d="M11,15 L14,18 L19,13" stroke="#FF5722" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                    
+                    <div class="form-group">
+                        <label>ขนาดไม้หมูปิ้ง</label>
+                        <div class="option-group">
+                            <div class="option-button" data-value="small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="8" y1="2" x2="8" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="8" cy="12" r="3"></circle>
+                                </svg>
+                                เล็ก
+                            </div>
+                            <div class="option-button selected" data-value="medium">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="2" x2="12" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                </svg>
+                                กลาง
+                            </div>
+                            <div class="option-button" data-value="large">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="16" y1="2" x2="16" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="16" cy="12" r="5"></circle>
+                                </svg>
+                                ใหญ่
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>ความสะอาดต้องมาก่อน</strong><br>
-                        สวมถุงมือ หน้ากาก ชุดสะอาด และทำความสะอาดอุปกรณ์ให้ลูกค้าเห็น ช่วยสร้างความเชื่อมั่น
+                    
+                    <div class="form-group">
+                        <label for="additional-cost">ต้นทุนเพิ่มเติมต่อไม้ (ไม้, เครื่องปรุง, แรงงาน)</label>
+                        <input type="number" id="additional-cost" min="0" step="0.1" value="1">
                     </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="22" r="3" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <circle cx="20" cy="22" r="3" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <path d="M5,5 L7,5 L10,15 L23,15 L25,8 L8,8" stroke="#FF5722" stroke-width="2" fill="none"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <strong>รถเข็นสะดุดตา</strong><br>
-                        ตกแต่งรถเข็นหมูปิ้งให้โดดเด่น แตกต่าง ใช้ไฟ LED ช่วงพลบค่ำ ทำป้ายชื่อร้านให้จำง่าย
-                    </div>
-                </div>
+                </form>
             </div>
             
-            <div class="strategy-section">
-                <h3>
-                    <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5,20 L15,5 L25,20 L15,15 Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>
-                        <path d="M15,15 L15,25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    วิธีเพิ่มยอดขาย
-                </h3>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="7" stroke="#FF5722" stroke-width="2" fill="none"/>
-                            <path d="M17,17 L25,25" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="12" cy="12" r="3" fill="#FF5722"/>
-                        </svg>
+            <div class="card">
+                <div class="card-title">ข้อมูลตลาด</div>
+                <form>
+                    <div class="form-group">
+                        <label for="location">ตำแหน่งขาย</label>
+                        <select id="location">
+                            <option value="market">ตลาด</option>
+                            <option value="street">ริมถนน</option>
+                            <option value="community">ชุมชน</option>
+                            <option value="school">สถานศึกษา</option>
+                            <option value="office">ออฟฟิศ</option>
+                        </select>
                     </div>
-                    <div>
-                        <strong>ขายในช่วงเวลาที่ใช่</strong><br>
-                        จับเวลาที่คนเยอะที่สุดของแต่ละพื้นที่ เช่น หน้าโรงเรียนช่วงเลิกเรียน ชุมชนช่วงเย็นหลังเลิกงาน
+                    
+                    <div class="form-group">
+                        <label for="sales-volume">จำนวนขายต่อวัน (ประมาณ)</label>
+                        <select id="sales-volume">
+                            <option value="low">น้อย (น้อยกว่า 100 ไม้)</option>
+                            <option value="medium" selected>ปานกลาง (100-300 ไม้)</option>
+                            <option value="high">มาก (มากกว่า 300 ไม้)</option>
+                        </select>
                     </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5,7 L25,7" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M5,15 L25,15" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M5,23 L25,23" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="10" cy="7" r="3" fill="#FF5722"/>
-                            <circle cx="20" cy="15" r="3" fill="#FF5722"/>
-                            <circle cx="15" cy="23" r="3" fill="#FF5722"/>
-                        </svg>
+                    
+                    <div class="form-group">
+                        <label>สภาพอากาศ</label>
+                        <div class="option-group">
+                            <div class="option-button selected" data-value="sunny">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                                แดดออก
+                            </div>
+                            <div class="option-button" data-value="cloudy">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                                </svg>
+                                มีเมฆ
+                            </div>
+                            <div class="option-button" data-value="rainy">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                                    <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                                    <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                    <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                                    <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                                    <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                                </svg>
+                                ฝนตก
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>เพิ่มความหลากหลาย</strong><br>
-                        นอกจากหมูปิ้งธรรมดา ลองเพิ่มสูตรพิเศษ เช่น หมูปิ้งหมักน้ำผึ้ง หมูปิ้งพริกไทยดำ ให้ลูกค้ามีตัวเลือก
-                    </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5,15 L25,15" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M15,5 L15,25" stroke="#FF5722" stroke-width="2" stroke-linecap="round"/>
-                            <circle cx="15" cy="15" r="5" stroke="#FF5722" stroke-width="2" fill="none"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <strong>ขายคู่กับสินค้าเสริม</strong><br>
-                        เพิ่มข้าวเหนียว น้ำจิ้ม หรือเครื่องดื่ม เพื่อเพิ่มยอดขายและให้ความสะดวกกับลูกค้า
-                    </div>
-                </div>
-            </div>
-            
-            <div class="strategy-section">
-                <h3>
-                    <svg class="svg-icon" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15,5 L22,12 L22,25 L8,25 L8,12 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M12,12 L18,12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M12,17 L18,17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M12,22 L18,22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    แนะนำตามสถานการณ์
-                </h3>
-                
-                <div class="situation-card">
-                    <div class="situation-title">
-                        <svg class="svg-icon" width="20" height="20" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10,15 C7,15 5,13 5,10 C5,7 7,5 10,5 L20,5 C22,5 25,7 25,10 C25,13 22,15 20,15 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                            <path d="M10,18 L8,22 M15,18 L13,22 M20,18 L18,22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        วันฝนตกควรทำอย่างไร
-                    </div>
-                    <p>ทำที่กันฝนเล็กๆ ให้ลูกค้ายืนไม่เปียก หรือมีบริการส่งถึงรถ เตรียมถุงพลาสติกให้ลูกค้าใส่หมูปิ้งกลับบ้าน และย้ายจุดขายไปใกล้ที่มีหลังคา</p>
-                </div>
-                
-                <div class="situation-card">
-                    <div class="situation-title">
-                        <svg class="svg-icon" width="20" height="20" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="15" cy="15" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-                            <path d="M10,18 C11,16 13,15 15,15 C17,15 19,16 20,18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12,11 C12,13 13,15 15,15 C17,15 18,13 18,11 L12,11 Z" fill="currentColor"/>
-                        </svg>
-                        ช่วงเศรษฐกิจแย่ควรทำอย่างไร
-                    </div>
-                    <p>ลดขนาดไม้เล็กน้อยแต่คงราคาเดิม เพิ่มโปรโมชั่น เช่น ซื้อ 5 ไม้แถม 1 หรือนำเสนอชุดราคาพิเศษ เช่น หมูปิ้ง + ข้าวเหนียว ในราคาประหยัด</p>
-                </div>
-                
-                <div class="situation-card">
-                    <div class="situation-title">
-                        <svg class="svg-icon" width="20" height="20" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="15" cy="15" r="7" fill="currentColor"/>
-                            <path d="M15,5 L15,7 M15,23 L15,25 M5,15 L7,15 M23,15 L25,15 M7,7 L9,9 M21,7 L19,9 M7,23 L9,21 M21,23 L19,21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        ช่วงอากาศร้อนจัด
-                    </div>
-                    <p>เตรียมน้ำดื่มเย็นๆ ไว้บริการฟรี หรือขายราคาถูก ใช้ร่มบังแดด จัดที่นั่งที่มีร่มเงาใกล้ๆ และอาจลดปริมาณหมูที่ปิ้งล่วงหน้าพร้อมขาย</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Smart Pork Skewer Pricing Advisor v1.0</p>
-        </div>
-    </div>
-    
-    <script>
-        // ฟังก์ชั่นแสดงวันที่ปัจจุบันในรูปแบบไทย
-        function setThaiDate() {
-            const now = new Date();
-            const thaiDay = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
-            const thaiMonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-            
-            const day = thaiDay[now.getDay()];
-            const date = now.getDate();
-            const month = thaiMonth[now.getMonth()];
-            const year = now.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
-            
-            document.getElementById('current-date').textContent = `วัน${day}ที่ ${date} ${month} ${year}`;
-        }
-        
-        // แสดงวันที่
-        setThaiDate();
-        
-        // ระบบแท็บ
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // ลบคลาส active จากทุกแท็บ
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                
-                // เพิ่มคลาส active ให้แท็บที่คลิก
-                this.classList.add('active');
-                
-                // แสดงเนื้อหาที่ตรงกับแท็บ
-                const tabId = this.getAttribute('data-tab');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-                
-                // ไม่ต้องใช้ localStorage เพื่อป้องกันปัญหา sandbox
-            });
-        });
-        
-        // ระบบเลือกออปชั่น
-        document.querySelectorAll('.option-button').forEach(button => {
-            button.addEventListener('click', function() {
-                // หา option-group ที่เป็นพาเรนต์
-                const parent = this.closest('.option-group');
-                
-                // ลบคลาส selected จากทุกปุ่มในกลุ่มเดียวกัน
-                parent.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
-                
-                // เพิ่มคลาส selected ให้ปุ่มที่คลิก
-                this.classList.add('selected');
-            });
-        });
-        
-        // ระบบคำนวณราคา
-        document.getElementById('calculate-btn').addEventListener('click', function() {
-            // เก็บค่าทั้งหมดที่เลือก
-            const selectedOptions = {};
-            const formGroups = document.querySelectorAll('.form-group');
-            
-            let allSelected = true;
-            
-            formGroups.forEach(group => {
-                const label = group.querySelector('label').textContent.trim();
-                const selectedButton = group.querySelector('.option-button.selected');
-                
-                if (selectedButton) {
-                    selectedOptions[label] = selectedButton.getAttribute('data-value');
-                } else {
-                    allSelected = false;
-                }
-            });
-            
-            if (!allSelected) {
-                alert('กรุณาเลือกข้อมูลให้ครบทุกช่อง');
-                return;
-            }
-            
-            // ใช้ข้อมูลที่เลือกในการคำนวณราคา
-            const priceResult = calculatePrice(selectedOptions);
-            
-            // แสดงผลลัพธ์
-            document.getElementById('price-recommendation').textContent = `${priceResult.price} บาท/ไม้`;
-            document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${priceResult.profit} บาท/วัน`;
-            
-            // แสดงเทคนิคเพิ่มกำไร
-            const tipsList = document.getElementById('tips-list');
-            tipsList.innerHTML = '';
-            
-            priceResult.tips.forEach(tip => {
-                const li = document.createElement('li');
-                li.textContent = tip;
-                tipsList.appendChild(li);
-            });
-            
-            // แสดงส่วนผลลัพธ์
-            document.getElementById('result-section').style.display = 'block';
-            
-            // ไม่ต้องบันทึกลง localStorage เนื่องจากข้อจำกัดของ sandbox
-            
-            // เลื่อนไปที่ผลลัพธ์
-            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        
-        // ฟังก์ชั่นคำนวณราคา
-        function calculatePrice(options) {
-            // กำหนดค่าพื้นฐาน
-            let basePrice = 0;
-            let profitPerSkewer = 0;
-            let dailySales = 0;
-            
-            // ราคาหมู
-            if (options['ราคาหมูวันนี้'] === 'cheap') {
-                basePrice = 7;
-                profitPerSkewer = 3;
-            } else if (options['ราคาหมูวันนี้'] === 'medium') {
-                basePrice = 8;
-                profitPerSkewer = 2.5;
-            } else if (options['ราคาหมูวันนี้'] === 'expensive') {
-                basePrice = 9;
-                profitPerSkewer = 2;
-            }
-            
-            // ขนาดไม้
-            if (options['ขนาดไม้หมูปิ้ง'] === 'small') {
-                basePrice -= 1;
-                profitPerSkewer += 0.5;
-            } else if (options['ขนาดไม้หมูปิ้ง'] === 'large') {
-                basePrice += 2;
-                profitPerSkewer += 1;
-            }
-            
-            // ตำแหน่งขาย
-            if (options['ตำแหน่งขาย'] === 'office' || options['ตำแหน่งขาย'] === 'school') {
-                basePrice += 1;
-            } else if (options['ตำแหน่งขาย'] === 'market') {
-                basePrice -= 1;
-            }
-            
-            // จำนวนขาย
-            if (options['จำนวนขายต่อวัน'] === 'low') {
-                dailySales = 100;
-            } else if (options['จำนวนขายต่อวัน'] === 'medium') {
-                dailySales = 250;
-            } else if (options['จำนวนขายต่อวัน'] === 'high') {
-                dailySales = 400;
-            }
-            
-            // สภาพอากาศ
-            if (options['สภาพอากาศวันนี้'] === 'rainy') {
-                basePrice -= 1;
-            }
-            
-            // สภาพเศรษฐกิจ
-            if (options['สภาพเศรษฐกิจ'] === 'bad') {
-                basePrice -= 1;
-            }
-            
-            // ตรวจสอบราคาขั้นต่ำ
-            basePrice = Math.max(basePrice, 5);
-            
-            // คำนวณกำไรต่อวัน (โดยประมาณ)
-            const dailyProfit = Math.round(profitPerSkewer * dailySales);
-            
-            // เทคนิคเพิ่มกำไร
-            const tips = generateTips(options);
-            
-            return {
-                price: Math.round(basePrice),
-                profit: dailyProfit,
-                tips: tips
-            };
-        }
-        
-        // ฟังก์ชั่นสร้างเทคนิคเพิ่มกำไร
-        function generateTips(options) {
-            const tips = [];
-            
-            // เทคนิคตามสภาพอากาศ
-            if (options['สภาพอากาศวันนี้'] === 'rainy') {
-                tips.push('เพิ่มบริการส่งถึงรถ หรือถึงบ้านในรัศมีใกล้ๆ ช่วงฝนตก');
-            }
-            
-            // เทคนิคตามเศรษฐกิจ
-            if (options['สภาพเศรษฐกิจ'] === 'bad') {
-                tips.push('สร้างทางเลือกราคาประหยัด เช่น หมูชิ้นเล็กราคาถูก ควบคู่กับหมูชิ้นปกติ');
-            }
-            
-            // เทคนิคตามตำแหน่งขาย
-            if (options['ตำแหน่งขาย'] === 'school') {
-                tips.push('ทำโปรโมชั่นสำหรับนักเรียน เช่น ซื้อ 5 ไม้ แถม 1 ไม้');
-            } else if (options['ตำแหน่งขาย'] === 'office') {
-                tips.push('รับออเดอร์ล่วงหน้าจากพนักงานออฟฟิศ และมีบริการส่งถึงที่');
-            } else if (options['ตำแหน่งขาย'] === 'market') {
-                tips.push('ใช้กลยุทธ์ "วันนี้หมูสด" หรือ "หมูปิ้งใหม่ตลอดวัน" เพื่อดึงดูดลูกค้าในตลาด');
-            }
-            
-            // เทคนิคตามขนาดไม้
-            if (options['ขนาดไม้หมูปิ้ง'] === 'large') {
-                tips.push('ทำป้ายโฆษณา "หมูปิ้งชิ้นใหญ่คุ้มค่า" หรือ "ชิ้นใหญ่จัดเต็ม" เพื่อดึงดูดลูกค้า');
-            }
-            
-            // เทคนิคตามจำนวนขาย
-            if (options['จำนวนขายต่อวัน'] === 'low') {
-                tips.push('ลองขยายเวลาขาย หรือหาทำเลใหม่ในระแวกเดียวกันที่มีคนผ่านไปมามากกว่า');
-            }
-            
-            // เพิ่มเทคนิคทั่วไป
-            const generalTips = [
-                'แจกน้ำจิ้มเพิ่มฟรีเมื่อซื้อครบ 10 ไม้',
-                'ทำบัตรสะสมแต้ม ครบ 10 ครั้ง รับฟรี 5 ไม้',
-                'ขายเป็นเซตคู่กับข้าวเหนียวและน้ำจิ้มในราคาพิเศษ',
-                'ขายคู่กับเครื่องดื่ม หรือร่วมมือกับร้านเครื่องดื่มใกล้เคียง',
-                'ใช้โซเชียลมีเดียในการโปรโมท บอกเวลาและสถานที่ขายประจำ'
-            ];
-            
-            // เลือกเทคนิคทั่วไปแบบสุ่ม 1-2 อัน
-            const randomTips = generalTips.sort(() => 0.5 - Math.random()).slice(0, 2);
-            tips.push(...randomTips);
-            
-            return tips;
-        }
-        
-        // เนื่องจากมีข้อจำกัดเรื่อง localStorage ในสภาพแวดล้อม sandbox จึงไม่ใช้ feature นี้
-    </script>
-</body>
-</html>
+                    
+                    <div class="form-group">
+                        <label>สภาพเศรษฐกิจ</label>
+                        <div class="option-group">
+                            <div class="option-button" data

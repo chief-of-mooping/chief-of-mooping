@@ -1399,41 +1399,403 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Main calculation function
         function calculatePricing() {
-            // Show loading state
-            const resultsSection = document.getElementById('results');
-            resultsSection.style.display = 'block';
-            resultsSection.classList.add('animate-slide-up');
+// ========== AI MEMORY & PROFILE SYSTEM ========== //
 
-            // Get input values
-            const inputs = {
-                porkPrice: parseFloat(document.getElementById('porkPrice').value),
-                fuelCost: parseFloat(document.getElementById('fuelCost').value),
-                weather: document.getElementById('weather').value,
-                economic: document.getElementById('economic').value,
-                season: document.getElementById('season').value,
-                political: document.getElementById('political').value,
-                meatWeight: parseFloat(document.getElementById('meatWeight').value),
-                stickCost: parseFloat(document.getElementById('stickCost').value),
-                seasoningCost: parseFloat(document.getElementById('seasoningCost').value),
-                laborCost: parseFloat(document.getElementById('laborCost').value),
-                overheadCost: parseFloat(document.getElementById('overheadCost').value),
-                dailySticks: parseFloat(document.getElementById('dailySticks').value)
+// Memory storage keys
+const MEMORY_KEYS = {
+    profile: 'aiMooPing_profile',
+    usage: 'aiMooPing_usage',
+    history: 'aiMooPing_memory_history',
+    patterns: 'aiMooPing_patterns',
+    learning: 'aiMooPing_learning'
+};
+
+// AI Memory Class
+class AIMemory {
+    constructor() {
+        this.profile = this.loadProfile();
+        this.usage = this.loadUsage();
+        this.patterns = this.loadPatterns();
+        this.learning = this.loadLearning();
+    }
+
+    // Profile Management
+    loadProfile() {
+        try {
+            const saved = localStorage.getItem(MEMORY_KEYS.profile);
+            return saved ? JSON.parse(saved) : {
+                userName: '',
+                businessGoal: '',
+                experienceLevel: '',
+                riskTolerance: '',
+                createdAt: null,
+                lastActive: null
             };
+        } catch (e) {
+            console.warn('Profile loading failed:', e);
+            return {};
+        }
+    }
 
-            // Simulate AI processing delay
-            setTimeout(() => {
-                const result = performAIAnalysis(inputs);
-                displayResults(result);
-                
-                // Save to history
-                calculationHistory.push({
-                    timestamp: new Date().toLocaleString('th-TH'),
-                    cost: result.costPerStick.toFixed(2),
-                    price: result.suggestedPrice.toFixed(2),
-                    profit: result.profitMargin.toFixed(2),
-                    risk: result.riskLevel,
-                    inputs: inputs
-                });
+    saveProfile(profileData) {
+        try {
+            const profile = {
+                ...this.profile,
+                ...profileData,
+                lastActive: new Date().toISOString()
+            };
+            
+            if (!profile.createdAt) {
+                profile.createdAt = new Date().toISOString();
+            }
+
+            localStorage.setItem(MEMORY_KEYS.profile, JSON.stringify(profile));
+            this.profile = profile;
+            return true;
+        } catch (e) {
+            console.error('Profile saving failed:', e);
+            return false;
+        }
+    }
+
+    // Usage Tracking
+    loadUsage() {
+        try {
+            const saved = localStorage.getItem(MEMORY_KEYS.usage);
+            return saved ? JSON.parse(saved) : {
+                totalCalculations: 0,
+                totalSessions: 0,
+                accuratePredictions: 0,
+                lastCalculation: null,
+                favoriteSettings: {}
+            };
+        } catch (e) {
+            return {};
+        }
+    }
+
+    recordUsage(calculationData) {
+        this.usage.totalCalculations++;
+        this.usage.lastCalculation = new Date().toISOString();
+        
+        // Track favorite settings
+        const settings = {
+            porkPrice: calculationData.porkPrice,
+            weather: calculationData.weather,
+            economic: calculationData.economic
+        };
+
+        Object.keys(settings).forEach(key => {
+            if (!this.usage.favoriteSettings[key]) {
+                this.usage.favoriteSettings[key] = {};
+            }
+            const value = settings[key];
+            this.usage.favoriteSettings[key][value] = 
+                (this.usage.favoriteSettings[key][value] || 0) + 1;
+        });
+
+        localStorage.setItem(MEMORY_KEYS.usage, JSON.stringify(this.usage));
+    }
+
+    // Pattern Recognition
+    loadPatterns() {
+        try {
+            const saved = localStorage.getItem(MEMORY_KEYS.patterns);
+            return saved ? JSON.parse(saved) : {
+                pricePatterns: [],
+                behaviorPatterns: {},
+                successfulStrategies: []
+            };
+        } catch (e) {
+            return {};
+        }
+    }
+
+    recordPattern(calculationData, result) {
+        // Record price pattern
+        this.patterns.pricePatterns.push({
+            timestamp: new Date().toISOString(),
+            inputs: calculationData,
+            outputs: result,
+            success: result.profitMargin > (result.costPerStick * 0.3) // 30% profit threshold
+        });
+
+        // Keep only last 50 patterns
+        if (this.patterns.pricePatterns.length > 50) {
+            this.patterns.pricePatterns.shift();
+        }
+
+        localStorage.setItem(MEMORY_KEYS.patterns, JSON.stringify(this.patterns));
+    }
+
+    // Learning Simulation
+    loadLearning() {
+        try {
+            const saved = localStorage.getItem(MEMORY_KEYS.learning);
+            return saved ? JSON.parse(saved) : {
+                learningProgress: 0,
+                personalityType: '',
+                insights: [],
+                recommendations: []
+            };
+        } catch (e) {
+            return {};
+        }
+    }
+
+    updateLearning() {
+        // Simulate learning based on usage
+        const dataPoints = [
+            this.profile.userName ? 10 : 0,
+            this.profile.businessGoal ? 15 : 0,
+            this.profile.experienceLevel ? 15 : 0,
+            this.profile.riskTolerance ? 10 : 0,
+            Math.min(this.usage.totalCalculations * 2, 30),
+            Math.min(this.patterns.pricePatterns.length, 20)
+        ];
+
+        this.learning.learningProgress = Math.min(100, dataPoints.reduce((a, b) => a + b, 0));
+
+        // Personality analysis
+        if (this.usage.totalCalculations >= 3) {
+            this.learning.personalityType = this.analyzePersonality();
+        }
+
+        localStorage.setItem(MEMORY_KEYS.learning, JSON.stringify(this.learning));
+    }
+
+    analyzePersonality() {
+        const favorites = this.usage.favoriteSettings;
+        let personality = '';
+
+        // Risk analysis
+        if (favorites.economic && favorites.economic.poor > (favorites.economic.good || 0)) {
+            personality += 'ระมัดระวัง ';
+        } else if (favorites.economic && favorites.economic.good > (favorites.economic.poor || 0)) {
+            personality += 'มั่นใจ ';
+        }
+
+        // Weather preference analysis  
+        if (favorites.weather && favorites.weather.sunny > (favorites.weather.rainy || 0)) {
+            personality += 'เชิงรุก ';
+        }
+
+        // Experience level impact
+        if (this.profile.experienceLevel === 'newbie') {
+            personality += 'กำลังเรียนรู้';
+        } else if (this.profile.experienceLevel === 'expert') {
+            personality += 'เซียนการค้า';
+        }
+
+        return personality || 'ยังวิเคราะห์ไม่ได้';
+    }
+
+    // Get personalized greeting
+    getPersonalizedGreeting() {
+        const name = this.profile.userName || 'คุณลูกค้า';
+        const hour = new Date().getHours();
+        let timeGreeting = '';
+
+        if (hour < 12) timeGreeting = 'สวัสดีตอนเช้า';
+        else if (hour < 18) timeGreeting = 'สวัสดีตอนบ่าย';
+        else timeGreeting = 'สวัสดีตอนเย็น';
+
+        if (this.usage.totalCalculations === 0) {
+            return `${timeGreeting} ${name}! ยินดีต้อนรับสู่ระบบ AI ครั้งแรก 🎉`;
+        } else if (this.usage.totalCalculations < 5) {
+            return `${timeGreeting} ${name}! AI กำลังเรียนรู้คุณ... (${this.usage.totalCalculations}/5)`;
+        } else {
+            return `${timeGreeting} ${name}! AI จำคุณได้แล้ว ✨ (ใช้งาน ${this.usage.totalCalculations} ครั้ง)`;
+        }
+    }
+
+    // Get personalized insights
+    getPersonalizedInsight() {
+        if (this.usage.totalCalculations === 0) {
+            return 'เริ่มต้นด้วยการกรอกข้อมูลและคำนวณครั้งแรกเพื่อให้ AI เข้าใจคุณ';
+        }
+
+        const insights = [];
+
+        // Pattern-based insights
+        if (this.patterns.pricePatterns.length >= 3) {
+            const recentPatterns = this.patterns.pricePatterns.slice(-3);
+            const avgProfit = recentPatterns.reduce((sum, p) => sum + p.outputs.profitMargin, 0) / 3;
+            insights.push(`กำไรเฉลี่ย 3 ครั้งล่าสุด: ${avgProfit.toFixed(2)} บาท`);
+        }
+
+        // Personality insights
+        if (this.learning.personalityType) {
+            insights.push(`บุคลิกการค้า: ${this.learning.personalityType}`);
+        }
+
+        // Goal-based insights
+        if (this.profile.businessGoal) {
+            const goalTexts = {
+                'survival': 'เป้าหมาย: เน้นความมั่นคงและลดความเสี่ยง',
+                'stable': 'เป้าหมาย: สร้างรายได้สม่ำเสมอ',
+                'growth': 'เป้าหมาย: ขยายธุรกิจและเพิ่มกำไร',
+                'franchise': 'เป้าหมาย: เตรียมความพร้อมเปิดสาขา'
+            };
+            insights.push(goalTexts[this.profile.businessGoal]);
+        }
+
+        return insights.length > 0 ? insights.join(' • ') : 'AI กำลังสังเกตรูปแบบการใช้งานของคุณ...';
+    }
+
+    // Reset all memory
+    resetMemory() {
+        Object.values(MEMORY_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+        });
+        
+        // Reinitialize
+        this.profile = this.loadProfile();
+        this.usage = this.loadUsage();
+        this.patterns = this.loadPatterns();
+        this.learning = this.loadLearning();
+        
+        return true;
+    }
+}
+
+// Global AI Memory instance
+let aiMemory = new AIMemory();
+
+// ========== PROFILE FUNCTIONS ========== //
+
+function saveProfile() {
+    const profileData = {
+        userName: document.getElementById('userName').value.trim(),
+        businessGoal: document.getElementById('businessGoal').value,
+        experienceLevel: document.getElementById('experienceLevel').value,
+        riskTolerance: document.getElementById('riskTolerance').value
+    };
+
+    // Validation
+    if (!profileData.userName) {
+        alert('กรุณากรอกชื่อที่ต้องการให้ AI เรียก');
+        return;
+    }
+
+    if (aiMemory.saveProfile(profileData)) {
+        updateAIDisplay();
+        showFeedback('บันทึกข้อมูลแล้ว! AI จะจำคุณต่อจากนี้ ✨', 'success');
+    } else {
+        showFeedback('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่', 'error');
+    }
+}
+
+function resetAIMemory() {
+    if (confirm('ต้องการลบความทรงจำของ AI ทั้งหมดหรือไม่?\n(จะไม่สามารถย้อนกลับได้)')) {
+        aiMemory.resetMemory();
+        updateAIDisplay();
+        clearProfileForm();
+        showFeedback('รีเซ็ต AI Memory แล้ว เริ่มต้นใหม่!', 'info');
+    }
+}
+
+function clearProfileForm() {
+    document.getElementById('userName').value = '';
+    document.getElementById('businessGoal').value = '';
+    document.getElementById('experienceLevel').value = '';
+    document.getElementById('riskTolerance').value = '';
+}
+
+function loadProfileForm() {
+    const profile = aiMemory.profile;
+    document.getElementById('userName').value = profile.userName || '';
+    document.getElementById('businessGoal').value = profile.businessGoal || '';
+    document.getElementById('experienceLevel').value = profile.experienceLevel || '';
+    document.getElementById('riskTolerance').value = profile.riskTolerance || '';
+}
+
+function updateAIDisplay() {
+    // Update greeting
+    document.getElementById('aiGreeting').innerHTML = 
+        `<i class="fas fa-robot"></i> ${aiMemory.getPersonalizedGreeting()}`;
+    
+    // Update insight
+    document.getElementById('aiInsight').textContent = aiMemory.getPersonalizedInsight();
+    
+    // Update statistics
+    document.getElementById('usageCount').textContent = aiMemory.usage.totalCalculations || 0;
+    document.getElementById('dataPoints').textContent = 
+        (aiMemory.patterns.pricePatterns.length + Object.keys(aiMemory.profile).filter(k => aiMemory.profile[k]).length);
+    
+    // Update learning progress
+    aiMemory.updateLearning();
+    const progress = aiMemory.learning.learningProgress;
+    document.getElementById('learningPercent').textContent = `${progress}%`;
+    document.getElementById('learningBar').style.width = `${progress}%`;
+    
+    // Update accuracy (simulated based on usage)
+    const accuracy = Math.min(95, 60 + (aiMemory.usage.totalCalculations * 2));
+    document.getElementById('aiAccuracy').textContent = `${accuracy}%`;
+    
+    // Update personality
+    if (aiMemory.learning.personalityType) {
+        document.getElementById('personalityText').textContent = 
+            `คุณเป็นประเภท: ${aiMemory.learning.personalityType}`;
+    }
+}
+
+function showFeedback(message, type = 'info') {
+    // Create feedback element
+    const feedback = document.createElement('div');
+    feedback.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2000;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        animation: feedbackShow 0.3s ease;
+        font-weight: 500;
+        text-align: center;
+        max-width: 400px;
+    `;
+
+    // Set colors based on type
+    const colors = {
+        success: 'background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50;',
+        error: 'background: #ffebee; color: #c62828; border: 2px solid #f44336;',
+        info: 'background: #e3f2fd; color: #1565c0; border: 2px solid #2196f3;'
+    };
+
+    feedback.style.cssText += colors[type] || colors.info;
+    feedback.textContent = message;
+
+    document.body.appendChild(feedback);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        feedback.style.animation = 'feedbackHide 0.3s ease';
+        setTimeout(() => feedback.remove(), 300);
+    }, 3000);
+}
+
+// Add CSS for feedback animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes feedbackShow {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+    @keyframes feedbackHide {
+        from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadProfileForm();
+    updateAIDisplay();
+});
             }, 1500);
         }
 

@@ -1,802 +1,1553 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</title>
-    <style>
-        :root {
-            --gold: #d4af37;
-            --dark-gold: #9c7c38;
-            --light-gold: #f1d78a;
-            --brown: #4e2406;
-            --light-brown: #8c6946;
-            --orange: #ff7e00;
-            --red: #c92d28;
-            --charcoal: #333333;
-            --cream: #fffaf0;
-            --smoke: rgba(0, 0, 0, 0.7);
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: 'Sarabun', 'Prompt', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--cream);
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="%23fffaf0"/><path d="M0 0L100 100M100 0L0 100" stroke="%23d4af37" stroke-width="0.5" stroke-opacity="0.1"/></svg>');
-            color: var(--charcoal);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--gold), var(--dark-gold), var(--light-gold), var(--dark-gold));
-            background-size: 400% 100%;
-            animation: shimmer 8s infinite linear;
-            color: var(--brown);
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            border-bottom: 4px solid var(--brown);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.5);
-            position: relative;
-            display: inline-block;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -5px;
-            width: 100%;
-            height: 3px;
-            background: var(--brown);
-            transform: scaleX(0.8);
-            transform-origin: center;
-            transition: transform 0.3s ease;
-        }
-
-        h1:hover::after {
-            transform: scaleX(1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        @media (min-width: 992px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
-        .card:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.05);
-            transform: translateY(-5px);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--gold), var(--orange), var(--red), var(--orange), var(--gold));
-            background-size: 300% 100%;
-            animation: shimmer 5s infinite linear;
-        }
-
-        .card h2 {
-            color: var(--brown);
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .card h2::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -5px;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold), transparent);
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--brown);
-            font-weight: 500;
-        }
-
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-            outline: none;
-        }
-
-        .market-factors {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .result-section {
-            margin-top: 25px;
-            padding: 20px;
-            background: linear-gradient(to right bottom, rgba(212, 175, 55, 0.1), rgba(255, 126, 0, 0.05));
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .result-box {
-            background: #fff;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--gold);
-            transition: all 0.3s;
-        }
-
-        .result-box strong {
-            color: var(--orange);
-        }
-
-        .result-box.highlight {
-            background-color: rgba(255, 250, 240, 0.9);
-            border-left: 4px solid var(--red);
-            animation: pulse 2s infinite;
-        }
-
-        .recommendation {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: var(--charcoal);
-            padding: 15px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-left: 4px solid var(--orange);
-            margin-top: 20px;
-            position: relative;
-        }
-
-        .recommendation::before {
-            content: '"';
-            font-size: 60px;
-            color: rgba(212, 175, 55, 0.2);
-            position: absolute;
-            top: -15px;
-            left: 5px;
-        }
-
-        .recommendation::after {
-            content: '"';
-            font-size: 60px;
-            color: rgba(212, 175, 55, 0.2);
-            position: absolute;
-            bottom: -50px;
-            right: 5px;
-        }
-
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 15px;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 80%;
-            animation: fadeIn 0.3s ease-out forwards;
-            position: relative;
-            word-wrap: break-word;
-        }
-
-        .user-message {
-            background-color: var(--light-brown);
-            color: white;
-            align-self: flex-end;
-            margin-left: auto;
-            border-bottom-right-radius: 0;
-        }
-
-        .bot-message {
-            background-color: rgba(241, 215, 138, 0.4);
-            color: var(--brown);
-            align-self: flex-start;
-            border-bottom-left-radius: 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .bot-message::before {
-            content: '🍖';
-            font-size: 20px;
-            position: absolute;
-            left: -30px;
-            top: 5px;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 10px 15px;
-            background-color: rgba(241, 215, 138, 0.3);
-            border-radius: 15px;
-            margin-bottom: 15px;
-            width: fit-content;
-        }
-
-        .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: var(--brown);
-            border-radius: 50%;
-            margin: 0 2px;
-            opacity: 0.6;
-            animation: typing 1s infinite;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0); }
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .chat-input input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-            outline: none;
-        }
-
-        button {
-            background: linear-gradient(45deg, var(--gold), var(--orange));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        button:hover {
-            background: linear-gradient(45deg, var(--dark-gold), var(--red));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        button:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-        }
-
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .toggle {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-            margin: 0 10px;
-        }
-
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 30px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--gold);
-        }
-
-        input:focus + .slider {
-            box-shadow: 0 0 1px var(--gold);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--light-brown);
-            font-size: 0.9rem;
-        }
-
-        .floating-icon {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--gold), var(--orange));
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 1000;
-            animation: float 3s infinite ease-in-out;
-            transition: all 0.3s;
-        }
-
-        .floating-icon:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-        }
-
-        .floating-icon i {
-            color: white;
-            font-size: 24px;
-        }
-
-        /* Icons */
-        .icon {
-            display: inline-block;
-            font-size: 1.2em;
-            margin-right: 5px;
-        }
-
-        /* Additional styles for animation effects */
-        @keyframes glowing {
-            0% { box-shadow: 0 0 5px var(--gold); }
-            50% { box-shadow: 0 0 20px var(--gold); }
-            100% { box-shadow: 0 0 5px var(--gold); }
-        }
-
-        .glow-effect {
-            animation: glowing 2s infinite;
-        }
-
-        /* Tooltip */
-        [data-tooltip] {
-            position: relative;
-            cursor: help;
-        }
-
-        [data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 10px;
-            background-color: var(--smoke);
-            color: white;
-            border-radius: 6px;
-            white-space: nowrap;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s, visibility 0.3s;
-            font-size: 14px;
-            z-index: 1000;
-        }
-
-        [data-tooltip]:hover:before {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .card-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            color: var(--gold);
-            opacity: 0.4;
-        }
-
-        .export-import {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .export-import button {
-            font-size: 14px;
-            padding: 8px 15px;
-        }
-    </style>
-
-    <!-- Google Font: Sarabun (Thai) -->
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Google Font: Prompt (Thai) -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- Include Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Pork Skewer Pricing Advisor</title>
+  <style>
+    :root {
+      --primary: #ff6a00;
+      --primary-light: #ff8a3d;
+      --primary-dark: #e05a00;
+      --secondary: #8b4513;
+      --tertiary: #ffc107;
+      --text: #333;
+      --text-light: #666;
+      --bg: #fff9f2;
+      --card-bg: #fff;
+      --border-radius: 10px;
+      --shadow: 0 4px 12px rgba(139, 69, 19, 0.15);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kanit', 'Prompt', 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1.5rem 0;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>');
+      opacity: 0.1;
+      right: -50px;
+      top: -50px;
+      transform: rotate(45deg);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-icon {
+      font-size: 2.5rem;
+      margin-right: 1rem;
+    }
+
+    .logo-text h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-text p {
+      font-size: 0.9rem;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .app-tabs {
+      display: flex;
+      justify-content: center;
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+      margin: 1.5rem auto;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 10;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      transition: var(--transition);
+      color: var(--text-light);
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .tab.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .tab:hover:not(.active) {
+      background-color: rgba(255, 106, 0, 0.1);
+    }
+
+    .tab-icon {
+      font-size: 1.2rem;
+    }
+
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(255, 106, 0, 0.1);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-light);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1 0 200px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.1);
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .result-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+      border-left: 5px solid var(--primary);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(255, 106, 0, 0.1);
+    }
+
+    .result-title {
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+      margin: 0;
+    }
+
+    .price-recommendation {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 1rem 0;
+      text-align: center;
+      animation: pulsate 2s infinite;
+    }
+
+    @keyframes pulsate {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .cost-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .cost-item {
+      background-color: rgba(255, 106, 0, 0.05);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .cost-item-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .cost-item-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .strategy-section {
+      margin-top: 2rem;
+    }
+
+    .strategy-item {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--tertiary);
+    }
+
+    .strategy-item h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--secondary);
+    }
+
+    .strategy-item p {
+      margin: 0;
+      color: var(--text);
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 300px;
+      margin-top: 1.5rem;
+    }
+
+    /* Chat section */
+    .chat-section {
+      grid-column: 1 / -1;
+      display: none;
+    }
+
+    .chat-container {
+      border-radius: var(--border-radius);
+      background-color: var(--card-bg);
+      box-shadow: var(--shadow);
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      max-width: 80%;
+    }
+
+    .message-user {
+      margin-left: auto;
+      background-color: var(--primary-light);
+      color: white;
+      border-radius: 18px 18px 0 18px;
+      padding: 0.75rem 1rem;
+    }
+
+    .message-bot {
+      background-color: #f1f1f1;
+      border-radius: 18px 18px 18px 0;
+      padding: 0.75rem 1rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .typing-indicator {
+      display: none;
+      padding: 0.75rem 1rem;
+      background-color: #f1f1f1;
+      border-radius: 18px 18px 18px 0;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #aaa;
+      border-radius: 50%;
+      margin-right: 5px;
+      animation: typing 1s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+      margin-right: 0;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+      }
+      30% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .chat-input-container {
+      padding: 1rem;
+      border-top: 1px solid #eee;
+      display: flex;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .chat-submit {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-submit:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Marketing Strategy Tab */
+    .marketing-section {
+      grid-column: 1 / -1;
+      display: none;
+    }
+
+    .strategy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .strategy-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-top: 4px solid var(--tertiary);
+    }
+
+    .strategy-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
+    }
+
+    .strategy-card h3 {
+      font-size: 1.25rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .strategy-card-icon {
+      font-size: 1.5rem;
+      color: var(--tertiary);
+    }
+
+    .strategy-detail {
+      background-color: rgba(255, 193, 7, 0.1);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-top: 1rem;
+    }
+
+    .strategy-detail h4 {
+      margin: 0 0 0.5rem 0;
+      color: var(--secondary);
+      font-size: 1rem;
+    }
+
+    .strategy-detail p {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .rationale {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(139, 69, 19, 0.2);
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .rationale strong {
+      color: var(--primary-dark);
+    }
+
+    .factors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .factor-item {
+      background-color: var(--bg);
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .factor-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .factor-item-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .factor-item-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .factor-item-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Animations */
+    @keyframes slideInRight {
+      from {
+        transform: translateX(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .animate-price {
+      animation: slideInRight 0.5s ease-out;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo {
+        margin-bottom: 1rem;
+        justify-content: center;
+      }
+
+      .app-tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab {
+        padding: 0.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>🍖 ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ 🍖</h1>
-        <p>คำนวณราคาที่เหมาะสม วิเคราะห์ตลาด เพิ่มกำไรให้ร้านหมูปิ้งของคุณ</p>
-    </header>
-
-    <div class="container">
-        <div class="card">
-            <i class="fa fa-calculator card-icon"></i>
-            <h2>คำนวณต้นทุนและราคาขาย</h2>
-            
-            <div class="toggle-container">
-                <span>คำนวณอัตโนมัติ</span>
-                <label class="toggle">
-                    <input type="checkbox" id="realtime-toggle">
-                    <span class="slider"></span>
-                </label>
-                <span>เปิด</span>
-            </div>
-
-            <div class="input-group">
-                <label for="meat-cost">ราคาเนื้อหมูต่อไม้ (บาท)</label>
-                <input type="number" id="meat-cost" value="8" min="0" step="0.5">
-            </div>
-            
-            <div class="input-group">
-                <label for="stick-cost">ราคาไม้ต่อไม้ (บาท)</label>
-                <input type="number" id="stick-cost" value="0.2" min="0" step="0.1">
-            </div>
-            
-            <div class="input-group">
-                <label for="seasoning-cost">ราคาน้ำจิ้มและเครื่องปรุงต่อไม้ (บาท)</label>
-                <input type="number" id="seasoning-cost" value="1" min="0" step="0.5">
-            </div>
-            
-            <div class="input-group">
-                <label for="labor-cost">ค่าแรงต่อวัน (บาท)</label>
-                <input type="number" id="labor-cost" value="400" min="0" step="10">
-            </div>
-            
-            <div class="input-group">
-                <label for="fixed-cost">ค่าใช้จ่ายคงที่ต่อวัน (ค่าเช่า, ค่าขนส่ง, ฯลฯ) (บาท)</label>
-                <input type="number" id="fixed-cost" value="150" min="0" step="10">
-            </div>
-            
-            <div class="input-group">
-                <label for="profit-margin">เป้าหมายกำไร (%)</label>
-                <input type="number" id="profit-margin" value="30" min="0" max="100" step="1">
-            </div>
-            
-            <div class="input-group">
-                <label for="daily-volume">จำนวนหมูปิ้งที่คาดว่าจะขายต่อวัน (ไม้)</label>
-                <input type="number" id="daily-volume" value="300" min="0" step="10">
-            </div>
-            
-            <h3>ปัจจัยตลาด</h3>
-            <div class="market-factors">
-                <div class="input-group">
-                    <label for="weather">สภาพอากาศ</label>
-                    <select id="weather">
-                        <option value="sunny">แดดจัด</option>
-                        <option value="rainy">ฝนตก</option>
-                        <option value="cool">อากาศเย็น</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="economy">สภาพเศรษฐกิจ</label>
-                    <select id="economy">
-                        <option value="good">ดี</option>
-                        <option value="normal" selected>ปกติ</option>
-                        <option value="poor">แย่</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="season">ฤดูกาล</label>
-                    <select id="season">
-                        <option value="hot">ร้อน</option>
-                        <option value="rainy">ฝน</option>
-                        <option value="cool">หนาว</option>
-                    </select>
-                </div>
-                
-                <div class="input-group">
-                    <label for="politics">เสถียรภาพทางการเมือง</label>
-                    <select id="politics">
-                        <option value="stable" selected>มั่นคง</option>
-                        <option value="unstable">ไม่มั่นคง</option>
-                        <option value="crisis">วิกฤต</option>
-                    </select>
-                </div>
-            </div>
-            
-            <button id="calculate-btn">คำนวณราคา</button>
-            
-            <div class="export-import">
-                <button id="export-btn"><i class="fas fa-file-export"></i> ส่งออกข้อมูล</button>
-                <button id="import-btn"><i class="fas fa-file-import"></i> นำเข้าข้อมูล</button>
-                <input type="file" id="import-file" style="display: none;">
-            </div>
-            
-            <div class="result-section">
-                <div class="result-box">
-                    <p>ต้นทุนต่อไม้: <strong id="cost-per-skewer">-- บาท</strong></p>
-                </div>
-                
-                <div class="result-box">
-                    <p>รวมต้นทุนคงที่และแรงงานต่อไม้: <strong id="full-cost-per-skewer">-- บาท</strong></p>
-                </div>
-                
-                <div class="result-box highlight">
-                    <p>ราคาขายที่แนะนำ: <strong id="recommended-price">-- บาท</strong></p>
-                </div>
-                
-                <div class="result-box">
-                    <p>จุดคุ้มทุน: <strong id="break-even">-- ไม้ต่อวัน</strong></p>
-                </div>
-                
-                <div class="result-box">
-                    <p>กำไรประมาณการต่อวัน: <strong id="daily-profit">-- บาท</strong></p>
-                </div>
-                
-                <div class="recommendation" id="ai-recommendation">
-                    คำนวณราคาเพื่อรับคำแนะนำจากระบบอัจฉริยะ
-                </div>
-            </div>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">🍖</div>
+        <div class="logo-text">
+          <h1>Smart Pork Skewer Advisor</h1>
+          <p>Intelligent pricing & marketing for street food vendors</p>
         </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="app-tabs">
+      <div class="tab active" data-tab="pricing">
+        <span class="tab-icon">🧮</span>
+        <span>Pricing</span>
+      </div>
+      <div class="tab" data-tab="marketing">
+        <span class="tab-icon">🧠</span>
+        <span>Marketing</span>
+      </div>
+      <div class="tab" data-tab="chat">
+        <span class="tab-icon">💬</span>
+        <span>Advisor</span>
+      </div>
+    </div>
+
+    <!-- Pricing Calculator Section -->
+    <div class="main-content" id="pricing-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💰</div>
+          <h3>Cost & Pricing Calculator</h3>
+        </div>
+        <form id="pricing-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pork-price">Pork Price (per kg)</label>
+              <input type="number" id="pork-price" min="0" step="0.01" value="150" required>
+            </div>
+            <div class="form-group">
+              <label for="grams-per-skewer">Grams per Skewer</label>
+              <input type="number" id="grams-per-skewer" min="0" step="1" value="30" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stick-cost">Stick Cost (each)</label>
+              <input type="number" id="stick-cost" min="0" step="0.01" value="0.25" required>
+            </div>
+            <div class="form-group">
+              <label for="seasoning-cost">Seasoning Cost (per skewer)</label>
+              <input type="number" id="seasoning-cost" min="0" step="0.01" value="1.5" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="labor-cost">Labor Cost (per hour)</label>
+              <input type="number" id="labor-cost" min="0" step="0.01" value="50" required>
+            </div>
+            <div class="form-group">
+              <label for="fixed-cost">Fixed Cost (per day)</label>
+              <input type="number" id="fixed-cost" min="0" step="0.01" value="200" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sales-volume">Expected Sales Volume (skewers/day)</label>
+              <input type="number" id="sales-volume" min="1" step="1" value="100" required>
+            </div>
+            <div class="form-group">
+              <label for="profit-goal">Profit Goal (%)</label>
+              <input type="number" id="profit-goal" min="0" max="100" step="1" value="30" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="working-hours">Working Hours (per day)</label>
+              <input type="number" id="working-hours" min="1" max="24" step="0.5" value="8" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="weather">Weather Condition</label>
+              <select id="weather" required>
+                <option value="sunny">Sunny</option>
+                <option value="rainy">Rainy</option>
+                <option value="cool">Cool</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="economy">Economic Condition</label>
+              <select id="economy" required>
+                <option value="good">Good</option>
+                <option value="normal" selected>Normal</option>
+                <option value="poor">Poor</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="season">Season</label>
+              <select id="season" required>
+                <option value="hot">Hot Season</option>
+                <option value="rain">Rainy Season</option>
+                <option value="cool">Cool Season</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="political">Political Situation</label>
+              <select id="political" required>
+                <option value="stable" selected>Stable</option>
+                <option value="unstable">Unstable</option>
+                <option value="crisis">Crisis</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" id="calculate-btn">
+            <span>Calculate Optimal Price</span>
+            <span>📊</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="card" id="result-container" style="display: none;">
+        <div class="card-header">
+          <div class="card-icon">📈</div>
+          <h3>Pricing Analysis Result</h3>
+        </div>
+        <div class="price-recommendation" id="price-recommendation"></div>
+        <div class="factors-grid">
+          <div class="factor-item">
+            <div class="factor-item-icon">☀️</div>
+            <div class="factor-item-label">Weather</div>
+            <div class="factor-item-value" id="weather-factor">Sunny</div>
+          </div>
+          <div class="factor-item">
+            <div class="factor-item-icon">💰</div>
+            <div class="factor-item-label">Economy</div>
+            <div class="factor-item-value" id="economy-factor">Normal</div>
+          </div>
+          <div class="factor-item">
+            <div class="factor-item-icon">🌡️</div>
+            <div class="factor-item-label">Season</div>
+            <div class="factor-item-value" id="season-factor">Hot</div>
+          </div>
+          <div class="factor-item">
+            <div class="factor-item-icon">🏛️</div>
+            <div class="factor-item-label">Political</div>
+            <div class="factor-item-value" id="political-factor">Stable</div>
+          </div>
+        </div>
+        <h4>Cost Breakdown</h4>
+        <div class="cost-breakdown">
+          <div class="cost-item">
+            <div class="cost-item-label">Raw Meat Cost</div>
+            <div class="cost-item-value" id="meat-cost">0.00</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-label">Stick Cost</div>
+            <div class="cost-item-value" id="stick-cost-value">0.00</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-label">Seasoning Cost</div>
+            <div class="cost-item-value" id="seasoning-cost-value">0.00</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-label">Labor Cost</div>
+            <div class="cost-item-value" id="labor-cost-value">0.00</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-label">Fixed Cost</div>
+            <div class="cost-item-value" id="fixed-cost-value">0.00</div>
+          </div>
+          <div class="cost-item">
+            <div class="cost-item-label">Total Cost</div>
+            <div class="cost-item-value" id="total-cost">0.00</div>
+          </div>
+        </div>
+        <div class="strategy-section">
+          <h4>Quick Strategy Recommendations</h4>
+          <div id="quick-strategies"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing Strategy Section -->
+    <div class="marketing-section" id="marketing-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📊</div>
+          <h3>Marketing Strategy Generator</h3>
+        </div>
+        <p>Based on your pricing inputs and market factors, here are tailored marketing strategies:</p>
+        <div class="strategy-grid" id="marketing-strategies">
+          <!-- Strategies will be generated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Advisor Section -->
+    <div class="chat-section" id="chat-section">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💬</div>
+          <h3>Smart Advisor</h3>
+        </div>
+        <p>Ask anything about your pork skewer business. For example: "What if it rains tomorrow?" or "How should I sell to students?"</p>
+        <div class="chat-container">
+          <div class="chat-messages" id="chat-messages">
+            <div class="message message-bot">
+              Hello! I'm your Smart Pork Skewer Advisor. How can I help you today with your business?
+            </div>
+            <div class="typing-indicator" id="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your question here...">
+            <button class="chat-submit" id="chat-submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // App State
+    const state = {
+      pricingData: {
+        porkPrice: 150,
+        gramsPerSkewer: 30,
+        stickCost: 0.25,
+        seasoningCost: 1.5,
+        laborCost: 50,
+        fixedCost: 200,
+        salesVolume: 100,
+        profitGoal: 30,
+        workingHours: 8,
+        weather: 'sunny',
+        economy: 'normal',
+        season: 'hot',
+        political: 'stable'
+      },
+      calculationResult: null,
+      activeTab: 'pricing'
+    };
+
+    // Observer Pattern - For UI updates
+    class Observer {
+      constructor() {
+        this.observers = [];
+      }
+
+      subscribe(fn) {
+        this.observers.push(fn);
+      }
+
+      notify(data) {
+        this.observers.forEach(observer => observer(data));
+      }
+    }
+
+    // Main Strategy Pattern for Pricing Logic
+    class PricingStrategy {
+      constructor() {
+        this.weatherFactors = {
+          sunny: 1.05,  // Good for business
+          rainy: 0.9,   // Bad for business
+          cool: 1.02    // Slightly better
+        };
         
-        <div class="card">
-            <i class="fa fa-comments card-icon"></i>
-            <h2>ปรึกษาผู้เชี่ยวชาญหมูปิ้งอัจฉริยะ</h2>
-            
-            <div class="chat-container">
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message bot-message">
-                        สวัสดีค่ะ! ฉันคือผู้เชี่ยวชาญหมูปิ้งอัจฉริยะ พร้อมให้คำปรึกษาและแนะนำเกี่ยวกับการตั้งราคาและกลยุทธ์การขายหมูปิ้งของคุณ ถามอะไรก็ได้เลยค่ะ
-                    </div>
-                </div>
-                
-                <div class="typing-indicator" id="typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                
-                <div class="chat-input">
-                    <input type="text" id="chat-input" placeholder="พิมพ์คำถามที่นี่...">
-                    <button id="send-btn"><i class="fas fa-paper-plane"></i> ส่ง</button>
-                </div>
+        this.economyFactors = {
+          good: 1.08,    // People spend more
+          normal: 1.0,   // Neutral
+          poor: 0.92     // People spend less
+        };
+        
+        this.seasonFactors = {
+          hot: 1.03,     // Better for grilled food
+          rain: 0.95,    // Worse for street vendors
+          cool: 1.04     // Good appetite weather
+        };
+        
+        this.politicalFactors = {
+          stable: 1.02,  // Good for business
+          unstable: 0.97, // Some uncertainty
+          crisis: 0.85   // Bad for business
+        };
+      }
+
+      calculateBasePrice(data) {
+        // Calculate raw meat cost
+        const meatCostPerSkewer = (data.porkPrice * data.gramsPerSkewer) / 1000;
+        
+        // Calculate labor cost per skewer
+        const laborCostPerSkewer = (data.laborCost * data.workingHours) / data.salesVolume;
+        
+        // Calculate fixed cost per skewer
+        const fixedCostPerSkewer = data.fixedCost / data.salesVolume;
+        
+        // Total base cost per skewer
+        const totalCostPerSkewer = meatCostPerSkewer + 
+                                   data.stickCost + 
+                                   data.seasoningCost + 
+                                   laborCostPerSkewer + 
+                                   fixedCostPerSkewer;
+        
+        // Add profit margin
+        const priceWithProfit = totalCostPerSkewer * (1 + (data.profitGoal / 100));
+        
+        return {
+          basePrice: priceWithProfit,
+          breakdown: {
+            meatCost: meatCostPerSkewer,
+            stickCost: data.stickCost,
+            seasoningCost: data.seasoningCost,
+            laborCost: laborCostPerSkewer,
+            fixedCost: fixedCostPerSkewer,
+            totalCost: totalCostPerSkewer
+          }
+        };
+      }
+
+      applyMarketFactors(basePrice, data) {
+        // Apply all market factors
+        const marketFactor = this.weatherFactors[data.weather] * 
+                            this.economyFactors[data.economy] * 
+                            this.seasonFactors[data.season] * 
+                            this.politicalFactors[data.political];
+        
+        // Final price with market adjustments
+        return basePrice * marketFactor;
+      }
+
+      calculatePrice(data) {
+        // Get base price and breakdown
+        const { basePrice, breakdown } = this.calculateBasePrice(data);
+        
+        // Apply market factors
+        const adjustedPrice = this.applyMarketFactors(basePrice, data);
+        
+        // Round to the nearest whole number for simplicity
+        const finalPrice = Math.ceil(adjustedPrice);
+        
+        return {
+          suggestedPrice: finalPrice,
+          breakdown: breakdown,
+          marketFactor: {
+            weather: data.weather,
+            economy: data.economy,
+            season: data.season,
+            political: data.political
+          }
+        };
+      }
+    }
+
+    // Marketing Strategy Generator
+    class MarketingStrategyGenerator {
+      constructor() {
+        // STP (Segmentation, Targeting, Positioning) strategies
+        this.stpStrategies = {
+          // For different weather conditions
+          sunny: {
+            title: "Sunny Day Strategy",
+            icon: "☀️",
+            segments: "Outdoor walkers, tourists, and park visitors",
+            targeting: "Focus on visibility in high traffic areas and tourist spots",
+            positioning: "Fresh, quick, and delicious food for your outdoor adventures",
+            rationale: "Sunny days bring more foot traffic outdoors, allowing for premium positioning"
+          },
+          rainy: {
+            title: "Rainy Day Strategy",
+            icon: "🌧️",
+            segments: "Office workers, indoor market visitors, delivery customers",
+            targeting: "Target covered areas and offer delivery options",
+            positioning: "Warm, comforting food that brightens up a rainy day",
+            rationale: "During rainy weather, focus on indoor venues and comfort food positioning"
+          },
+          cool: {
+            title: "Cool Weather Strategy",
+            icon: "❄️",
+            segments: "Comfort food seekers, evening diners, takeaway customers",
+            targeting: "Emphasize the warm, freshly grilled aspect of your product",
+            positioning: "Hot, juicy skewers that warm you up in cool weather",
+            rationale: "Cool weather increases demand for hot food, allowing for premium positioning"
+          }
+        };
+
+        // 4Ps strategies based on economic conditions
+        this.marketingMixStrategies = {
+          good: {
+            title: "Premium Mix Strategy",
+            icon: "💎",
+            product: "Premium quality meat cuts, special marinades, and presentation",
+            price: "Premium pricing with emphasis on quality and experience",
+            place: "High-visibility locations, food markets, and festivals",
+            promotion: "Emphasis on quality, health benefits, and premium ingredients",
+            rationale: "Strong economy allows for premium positioning and higher margins"
+          },
+          normal: {
+            title: "Balanced Mix Strategy",
+            icon: "⚖️",
+            product: "Good quality skewers with consistent taste and presentation",
+            price: "Competitive pricing with occasional promotions",
+            place: "Mix of high-traffic areas and regular spots with established customers",
+            promotion: "Value proposition focusing on taste and satisfaction",
+            rationale: "Standard economic conditions require balanced approach to marketing mix"
+          },
+          poor: {
+            title: "Value Mix Strategy",
+            icon: "🏷️",
+            product: "Consistent quality with emphasis on portion size and value",
+            price: "Value pricing with bundle deals and promotions",
+            place: "Focus on high-density residential areas and workplaces",
+            promotion: "Emphasize affordability, value bundles, and loyalty rewards",
+            rationale: "Economic downturns require emphasis on value and affordability"
+          }
+        };
+
+        // Pricing strategies based on political situations
+        this.pricingStrategies = {
+          stable: {
+            title: "Growth Pricing Strategy",
+            icon: "📈",
+            strategy: "Value-based pricing with occasional premium offerings",
+            tactics: "Gradually increase prices as you build reputation, add premium variations",
+            implementation: "Test price elasticity with special products, monitor competitor pricing",
+            rationale: "Stable political environment allows for long-term planning and growth-oriented pricing"
+          },
+          unstable: {
+            title: "Adaptive Pricing Strategy",
+            icon: "🔄",
+            strategy: "Flexible pricing with quick adaptation to market changes",
+            tactics: "Keep base prices stable but offer promotions to respond to market conditions",
+            implementation: "Monitor closely and be ready to adjust pricing weekly based on conditions",
+            rationale: "Political uncertainty requires flexibility and quick response to changes"
+          },
+          crisis: {
+            title: "Survival Pricing Strategy",
+            icon: "🛡️",
+            strategy: "Penetration pricing with focus on volume",
+            tactics: "Lower margins, bundle deals, and loyalty programs to maintain volume",
+            implementation: "Cut unnecessary costs, focus on efficiency, maintain minimum margins",
+            rationale: "Crisis situations require focusing on maintaining cash flow over profits"
+          }
+        };
+
+        // Promotion strategies based on seasons
+        this.promotionStrategies = {
+          hot: {
+            title: "Hot Season Promotion Strategy",
+            icon: "🔥",
+            strategy: "Refreshment pairing and visibility marketing",
+            tactics: "Pair with cold drinks, position stalls in shaded areas, emphasize freshness",
+            implementation: "Create bundles with drinks, use visually appealing displays, extend evening hours",
+            rationale: "Hot weather increases thirst, so pairing with beverages and ensuring comfortable eating areas boosts sales"
+          },
+          rain: {
+            title: "Rainy Season Promotion Strategy",
+            icon: "☔",
+            strategy: "Shelter and delivery focus",
+            tactics: "Partner with sheltered venues, offer delivery, create rainy day specials",
+            implementation: "Set up in covered markets, partner with delivery apps, offer discounts during heavy rain",
+            rationale: "Rainy season reduces foot traffic, so alternative distribution channels become essential"
+          },
+          cool: {
+            title: "Cool Season Promotion Strategy",
+            icon: "🧣",
+            strategy: "Warmth and comfort marketing",
+            tactics: "Emphasize freshly grilled aspect, create special spicy variations, bundle with hot drinks",
+            implementation: "Use visual cues of steam and grilling, introduce winter spice blends, partner with hot beverage vendors",
+            rationale: "Cool weather increases demand for hot, satisfying food with warming properties"
+          }
+        };
+      }
+
+      generateStrategies(data) {
+        // Select strategies based on the current market factors
+        const stpStrategy = this.stpStrategies[data.weather];
+        const marketingMixStrategy = this.marketingMixStrategies[data.economy];
+        const pricingStrategy = this.pricingStrategies[data.political];
+        const promotionStrategy = this.promotionStrategies[data.season];
+
+        return {
+          stp: stpStrategy,
+          marketingMix: marketingMixStrategy,
+          pricing: pricingStrategy,
+          promotion: promotionStrategy
+        };
+      }
+    }
+
+    // Chat Advisor System using Simple Pattern Matching
+    class ChatAdvisor {
+      constructor() {
+        this.patterns = [
+          {
+            keywords: ['rain', 'rainy', 'rain tomorrow', 'rainy day', 'raining'],
+            response: "When it rains, customer traffic typically drops by 30-40%. I recommend: 1) Partner with food delivery apps to maintain sales, 2) Set up in covered areas like markets or food courts, 3) Create special 'Rainy Day Bundles' with discounts to attract customers, 4) Offer slightly larger portions to create better perceived value."
+          },
+          {
+            keywords: ['student', 'students', 'university', 'school', 'college'],
+            response: "Students are value-conscious customers with specific peak times. I recommend: 1) Create student-specific meal deals (3-4 skewers + drink), 2) Position near campuses around lunch and after classes, 3) Accept mobile payments, 4) Offer a simple loyalty program (buy 10 get 1 free), 5) Consider increasing portion size slightly rather than decreasing price."
+          },
+          {
+            keywords: ['competition', 'competitor', 'competitors', 'rival', 'rivals'],
+            response: "To stand out from competitors: 1) Develop a signature marinade or sauce that's unique to your stall, 2) Ensure consistent quality and slightly larger portions, 3) Create visually distinctive branding for your stall, 4) Offer a signature premium skewer option alongside standard ones, 5) Build personal connections with regular customers through friendly service and remembering preferences."
+          },
+          {
+            keywords: ['festival', 'event', 'events', 'special', 'fair', 'market'],
+            response: "For special events and festivals: 1) Prepare 30-50% more inventory than usual, 2) Create festival-specific bundles and platters, 3) Simplify your menu to ensure fast service, 4) Consider a slight price premium (10-15%) for the convenience factor, 5) Have eye-catching signage and possibly themed decorations, 6) Prepare pre-marinated meat to speed up grilling time."
+          },
+          {
+            keywords: ['loyal', 'loyalty', 'regular', 'regulars', 'customer', 'customers', 'retention'],
+            response: "To build customer loyalty: 1) Implement a simple loyalty card (buy 9 get 1 free), 2) Remember your regular customers' preferences, 3) Maintain consistent quality and portion size, 4) Occasionally offer a free skewer to your best customers, 5) Create a signature sauce or marinade that customers can't get elsewhere, 6) Maintain consistent operating hours so customers know when to find you."
+          },
+          {
+            keywords: ['location', 'spot', 'place', 'where', 'where to sell', 'sell', 'selling'],
+            response: "Best locations for pork skewer stalls: 1) Near office buildings during lunch and evening commute times, 2) Outside popular bars and nightlife areas in evenings, 3) Near universities and schools after class times, 4) Weekend markets and food courts, 5) Near public transportation hubs. Choose locations with high foot traffic and, if possible, some seating nearby. Track sales by location and focus on your top performers."
+          },
+          {
+            keywords: ['marinade', 'sauce', 'recipe', 'flavor', 'taste', 'seasoning', 'spice', 'spicy'],
+            response: "For standout marinades: 1) Base: Use a balanced mix of soy sauce, garlic, sugar and lime juice as your foundation, 2) Local touch: Add Thai-specific ingredients like fish sauce, cilantro root, and lemongrass, 3) Signature element: Add one unique ingredient like tamarind, mango, or special chilis that will be your signature, 4) Consistency: Measure ingredients precisely for consistent flavor, 5) Marination time: Allow at least 4-6 hours, ideally overnight for flavor penetration."
+          },
+          {
+            keywords: ['price', 'pricing', 'charge', 'cost', 'expensive', 'cheap'],
+            response: "Smart pricing tips: 1) Calculate your break-even price precisely, including ALL costs, 2) Check competitor pricing in your area, 3) Consider psychological pricing (29฿ rather than 30฿), 4) Create tiered options (standard, premium, and bundle deals), 5) Update prices with major meat cost changes, not minor fluctuations, 6) Test price elasticity by occasionally offering premium options to see willingness to pay."
+          },
+          {
+            keywords: ['supply', 'supplier', 'meat', 'quality', 'supplies', 'ingredients', 'buy'],
+            response: "For better suppliers: 1) Build relationships with at least 2-3 meat suppliers so you have backup options, 2) Buy in bulk when prices are favorable and you can store properly, 3) Request early morning fresh cuts for best quality, 4) Pay promptly to build good supplier relationships, 5) Check meat quality consistently (good color, smell, marbling), 6) Consider joining with other vendors to increase buying power with suppliers."
+          },
+          {
+            keywords: ['morning', 'afternoon', 'evening', 'night', 'time', 'busy', 'busiest', 'hours', 'slow'],
+            response: "Optimal timing strategy: 1) Morning (7-9am): Target commuters with breakfast skewers, 2) Lunch (11:30am-1:30pm): Office workers and students, 3) Afternoon (3-5pm): School students and early commuters, 4) Evening (6-9pm): Dinner and after-work crowd, 5) Late night (if permitted): Focus on nightlife areas. Track sales by hour and day of week to optimize your schedule and inventory, then focus on your most profitable times."
+          },
+          {
+            keywords: ['loss', 'waste', 'leftover', 'unsold', 'profit', 'profitable'],
+            response: "To reduce waste and increase profit: 1) Track daily sales patterns to predict demand better, 2) Pre-marinate but only skewer meat as needed, 3) Consider a 'happy hour' with small discounts before closing to clear inventory, 4) Create a secondary product that uses leftover meat (fried rice or noodles), 5) Offer larger bulk deals to clear inventory near closing, 6) For unsold but safe meat, vacuum seal and properly refrigerate for next day specials."
+          },
+          {
+            keywords: ['healthy', 'health', 'nutrition', 'nutritious', 'diet', 'clean'],
+            response: "Healthier options appeal to a growing market: 1) Offer leaner cut options alongside traditional cuts, 2) Include vegetable skewers with options like zucchini, mushrooms, and bell peppers, 3) Offer a no-MSG option for health-conscious customers, 4) Consider a 'protein plate' with skewers and fresh vegetables, 5) Highlight any natural ingredients in your marinades, 6) Ensure visibly clean food preparation for customer confidence."
+          }
+        ];
+
+        // Default response if no pattern matches
+        this.defaultResponse = "I understand you're asking about your pork skewer business. Could you provide more specific details about what you'd like to know? I can help with pricing strategies, customer targeting, location selection, or marketing tactics.";
+      }
+
+      generateResponse(question) {
+        // Convert the question to lowercase for easier matching
+        const lowerQuestion = question.toLowerCase();
+        
+        // Find matching patterns
+        for (const pattern of this.patterns) {
+          // Check if any keywords match
+          if (pattern.keywords.some(keyword => lowerQuestion.includes(keyword))) {
+            return pattern.response;
+          }
+        }
+        
+        // Return default response if no patterns match
+        return this.defaultResponse;
+      }
+    }
+
+    // Initialize classes
+    const pricingStrategy = new PricingStrategy();
+    const marketingStrategy = new MarketingStrategyGenerator();
+    const chatAdvisor = new ChatAdvisor();
+    const uiObserver = new Observer();
+
+    // UI Controller
+    class UIController {
+      constructor() {
+        this.initEventListeners();
+        this.loadInitialState();
+        
+        // Subscribe to UI updates
+        uiObserver.subscribe(data => {
+          this.updateUI(data);
+        });
+      }
+
+      initEventListeners() {
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            this.switchTab(tab.getAttribute('data-tab'));
+          });
+        });
+
+        // Form submission
+        document.getElementById('pricing-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.calculatePrice();
+        });
+
+        // Chat submission
+        document.getElementById('chat-submit').addEventListener('click', () => {
+          this.handleChatSubmit();
+        });
+
+        document.getElementById('chat-input').addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            this.handleChatSubmit();
+          }
+        });
+      }
+
+      loadInitialState() {
+        // Load initial values from state into the form
+        document.getElementById('pork-price').value = state.pricingData.porkPrice;
+        document.getElementById('grams-per-skewer').value = state.pricingData.gramsPerSkewer;
+        document.getElementById('stick-cost').value = state.pricingData.stickCost;
+        document.getElementById('seasoning-cost').value = state.pricingData.seasoningCost;
+        document.getElementById('labor-cost').value = state.pricingData.laborCost;
+        document.getElementById('fixed-cost').value = state.pricingData.fixedCost;
+        document.getElementById('sales-volume').value = state.pricingData.salesVolume;
+        document.getElementById('profit-goal').value = state.pricingData.profitGoal;
+        document.getElementById('working-hours').value = state.pricingData.workingHours;
+        document.getElementById('weather').value = state.pricingData.weather;
+        document.getElementById('economy').value = state.pricingData.economy;
+        document.getElementById('season').value = state.pricingData.season;
+        document.getElementById('political').value = state.pricingData.political;
+      }
+
+      switchTab(tabName) {
+        // Update active state in tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+          if (tab.getAttribute('data-tab') === tabName) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+
+        // Hide all content sections
+        document.getElementById('pricing-section').style.display = 'none';
+        document.getElementById('marketing-section').style.display = 'none';
+        document.getElementById('chat-section').style.display = 'none';
+
+        // Show selected content section
+        if (tabName === 'pricing') {
+          document.getElementById('pricing-section').style.display = 'grid';
+        } else if (tabName === 'marketing') {
+          document.getElementById('marketing-section').style.display = 'block';
+          // Generate marketing strategies if we have calculation results
+          if (state.calculationResult) {
+            this.generateMarketingStrategies();
+          }
+        } else if (tabName === 'chat') {
+          document.getElementById('chat-section').style.display = 'block';
+        }
+
+        // Update state
+        state.activeTab = tabName;
+      }
+
+      getFormData() {
+        // Get values from the form
+        const porkPrice = parseFloat(document.getElementById('pork-price').value);
+        const gramsPerSkewer = parseFloat(document.getElementById('grams-per-skewer').value);
+        const stickCost = parseFloat(document.getElementById('stick-cost').value);
+        const seasoningCost = parseFloat(document.getElementById('seasoning-cost').value);
+        const laborCost = parseFloat(document.getElementById('labor-cost').value);
+        const fixedCost = parseFloat(document.getElementById('fixed-cost').value);
+        const salesVolume = parseInt(document.getElementById('sales-volume').value);
+        const profitGoal = parseInt(document.getElementById('profit-goal').value);
+        const workingHours = parseFloat(document.getElementById('working-hours').value);
+        const weather = document.getElementById('weather').value;
+        const economy = document.getElementById('economy').value;
+        const season = document.getElementById('season').value;
+        const political = document.getElementById('political').value;
+
+        return {
+          porkPrice,
+          gramsPerSkewer,
+          stickCost,
+          seasoningCost,
+          laborCost,
+          fixedCost,
+          salesVolume,
+          profitGoal,
+          workingHours,
+          weather,
+          economy,
+          season,
+          political
+        };
+      }
+
+      calculatePrice() {
+        // Get form data
+        const formData = this.getFormData();
+        
+        // Update state
+        state.pricingData = formData;
+        
+        // Calculate price using strategy
+        const result = pricingStrategy.calculatePrice(formData);
+        
+        // Update state with result
+        state.calculationResult = result;
+        
+        // Notify UI to update
+        uiObserver.notify({
+          type: 'price-calculated',
+          data: result
+        });
+        
+        // Show result container
+        document.getElementById('result-container').style.display = 'block';
+        
+        // Generate quick strategies for the pricing tab
+        this.generateQuickStrategies();
+      }
+
+      updateUI(data) {
+        if (data.type === 'price-calculated') {
+          // Update price recommendation with animation
+          const priceElement = document.getElementById('price-recommendation');
+          priceElement.classList.remove('animate-price');
+          // Trigger reflow to restart animation
+          void priceElement.offsetWidth;
+          priceElement.classList.add('animate-price');
+          priceElement.textContent = `฿${data.data.suggestedPrice.toFixed(0)} per skewer`;
+
+          // Update cost breakdown
+          document.getElementById('meat-cost').textContent = `฿${data.data.breakdown.meatCost.toFixed(2)}`;
+          document.getElementById('stick-cost-value').textContent = `฿${data.data.breakdown.stickCost.toFixed(2)}`;
+          document.getElementById('seasoning-cost-value').textContent = `฿${data.data.breakdown.seasoningCost.toFixed(2)}`;
+          document.getElementById('labor-cost-value').textContent = `฿${data.data.breakdown.laborCost.toFixed(2)}`;
+          document.getElementById('fixed-cost-value').textContent = `฿${data.data.breakdown.fixedCost.toFixed(2)}`;
+          document.getElementById('total-cost').textContent = `฿${data.data.breakdown.totalCost.toFixed(2)}`;
+
+          // Update market factors
+          document.getElementById('weather-factor').textContent = data.data.marketFactor.weather;
+          document.getElementById('economy-factor').textContent = data.data.marketFactor.economy;
+          document.getElementById('season-factor').textContent = data.data.marketFactor.season;
+          document.getElementById('political-factor').textContent = data.data.marketFactor.political;
+        }
+      }
+
+      generateQuickStrategies() {
+        // Generate simple strategies based on the calculated price
+        const strategiesContainer = document.getElementById('quick-strategies');
+        strategiesContainer.innerHTML = '';
+
+        // Weather-based strategy
+        let weatherStrategy = '';
+        if (state.pricingData.weather === 'sunny') {
+          weatherStrategy = `<div class="strategy-item">
+            <h4>☀️ Sunny Day Strategy</h4>
+            <p>Use bright, visible signage and position in high-traffic outdoor areas. Emphasize freshness and quick service for people on the go.</p>
+          </div>`;
+        } else if (state.pricingData.weather === 'rainy') {
+          weatherStrategy = `<div class="strategy-item">
+            <h4>🌧️ Rainy Day Strategy</h4>
+            <p>Focus on covered areas or consider delivery options. Offer "Rainy Day Specials" with small discounts to attract customers despite the weather.</p>
+          </div>`;
+        } else {
+          weatherStrategy = `<div class="strategy-item">
+            <h4>❄️ Cool Weather Strategy</h4>
+            <p>Emphasize the hot, fresh aspect of your skewers. Consider adding spicier options that warm customers up in cooler weather.</p>
+          </div>`;
+        }
+
+        // Economy-based strategy
+        let economyStrategy = '';
+        if (state.pricingData.economy === 'good') {
+          economyStrategy = `<div class="strategy-item">
+            <h4>💰 Strong Economy Strategy</h4>
+            <p>Offer premium options with special cuts or marinades at higher price points. Focus on quality and experience rather than just price.</p>
+          </div>`;
+        } else if (state.pricingData.economy === 'poor') {
+          economyStrategy = `<div class="strategy-item">
+            <h4>🏷️ Economic Downturn Strategy</h4>
+            <p>Create value bundles and meal deals to maintain volume. Emphasize good value and filling portions to attract cost-conscious customers.</p>
+          </div>`;
+        } else {
+          economyStrategy = `<div class="strategy-item">
+            <h4>⚖️ Balanced Economy Strategy</h4>
+            <p>Maintain competitive pricing with occasional promotions. Focus on consistent quality and good customer service to build loyalty.</p>
+          </div>`;
+        }
+
+        strategiesContainer.innerHTML = weatherStrategy + economyStrategy;
+      }
+
+      generateMarketingStrategies() {
+        // Generate detailed marketing strategies
+        const strategies = marketingStrategy.generateStrategies(state.pricingData);
+        const container = document.getElementById('marketing-strategies');
+        
+        // Clear previous strategies
+        container.innerHTML = '';
+        
+        // STP Strategy
+        const stpHTML = `
+          <div class="strategy-card">
+            <h3><span class="strategy-card-icon">${strategies.stp.icon}</span> ${strategies.stp.title}</h3>
+            <div class="strategy-detail">
+              <h4>Segmentation</h4>
+              <p>${strategies.stp.segments}</p>
             </div>
-        </div>
-    </div>
+            <div class="strategy-detail">
+              <h4>Targeting</h4>
+              <p>${strategies.stp.targeting}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Positioning</h4>
+              <p>${strategies.stp.positioning}</p>
+            </div>
+            <div class="rationale">
+              <strong>Why this strategy:</strong> ${strategies.stp.rationale}
+            </div>
+          </div>
+        `;
+        
+        // Marketing Mix (4Ps) Strategy
+        const mixHTML = `
+          <div class="strategy-card">
+            <h3><span class="strategy-card-icon">${strategies.marketingMix.icon}</span> ${strategies.marketingMix.title}</h3>
+            <div class="strategy-detail">
+              <h4>Product</h4>
+              <p>${strategies.marketingMix.product}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Price</h4>
+              <p>${strategies.marketingMix.price}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Place</h4>
+              <p>${strategies.marketingMix.place}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Promotion</h4>
+              <p>${strategies.marketingMix.promotion}</p>
+            </div>
+            <div class="rationale">
+              <strong>Why this strategy:</strong> ${strategies.marketingMix.rationale}
+            </div>
+          </div>
+        `;
+        
+        // Pricing Strategy
+        const pricingHTML = `
+          <div class="strategy-card">
+            <h3><span class="strategy-card-icon">${strategies.pricing.icon}</span> ${strategies.pricing.title}</h3>
+            <div class="strategy-detail">
+              <h4>Strategy</h4>
+              <p>${strategies.pricing.strategy}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Tactics</h4>
+              <p>${strategies.pricing.tactics}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Implementation</h4>
+              <p>${strategies.pricing.implementation}</p>
+            </div>
+            <div class="rationale">
+              <strong>Why this strategy:</strong> ${strategies.pricing.rationale}
+            </div>
+          </div>
+        `;
+        
+        // Promotion Strategy
+        const promotionHTML = `
+          <div class="strategy-card">
+            <h3><span class="strategy-card-icon">${strategies.promotion.icon}</span> ${strategies.promotion.title}</h3>
+            <div class="strategy-detail">
+              <h4>Strategy</h4>
+              <p>${strategies.promotion.strategy}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Tactics</h4>
+              <p>${strategies.promotion.tactics}</p>
+            </div>
+            <div class="strategy-detail">
+              <h4>Implementation</h4>
+              <p>${strategies.promotion.implementation}</p>
+            </div>
+            <div class="rationale">
+              <strong>Why this strategy:</strong> ${strategies.promotion.rationale}
+            </div>
+          </div>
+        `;
+        
+        // Add all strategies to the container
+        container.innerHTML = stpHTML + mixHTML + pricingHTML + promotionHTML;
+      }
 
-    <div class="floating-icon" id="info-btn">
-        <i class="fas fa-info"></i>
-    </div>
+      handleChatSubmit() {
+        const chatInput = document.getElementById('chat-input');
+        const question = chatInput.value.trim();
+        
+        if (question === '') return;
+        
+        // Add user message to chat
+        this.addMessageToChat(question, 'user');
+        
+        // Clear input
+        chatInput.value = '';
+        
+        // Show typing indicator
+        this.showTypingIndicator();
+        
+        // Generate response with delay for realistic typing effect
+        setTimeout(() => {
+          const response = chatAdvisor.generateResponse(question);
+          this.hideTypingIndicator();
+          this.addMessageToChat(response, 'bot');
+        }, 1500);
+      }
 
-    <footer>
-        ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ &copy; 2025 - เครื่องมือช่วยเหลือผู้ประกอบการรายย่อย
-    </footer>
-
-    <script>
-        // =====================================================================
-        // โมดูลสำหรับระบบพลั๊กอิน (Extensible Architecture - Plugin System)
-        // =====================================================================
-        class PluginSystem {
-            constructor() {
-                this.plugins = {};
-            }
-            
-            register(type, name, plugin) {
-                if (!this.plugins[type]) {
-                    this.plugins[type] = {};
-                }
-                this.plugins[type][name] = plugin;
-            }
-            
-            get(type, name) {
-                if (this.plugins[type] && this.plugins[type][name]) {
-                    return this.plugins[type][name];
-                }
-                return null;
-            }
-            
-            getAll(type) {
-                return this.plugins[type] || {};
-            }
-        }
-
-        // =====================================================================
-        // แพทเทิร์นกลยุทธ์ (Strategy Pattern) สำหรับการคำนวณราคา
-        // =====================================================================
-        class PricingStrategy {
-            calculatePrice(costs, factors) {
-                throw new Error("Method calculatePrice must be implemented by derived classes");
-            }
-        }
-
-        class StandardPricingStrategy extends PricingStrategy {
-            calculatePrice(costs, factors) {
-                const baseCostPerSkewer = costs.meatCost + costs.stickCost + costs.seasoningCost;
-                const fixedCostPerSkewer = (costs.laborCost + costs.fixedCost) / costs.dailyVolume;
-                const totalCostPerSkewer = baseCostPerSkewer + fixedCostPerSkewer;
-                const recommendedPrice = totalCostPerSkewer * (1 + (costs.profitMargin / 100));
-                
-                // ปรับราคาตามปัจจัยตลาด
-                const marketFactor = this.calculateMarketFactor(factors);
-                
-                return {
-                    baseCostPerSkewer,
-                    fixedCostPerSkewer,
-                    totalCostPerSkewer,
-                    recommendedPrice: Math.ceil(recommendedPrice * marketFactor),
-                    breakEven: Math.ceil((costs.fixedCost + costs.laborCost) / (recommendedPrice - baseCostPerSkewer)),
-                    dailyProfit: Math.round((recommendedPrice - totalCostPerSkewer) * costs.dailyVolume),
-                    marketFactor
-                };
-            }
-            
-            calculateMarketFactor(factors) {
-                let factor = 1.0;
-                
-                // ปัจจัยสภาพอากาศ
-                switch (factors.weather) {
-                    case 'sunny': factor *= 1.05; break;   // คนหมูปิ้งเยอะในอากาศร้อน
-                    case 'rainy': factor *= 0.95; break;   // คนซื้อหมูปิ้งน้อยลงในวันฝนตก
-                    case 'cool': factor *= 1.1; break;     // อากาศเย็นคนชอบกินของร้อน
-                }
-                
-                // ปัจจัยเศรษฐกิจ
-                switch (factors.economy) {
-                    case 'good': factor *= 1.1; break;     // เศรษฐกิจดี คนมีกำลังซื้อ
-                    case 'normal': factor *= 1.0; break;   // เศรษฐกิจปกติ
-                    case 'poor': factor *= 0.9; break;     // เศรษฐกิจแย่ ควรลดราคา
-                }
-                
-                // ปัจจัยฤดูกาล
-                switch (factors.season) {
-                    case 'hot': factor *= 1.05; break;     // หน้าร้อนคนชอบกินหมูปิ้ง
-                    case 'rainy': factor *= 0.95; break;   // หน้าฝนยอดขายลดลง
-                    case 'cool': factor *= 1.1; break;     // หน้าหนาวขายดี
-                }
-                
-                // ปัจจัยการเมือง
-                switch (factors.politics) {
-                    case 'stable': factor *= 1.05; break;  // การเมืองมั่นคง เศรษฐกิจดี
-                    case 'unstable': factor *= 0.97; break; // ไม่แน่นอน ระมัดระวังราคา
-                    case 'crisis': factor *= 0.9; break;   // วิกฤต ลดราคาเพื่อดึงดูดลูกค้า
-                }
-                
-                return factor;
+      showTypingIndicator() {
+        document.getElementById('typing-indicator').style.display = 'block';

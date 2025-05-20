@@ -571,6 +571,159 @@
             <!-- Input Factors Section -->
             <div class="card animate-slide-up">
                 <h2><i class="fas fa-chart-line"></i> ปัจจัยตลาด</h2>
+
+</div>
+<div class="main-grid">
+    <!-- AI Profile & Memory Section -->
+    <div class="card animate-slide-up">
+        <h2><i class="fas fa-user-robot"></i> โปรไฟล์ผู้ใช้ AI</h2>
+        
+        <div class="input-group">
+            <label for="userName">ชื่อเรียก (ให้ AI เรียก)</label>
+            <input type="text" id="userName" placeholder="คุณอยากให้ AI เรียกยังไง?">
+        </div>
+
+        <div class="input-group">
+            <label for="businessGoal">เป้าหมายธุรกิจ</label>
+            <select id="businessGoal">
+                <option value="">เลือกเป้าหมาย...</option>
+                <option value="survival">รอดพอมีกิน</option>
+                <option value="stable">รายได้มั่นคง</option>
+                <option value="growth">ขยายธุรกิจ</option>
+                <option value="franchise">เปิดสาขา</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="experienceLevel">ประสบการณ์การค้า</label>
+            <select id="experienceLevel">
+                <option value="">เลือกระดับ...</option>
+                <option value="newbie">มือใหม่ (< 6 เดือน)</option>
+                <option value="learning">กำลังเรียนรู้ (6เดือน-2ปี)</option>
+                <option value="experienced">มีประสบการณ์ (2-5ปี)</option>
+                <option value="expert">เซียน (5+ ปี)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="riskTolerance">ระดับความเสี่ยงที่รับได้</label>
+            <select id="riskTolerance">
+                <option value="">เลือกระดับ...</option>
+                <option value="conservative">อนุรักษ์นิยม (เสี่ยงน้อย)</option>
+                <option value="moderate">ปานกลาง</option>
+                <option value="aggressive">เสี่ยงได้ (กำไรสูง)</option>
+            </select>
+        </div>
+
+        <button class="button" onclick="saveProfile()">
+            <i class="fas fa-save"></i> บันทึกข้อมูล AI จะจำ
+        </button>
+
+        <!-- AI Status -->
+        <div id="aiStatus" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: rgba(74, 144, 226, 0.1); border-left: 4px solid #4a90e2;">
+            <div id="aiGreeting" style="font-weight: 500; color: #4a90e2;">
+                <i class="fas fa-robot"></i> AI พร้อมทำความรู้จักกับคุณ...
+            </div>
+            <div id="aiInsight" style="margin-top: 8px; font-size: 0.9rem; color: #666;">
+                กรอกข้อมูลเพื่อให้ AI เข้าใจและช่วยคุณได้ดีขึ้น
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Statistics & Learning -->
+    <div class="card animate-slide-up">
+        <h2><i class="fas fa-chart-area"></i> AI กำลังเรียนรู้คุณ</h2>
+        
+        <!-- การใช้งาน -->
+        <div class="stat-item">
+            <div class="stat-label">การใช้งานทั้งหมด</div>
+            <div class="stat-value" id="usageCount">-</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-label">คะแนน AI Accuracy</div>
+            <div class="stat-value" id="aiAccuracy">-</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-label">ข้อมูลที่ AI จำได้</div>
+            <div class="stat-value" id="dataPoints">-</div>
+        </div>
+
+        <!-- AI Learning Progress -->
+        <div class="learning-progress" style="margin-top: 15px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span style="font-size: 0.9rem; color: #666;">AI Learning Progress</span>
+                <span id="learningPercent" style="font-size: 0.9rem; color: #4a90e2;">0%</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                <div id="learningBar" style="height: 100%; background: linear-gradient(90deg, #4a90e2, #6ab7ff); width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+        </div>
+
+        <!-- Personality Insights -->
+        <div id="personalityInsights" style="margin-top: 15px; padding: 10px; border-radius: 8px; background: rgba(0, 200, 83, 0.1); border-left: 4px solid #00c853;">
+            <div style="font-weight: 500; color: #00c853; margin-bottom: 5px;">
+                <i class="fas fa-lightbulb"></i> AI Personality Match
+            </div>
+            <div id="personalityText" style="font-size: 0.9rem; color: #666;">
+                ใช้งานเพิ่มเติมเพื่อให้ AI วิเคราะห์บุคลิกการค้าของคุณ
+            </div>
+        </div>
+
+        <button class="button secondary" onclick="resetAIMemory()">
+            <i class="fas fa-brain"></i> รีเซ็ต AI Memory
+        </button>
+    </div>
+</div>
+
+<style>
+/* เพิ่ม CSS สำหรับ Profile Section */
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #8B4513;
+}
+
+#aiStatus, #personalityInsights {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Robot icon animation */
+.fa-user-robot, .fa-robot {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+</style>
+
+
                 
                 <div class="input-group">
                     <label for="porkPrice">ราคาเนื้อหมูภาคเหนือ (บาท/กก.) 

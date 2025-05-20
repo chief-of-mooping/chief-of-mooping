@@ -1,1553 +1,936 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Pork Skewer Pricing Advisor</title>
-  <style>
-    :root {
-      --primary: #ff6a00;
-      --primary-light: #ff8a3d;
-      --primary-dark: #e05a00;
-      --secondary: #8b4513;
-      --tertiary: #ffc107;
-      --text: #333;
-      --text-light: #666;
-      --bg: #fff9f2;
-      --card-bg: #fff;
-      --border-radius: 10px;
-      --shadow: 0 4px 12px rgba(139, 69, 19, 0.15);
-      --transition: all 0.3s ease;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Kanit', 'Prompt', 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 1.5rem 0;
-      border-radius: 0 0 var(--border-radius) var(--border-radius);
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: "";
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>');
-      opacity: 0.1;
-      right: -50px;
-      top: -50px;
-      transform: rotate(45deg);
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo-icon {
-      font-size: 2.5rem;
-      margin-right: 1rem;
-    }
-
-    .logo-text h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 0;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo-text p {
-      font-size: 0.9rem;
-      margin: 0;
-      opacity: 0.9;
-    }
-
-    .app-tabs {
-      display: flex;
-      justify-content: center;
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 0.5rem;
-      margin: 1.5rem auto;
-      max-width: 600px;
-      box-shadow: var(--shadow);
-      position: relative;
-      z-index: 10;
-    }
-
-    .tab {
-      padding: 0.75rem 1.5rem;
-      cursor: pointer;
-      border-radius: var(--border-radius);
-      font-weight: 600;
-      transition: var(--transition);
-      color: var(--text-light);
-      flex: 1;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .tab.active {
-      background-color: var(--primary);
-      color: white;
-    }
-
-    .tab:hover:not(.active) {
-      background-color: rgba(255, 106, 0, 0.1);
-    }
-
-    .tab-icon {
-      font-size: 1.2rem;
-    }
-
-    .main-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid rgba(255, 106, 0, 0.1);
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      background-color: var(--primary-light);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .card h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      color: var(--primary-dark);
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .form-row .form-group {
-      flex: 1 0 200px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid #ddd;
-      border-radius: var(--border-radius);
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.1);
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--border-radius);
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    button:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    .result-card {
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-top: 2rem;
-      border-left: 5px solid var(--primary);
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .result-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid rgba(255, 106, 0, 0.1);
-    }
-
-    .result-title {
-      font-size: 1.25rem;
-      color: var(--primary-dark);
-      margin: 0;
-    }
-
-    .price-recommendation {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin: 1rem 0;
-      text-align: center;
-      animation: pulsate 2s infinite;
-    }
-
-    @keyframes pulsate {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    .cost-breakdown {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-
-    .cost-item {
-      background-color: rgba(255, 106, 0, 0.05);
-      border-radius: var(--border-radius);
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .cost-item-label {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      margin-bottom: 0.5rem;
-    }
-
-    .cost-item-value {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .strategy-section {
-      margin-top: 2rem;
-    }
-
-    .strategy-item {
-      background-color: rgba(255, 193, 7, 0.1);
-      border-radius: var(--border-radius);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-left: 3px solid var(--tertiary);
-    }
-
-    .strategy-item h4 {
-      margin: 0 0 0.5rem 0;
-      color: var(--secondary);
-    }
-
-    .strategy-item p {
-      margin: 0;
-      color: var(--text);
-    }
-
-    .chart-container {
-      width: 100%;
-      height: 300px;
-      margin-top: 1.5rem;
-    }
-
-    /* Chat section */
-    .chat-section {
-      grid-column: 1 / -1;
-      display: none;
-    }
-
-    .chat-container {
-      border-radius: var(--border-radius);
-      background-color: var(--card-bg);
-      box-shadow: var(--shadow);
-      height: 400px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-    }
-
-    .message {
-      margin-bottom: 1rem;
-      max-width: 80%;
-    }
-
-    .message-user {
-      margin-left: auto;
-      background-color: var(--primary-light);
-      color: white;
-      border-radius: 18px 18px 0 18px;
-      padding: 0.75rem 1rem;
-    }
-
-    .message-bot {
-      background-color: #f1f1f1;
-      border-radius: 18px 18px 18px 0;
-      padding: 0.75rem 1rem;
-      animation: fadeIn 0.5s ease;
-    }
-
-    .typing-indicator {
-      display: none;
-      padding: 0.75rem 1rem;
-      background-color: #f1f1f1;
-      border-radius: 18px 18px 18px 0;
-      margin-bottom: 1rem;
-      width: fit-content;
-    }
-
-    .typing-indicator span {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background-color: #aaa;
-      border-radius: 50%;
-      margin-right: 5px;
-      animation: typing 1s infinite;
-    }
-
-    .typing-indicator span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-indicator span:nth-child(3) {
-      animation-delay: 0.4s;
-      margin-right: 0;
-    }
-
-    @keyframes typing {
-      0%, 60%, 100% {
-        transform: translateY(0);
-      }
-      30% {
-        transform: translateY(-5px);
-      }
-    }
-
-    .chat-input-container {
-      padding: 1rem;
-      border-top: 1px solid #eee;
-      display: flex;
-    }
-
-    .chat-input {
-      flex: 1;
-      padding: 0.75rem;
-      border: 2px solid #ddd;
-      border-radius: 50px;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .chat-input:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .chat-submit {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .chat-submit:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    /* Marketing Strategy Tab */
-    .marketing-section {
-      grid-column: 1 / -1;
-      display: none;
-    }
-
-    .strategy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .strategy-card {
-      background-color: var(--card-bg);
-      border-radius: var(--border-radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      border-top: 4px solid var(--tertiary);
-    }
-
-    .strategy-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(139, 69, 19, 0.2);
-    }
-
-    .strategy-card h3 {
-      font-size: 1.25rem;
-      color: var(--secondary);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .strategy-card-icon {
-      font-size: 1.5rem;
-      color: var(--tertiary);
-    }
-
-    .strategy-detail {
-      background-color: rgba(255, 193, 7, 0.1);
-      padding: 1rem;
-      border-radius: var(--border-radius);
-      margin-top: 1rem;
-    }
-
-    .strategy-detail h4 {
-      margin: 0 0 0.5rem 0;
-      color: var(--secondary);
-      font-size: 1rem;
-    }
-
-    .strategy-detail p {
-      margin: 0;
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-
-    .rationale {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px dashed rgba(139, 69, 19, 0.2);
-      font-size: 0.9rem;
-      color: var(--text-light);
-    }
-
-    .rationale strong {
-      color: var(--primary-dark);
-    }
-
-    .factors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-
-    .factor-item {
-      background-color: var(--bg);
-      border-radius: var(--border-radius);
-      padding: 1rem;
-      text-align: center;
-      transition: var(--transition);
-    }
-
-    .factor-item:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-
-    .factor-item-icon {
-      font-size: 1.5rem;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .factor-item-label {
-      font-size: 0.9rem;
-      color: var(--text-light);
-      margin-bottom: 0.25rem;
-    }
-
-    .factor-item-value {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    /* Animations */
-    @keyframes slideInRight {
-      from {
-        transform: translateX(50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    .animate-price {
-      animation: slideInRight 0.5s ease-out;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .main-content {
-        grid-template-columns: 1fr;
-      }
-
-      .header-content {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .logo {
-        margin-bottom: 1rem;
-        justify-content: center;
-      }
-
-      .app-tabs {
-        flex-wrap: wrap;
-      }
-
-      .tab {
-        padding: 0.5rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="header-content">
-      <div class="logo">
-        <div class="logo-icon">🍖</div>
-        <div class="logo-text">
-          <h1>Smart Pork Skewer Advisor</h1>
-          <p>Intelligent pricing & marketing for street food vendors</p>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="app-tabs">
-      <div class="tab active" data-tab="pricing">
-        <span class="tab-icon">🧮</span>
-        <span>Pricing</span>
-      </div>
-      <div class="tab" data-tab="marketing">
-        <span class="tab-icon">🧠</span>
-        <span>Marketing</span>
-      </div>
-      <div class="tab" data-tab="chat">
-        <span class="tab-icon">💬</span>
-        <span>Advisor</span>
-      </div>
-    </div>
-
-    <!-- Pricing Calculator Section -->
-    <div class="main-content" id="pricing-section">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">💰</div>
-          <h3>Cost & Pricing Calculator</h3>
-        </div>
-        <form id="pricing-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="pork-price">Pork Price (per kg)</label>
-              <input type="number" id="pork-price" min="0" step="0.01" value="150" required>
-            </div>
-            <div class="form-group">
-              <label for="grams-per-skewer">Grams per Skewer</label>
-              <input type="number" id="grams-per-skewer" min="0" step="1" value="30" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="stick-cost">Stick Cost (each)</label>
-              <input type="number" id="stick-cost" min="0" step="0.01" value="0.25" required>
-            </div>
-            <div class="form-group">
-              <label for="seasoning-cost">Seasoning Cost (per skewer)</label>
-              <input type="number" id="seasoning-cost" min="0" step="0.01" value="1.5" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="labor-cost">Labor Cost (per hour)</label>
-              <input type="number" id="labor-cost" min="0" step="0.01" value="50" required>
-            </div>
-            <div class="form-group">
-              <label for="fixed-cost">Fixed Cost (per day)</label>
-              <input type="number" id="fixed-cost" min="0" step="0.01" value="200" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="sales-volume">Expected Sales Volume (skewers/day)</label>
-              <input type="number" id="sales-volume" min="1" step="1" value="100" required>
-            </div>
-            <div class="form-group">
-              <label for="profit-goal">Profit Goal (%)</label>
-              <input type="number" id="profit-goal" min="0" max="100" step="1" value="30" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="working-hours">Working Hours (per day)</label>
-              <input type="number" id="working-hours" min="1" max="24" step="0.5" value="8" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="weather">Weather Condition</label>
-              <select id="weather" required>
-                <option value="sunny">Sunny</option>
-                <option value="rainy">Rainy</option>
-                <option value="cool">Cool</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="economy">Economic Condition</label>
-              <select id="economy" required>
-                <option value="good">Good</option>
-                <option value="normal" selected>Normal</option>
-                <option value="poor">Poor</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="season">Season</label>
-              <select id="season" required>
-                <option value="hot">Hot Season</option>
-                <option value="rain">Rainy Season</option>
-                <option value="cool">Cool Season</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="political">Political Situation</label>
-              <select id="political" required>
-                <option value="stable" selected>Stable</option>
-                <option value="unstable">Unstable</option>
-                <option value="crisis">Crisis</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit" id="calculate-btn">
-            <span>Calculate Optimal Price</span>
-            <span>📊</span>
-          </button>
-        </form>
-      </div>
-
-      <div class="card" id="result-container" style="display: none;">
-        <div class="card-header">
-          <div class="card-icon">📈</div>
-          <h3>Pricing Analysis Result</h3>
-        </div>
-        <div class="price-recommendation" id="price-recommendation"></div>
-        <div class="factors-grid">
-          <div class="factor-item">
-            <div class="factor-item-icon">☀️</div>
-            <div class="factor-item-label">Weather</div>
-            <div class="factor-item-value" id="weather-factor">Sunny</div>
-          </div>
-          <div class="factor-item">
-            <div class="factor-item-icon">💰</div>
-            <div class="factor-item-label">Economy</div>
-            <div class="factor-item-value" id="economy-factor">Normal</div>
-          </div>
-          <div class="factor-item">
-            <div class="factor-item-icon">🌡️</div>
-            <div class="factor-item-label">Season</div>
-            <div class="factor-item-value" id="season-factor">Hot</div>
-          </div>
-          <div class="factor-item">
-            <div class="factor-item-icon">🏛️</div>
-            <div class="factor-item-label">Political</div>
-            <div class="factor-item-value" id="political-factor">Stable</div>
-          </div>
-        </div>
-        <h4>Cost Breakdown</h4>
-        <div class="cost-breakdown">
-          <div class="cost-item">
-            <div class="cost-item-label">Raw Meat Cost</div>
-            <div class="cost-item-value" id="meat-cost">0.00</div>
-          </div>
-          <div class="cost-item">
-            <div class="cost-item-label">Stick Cost</div>
-            <div class="cost-item-value" id="stick-cost-value">0.00</div>
-          </div>
-          <div class="cost-item">
-            <div class="cost-item-label">Seasoning Cost</div>
-            <div class="cost-item-value" id="seasoning-cost-value">0.00</div>
-          </div>
-          <div class="cost-item">
-            <div class="cost-item-label">Labor Cost</div>
-            <div class="cost-item-value" id="labor-cost-value">0.00</div>
-          </div>
-          <div class="cost-item">
-            <div class="cost-item-label">Fixed Cost</div>
-            <div class="cost-item-value" id="fixed-cost-value">0.00</div>
-          </div>
-          <div class="cost-item">
-            <div class="cost-item-label">Total Cost</div>
-            <div class="cost-item-value" id="total-cost">0.00</div>
-          </div>
-        </div>
-        <div class="strategy-section">
-          <h4>Quick Strategy Recommendations</h4>
-          <div id="quick-strategies"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Marketing Strategy Section -->
-    <div class="marketing-section" id="marketing-section">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">📊</div>
-          <h3>Marketing Strategy Generator</h3>
-        </div>
-        <p>Based on your pricing inputs and market factors, here are tailored marketing strategies:</p>
-        <div class="strategy-grid" id="marketing-strategies">
-          <!-- Strategies will be generated here -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Chat Advisor Section -->
-    <div class="chat-section" id="chat-section">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">💬</div>
-          <h3>Smart Advisor</h3>
-        </div>
-        <p>Ask anything about your pork skewer business. For example: "What if it rains tomorrow?" or "How should I sell to students?"</p>
-        <div class="chat-container">
-          <div class="chat-messages" id="chat-messages">
-            <div class="message message-bot">
-              Hello! I'm your Smart Pork Skewer Advisor. How can I help you today with your business?
-            </div>
-            <div class="typing-indicator" id="typing-indicator">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          <div class="chat-input-container">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Type your question here...">
-            <button class="chat-submit" id="chat-submit">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // App State
-    const state = {
-      pricingData: {
-        porkPrice: 150,
-        gramsPerSkewer: 30,
-        stickCost: 0.25,
-        seasoningCost: 1.5,
-        laborCost: 50,
-        fixedCost: 200,
-        salesVolume: 100,
-        profitGoal: 30,
-        workingHours: 8,
-        weather: 'sunny',
-        economy: 'normal',
-        season: 'hot',
-        political: 'stable'
-      },
-      calculationResult: null,
-      activeTab: 'pricing'
-    };
-
-    // Observer Pattern - For UI updates
-    class Observer {
-      constructor() {
-        this.observers = [];
-      }
-
-      subscribe(fn) {
-        this.observers.push(fn);
-      }
-
-      notify(data) {
-        this.observers.forEach(observer => observer(data));
-      }
-    }
-
-    // Main Strategy Pattern for Pricing Logic
-    class PricingStrategy {
-      constructor() {
-        this.weatherFactors = {
-          sunny: 1.05,  // Good for business
-          rainy: 0.9,   // Bad for business
-          cool: 1.02    // Slightly better
-        };
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pork Skewer Pricing Advisor - แอปคำนวณราคาหมูปิ้งอัจฉริยะ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
         
-        this.economyFactors = {
-          good: 1.08,    // People spend more
-          normal: 1.0,   // Neutral
-          poor: 0.92     // People spend less
-        };
-        
-        this.seasonFactors = {
-          hot: 1.03,     // Better for grilled food
-          rain: 0.95,    // Worse for street vendors
-          cool: 1.04     // Good appetite weather
-        };
-        
-        this.politicalFactors = {
-          stable: 1.02,  // Good for business
-          unstable: 0.97, // Some uncertainty
-          crisis: 0.85   // Bad for business
-        };
-      }
-
-      calculateBasePrice(data) {
-        // Calculate raw meat cost
-        const meatCostPerSkewer = (data.porkPrice * data.gramsPerSkewer) / 1000;
-        
-        // Calculate labor cost per skewer
-        const laborCostPerSkewer = (data.laborCost * data.workingHours) / data.salesVolume;
-        
-        // Calculate fixed cost per skewer
-        const fixedCostPerSkewer = data.fixedCost / data.salesVolume;
-        
-        // Total base cost per skewer
-        const totalCostPerSkewer = meatCostPerSkewer + 
-                                   data.stickCost + 
-                                   data.seasoningCost + 
-                                   laborCostPerSkewer + 
-                                   fixedCostPerSkewer;
-        
-        // Add profit margin
-        const priceWithProfit = totalCostPerSkewer * (1 + (data.profitGoal / 100));
-        
-        return {
-          basePrice: priceWithProfit,
-          breakdown: {
-            meatCost: meatCostPerSkewer,
-            stickCost: data.stickCost,
-            seasoningCost: data.seasoningCost,
-            laborCost: laborCostPerSkewer,
-            fixedCost: fixedCostPerSkewer,
-            totalCost: totalCostPerSkewer
-          }
-        };
-      }
-
-      applyMarketFactors(basePrice, data) {
-        // Apply all market factors
-        const marketFactor = this.weatherFactors[data.weather] * 
-                            this.economyFactors[data.economy] * 
-                            this.seasonFactors[data.season] * 
-                            this.politicalFactors[data.political];
-        
-        // Final price with market adjustments
-        return basePrice * marketFactor;
-      }
-
-      calculatePrice(data) {
-        // Get base price and breakdown
-        const { basePrice, breakdown } = this.calculateBasePrice(data);
-        
-        // Apply market factors
-        const adjustedPrice = this.applyMarketFactors(basePrice, data);
-        
-        // Round to the nearest whole number for simplicity
-        const finalPrice = Math.ceil(adjustedPrice);
-        
-        return {
-          suggestedPrice: finalPrice,
-          breakdown: breakdown,
-          marketFactor: {
-            weather: data.weather,
-            economy: data.economy,
-            season: data.season,
-            political: data.political
-          }
-        };
-      }
-    }
-
-    // Marketing Strategy Generator
-    class MarketingStrategyGenerator {
-      constructor() {
-        // STP (Segmentation, Targeting, Positioning) strategies
-        this.stpStrategies = {
-          // For different weather conditions
-          sunny: {
-            title: "Sunny Day Strategy",
-            icon: "☀️",
-            segments: "Outdoor walkers, tourists, and park visitors",
-            targeting: "Focus on visibility in high traffic areas and tourist spots",
-            positioning: "Fresh, quick, and delicious food for your outdoor adventures",
-            rationale: "Sunny days bring more foot traffic outdoors, allowing for premium positioning"
-          },
-          rainy: {
-            title: "Rainy Day Strategy",
-            icon: "🌧️",
-            segments: "Office workers, indoor market visitors, delivery customers",
-            targeting: "Target covered areas and offer delivery options",
-            positioning: "Warm, comforting food that brightens up a rainy day",
-            rationale: "During rainy weather, focus on indoor venues and comfort food positioning"
-          },
-          cool: {
-            title: "Cool Weather Strategy",
-            icon: "❄️",
-            segments: "Comfort food seekers, evening diners, takeaway customers",
-            targeting: "Emphasize the warm, freshly grilled aspect of your product",
-            positioning: "Hot, juicy skewers that warm you up in cool weather",
-            rationale: "Cool weather increases demand for hot food, allowing for premium positioning"
-          }
-        };
-
-        // 4Ps strategies based on economic conditions
-        this.marketingMixStrategies = {
-          good: {
-            title: "Premium Mix Strategy",
-            icon: "💎",
-            product: "Premium quality meat cuts, special marinades, and presentation",
-            price: "Premium pricing with emphasis on quality and experience",
-            place: "High-visibility locations, food markets, and festivals",
-            promotion: "Emphasis on quality, health benefits, and premium ingredients",
-            rationale: "Strong economy allows for premium positioning and higher margins"
-          },
-          normal: {
-            title: "Balanced Mix Strategy",
-            icon: "⚖️",
-            product: "Good quality skewers with consistent taste and presentation",
-            price: "Competitive pricing with occasional promotions",
-            place: "Mix of high-traffic areas and regular spots with established customers",
-            promotion: "Value proposition focusing on taste and satisfaction",
-            rationale: "Standard economic conditions require balanced approach to marketing mix"
-          },
-          poor: {
-            title: "Value Mix Strategy",
-            icon: "🏷️",
-            product: "Consistent quality with emphasis on portion size and value",
-            price: "Value pricing with bundle deals and promotions",
-            place: "Focus on high-density residential areas and workplaces",
-            promotion: "Emphasize affordability, value bundles, and loyalty rewards",
-            rationale: "Economic downturns require emphasis on value and affordability"
-          }
-        };
-
-        // Pricing strategies based on political situations
-        this.pricingStrategies = {
-          stable: {
-            title: "Growth Pricing Strategy",
-            icon: "📈",
-            strategy: "Value-based pricing with occasional premium offerings",
-            tactics: "Gradually increase prices as you build reputation, add premium variations",
-            implementation: "Test price elasticity with special products, monitor competitor pricing",
-            rationale: "Stable political environment allows for long-term planning and growth-oriented pricing"
-          },
-          unstable: {
-            title: "Adaptive Pricing Strategy",
-            icon: "🔄",
-            strategy: "Flexible pricing with quick adaptation to market changes",
-            tactics: "Keep base prices stable but offer promotions to respond to market conditions",
-            implementation: "Monitor closely and be ready to adjust pricing weekly based on conditions",
-            rationale: "Political uncertainty requires flexibility and quick response to changes"
-          },
-          crisis: {
-            title: "Survival Pricing Strategy",
-            icon: "🛡️",
-            strategy: "Penetration pricing with focus on volume",
-            tactics: "Lower margins, bundle deals, and loyalty programs to maintain volume",
-            implementation: "Cut unnecessary costs, focus on efficiency, maintain minimum margins",
-            rationale: "Crisis situations require focusing on maintaining cash flow over profits"
-          }
-        };
-
-        // Promotion strategies based on seasons
-        this.promotionStrategies = {
-          hot: {
-            title: "Hot Season Promotion Strategy",
-            icon: "🔥",
-            strategy: "Refreshment pairing and visibility marketing",
-            tactics: "Pair with cold drinks, position stalls in shaded areas, emphasize freshness",
-            implementation: "Create bundles with drinks, use visually appealing displays, extend evening hours",
-            rationale: "Hot weather increases thirst, so pairing with beverages and ensuring comfortable eating areas boosts sales"
-          },
-          rain: {
-            title: "Rainy Season Promotion Strategy",
-            icon: "☔",
-            strategy: "Shelter and delivery focus",
-            tactics: "Partner with sheltered venues, offer delivery, create rainy day specials",
-            implementation: "Set up in covered markets, partner with delivery apps, offer discounts during heavy rain",
-            rationale: "Rainy season reduces foot traffic, so alternative distribution channels become essential"
-          },
-          cool: {
-            title: "Cool Season Promotion Strategy",
-            icon: "🧣",
-            strategy: "Warmth and comfort marketing",
-            tactics: "Emphasize freshly grilled aspect, create special spicy variations, bundle with hot drinks",
-            implementation: "Use visual cues of steam and grilling, introduce winter spice blends, partner with hot beverage vendors",
-            rationale: "Cool weather increases demand for hot, satisfying food with warming properties"
-          }
-        };
-      }
-
-      generateStrategies(data) {
-        // Select strategies based on the current market factors
-        const stpStrategy = this.stpStrategies[data.weather];
-        const marketingMixStrategy = this.marketingMixStrategies[data.economy];
-        const pricingStrategy = this.pricingStrategies[data.political];
-        const promotionStrategy = this.promotionStrategies[data.season];
-
-        return {
-          stp: stpStrategy,
-          marketingMix: marketingMixStrategy,
-          pricing: pricingStrategy,
-          promotion: promotionStrategy
-        };
-      }
-    }
-
-    // Chat Advisor System using Simple Pattern Matching
-    class ChatAdvisor {
-      constructor() {
-        this.patterns = [
-          {
-            keywords: ['rain', 'rainy', 'rain tomorrow', 'rainy day', 'raining'],
-            response: "When it rains, customer traffic typically drops by 30-40%. I recommend: 1) Partner with food delivery apps to maintain sales, 2) Set up in covered areas like markets or food courts, 3) Create special 'Rainy Day Bundles' with discounts to attract customers, 4) Offer slightly larger portions to create better perceived value."
-          },
-          {
-            keywords: ['student', 'students', 'university', 'school', 'college'],
-            response: "Students are value-conscious customers with specific peak times. I recommend: 1) Create student-specific meal deals (3-4 skewers + drink), 2) Position near campuses around lunch and after classes, 3) Accept mobile payments, 4) Offer a simple loyalty program (buy 10 get 1 free), 5) Consider increasing portion size slightly rather than decreasing price."
-          },
-          {
-            keywords: ['competition', 'competitor', 'competitors', 'rival', 'rivals'],
-            response: "To stand out from competitors: 1) Develop a signature marinade or sauce that's unique to your stall, 2) Ensure consistent quality and slightly larger portions, 3) Create visually distinctive branding for your stall, 4) Offer a signature premium skewer option alongside standard ones, 5) Build personal connections with regular customers through friendly service and remembering preferences."
-          },
-          {
-            keywords: ['festival', 'event', 'events', 'special', 'fair', 'market'],
-            response: "For special events and festivals: 1) Prepare 30-50% more inventory than usual, 2) Create festival-specific bundles and platters, 3) Simplify your menu to ensure fast service, 4) Consider a slight price premium (10-15%) for the convenience factor, 5) Have eye-catching signage and possibly themed decorations, 6) Prepare pre-marinated meat to speed up grilling time."
-          },
-          {
-            keywords: ['loyal', 'loyalty', 'regular', 'regulars', 'customer', 'customers', 'retention'],
-            response: "To build customer loyalty: 1) Implement a simple loyalty card (buy 9 get 1 free), 2) Remember your regular customers' preferences, 3) Maintain consistent quality and portion size, 4) Occasionally offer a free skewer to your best customers, 5) Create a signature sauce or marinade that customers can't get elsewhere, 6) Maintain consistent operating hours so customers know when to find you."
-          },
-          {
-            keywords: ['location', 'spot', 'place', 'where', 'where to sell', 'sell', 'selling'],
-            response: "Best locations for pork skewer stalls: 1) Near office buildings during lunch and evening commute times, 2) Outside popular bars and nightlife areas in evenings, 3) Near universities and schools after class times, 4) Weekend markets and food courts, 5) Near public transportation hubs. Choose locations with high foot traffic and, if possible, some seating nearby. Track sales by location and focus on your top performers."
-          },
-          {
-            keywords: ['marinade', 'sauce', 'recipe', 'flavor', 'taste', 'seasoning', 'spice', 'spicy'],
-            response: "For standout marinades: 1) Base: Use a balanced mix of soy sauce, garlic, sugar and lime juice as your foundation, 2) Local touch: Add Thai-specific ingredients like fish sauce, cilantro root, and lemongrass, 3) Signature element: Add one unique ingredient like tamarind, mango, or special chilis that will be your signature, 4) Consistency: Measure ingredients precisely for consistent flavor, 5) Marination time: Allow at least 4-6 hours, ideally overnight for flavor penetration."
-          },
-          {
-            keywords: ['price', 'pricing', 'charge', 'cost', 'expensive', 'cheap'],
-            response: "Smart pricing tips: 1) Calculate your break-even price precisely, including ALL costs, 2) Check competitor pricing in your area, 3) Consider psychological pricing (29฿ rather than 30฿), 4) Create tiered options (standard, premium, and bundle deals), 5) Update prices with major meat cost changes, not minor fluctuations, 6) Test price elasticity by occasionally offering premium options to see willingness to pay."
-          },
-          {
-            keywords: ['supply', 'supplier', 'meat', 'quality', 'supplies', 'ingredients', 'buy'],
-            response: "For better suppliers: 1) Build relationships with at least 2-3 meat suppliers so you have backup options, 2) Buy in bulk when prices are favorable and you can store properly, 3) Request early morning fresh cuts for best quality, 4) Pay promptly to build good supplier relationships, 5) Check meat quality consistently (good color, smell, marbling), 6) Consider joining with other vendors to increase buying power with suppliers."
-          },
-          {
-            keywords: ['morning', 'afternoon', 'evening', 'night', 'time', 'busy', 'busiest', 'hours', 'slow'],
-            response: "Optimal timing strategy: 1) Morning (7-9am): Target commuters with breakfast skewers, 2) Lunch (11:30am-1:30pm): Office workers and students, 3) Afternoon (3-5pm): School students and early commuters, 4) Evening (6-9pm): Dinner and after-work crowd, 5) Late night (if permitted): Focus on nightlife areas. Track sales by hour and day of week to optimize your schedule and inventory, then focus on your most profitable times."
-          },
-          {
-            keywords: ['loss', 'waste', 'leftover', 'unsold', 'profit', 'profitable'],
-            response: "To reduce waste and increase profit: 1) Track daily sales patterns to predict demand better, 2) Pre-marinate but only skewer meat as needed, 3) Consider a 'happy hour' with small discounts before closing to clear inventory, 4) Create a secondary product that uses leftover meat (fried rice or noodles), 5) Offer larger bulk deals to clear inventory near closing, 6) For unsold but safe meat, vacuum seal and properly refrigerate for next day specials."
-          },
-          {
-            keywords: ['healthy', 'health', 'nutrition', 'nutritious', 'diet', 'clean'],
-            response: "Healthier options appeal to a growing market: 1) Offer leaner cut options alongside traditional cuts, 2) Include vegetable skewers with options like zucchini, mushrooms, and bell peppers, 3) Offer a no-MSG option for health-conscious customers, 4) Consider a 'protein plate' with skewers and fresh vegetables, 5) Highlight any natural ingredients in your marinades, 6) Ensure visibly clean food preparation for customer confidence."
-          }
-        ];
-
-        // Default response if no pattern matches
-        this.defaultResponse = "I understand you're asking about your pork skewer business. Could you provide more specific details about what you'd like to know? I can help with pricing strategies, customer targeting, location selection, or marketing tactics.";
-      }
-
-      generateResponse(question) {
-        // Convert the question to lowercase for easier matching
-        const lowerQuestion = question.toLowerCase();
-        
-        // Find matching patterns
-        for (const pattern of this.patterns) {
-          // Check if any keywords match
-          if (pattern.keywords.some(keyword => lowerQuestion.includes(keyword))) {
-            return pattern.response;
-          }
-        }
-        
-        // Return default response if no patterns match
-        return this.defaultResponse;
-      }
-    }
-
-    // Initialize classes
-    const pricingStrategy = new PricingStrategy();
-    const marketingStrategy = new MarketingStrategyGenerator();
-    const chatAdvisor = new ChatAdvisor();
-    const uiObserver = new Observer();
-
-    // UI Controller
-    class UIController {
-      constructor() {
-        this.initEventListeners();
-        this.loadInitialState();
-        
-        // Subscribe to UI updates
-        uiObserver.subscribe(data => {
-          this.updateUI(data);
-        });
-      }
-
-      initEventListeners() {
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-          tab.addEventListener('click', () => {
-            this.switchTab(tab.getAttribute('data-tab'));
-          });
-        });
-
-        // Form submission
-        document.getElementById('pricing-form').addEventListener('submit', (e) => {
-          e.preventDefault();
-          this.calculatePrice();
-        });
-
-        // Chat submission
-        document.getElementById('chat-submit').addEventListener('click', () => {
-          this.handleChatSubmit();
-        });
-
-        document.getElementById('chat-input').addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            this.handleChatSubmit();
-          }
-        });
-      }
-
-      loadInitialState() {
-        // Load initial values from state into the form
-        document.getElementById('pork-price').value = state.pricingData.porkPrice;
-        document.getElementById('grams-per-skewer').value = state.pricingData.gramsPerSkewer;
-        document.getElementById('stick-cost').value = state.pricingData.stickCost;
-        document.getElementById('seasoning-cost').value = state.pricingData.seasoningCost;
-        document.getElementById('labor-cost').value = state.pricingData.laborCost;
-        document.getElementById('fixed-cost').value = state.pricingData.fixedCost;
-        document.getElementById('sales-volume').value = state.pricingData.salesVolume;
-        document.getElementById('profit-goal').value = state.pricingData.profitGoal;
-        document.getElementById('working-hours').value = state.pricingData.workingHours;
-        document.getElementById('weather').value = state.pricingData.weather;
-        document.getElementById('economy').value = state.pricingData.economy;
-        document.getElementById('season').value = state.pricingData.season;
-        document.getElementById('political').value = state.pricingData.political;
-      }
-
-      switchTab(tabName) {
-        // Update active state in tabs
-        document.querySelectorAll('.tab').forEach(tab => {
-          if (tab.getAttribute('data-tab') === tabName) {
-            tab.classList.add('active');
-          } else {
-            tab.classList.remove('active');
-          }
-        });
-
-        // Hide all content sections
-        document.getElementById('pricing-section').style.display = 'none';
-        document.getElementById('marketing-section').style.display = 'none';
-        document.getElementById('chat-section').style.display = 'none';
-
-        // Show selected content section
-        if (tabName === 'pricing') {
-          document.getElementById('pricing-section').style.display = 'grid';
-        } else if (tabName === 'marketing') {
-          document.getElementById('marketing-section').style.display = 'block';
-          // Generate marketing strategies if we have calculation results
-          if (state.calculationResult) {
-            this.generateMarketingStrategies();
-          }
-        } else if (tabName === 'chat') {
-          document.getElementById('chat-section').style.display = 'block';
+        :root {
+            /* Luxury color palette */
+            --gold: #D4AF37;
+            --soft-gold: #E6C77E;
+            --rich-gold: #996515;
+            --dark-gold: #705214;
+            --royal-purple: #6c11a5;
+            --deep-purple: #4A0072;
+            --midnight: #0A0A18;
+            --dark-navy: #14152A;
+            --deep-navy: #0A0B1A;
+            --charcoal: #1E1E2A;
+            --pearl: #E8E8E0;
+            --silver: #C0C0C0;
+            --cream: #F5F5F0;
+            --soft-white: #F9F9F7;
+            
+            /* Gradients */
+            --gold-gradient: linear-gradient(135deg, #D4AF37, #FFD700, #D4AF37);
+            --purple-gold-gradient: linear-gradient(135deg, #6c11a5, #D4AF37);
+            --royal-gradient: linear-gradient(135deg, #14152A, #4A0072);
+            --dark-gradient: linear-gradient(to bottom, #14152A, #0A0B1A);
+            
+            /* Effects */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.35);
+            --gold-shadow: 0 5px 15px rgba(212, 175, 55, 0.25);
+            --inset-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            --glass-effect: rgba(255, 255, 255, 0.05);
+            --gold-glass: rgba(212, 175, 55, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* Borders */
+            --radius-sm: 6px;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --gold-border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        // Update state
-        state.activeTab = tabName;
-      }
-
-      getFormData() {
-        // Get values from the form
-        const porkPrice = parseFloat(document.getElementById('pork-price').value);
-        const gramsPerSkewer = parseFloat(document.getElementById('grams-per-skewer').value);
-        const stickCost = parseFloat(document.getElementById('stick-cost').value);
-        const seasoningCost = parseFloat(document.getElementById('seasoning-cost').value);
-        const laborCost = parseFloat(document.getElementById('labor-cost').value);
-        const fixedCost = parseFloat(document.getElementById('fixed-cost').value);
-        const salesVolume = parseInt(document.getElementById('sales-volume').value);
-        const profitGoal = parseInt(document.getElementById('profit-goal').value);
-        const workingHours = parseFloat(document.getElementById('working-hours').value);
-        const weather = document.getElementById('weather').value;
-        const economy = document.getElementById('economy').value;
-        const season = document.getElementById('season').value;
-        const political = document.getElementById('political').value;
-
-        return {
-          porkPrice,
-          gramsPerSkewer,
-          stickCost,
-          seasoningCost,
-          laborCost,
-          fixedCost,
-          salesVolume,
-          profitGoal,
-          workingHours,
-          weather,
-          economy,
-          season,
-          political
-        };
-      }
-
-      calculatePrice() {
-        // Get form data
-        const formData = this.getFormData();
-        
-        // Update state
-        state.pricingData = formData;
-        
-        // Calculate price using strategy
-        const result = pricingStrategy.calculatePrice(formData);
-        
-        // Update state with result
-        state.calculationResult = result;
-        
-        // Notify UI to update
-        uiObserver.notify({
-          type: 'price-calculated',
-          data: result
-        });
-        
-        // Show result container
-        document.getElementById('result-container').style.display = 'block';
-        
-        // Generate quick strategies for the pricing tab
-        this.generateQuickStrategies();
-      }
-
-      updateUI(data) {
-        if (data.type === 'price-calculated') {
-          // Update price recommendation with animation
-          const priceElement = document.getElementById('price-recommendation');
-          priceElement.classList.remove('animate-price');
-          // Trigger reflow to restart animation
-          void priceElement.offsetWidth;
-          priceElement.classList.add('animate-price');
-          priceElement.textContent = `฿${data.data.suggestedPrice.toFixed(0)} per skewer`;
-
-          // Update cost breakdown
-          document.getElementById('meat-cost').textContent = `฿${data.data.breakdown.meatCost.toFixed(2)}`;
-          document.getElementById('stick-cost-value').textContent = `฿${data.data.breakdown.stickCost.toFixed(2)}`;
-          document.getElementById('seasoning-cost-value').textContent = `฿${data.data.breakdown.seasoningCost.toFixed(2)}`;
-          document.getElementById('labor-cost-value').textContent = `฿${data.data.breakdown.laborCost.toFixed(2)}`;
-          document.getElementById('fixed-cost-value').textContent = `฿${data.data.breakdown.fixedCost.toFixed(2)}`;
-          document.getElementById('total-cost').textContent = `฿${data.data.breakdown.totalCost.toFixed(2)}`;
-
-          // Update market factors
-          document.getElementById('weather-factor').textContent = data.data.marketFactor.weather;
-          document.getElementById('economy-factor').textContent = data.data.marketFactor.economy;
-          document.getElementById('season-factor').textContent = data.data.marketFactor.season;
-          document.getElementById('political-factor').textContent = data.data.marketFactor.political;
-        }
-      }
-
-      generateQuickStrategies() {
-        // Generate simple strategies based on the calculated price
-        const strategiesContainer = document.getElementById('quick-strategies');
-        strategiesContainer.innerHTML = '';
-
-        // Weather-based strategy
-        let weatherStrategy = '';
-        if (state.pricingData.weather === 'sunny') {
-          weatherStrategy = `<div class="strategy-item">
-            <h4>☀️ Sunny Day Strategy</h4>
-            <p>Use bright, visible signage and position in high-traffic outdoor areas. Emphasize freshness and quick service for people on the go.</p>
-          </div>`;
-        } else if (state.pricingData.weather === 'rainy') {
-          weatherStrategy = `<div class="strategy-item">
-            <h4>🌧️ Rainy Day Strategy</h4>
-            <p>Focus on covered areas or consider delivery options. Offer "Rainy Day Specials" with small discounts to attract customers despite the weather.</p>
-          </div>`;
-        } else {
-          weatherStrategy = `<div class="strategy-item">
-            <h4>❄️ Cool Weather Strategy</h4>
-            <p>Emphasize the hot, fresh aspect of your skewers. Consider adding spicier options that warm customers up in cooler weather.</p>
-          </div>`;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
         }
 
-        // Economy-based strategy
-        let economyStrategy = '';
-        if (state.pricingData.economy === 'good') {
-          economyStrategy = `<div class="strategy-item">
-            <h4>💰 Strong Economy Strategy</h4>
-            <p>Offer premium options with special cuts or marinades at higher price points. Focus on quality and experience rather than just price.</p>
-          </div>`;
-        } else if (state.pricingData.economy === 'poor') {
-          economyStrategy = `<div class="strategy-item">
-            <h4>🏷️ Economic Downturn Strategy</h4>
-            <p>Create value bundles and meal deals to maintain volume. Emphasize good value and filling portions to attract cost-conscious customers.</p>
-          </div>`;
-        } else {
-          economyStrategy = `<div class="strategy-item">
-            <h4>⚖️ Balanced Economy Strategy</h4>
-            <p>Maintain competitive pricing with occasional promotions. Focus on consistent quality and good customer service to build loyalty.</p>
-          </div>`;
+        body {
+            background: var(--dark-gradient);
+            color: var(--pearl);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Luxury background patterns and effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0C20 10 15 15 5 20C15 25 20 30 30 40C40 30 45 25 55 20C45 15 40 10 30 0Z' fill='%23D4AF37' fill-opacity='0.03'/%3E%3C/svg%3E");
+            z-index: -2;
+            opacity: 0.6;
+        }
+        
+        /* Animated light effects */
+        .luxury-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .luxury-orb.gold {
+            width: 400px;
+            height: 400px;
+            background: var(--gold);
+            top: -200px;
+            right: -100px;
+            animation: floatOrb 20s ease-in-out infinite alternate;
+        }
+        
+        .luxury-orb.purple {
+            width: 300px;
+            height: 300px;
+            background: var(--royal-purple);
+            bottom: -100px;
+            left: -100px;
+            animation: floatOrb 15s ease-in-out infinite alternate-reverse;
+        }
+        
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
         }
 
-        strategiesContainer.innerHTML = weatherStrategy + economyStrategy;
-      }
+        /* Gold dust particles */
+        .gold-dust {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .gold-particle {
+            position: absolute;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle 10s ease-in-out infinite;
+        }
+        
+        @keyframes floatParticle {
+            0% { 
+                transform: translateY(0);
+                opacity: 0; 
+            }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.2; }
+            100% { 
+                transform: translateY(-100vh);
+                opacity: 0; 
+            }
+        }
 
-      generateMarketingStrategies() {
-        // Generate detailed marketing strategies
-        const strategies = marketingStrategy.generateStrategies(state.pricingData);
-        const container = document.getElementById('marketing-strategies');
-        
-        // Clear previous strategies
-        container.innerHTML = '';
-        
-        // STP Strategy
-        const stpHTML = `
-          <div class="strategy-card">
-            <h3><span class="strategy-card-icon">${strategies.stp.icon}</span> ${strategies.stp.title}</h3>
-            <div class="strategy-detail">
-              <h4>Segmentation</h4>
-              <p>${strategies.stp.segments}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Targeting</h4>
-              <p>${strategies.stp.targeting}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Positioning</h4>
-              <p>${strategies.stp.positioning}</p>
-            </div>
-            <div class="rationale">
-              <strong>Why this strategy:</strong> ${strategies.stp.rationale}
-            </div>
-          </div>
-        `;
-        
-        // Marketing Mix (4Ps) Strategy
-        const mixHTML = `
-          <div class="strategy-card">
-            <h3><span class="strategy-card-icon">${strategies.marketingMix.icon}</span> ${strategies.marketingMix.title}</h3>
-            <div class="strategy-detail">
-              <h4>Product</h4>
-              <p>${strategies.marketingMix.product}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Price</h4>
-              <p>${strategies.marketingMix.price}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Place</h4>
-              <p>${strategies.marketingMix.place}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Promotion</h4>
-              <p>${strategies.marketingMix.promotion}</p>
-            </div>
-            <div class="rationale">
-              <strong>Why this strategy:</strong> ${strategies.marketingMix.rationale}
-            </div>
-          </div>
-        `;
-        
-        // Pricing Strategy
-        const pricingHTML = `
-          <div class="strategy-card">
-            <h3><span class="strategy-card-icon">${strategies.pricing.icon}</span> ${strategies.pricing.title}</h3>
-            <div class="strategy-detail">
-              <h4>Strategy</h4>
-              <p>${strategies.pricing.strategy}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Tactics</h4>
-              <p>${strategies.pricing.tactics}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Implementation</h4>
-              <p>${strategies.pricing.implementation}</p>
-            </div>
-            <div class="rationale">
-              <strong>Why this strategy:</strong> ${strategies.pricing.rationale}
-            </div>
-          </div>
-        `;
-        
-        // Promotion Strategy
-        const promotionHTML = `
-          <div class="strategy-card">
-            <h3><span class="strategy-card-icon">${strategies.promotion.icon}</span> ${strategies.promotion.title}</h3>
-            <div class="strategy-detail">
-              <h4>Strategy</h4>
-              <p>${strategies.promotion.strategy}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Tactics</h4>
-              <p>${strategies.promotion.tactics}</p>
-            </div>
-            <div class="strategy-detail">
-              <h4>Implementation</h4>
-              <p>${strategies.promotion.implementation}</p>
-            </div>
-            <div class="rationale">
-              <strong>Why this strategy:</strong> ${strategies.promotion.rationale}
-            </div>
-          </div>
-        `;
-        
-        // Add all strategies to the container
-        container.innerHTML = stpHTML + mixHTML + pricingHTML + promotionHTML;
-      }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
 
-      handleChatSubmit() {
-        const chatInput = document.getElementById('chat-input');
-        const question = chatInput.value.trim();
+        /* Luxury header with gold accents */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+            background: rgba(20, 21, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: var(--gold-border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
         
-        if (question === '') return;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold-gradient);
+        }
         
-        // Add user message to chat
-        this.addMessageToChat(question, 'user');
-        
-        // Clear input
-        chatInput.value = '';
-        
-        // Show typing indicator
-        this.showTypingIndicator();
-        
-        // Generate response with delay for realistic typing effect
-        setTimeout(() => {
-          const response = chatAdvisor.generateResponse(question);
-          this.hideTypingIndicator();
-          this.addMessageToChat(response, 'bot');
-        }, 1500);
-      }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
 
-      showTypingIndicator() {
-        document.getElementById('typing-indicator').style.display = 'block';
+        /* Premium logo design */
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            position: relative;
+            width: 65px;
+            height: 65px;
+            margin-right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--radius);
+            background: var(--gold-gradient);
+            box-shadow: var(--gold-shadow);
+            overflow: hidden;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .logo-icon::after {
+            content: 'หมู';
+            position: relative;
+            z-index: 1;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--midnight);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 6px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-subtitle {
+            font-size: 1rem;
+            color: var(--pearl);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        /* Elegant date time display */
+        .datetime {
+            padding: 15px 25px;
+            background: var(--glass-effect);
+            border-radius: var(--radius);
+            border: var(--gold-border);
+            color: var(--cream);
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .datetime::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.05), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        /* Premium tab navigation */
+        .tabs {
+            display: flex;
+            margin-bottom: 40px;
+            background: rgba(20, 21, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: var(--gold-border);
+            position: relative;
+        }
+        
+        .tabs::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 18px 20px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--silver);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tab:hover {
+            color: var(--gold);
+        }
+        
+        .tab.active {
+            color: var(--gold);
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .tab:hover::after {
+            width: 30%;
+        }
+        
+        .tab.active::after {
+            width: 60%;
+        }
+
+        /* Premium content panels with luxury design */
+        .tab-content {
+            display: none;
+            background: rgba(20, 21, 42, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            border: var(--gold-border);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .tab-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Luxury section headers */
+        .section-header {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--gold-gradient);
+            border-radius: var(--radius-sm);
+        }
+
+        /* Premium form controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--soft-white);
+            letter-spacing: 0.3px;
+        }
+        
+        .input-group {
+            position: relative;
+            border-radius: var(--radius);
+            background: rgba(255, 255, 255, 0.03);
+            border: var(--gold-border);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+        
+        .input-group:focus-within {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 16px 18px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--soft-white);
+            font-size: 1rem;
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .input-group select {
+            appearance: none;
+            cursor: pointer;
+            color: var(--soft-white);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 18px;
+            padding-right: 40px;
+        }
+        
+        .input-group select option {
+            background-color: var(--dark-navy);
+            color: var(--soft-white);
+        }
+        
+        .input-group span {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 0.9rem;
+            color: var(--gold);
+            pointer-events: none;
+        }
+        
+        .input-group.with-icon {
+            padding-left: 50px;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        /* Premium luxury buttons */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 28px;
+            background: var(--gold-gradient);
+            color: var(--midnight);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--gold-shadow);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .button:active {
+            transform: translateY(-1px);
+        }
+        
+        .button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: shimmerButton 2.5s infinite;
+        }
+        
+        @keyframes shimmerButton {
+            100% { transform: translateX(100%); }
+        }
+        
+        .button-outline {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            box-shadow: none;
+        }
+        
+        .button-outline:hover {
+            background: rgba(212, 175, 55, 0.08);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+        }
+        
+        .button-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Luxury results container */
+        .results-container {
+            background: rgba(20, 21, 42, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            margin-top: 40px;
+            border: var(--gold-border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .results-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 1.6rem;
+            color: var(--gold);
+            position: relative;
+            padding-bottom: 18px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .results-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--gold-gradient);
+            border-radius: var(--radius-sm);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .result-item {
+            background: var(--gold-glass);
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+            border: var(--gold-border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.05), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+        
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--gold-shadow);
+            border-color: var(--gold);
+        }
+        
+        .result-label {
+            font-size: 0.95rem;
+            color: var(--silver);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 6px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+        
+        .result-change {
+            font-size: 0.9rem;
+            color: var(--soft-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .result-change-icon {
+            margin-right: 6px;
+        }
+
+        /* Premium gauge with luxury styling */
+        .gauge-container {
+            margin: 50px auto;
+            max-width: 450px;
+            position: relative;
+        }
+        
+        .gauge-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--cream);
+            letter-spacing: 0.5px;
+        }
+        
+        .gauge {
+            height: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--inset-shadow);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        
+        .gauge-fill {
+            height: 100%;
+            border-radius: var(--radius-full);
+            transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: linear-gradient(to right, #4CAF50, #FFC107, #F44336);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gauge-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmerGauge 2s infinite;
+        }
+        
+        @keyframes shimmerGauge {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 0 4px;
+        }
+        
+        .gauge-label {
+            font-size: 0.9rem;
+            color: var(--silver);
+            position: relative;
+        }
+        
+        .gauge-label.active {
+            color: var(--gold);
+            font-weight: 500;
+        }
+        
+        .gauge-label::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 10px;
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Premium AI Advice component */
+        .ai-advice {
+            position: relative;
+            background: rgba(108, 17, 165, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-top: 40px;
+            border: 1px solid rgba(108, 17, 165, 0.3);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .ai-advice::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(108, 17, 165, 0.2), transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .ai-advice-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--royal-purple), var(--deep-purple));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(108, 17, 165, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+        
+        .ai-icon::after {
+            content: 'AI';
+            color: var(--soft-white);
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ai-advice-title {
+            font-size: 1.2rem;
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .ai-advice-content {
+            color: var(--pearl);
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+            letter-spacing: 0.2px;
+        }
+        
+        .ai-advice-content p {
+            margin-bottom: 10px;
+        }
+        
+        .ai-advice-content strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* Premium history cards */
+        .history-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .history-item {
+            background: var(--gold-glass);
+            padding: 25px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border: var(--gold-border);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .history-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(212, 175, 55, 0.05), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+            pointer-events: none;
+        }
+        
+        .history-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--gold-shadow);
+            border-color: var(--gold);
+        }
+        
+        .history-date {
+            font-size: 0.9rem;
+            color: var(--silver);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+        
+        .history-date-icon {
+            margin-right: 8px;
+            color: var(--gold);
+        }
+        
+        .history-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+        
+        .history-detail {
+            font-size: 0.95rem;
+        }
+        
+        .history-label {
+            display: block;
+            font-weight: 500;
+            color: var(--silver);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        
+        .history-value {
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Premium setting cards */
+        .setting-card {
+            background: var(--gold-glass);
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            border: var(--gold-border);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .setting-card::before {
+            content: '';

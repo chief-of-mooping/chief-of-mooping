@@ -3,39 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI กลยุทธ์หมูปิ้งมืออาชีพ</title>
+  <title>ผู้ช่วยร้านหมูปิ้งอัจฉริยะ</title>
   <style>
     body {
-      background: linear-gradient(to bottom right, #011936, #2e8bc0);
-      color: #e0f7fa;
-      font-family: 'Segoe UI', sans-serif;
+      background: #0c1c26;
+      color: #f5f5f5;
+      font-family: 'Prompt', sans-serif;
       margin: 0;
-      padding-bottom: 4rem;
+      padding: 0;
     }
     header {
-      background: linear-gradient(to right, #00c6ff, #0072ff);
+      background: linear-gradient(to right, #ff8a00, #e52e71);
       padding: 2rem;
       text-align: center;
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: bold;
       color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     main {
-      max-width: 1000px;
+      max-width: 900px;
       margin: auto;
       padding: 2rem;
     }
     section {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      padding: 2rem;
+      background: rgba(255,255,255,0.05);
       border-radius: 1rem;
+      padding: 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
     }
     h2 {
-      color: #ffd54f;
+      color: #ffeb3b;
     }
     label {
       display: block;
@@ -50,52 +48,53 @@
       font-size: 1rem;
     }
     button {
-      margin-top: 1rem;
-      padding: 0.8rem 1.5rem;
-      background: linear-gradient(to right, #ff6e7f, #bfe9ff);
+      margin-top: 1.5rem;
+      background: linear-gradient(to right, #43e97b, #38f9d7);
       color: #000;
-      border: none;
-      border-radius: 0.7rem;
       font-weight: bold;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
       cursor: pointer;
     }
     .output {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: rgba(0,0,0,0.2);
+      margin-top: 2rem;
+      background: rgba(255,255,255,0.08);
+      padding: 1.5rem;
       border-radius: 1rem;
+      line-height: 1.7;
+    }
+    .output h3 {
+      color: #4dd0e1;
     }
     ul {
-      margin: 0.5rem 0 0 1.5rem;
+      padding-left: 1.5rem;
     }
   </style>
 </head>
 <body>
-  <header>🔍 AI กลยุทธ์ตั้งราคาหมูปิ้ง พร้อมวิเคราะห์การตลาด</header>
+  <header>
+    🐷 ผู้ช่วยร้านหมูปิ้งอัจฉริยะ – คิดแทนทุกเรื่อง ตั้งแต่หมูยันกำไร
+  </header>
   <main>
     <section>
-      <h2>📊 กรอกข้อมูลทางธุรกิจ</h2>
-      <label>ราคาเนื้อหมู (บาท/กก.) <input type="number" id="pork"></label>
-      <label>น้ำหนักหมูต่อไม้ (กรัม) <input type="number" id="weight"></label>
+      <h2>📌 กรอกข้อมูลเบื้องต้น</h2>
+      <label>หมูราคากี่บาทต่อกิโล? <input type="number" id="pork"></label>
+      <label>ไม้ละกี่กรัม? <input type="number" id="weight"></label>
       <label>ค่าไม้เสียบ (บาท/100 ไม้) <input type="number" id="stick"></label>
-      <label>เครื่องปรุง (บาท/ไม้) <input type="number" id="spice"></label>
-      <label>ค่าแรง/วัน (บาท) <input type="number" id="labor"></label>
-      <label>ค่าใช้จ่ายคงที่/วัน (บาท) <input type="number" id="fixed"></label>
-      <label>ยอดขาย/วัน (จำนวนไม้) <input type="number" id="volume"></label>
-      <label>กำไรเป้าหมาย (%) <input type="number" id="profit"></label>
-      <label>กลุ่มเป้าหมาย <select id="target">
-        <option value="นักเรียน">นักเรียน</option>
-        <option value="คนทำงาน">คนทำงาน</option>
-        <option value="คนทั่วไป">คนทั่วไป</option>
-        <option value="นักท่องเที่ยว">นักท่องเที่ยว</option>
+      <label>เครื่องปรุงคิดไม้ละกี่บาท? <input type="number" id="spice"></label>
+      <label>ค่าแรงต่อวัน (บาท) <input type="number" id="labor"></label>
+      <label>ค่าใช้จ่ายอื่น ๆ ต่อวัน (บาท) <input type="number" id="fixed"></label>
+      <label>ตั้งเป้าขายวันละกี่ไม้? <input type="number" id="volume"></label>
+      <label>อยากมีกำไรต่อวันเท่าไหร่? (บาท) <input type="number" id="goalprofit"></label>
+      <label>วันนี้มีปัญหาอะไร? <select id="issue">
+        <option value="none">ไม่มี</option>
+        <option value="ขายไม่ดี">ขายไม่ดี</option>
+        <option value="ต้นทุนแพง">ต้นทุนแพง</option>
+        <option value="ฝนตก">ฝนตกบ่อย</option>
+        <option value="ลูกค้าน้อย">ลูกค้าน้อยลง</option>
       </select></label>
-      <label>สถานการณ์ตลาด <select id="situation">
-        <option value="ฝนตก">ฝนตก</option>
-        <option value="ต้นทุนสูง">ต้นทุนวัตถุดิบสูง</option>
-        <option value="ยอดขายต่ำ">ยอดขายตกต่ำ</option>
-        <option value="คู่แข่งเยอะ">มีคู่แข่งจำนวนมาก</option>
-      </select></label>
-      <button onclick="analyze()">📈 วิเคราะห์ราคาขาย & กลยุทธ์ STP + 4Ps</button>
+      <button onclick="analyze()">✨ วิเคราะห์และแนะนำ</button>
       <div class="output" id="result"></div>
     </section>
   </main>
@@ -108,37 +107,29 @@
       const labor = +document.getElementById('labor').value;
       const fixed = +document.getElementById('fixed').value;
       const volume = +document.getElementById('volume').value;
-      const profit = +document.getElementById('profit').value;
-      const target = document.getElementById('target').value;
-      const situation = document.getElementById('situation').value;
+      const goalProfit = +document.getElementById('goalprofit').value;
+      const issue = document.getElementById('issue').value;
 
-      const cost = ((pork * weight / 1000) + (stick / 100) + spice + (labor / volume) + (fixed / volume));
-      const price = cost * (1 + profit / 100);
+      const porkCost = (pork * weight) / 1000;
+      const stickCost = stick / 100;
+      const laborCost = labor / volume;
+      const fixedCost = fixed / volume;
+      const totalCost = porkCost + stickCost + spice + laborCost + fixedCost;
+      const priceNeeded = (totalCost * volume + goalProfit) / volume;
 
-      const stp = [];
-      if (target === 'นักเรียน') stp.push('📍 STP: กำหนด Positioning เป็น “คุ้มค่า” สำหรับกลุ่มที่มีงบจำกัด');
-      if (target === 'คนทำงาน') stp.push('📍 STP: เน้นความสะดวก รวดเร็ว เหมาะกับช่วงพักเที่ยงหรือหลังเลิกงาน');
-      if (target === 'นักท่องเที่ยว') stp.push('📍 STP: สร้างจุดขายจากความเป็นเอกลักษณ์ของแบรนด์หมูปิ้งท้องถิ่น');
+      let advice = [];
 
-      const ps = [];
-      ps.push(`💰 Price: ตั้งราคาขายที่ <b>${price.toFixed(2)}</b> บาท โดยคงกำไรตามเป้า (${profit}%)`);
-      ps.push('📦 Product: ใช้วัตถุดิบคุณภาพ/ปรุงรสเฉพาะตัว เพื่อสร้างความต่าง');
-      ps.push('🗺️ Place: ขายใกล้จุดรวมคน เช่น หน้าโรงเรียน ป้ายรถเมล์ ตลาดนัด');
-      ps.push('📣 Promotion: แจกคูปองสะสมแต้ม หรือจัด Flash Deal 5 โมงเย็น');
-
-      const extra = [];
-      if (situation === 'ฝนตก') extra.push('🌧️ กลยุทธ์พิเศษ: เสนอส่งฟรีช่วงฝนตก หรือมีเต็นท์กันฝนหน้าร้าน');
-      if (situation === 'ต้นทุนสูง') extra.push('📉 กลยุทธ์ลดต้นทุน: ปรับ portion ให้เล็กลงแต่คงรสชาติ');
-      if (situation === 'ยอดขายต่ำ') extra.push('📊 กระตุ้นยอด: ทำโปรโมชั่น “ซื้อ 4 แถม 1” หรือจัดกิจกรรมในเพจ');
-      if (situation === 'คู่แข่งเยอะ') extra.push('🏁 แข่งขัน: ใช้กลยุทธ์ความต่าง เช่น รูปทรงไม้, กล่องพรีเมียม หรือรสชาติใหม่');
+      if (issue === 'ขายไม่ดี') advice.push('ลองจัดโปร “ซื้อ 4 แถม 1” หรือขายคู่กับน้ำสมุนไพร');
+      if (issue === 'ต้นทุนแพง') advice.push('ลองลดขนาดไม้ลงเล็กน้อย แต่คงรสชาติไว้ให้ดี');
+      if (issue === 'ฝนตก') advice.push('หาที่ตั้งร้านที่มีหลังคา หรือขายผ่านไลน์กลุ่มของชุมชน');
+      if (issue === 'ลูกค้าน้อย') advice.push('อาจเปลี่ยนเวลาขาย เช่น ขายรอบเช้าใกล้โรงเรียนหรือศูนย์ชุมชน');
 
       document.getElementById('result').innerHTML = `
-        <h3>💡 วิเคราะห์ต้นทุน</h3>
-        ✅ ต้นทุนต่อไม้: <b>${cost.toFixed(2)}</b> บาท<br>
-        ✅ ราคาขายที่แนะนำ: <b>${price.toFixed(2)}</b> บาท<br>
-        <h3>🎯 กลยุทธ์ STP</h3><ul><li>${stp.join('</li><li>')}</li></ul>
-        <h3>📊 กลยุทธ์ 4Ps</h3><ul><li>${ps.join('</li><li>')}</li></ul>
-        <h3>📌 กลยุทธ์เฉพาะสถานการณ์</h3><ul><li>${extra.join('</li><li>')}</li></ul>
+        <h3>📊 สรุปเบื้องต้น</h3>
+        🔹 ต้นทุนต่อไม้: <b>${totalCost.toFixed(2)}</b> บาท<br>
+        💰 เพื่อให้มีกำไรวันละ ${goalProfit} บาท ควรตั้งราคาขายต่อไม้ที่: <b>${priceNeeded.toFixed(2)}</b> บาท
+        <h3>🤖 คำแนะนำจากผู้ช่วย</h3>
+        <ul><li>${advice.length ? advice.join('</li><li>') : 'วันนี้ไม่มีปัญหาเพิ่มเติม ระบบขอเป็นกำลังใจให้!'}</li></ul>
       `;
     }
   </script>

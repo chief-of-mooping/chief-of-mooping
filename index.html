@@ -3,172 +3,190 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</title>
+  <title>AI ที่ปรึกษาราคาหมูปิ้ง & กลยุทธ์การตลาด</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      color: #e0f7fa;
+      background: linear-gradient(to bottom, #0c1445, #1b6ca8, #a4ebf3);
+      color: #f0fdf4;
+      padding-bottom: 4rem;
     }
-
     header {
+      background: linear-gradient(to right, #21d4fd, #b721ff);
+      padding: 2rem;
       text-align: center;
-      padding: 2rem;
-      background: linear-gradient(to right, #2BC0E4, #EAECC6);
-      color: #0a0a0a;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      color: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
     }
-
-    header h1 {
-      font-size: 2.5rem;
+    h1 {
       margin: 0;
-      color: #004d40;
+      font-size: 2.5rem;
     }
-
     main {
-      padding: 2rem;
       max-width: 1000px;
-      margin: auto;
-    }
-
-    .section {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      margin: 2rem auto;
       padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 1rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
-
     h2 {
-      color: #a7ffeb;
+      color: #90f7ec;
     }
-
     label {
       display: block;
       margin-top: 1rem;
     }
-
     input, select {
       width: 100%;
       padding: 0.5rem;
-      margin-top: 0.3rem;
       border-radius: 0.5rem;
       border: none;
       background: #e0f2f1;
       color: #004d40;
     }
-
     button {
-      background: linear-gradient(to right, #43cea2, #185a9d);
-      border: none;
-      color: white;
-      padding: 0.7rem 1.5rem;
-      border-radius: 1rem;
-      font-weight: bold;
-      cursor: pointer;
       margin-top: 1rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.7rem;
+      font-size: 1rem;
+      cursor: pointer;
     }
-
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #64ffda;
-    }
-
-    .output {
+    .output, .strategy {
       margin-top: 2rem;
-      background: rgba(255, 255, 255, 0.2);
       padding: 1rem;
-      border-radius: 0.5rem;
-      color: #e0f7fa;
-    }
-
-    .chat {
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-      background: rgba(255, 255, 255, 0.1);
       border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .chat-log {
+      background: rgba(0, 0, 0, 0.2);
       padding: 1rem;
+      border-radius: 1rem;
+      height: 200px;
+      overflow-y: auto;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🌿 ที่ปรึกษาตั้งราคาหมูปิ้ง 🌿</h1>
+    <h1>🧠 ระบบที่ปรึกษาราคาหมูปิ้ง & กลยุทธ์การตลาดอัจฉริยะ</h1>
   </header>
-
   <main>
-    <section class="section">
-      <h2>🌱 ข้อมูลต้นทุนพื้นฐาน</h2>
-      <label>ราคาเนื้อหมู (บาท/กก.) <input type="number" id="pork"></label>
-      <label>น้ำหนักหมูต่อไม้ (กรัม) <input type="number" id="weight"></label>
-      <label>ค่าไม้เสียบ (บาท/100 ไม้) <input type="number" id="stick"></label>
-      <label>เครื่องปรุง (บาท/ไม้) <input type="number" id="spice"></label>
-      <label>ค่าแรง (บาท/ชม.) <input type="number" id="labor"></label>
-      <label>ค่าใช้จ่ายคงที่/วัน <input type="number" id="fixed"></label>
-      <label>จำนวนไม้ขายต่อวัน <input type="number" id="volume"></label>
-      <label>กำไรที่ต้องการ (%) <input type="number" id="profit"></label>
-      <button onclick="calculate()">🔮 คำนวณราคาขาย</button>
-      <div class="output" id="result"></div>
-    </section>
+    <h2>🧮 กรอกข้อมูลต้นทุน</h2>
+    <label>ราคาเนื้อหมู (บาท/กก.) <input type="number" id="pork"></label>
+    <label>น้ำหนักหมูต่อไม้ (กรัม) <input type="number" id="weight"></label>
+    <label>ค่าไม้ (บาท/100 ไม้) <input type="number" id="stick"></label>
+    <label>เครื่องปรุง (บาท/ไม้) <input type="number" id="spice"></label>
+    <label>ค่าแรงต่อวัน (บาท) <input type="number" id="labor"></label>
+    <label>ค่าใช้จ่ายคงที่/วัน (บาท) <input type="number" id="fixed"></label>
+    <label>จำนวนไม้ที่ขายต่อวัน <input type="number" id="volume"></label>
+    <label>กำไรที่ต้องการ (%) <input type="number" id="profit"></label>
+    <label>สภาพอากาศ <select id="weather">
+      <option value="sunny">แดดจัด</option>
+      <option value="rainy">ฝนตก</option>
+      <option value="cool">หนาว</option>
+    </select></label>
+    <label>เศรษฐกิจ <select id="economy">
+      <option value="good">ดี</option>
+      <option value="normal">ปกติ</option>
+      <option value="poor">แย่</option>
+    </select></label>
+    <label>ฤดูกาล <select id="season">
+      <option value="hot">ร้อน</option>
+      <option value="rain">ฝน</option>
+      <option value="cool">หนาว</option>
+    </select></label>
+    <label>การเมือง <select id="politic">
+      <option value="stable">มั่นคง</option>
+      <option value="unstable">ไม่แน่นอน</option>
+      <option value="crisis">วิกฤติ</option>
+    </select></label>
+    <button onclick="calculatePrice()">✅ คำนวณราคาขาย + วิเคราะห์กลยุทธ์</button>
+    <div class="output" id="result"></div>
+    <div class="strategy" id="strategy"></div>
 
-    <section class="section">
-      <h2>💬 ถามคำถามกับหมูปิ้งเทพเจ้า</h2>
-      <div class="chat" id="chatLog">
-        <div>🤖: สวัสดี! อยากรู้ราคาขายหรือกลยุทธ์อะไรไหม?</div>
-      </div>
-      <input type="text" id="chatInput" placeholder="ถามสิ เช่น 'ถ้าฝนตกควรตั้งราคายังไง?'">
-      <button onclick="sendMessage()">💡 ถามเลย</button>
-    </section>
+    <h2>💬 ถามที่ปรึกษา</h2>
+    <div class="chat-log" id="chatLog">
+      <div>🤖: สวัสดี! ถามฉันได้เลยเกี่ยวกับราคาหรือกลยุทธ์นะ</div>
+    </div>
+    <input type="text" id="chatInput" placeholder="พิมพ์คำถามที่นี่...">
+    <button onclick="sendChat()">💬 ส่งคำถาม</button>
   </main>
 
   <script>
-    function calculate() {
-      const pork = parseFloat(document.getElementById('pork').value);
-      const weight = parseFloat(document.getElementById('weight').value);
-      const stick = parseFloat(document.getElementById('stick').value);
-      const spice = parseFloat(document.getElementById('spice').value);
-      const labor = parseFloat(document.getElementById('labor').value);
-      const fixed = parseFloat(document.getElementById('fixed').value);
-      const volume = parseFloat(document.getElementById('volume').value);
-      const profit = parseFloat(document.getElementById('profit').value);
+    function calculatePrice() {
+      const pork = +document.getElementById('pork').value;
+      const weight = +document.getElementById('weight').value;
+      const stick = +document.getElementById('stick').value;
+      const spice = +document.getElementById('spice').value;
+      const labor = +document.getElementById('labor').value;
+      const fixed = +document.getElementById('fixed').value;
+      const volume = +document.getElementById('volume').value;
+      const profit = +document.getElementById('profit').value;
+      const weather = document.getElementById('weather').value;
+      const economy = document.getElementById('economy').value;
+      const season = document.getElementById('season').value;
+      const politic = document.getElementById('politic').value;
 
-      const porkCost = (pork * weight) / 1000;
+      const meatCost = (pork * weight) / 1000;
       const stickCost = stick / 100;
-      const laborCost = (labor * 8) / volume;
+      const laborCost = labor / volume;
       const fixedCost = fixed / volume;
-      const total = porkCost + stickCost + spice + laborCost + fixedCost;
-      const price = total * (1 + profit / 100);
+      const total = meatCost + stickCost + spice + laborCost + fixedCost;
 
-      document.getElementById('result').innerHTML = `🌟 ต้นทุนต่อไม้: <strong>${total.toFixed(2)}</strong> บาท<br>💰 ราคาขายแนะนำ: <strong>${price.toFixed(2)}</strong> บาท`;
+      let demand = 1.0;
+      if (weather === 'cool') demand += 0.1;
+      if (weather === 'rainy') demand -= 0.1;
+      if (economy === 'good') demand += 0.1;
+      if (economy === 'poor') demand -= 0.1;
+      if (politic === 'crisis') demand -= 0.05;
+
+      const price = total * (1 + profit / 100) * demand;
+
+      document.getElementById('result').innerHTML = `
+        🔍 ต้นทุนต่อไม้: <strong>${total.toFixed(2)}</strong> บาท<br>
+        💰 ราคาขายที่แนะนำ: <strong>${price.toFixed(2)}</strong> บาท
+      `;
+
+      const suggestions = [];
+      if (weather === 'rainy') suggestions.push('ฝนตก: ทำโปรส่งฟรีหรือขายคู่กับน้ำร้อน');
+      if (economy === 'poor') suggestions.push('เศรษฐกิจแย่: ใช้กลยุทธ์ penetration pricing ลดราคาเพื่อดึงลูกค้า');
+      if (season === 'cool') suggestions.push('ฤดูหนาว: ทำโปรโมชั่นชุดร้อนแรง เช่น "หมูปิ้งร้อนๆ + น้ำซุปฟรี"');
+      if (politic === 'unstable') suggestions.push('การเมืองไม่แน่นอน: โฟกัสการขายให้ลูกค้าประจำ, ไม่เสี่ยงเพิ่มต้นทุน');
+
+      document.getElementById('strategy').innerHTML = `
+        🎯 กลยุทธ์แนะนำ:<ul>${suggestions.map(s => `<li>${s}</li>`).join('')}</ul>
+      `;
     }
 
     const chatPlugins = [
       (msg) => {
-        if (msg.includes('ฝนตก')) return '🌧️ ฝนตก? ลองทำโปรโมชันเดลิเวอรี่ หรือขายไม้เล็กกำไรบาง ๆ ดึงลูกค้าไว้ก่อน!';
-        if (msg.includes('ร้อน')) return '☀️ อากาศร้อน? หมูปิ้งควรเสิร์ฟกับน้ำเย็น ๆ หรือทำโปรแถมเครื่องดื่ม!';
-        if (msg.includes('ตั้งราคา')) return '💸 กรอกต้นทุนแล้วใช้ระบบคำนวณเลยจ้า!';
+        if (msg.includes('ฤดู')) return '🌤️ ใช้โปรโมชั่นตามฤดูกาล เช่น ฤดูร้อนขายน้ำควบคู่!';
+        if (msg.includes('กำไร')) return '📈 ตั้งเป้ากำไรตามต้นทุน + ความต้องการลูกค้า จะดีที่สุด';
+        if (msg.includes('ฝน')) return '🌧️ ลองเพิ่มร่ม หรือโปรเดลิเวอรี่ฟรีช่วงฝนตก';
         return null;
       }
     ];
 
-    function sendMessage() {
+    function sendChat() {
       const input = document.getElementById('chatInput');
       const msg = input.value.trim();
-      const log = document.getElementById('chatLog');
       if (!msg) return;
 
-      log.innerHTML += `<div>🧑‍🍳: ${msg}</div>`;
+      const log = document.getElementById('chatLog');
+      log.innerHTML += `<div>🧑: ${msg}</div>`;
       input.value = '';
 
       setTimeout(() => {
-        let reply = '🤔 ขอโทษนะ ฉันยังไม่เข้าใจคำถามนี้';
-        for (const plugin of chatPlugins) {
-          const res = plugin(msg);
+        let reply = '🤖: ขอโทษ ฉันยังไม่เข้าใจคำถามนี้';
+        for (const fn of chatPlugins) {
+          const res = fn(msg);
           if (res) {
             reply = '🤖: ' + res;
             break;
@@ -176,7 +194,7 @@
         }
         log.innerHTML += `<div>${reply}</div>`;
         log.scrollTop = log.scrollHeight;
-      }, 800);
+      }, 1000);
     }
   </script>
 </body>

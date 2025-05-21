@@ -1,160 +1,1295 @@
-<!DOCTYPE html>
+<script>
+        // =====================
+        // ฟังก์ชันแสดงวันที่ปัจจุบันในรูปแบบไทย
+        // =====================
+        function setThaiDate() {
+            const now = new Date();
+            const thaiDay = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            const thaiMonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+            
+            const day = thaiDay[now.getDay()];
+            const date = now.getDate();
+            const month = thaiMonth[now.getMonth()];
+            const year = now.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
+            
+            document.getElementById('current-date').textContent = `วัน${day}ที่ ${date} ${month} ${year}`;
+        }
+        
+        // =====================
+        // ระบบแท็บ
+        // =====================
+        function setupTabs() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // ลบคลาส active จากทุกแท็บ
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // เพิ่มคลาส active ให้แท็บที่คลิก
+                    this.classList.add('active');
+                    
+                    // แสดงเนื้อหาที่ตรงกับแท็บ
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                });
+            });
+        }
+        
+        // =====================
+        // ระบบเลือกออปชั่น
+        // =====================
+        function setupOptionButtons() {
+            document.querySelectorAll('.option-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // หา option-group ที่เป็นพาเรนต์
+                    const parent = this.closest('.option-group');
+                    
+                    // ลบคลาส selected จากทุกปุ่มในกลุ่มเดียวกัน
+                    parent.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+                    
+                    // เพิ่มคลาส selected ให้ปุ่มที่คลิก
+                    this.classList.add('selected');
+                });
+            });
+        }
+        
+        // =====================
+        // ระบบจัดการข้อมูลผู้ใช้ (ไม่ใช้ localStorage)
+        // =====================
+        const UserDataManager = {
+            userData: {
+                profile: {
+                    businessName: '',
+                    location: '',
+                    description: ''
+                },
+                preferences: {
+                    weatherAlert: true,
+                    priceAlert: true,
+                    eventAlert: true
+                },
+                apiSettings: {
+                    provider: 'openai',
+                    apiKey: ''
+                }
+            },
+            
+            saveUserData: function() {
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                return true;
+            },
+            
+            loadUserData: function() {
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+                return false;
+            },
+            
+            updateBusinessInfo: function(name, location, description) {
+                this.userData.profile.businessName = name;
+                this.userData.profile.location = location;
+                this.userData.profile.description = description;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            updateAlertSettings: function(weatherAlert, priceAlert, eventAlert) {
+                this.userData.preferences.weatherAlert = weatherAlert;
+                this.userData.preferences.priceAlert = priceAlert;
+                this.userData.preferences.eventAlert = eventAlert;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            updateApiSettings: function(provider, apiKey) {
+                this.userData.apiSettings.provider = provider;
+                this.userData.apiSettings.apiKey = apiKey;
+                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
+            },
+            
+            hasApiKey: function() {
+                return !!this.userData.apiSettings.apiKey;
+            }
+        };
+        
+        // =====================
+        // AI Engine Service - จำลองการเชื่อมต่อกับ AI
+        // =====================
+        const AIEngine = {
+            mockResponses: {
+                priceRecommendation: [
+                    "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
+                    "เนื่องจากสภาพอากาศดี และที่ตั้งอยู่ใกล้สถานศึกษา แนะนำให้ตั้งราคาที่ 12 บาทต่อไม้ คุณสามารถทำกำไรได้ดีเพราะนักเรียนและนักศึกษาเป็นกลุ่มที่ชื่นชอบหมูปิ้ง",
+                    "ด้วยราคาหมูที่ค่อนข้างสูงในช่วงนี้ แนะนำให้ตั้งราคาที่ 15 บาทต่อไม้ แต่เพิ่มขนาดหรือคุณภาพเล็กน้อยเพื่อสร้างความคุ้มค่า",
+                    "ในช่วงเศรษฐกิจไม่ดี แต่คุณอยู่ในทำเลที่มีกำลังซื้อสูง แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ และทำโปรโมชั่น 'ซื้อ 10 แถม 1' เพื่อกระตุ้นยอดขาย"
+                ],
+                businessTips: [
+                    "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                    "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                    "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
+                    "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
+                    "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
+                ],
+                weatherStrategies: {
+                    sunny: [
+                        "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า",
+                        "มีน้ำดื่มเย็นๆ ไว้บริการฟรีหรือราคาถูก",
+                        "ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป"
+                    ],
+                    cloudy: [
+                        "เน้นการปิ้งให้มีกลิ่นหอมเพื่อดึงดูดลูกค้า",
+                        "อากาศไม่ร้อนเกินไป เหมาะแก่การปิ้งหมูจำนวนมากเพื่อรองรับลูกค้า",
+                        "เตรียมพร้อมในกรณีที่อาจมีฝนตก"
+                    ],
+                    rainy: [
+                        "เตรียมที่กันฝนสำหรับลูกค้า",
+                        "มีบริการส่งถึงรถหรือให้ถุงพลาสติกกันน้ำ",
+                        "ทำโปรโมชั่นพิเศษช่วงฝนตก เช่น ซื้อ 10 แถม 1",
+                        "ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า"
+                    ]
+                },
+                chatResponses: [
+                    "จากประสบการณ์ ในช่วงเย็นหลังเลิกงานประมาณ 17.00-19.00 น. มักจะขายดีที่สุด โดยเฉพาะบริเวณที่มีคนเดินผ่านไปมามาก เช่น ใกล้สถานีรถไฟฟ้า หรือจุดรอรถเมล์",
+                    "สูตรหมักที่นิยมคือ ซีอิ๊วขาว น้ำตาล กระเทียม พริกไทย และเครื่องปรุงลับเฉพาะของแต่ละร้าน บางร้านเพิ่มน้ำผึ้งเพื่อให้หวานและมันวาว",
+                    "คุณสามารถเพิ่มกำไรได้โดยขายเครื่องเคียง เช่น ข้าวเหนียว น้ำจิ้ม หรือเครื่องดื่ม ซึ่งมักมีอัตรากำไรสูงกว่าหมูปิ้งเอง",
+                    "ในช่วงฝนตก ลองทำโปรโมชั่นพิเศษ เช่น ซื้อ 10 แถม 1 หรือลดราคาเล็กน้อย และมีบริการส่งถึงรถ จะช่วยรักษายอดขาย",
+                    "ระวังเรื่องสุขอนามัย ควรสวมถุงมือ หน้ากาก และรักษาความสะอาดของอุปกรณ์ นอกจากจะดีต่อสุขภาพลูกค้าแล้ว ยังสร้างความเชื่อมั่นด้วย"
+                ]
+            },
+            
+            getRandomElement: function(array) {
+                return array[Math.floor(Math.random() * array.length)];
+            },
+            
+            getPriceRecommendation: async function(userData, marketData) {
+                // จำลองการวิเคราะห์ด้วย AI
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // คำนวณราคาแนะนำจากปัจจัยต่างๆ
+                        let basePrice = 10; // ราคาพื้นฐาน
+                        
+                        // ปรับตามราคาหมู
+                        const meatPricePerGram = userData.meatPrice / 1000; // บาทต่อกรัม
+                        const meatCostPerSkewer = meatPricePerGram * userData.meatPerSkewer;
+                        
+                        // ปรับตามต้นทุน
+                        const totalCost = meatCostPerSkewer + userData.additionalCost;
+                        
+                        // ปรับตามตำแหน่งขาย
+                        const locationFactor = {
+                            'market': 0,
+                            'street': 1,
+                            'community': 1,
+                            'school': 2,
+                            'office': 2
+                        };
+                        
+                        // ปรับตามสภาพอากาศ
+                        const weatherFactor = {
+                            'sunny': 0,
+                            'cloudy': -0.5,
+                            'rainy': -1
+                        };
+                        
+                        // ปรับตามเศรษฐกิจ
+                        const economyFactor = {
+                            'good': 1,
+                            'normal': 0,
+                            'bad': -1
+                        };
+                        
+                        // คำนวณราคาแนะนำ
+                        basePrice = totalCost * 2; // กำไร 100%
+                        basePrice += locationFactor[marketData.location] || 0;
+                        basePrice += weatherFactor[marketData.weather] || 0;
+                        basePrice += economyFactor[marketData.economy] || 0;
+                        
+                        // ปรับให้เป็นจำนวนเต็ม
+                        const recommendedPrice = Math.round(basePrice);
+                        
+                        // คำนวณประมาณการกำไร
+                        const salesVolume = {
+                            'low': 80,
+                            'medium': 200,
+                            'high': 350
+                        };
+                        const dailySales = salesVolume[marketData.salesVolume] || 200;
+                        const profitPerSkewer = recommendedPrice - totalCost;
+                        const estimatedProfit = Math.round(profitPerSkewer * dailySales);
+                        
+                        // ดึงคำแนะนำและเทคนิค
+                        const analysisText = this.getRandomElement(this.mockResponses.priceRecommendation);
+                        const tips = [];
+                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                        while (tips.length < 3) {
+                            const tip = this.getRandomElement(this.mockResponses.businessTips);
+                            if (!tips.includes(tip)) {
+                                tips.push(tip);
+                            }
+                        }
+                        
+                        // เพิ่มเทคนิคตามสภาพอากาศ
+                        const weatherTips = this.mockResponses.weatherStrategies[marketData.weather] || [];
+                        if (weatherTips.length > 0) {
+                            tips.push(this.getRandomElement(weatherTips));
+                        }
+                        
+                        resolve({
+                            recommendedPrice,
+                            estimatedProfit,
+                            analysisText,
+                            tips
+                        });
+                    }, 1500); // จำลองการประมวลผล 1.5 วินาที
+                });
+            },
+            
+            getChatResponse: async function(message) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // จำลองการตอบคำถามด้วย AI
+                        const response = this.getRandomElement(this.mockResponses.chatResponses);
+                        resolve(response);
+                    }, 1000);
+                });
+            },
+            
+            generateDailyRecommendation: async function(location) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        // จำลองสภาพอากาศ
+                        const weatherTypes = ['sunny', 'cloudy', 'rainy'];
+                        const weather = this.getRandomElement(weatherTypes);
+                        const weatherDesc = {
+                            'sunny': 'แดดออก',
+                            'cloudy': 'มีเมฆมาก',
+                            'rainy': 'ฝนตก'
+                        }[weather];
+                        
+                        // จำลองราคาตลาด
+                        const marketPrice = 100 + Math.floor(Math.random() * 50);
+                        
+                        // จำลองราคาแนะนำ
+                        const recommendedPrice = 10 + Math.floor(Math.random() * 5);
+                        
+                        // จำลองตำแหน่งที่แนะนำ
+                        const locations = ['ตลาด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
+                        const recommendedLocation = this.getRandomElement(locations);
+                        
+                        // จำลองเหตุผล
+                        const reasons = [
+                            'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
+                            'สภาพอากาศวันนี้และพฤติกรรมผู้บริโภค',
+                            'การแข่งขันในพื้นที่และต้นทุนการดำเนินงาน',
+                            'กำลังซื้อของผู้บริโภคในช่วงนี้'
+                        ];
+                        const reason = this.getRandomElement(reasons);
+                        
+                        // จำลองเทคนิคประจำวัน
+                        const dailyTips = [];
+                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                        while (dailyTips.length < 3) {
+                            const tip = this.getRandomElement(this.mockResponses.businessTips);
+                            if (!dailyTips.includes(tip)) {
+                                dailyTips.push(tip);
+                            }
+                        }
+                        
+                        // เพิ่มเทคนิคตามสภาพอากาศ
+                        const weatherTips = this.mockResponses.weatherStrategies[weather] || [];
+                        if (weatherTips.length > 0) {
+                            dailyTips.push(this.getRandomElement(weatherTips));
+                        }
+                        
+                        // จำลองประมาณการกำไร
+                        const estimatedProfit = 1500 + Math.floor(Math.random() * 1000);
+                        
+                        resolve({
+                            weather,
+                            weatherDesc,
+                            marketPrice,
+                            recommendedPrice,
+                            recommendedLocation,
+                            reason,
+                            dailyTips,
+                            estimatedProfit,
+                            humidity: 60 + Math.floor(Math.random() * 20)
+                        });
+                    }, 2000);
+                });
+            }
+        };<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ผู้ช่วยร้านหมูปิ้งอัจฉริยะ + การตลาดดิจิทัล</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Prompt', sans-serif;
-      background: #0c1c26;
-      color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      background: linear-gradient(to right, #ff8a00, #e52e71);
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: white;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      gap: 1rem;
-      padding: 1rem;
-      box-sizing: border-box;
-      overflow: hidden;
-    }
-    .column {
-      flex: 1;
-      background: rgba(255,255,255,0.05);
-      padding: 1.5rem;
-      border-radius: 1rem;
-      overflow-y: auto;
-      box-shadow: 0 0 15px rgba(255,255,255,0.05);
-    }
-    h2 {
-      color: #ffeb3b;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    label {
-      display: block;
-      margin-top: 0.8rem;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border-radius: 0.5rem;
-      border: none;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      background: linear-gradient(to right, #43e97b, #38f9d7);
-      color: #000;
-      font-weight: bold;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      width: 100%;
-    }
-    .output {
-      margin-top: 1rem;
-      background: rgba(255,255,255,0.08);
-      padding: 1rem;
-      border-radius: 1rem;
-      line-height: 1.6;
-    }
-    ul {
-      padding-left: 1.2rem;
-    }
-    @media screen and (max-width: 768px) {
-      main {
-        flex-direction: column;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pork Skewer Pricing Advisor AI</title>
+    <style>
+        :root {
+            --primary-color: #FF5722;
+            --secondary-color: #FF9800;
+            --accent-color: #FFEB3B;
+            --dark-color: #5D4037;
+            --light-color: #FFF8E1;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --info-color: #2196F3;
+            --warning-color: #FFC107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', 'Prompt', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 5px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMjAsMzAgQzIwLDY1IDgwLDY1IDgwLDMwIiBzdHJva2U9IiNGRkM3QTciIHN0cm9rZS13aWR0aD0iMi41IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjMwIiByPSI2IiBmaWxsPSIjRkZDN0E3Ii8+PC9zdmc+') repeat;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        h2 {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+        
+        .date-display {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #FFF;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            background-color: #FFF;
+            color: var(--dark-color);
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .option-button {
+            flex: 1;
+            min-width: 80px;
+            background-color: #FFF;
+            border: 2px solid #DDD;
+            border-radius: 8px;
+            padding: 12px 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .option-button.selected {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .option-button img, .option-button svg {
+            display: block;
+            width: 30px;
+            height: 30px;
+            margin: 0 auto 5px;
+        }
+        
+        .calculate-btn, .action-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculate-btn:hover, .action-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .calculate-btn:active, .action-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+        
+        .result-section {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .price-recommendation {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .profit-estimate {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .additional-tips {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: var(--dark-color);
+            text-align: left;
+        }
+        
+        .additional-tips h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .additional-tips ul {
+            padding-left: 20px;
+        }
+        
+        .additional-tips li {
+            margin-bottom: 8px;
+        }
+        
+        .strategy-section {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .strategy-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .strategy-section h3 svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        .strategy-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #DDD;
+        }
+        
+        .strategy-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .strategy-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .strategy-icon svg {
+            width: 30px;
+            height: 30px;
+            color: var(--primary-color);
+        }
+        
+        .strategy-content {
+            flex: 1;
+        }
+        
+        .strategy-content h4 {
+            margin-bottom: 5px;
+        }
+        
+        .situation-card {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .situation-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .situation-title svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .notification {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .notification.info {
+            background-color: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .notification.warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .notification.error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .notification.success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .notification svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .chat-ui {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+        }
+        
+        .chat-send-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            margin-left: auto;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 18px 18px 0 18px;
+        }
+        
+        .message.ai {
+            margin-right: auto;
+            background-color: #f1f1f1;
+            color: var(--dark-color);
+            padding: 10px 15px;
+            border-radius: 18px 18px 18px 0;
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .loader {
+            display: none;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .loader div {
+            width: 12px;
+            height: 12px;
+            margin: 0 4px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            animation: loader 1.4s infinite ease-in-out both;
+        }
+        
+        .loader div:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        
+        .loader div:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        
+        @keyframes loader {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .api-key-section {
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1rem;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .option-button {
+                font-size: 0.8rem;
+                padding: 8px 5px;
+            }
+            
+            .price-recommendation {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    🐷 ผู้ช่วยร้านหมูปิ้งอัจฉริยะ – คิดแทนทุกเรื่อง ตั้งแต่หมูยันกำไร + การตลาดออนไลน์
-  </header>
-  <main>
-    <div class="column">
-      <h2>📌 กรอกข้อมูลร้าน</h2>
-      <label>หมูราคากี่บาทต่อกิโล? <input type="number" id="pork"></label>
-      <label>ไม้ละกี่กรัม? <input type="number" id="weight"></label>
-      <label>ค่าไม้เสียบ (บาท/100 ไม้) <input type="number" id="stick"></label>
-      <label>เครื่องปรุงคิดไม้ละกี่บาท? <input type="number" id="spice"></label>
-      <label>ค่าแรงต่อวัน (บาท) <input type="number" id="labor"></label>
-      <label>ค่าใช้จ่ายอื่น ๆ ต่อวัน (บาท) <input type="number" id="fixed"></label>
-      <label>ตั้งเป้าขายวันละกี่ไม้? <input type="number" id="volume"></label>
-      <label>อยากมีกำไรต่อวันเท่าไหร่? (บาท) <input type="number" id="goalprofit"></label>
-      <label>วันนี้มีปัญหาอะไร? <select id="issue">
-        <option value="none">ไม่มี</option>
-        <option value="ขายไม่ดี">ขายไม่ดี</option>
-        <option value="ต้นทุนแพง">ต้นทุนแพง</option>
-        <option value="ฝนตก">ฝนตกบ่อย</option>
-        <option value="ลูกค้าน้อย">ลูกค้าน้อยลง</option>
-      </select></label>
-      <button onclick="analyze()">✨ วิเคราะห์และแนะนำ</button>
+    <header>
+        <div class="header-bg"></div>
+        <div class="header-content container">
+            <h1>Smart Pork Skewer Pricing Advisor AI</h1>
+            <h2>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</h2>
+            <div class="date-display" id="current-date">วันที่ ...</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="notification info" id="api-key-notification">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12" y2="16"></line>
+            </svg>
+            <div class="notification-content">
+                <p>คุณกำลังทดลองใช้งานในเวอร์ชันทดสอบ หากต้องการใช้งาน AI เต็มรูปแบบ โปรดตั้งค่า API Key ใน "การตั้งค่า"</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">แดชบอร์ด</div>
+            <div class="tab" data-tab="calculator">คำนวณราคา</div>
+            <div class="tab" data-tab="advisor">ที่ปรึกษา AI</div>
+            <div class="tab" data-tab="settings">การตั้งค่า</div>
+        </div>
+        
+        <!-- แดชบอร์ด -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-label">ราคาแนะนำวันนี้</div>
+                    <div class="stat-value" id="today-price">-- บาท</div>
+                    <div class="stat-label">ต่อไม้</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">ราคาหมูในตลาด</div>
+                    <div class="stat-value" id="market-price">-- บาท</div>
+                    <div class="stat-label">ต่อกิโลกรัม</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">สภาพอากาศ</div>
+                    <div class="stat-value" id="weather-status">--</div>
+                    <div class="stat-label">ความชื้น: <span id="humidity">--</span>%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">กำไรประมาณการ</div>
+                    <div class="stat-value" id="estimated-profit">-- บาท</div>
+                    <div class="stat-label">ต่อวัน</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">แนะนำประจำวัน</div>
+                <div id="daily-recommendation">
+                    <div class="loader" id="recommendation-loader">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div id="recommendation-content" class="hidden">
+                        <p>วันนี้สภาพอากาศ <span id="weather-desc">--</span> เหมาะกับการขายที่ <span id="location-rec">--</span></p>
+                        <p>แนะนำให้ตั้งราคาที่ <span id="price-rec">--</span> บาทต่อไม้</p>
+                        <p>เพราะ <span id="price-reason">--</span></p>
+                        
+                        <div class="additional-tips">
+                            <h4>เทคนิคพิเศษสำหรับวันนี้</h4>
+                            <ul id="daily-tips">
+                                <li>กำลังโหลด...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="action-btn" id="refresh-recommendation">รีเฟรชคำแนะนำ</button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">การแจ้งเตือน</div>
+                <div id="notifications-container">
+                    <!-- จะใส่การแจ้งเตือนทีหลัง -->
+                    <p class="empty-notification">ไม่มีการแจ้งเตือนในขณะนี้</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- คำนวณราคา -->
+        <div id="calculator-tab" class="tab-content">
+            <div class="card">
+                <div class="card-title">ข้อมูลต้นทุน</div>
+                <form id="calculator-form">
+                    <div class="form-group">
+                        <label for="meat-price">ราคาหมู (บาทต่อกิโลกรัม)</label>
+                        <input type="number" id="meat-price" min="50" value="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="meat-per-skewer">น้ำหนักหมูต่อไม้ (กรัม)</label>
+                        <input type="number" id="meat-per-skewer" min="10" max="50" value="25">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>ขนาดไม้หมูปิ้ง</label>
+                        <div class="option-group">
+                            <div class="option-button" data-value="small">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="8" y1="2" x2="8" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="8" cy="12" r="3"></circle>
+                                </svg>
+                                เล็ก
+                            </div>
+                            <div class="option-button selected" data-value="medium">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="2" x2="12" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                </svg>
+                                กลาง
+                            </div>
+                            <div class="option-button" data-value="large">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="16" y1="2" x2="16" y2="22" stroke-linecap="round"></line>
+                                    <circle cx="16" cy="12" r="5"></circle>
+                                </svg>
+                                ใหญ่
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additional-cost">ต้นทุนเพิ่มเติมต่อไม้ (ไม้, เครื่องปรุง, แรงงาน)</label>
+                        <input type="number" id="additional-cost" min="0" step="0.1" value="1">
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">ข้อมูลตลาด</div>
+                <form>
+                    <div class="form-group">
+                        <label for="location">ตำแหน่งขาย</label>
+                        <select id="location">
+                            <option value="market">ตลาด</option>
+                            <option value="street">ริมถนน</option>
+                            <option value="community">ชุมชน</option>
+                            <option value="school">สถานศึกษา</option>
+                            <option value="office">ออฟฟิศ</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sales-volume">จำนวนขายต่อวัน (ประมาณ)</label>
+                        <select id="sales-volume">
+                            <option value="low">น้อย (น้อยกว่า 100 ไม้)</option>
+                            <option value="medium" selected>ปานกลาง (100-300 ไม้)</option>
+                            <option value="high">มาก (มากกว่า 300 ไม้)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>สภาพอากาศ</label>
+                        <div class="option-group">
+                            <div class="option-button selected" data-value="sunny">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                                แดดออก
+                            </div>
+                            <div class="option-button" data-value="cloudy">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                                </svg>
+                                มีเมฆ
+                            </div>
+                            <div class="option-button" data-value="rainy">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                                    <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                                    <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                    <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                                    <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                                    <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                                </svg>
+                                ฝนตก
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>สภาพเศรษฐกิจ</label>
+                        <div class="option-group">
+                            <div class="option-button" data-value="good">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                ดี
+                            </div>
+                            <div class="option-button selected" data-value="normal">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <line x1="8" y1="15" x2="16" y2="15"></line>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                ปกติ
+                            </div>
+                            <div class="option-button" data-value="bad">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                                แย่
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                <button type="button" class="calculate-btn" id="calculate-btn">คำนวณราคา AI</button>
+            </div>
+            
+            <div class="result-section" id="result-section">
+                <h3>ราคาแนะนำจาก AI</h3>
+                <div class="price-recommendation" id="price-recommendation">-- บาท/ไม้</div>
+                <div class="profit-estimate" id="profit-estimate">ประมาณการกำไร: -- บาท/วัน</div>
+                <div class="additional-tips" id="additional-tips">
+                    <h4>วิเคราะห์และเทคนิคเพิ่มกำไร</h4>
+                    <p id="analysis-text">กำลังวิเคราะห์...</p>
+                    <ul id="tips-list">
+                        <li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ที่ปรึกษา AI -->
+        <div id="advisor-tab" class="tab-content">
+            <div class="chat-ui">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai">
+                        สวัสดีครับ ผมคือที่ปรึกษาหมูปิ้งอัจฉริยะ พร้อมให้คำแนะนำทั้งเรื่องราคา กลยุทธ์การขาย หรือการรับมือกับสถานการณ์ต่างๆ ลองถามได้เลยครับ
+                        <div class="message-time">เมื่อสักครู่</div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="ถามคำถามเกี่ยวกับธุรกิจหมูปิ้ง...">
+                    <button class="chat-send-btn" id="chat-send-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="strategy-section">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    คำแนะนำตามสถานการณ์
+                </h3>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                            <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                            <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                            <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                            <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>วันฝนตก</h4>
+                        <p>ทำที่กันฝนเล็กๆ ให้ลูกค้ายืนไม่เปียก หรือมีบริการส่งถึงรถ เตรียมถุงพลาสติกให้ลูกค้าใส่หมูปิ้งกลับบ้าน</p>
+                        <p>ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า หรือทำโปรโมชั่นพิเศษเช่น "ซื้อ 10 แถม 1 เฉพาะวันฝนตก"</p>
+                    </div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>เศรษฐกิจแย่</h4>
+                        <p>ลดขนาดไม้เล็กน้อยแต่คงราคาเดิม หรือเพิ่มโปรโมชั่น เช่น ซื้อ 5 ไม้แถม 1</p>
+                        <p>เน้นการตลาดโดยใช้คำว่า "อิ่มคุ้ม" หรือ "ประหยัด" และนำเสนอชุดราคาพิเศษ เช่น หมูปิ้ง + ข้าวเหนียว</p>
+                    </div>
+                </div>
+                
+                <div class="strategy-item">
+                    <div class="strategy-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                    <div class="strategy-content">
+                        <h4>อากาศร้อนจัด</h4>
+                        <p>เตรียมน้ำดื่มเย็นๆ ไว้บริการฟรี หรือขายราคาถูก ใช้ร่มบังแดดให้ลูกค้า</p>
+                        <p>ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป และพิจารณาเพิ่มเมนูน้ำแข็งไสหรือเครื่องดื่มเย็นๆ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">วิเคราะห์ตลาดและคู่แข่ง</div>
+                <div id="competitor-analysis">
+                    <p>ราคาเฉลี่ยของคู่แข่งในย่าน <span id="area-name">--</span>: <strong><span id="avg-competitor-price">--</span> บาท/ไม้</strong></p>
+                    <p>จุดเด่นที่สามารถสร้างความแตกต่างได้:</p>
+                    <ul id="differentiation-points">
+                        <li>คุณภาพเนื้อหมู - เลือกใช้หมูคุณภาพดี สด สะอาด</li>
+                        <li>สูตรหมักพิเศษ - สร้างรสชาติเฉพาะตัวที่ลูกค้าจดจำได้</li>
+                        <li>บริการประทับใจ - ยิ้มแย้ม สร้างความคุ้นเคยกับลูกค้า</li>
+                        <li>ความสะอาด - แสดงให้เห็นถึงความใส่ใจในความสะอาด</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- การตั้งค่า -->
+        <div id="settings-tab" class="tab-content">
+            <div class="card api-key-section">
+                <div class="card-title">ตั้งค่า API Key สำหรับ AI</div>
+                <div class="form-group">
+                    <label for="api-provider">ผู้ให้บริการ AI</label>
+                    <select id="api-provider">
+                        <option value="openai">OpenAI (GPT-4)</option>
+                        <option value="anthropic">Anthropic (Claude)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="api-key">API Key</label>
+                    <input type="password" id="api-key" placeholder="ใส่ API Key ของคุณ">
+                </div>
+                <button class="action-btn" id="save-api-key">บันทึก API Key</button>
+                <p class="api-note" style="margin-top:10px; font-size:0.9rem; color:#666;">
+                    หมายเหตุ: API Key จะถูกเก็บในเครื่องของคุณเท่านั้น ไม่ถูกส่งไปยังเซิร์ฟเวอร์อื่นๆ
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">ข้อมูลร้านค้า</div>
+                <div class="form-group">
+                    <label for="business-name">ชื่อร้าน</label>
+                    <input type="text" id="business-name" placeholder="ชื่อร้านของคุณ">
+                </div>
+                <div class="form-group">
+                    <label for="business-location">ที่ตั้งร้าน</label>
+                    <input type="text" id="business-location" placeholder="เช่น เชียงราย, กรุงเทพ">
+                </div>
+                <div class="form-group">
+                    <label for="business-description">รายละเอียดร้าน</label>
+                    <textarea id="business-description" rows="3" placeholder="เล่าเกี่ยวกับร้านของคุณ, จุดเด่น, ประสบการณ์"></textarea>
+                </div>
+                <button class="action-btn" id="save-business-info">บันทึกข้อมูลร้าน</button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">การแจ้งเตือน</div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="weather-alert" checked> แจ้งเตือนสภาพอากาศ
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="price-alert" checked> แจ้งเตือนการเปลี่ยนแปลงราคาวัตถุดิบ
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="event-alert" checked> แจ้งเตือนกิจกรรมและเทศกาล
+                    </label>
+                </div>
+                <button class="action-btn" id="save-alert-settings">บันทึกการตั้งค่าแจ้งเตือน</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Smart Pork Skewer Pricing Advisor AI v1.0</p>
+            <p>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ - พัฒนาโดยใช้ AI</p>
+        </div>
     </div>
-    <div class="column">
-      <h2>📊 ผลลัพธ์</h2>
-      <div class="output" id="result"></div>
-    </div>
-  </main>
-  <script>
-    function analyze() {
-      const pork = +document.getElementById('pork').value;
-      const weight = +document.getElementById('weight').value;
-      const stick = +document.getElementById('stick').value;
-      const spice = +document.getElementById('spice').value;
-      const labor = +document.getElementById('labor').value;
-      const fixed = +document.getElementById('fixed').value;
-      const volume = +document.getElementById('volume').value;
-      const goalProfit = +document.getElementById('goalprofit').value;
-      const issue = document.getElementById('issue').value;
-
-      const porkCost = (pork * weight) / 1000;
-      const stickCost = stick / 100;
-      const laborCost = labor / volume;
-      const fixedCost = fixed / volume;
-      const totalCost = porkCost + stickCost + spice + laborCost + fixedCost;
-      const priceNeeded = (totalCost * volume + goalProfit) / volume;
-
-      let advice = [];
-
-      if (issue === 'ขายไม่ดี') advice.push('🟡 ลองจัดโปร “ซื้อ 4 แถม 1” หรือขายคู่กับน้ำสมุนไพร');
-      if (issue === 'ต้นทุนแพง') advice.push('🟡 ลดขนาดไม้ลงเล็กน้อยแต่ยังคงรสชาติ');
-      if (issue === 'ฝนตก') advice.push('🟡 หาทำเลที่มีหลังคาหรือส่งเดลิเวอรี่ใกล้ ๆ ผ่าน LINE OA');
-      if (issue === 'ลูกค้าน้อย') advice.push('🟡 ลองเปลี่ยนช่วงเวลาขาย หาช่องใหม่ เช่น ใกล้ตลาดเช้า');
-
-      let digitalStrategy = [];
-      digitalStrategy.push('📱 สร้าง Facebook Page สำหรับร้านของคุณ');
-      digitalStrategy.push('📷 ถ่ายภาพอาหารจริงมุมใกล้ + ตอนย่าง + ตอนจัดจาน');
-      digitalStrategy.push('🎯 โพสต์โปรโมชันอย่างน้อยสัปดาห์ละ 3 ครั้ง');
-      digitalStrategy.push('📞 ตอบแชตลูกค้าให้ไว สร้างความไว้ใจ');
-      digitalStrategy.push('🔁 ใช้หลัก 5A: Aware → Appeal → Ask → Act → Advocate');
-
-      document.getElementById('result').innerHTML = `
-        <h3>💰 คำนวณต้นทุน</h3>
-        ▪ ต้นทุนต่อไม้: <b>${totalCost.toFixed(2)}</b> บาท<br>
-        ▪ ราคาขายที่ควรตั้ง: <b>${priceNeeded.toFixed(2)}</b> บาท เพื่อให้ได้กำไรวันละ ${goalProfit} บาท
-        <h3>🧠 ข้อเสนอแนะ</h3>
-        <ul><li>${advice.length ? advice.join('</li><li>') : 'วันนี้ไม่มีปัญหาเพิ่มเติม ระบบขอเป็นกำลังใจให้!'}</li></ul>
-        <h3>📢 กลยุทธ์การตลาดดิจิทัล</h3>
-        <ul><li>${digitalStrategy.join('</li><li>')}</li></ul>
-      `;
-    }
-  </script>
-</body>
-</html>

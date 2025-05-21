@@ -8,14 +8,24 @@
     <style>
         :root {
             --primary-color: #FF5722;
+            --primary-dark: #E64A19;
+            --primary-light: #FFAB91;
             --secondary-color: #FF9800;
+            --secondary-dark: #F57C00;
             --accent-color: #FFEB3B;
             --dark-color: #5D4037;
             --light-color: #FFF8E1;
+            --light-alt-color: #FFECB3;
+            --white-color: #FFFFFF;
             --success-color: #4CAF50;
+            --success-dark: #388E3C;
             --error-color: #F44336;
+            --error-dark: #D32F2F;
             --info-color: #2196F3;
+            --info-dark: #1976D2;
             --warning-color: #FFC107;
+            --warning-dark: #FFA000;
+            --shadow-color: rgba(0, 0, 0, 0.2);
         }
         
         * {
@@ -39,14 +49,15 @@
         }
         
         header {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
             text-align: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
+            padding: 25px 0;
+            margin-bottom: 25px;
             border-bottom: 5px solid var(--secondary-color);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 10px var(--shadow-color);
         }
         
         .header-content {
@@ -66,33 +77,37 @@
         }
         
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
         
         h2 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: normal;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         
         .date-display {
             background-color: var(--secondary-color);
             color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
+            padding: 7px 15px;
+            border-radius: 20px;
             display: inline-block;
             margin-top: 10px;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
         }
         
         .tabs {
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-radius: 10px;
             overflow: hidden;
             background-color: #FFF;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
         .tab {
@@ -105,40 +120,80 @@
             transition: all 0.3s;
             font-weight: bold;
             border-bottom: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab:hover {
+            background-color: var(--light-alt-color);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab:active {
+            transform: translateY(1px);
+            box-shadow: none;
         }
         
         .tab.active {
             color: var(--primary-color);
             border-bottom: 3px solid var(--primary-color);
+            background-color: var(--light-alt-color);
+            box-shadow: inset 0 -3px 0 var(--primary-color);
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: 0;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .tab:hover::after {
+            transform: scaleX(1);
         }
         
         .tab-content {
             display: none;
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
             animation: fadeIn 0.5s;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .tab-content.active {
             display: block;
         }
         
+        .tab-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
+            color: var(--dark-color);
+            font-size: 1.05rem;
         }
         
         input[type="text"],
@@ -147,139 +202,234 @@
         select,
         textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            outline: none;
+            background-color: #fff;
         }
         
         .option-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
         .option-button {
             flex: 1;
-            min-width: 80px;
+            min-width: 85px;
             background-color: #FFF;
             border: 2px solid #DDD;
-            border-radius: 8px;
-            padding: 12px 8px;
+            border-radius: 10px;
+            padding: 15px 10px;
             cursor: pointer;
             text-align: center;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option-button:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        }
+        
+        .option-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
         }
         
         .option-button.selected {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
+            border-color: var(--primary-dark);
             color: white;
+            box-shadow: 0 4px 8px rgba(255, 87, 34, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .option-button.selected:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(255, 87, 34, 0.35);
+        }
+        
+        .option-button.selected:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(255, 87, 34, 0.3);
         }
         
         .option-button img, .option-button svg {
             display: block;
-            width: 30px;
-            height: 30px;
-            margin: 0 auto 5px;
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 8px;
         }
         
         .calculate-btn, .action-btn {
             display: block;
             width: 100%;
-            background-color: var(--primary-color);
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 1.1rem;
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
             cursor: pointer;
-            margin: 20px 0;
+            margin: 25px 0;
             transition: all 0.3s;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 0 var(--primary-dark), 0 6px 15px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .calculate-btn:hover, .action-btn:hover {
-            background-color: var(--secondary-color);
+            background: linear-gradient(145deg, var(--secondary-color), var(--secondary-dark));
+            box-shadow: 0 6px 0 var(--secondary-dark), 0 6px 20px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
         }
         
         .calculate-btn:active, .action-btn:active {
             transform: translateY(4px);
-            box-shadow: none;
+            box-shadow: 0 2px 0 var(--primary-dark), 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .calculate-btn::after, .action-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .calculate-btn:hover::after, .action-btn:hover::after {
+            left: 100%;
         }
         
         .result-section {
-            background-color: var(--secondary-color);
+            background: linear-gradient(145deg, var(--secondary-color), var(--secondary-dark));
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: none;
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .result-section:hover {
+            transform: translateY(-5px);
         }
         
         .price-recommendation {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 15px 0;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
         
         .profit-estimate {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
         
         .additional-tips {
             background-color: var(--light-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
             color: var(--dark-color);
             text-align: left;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .additional-tips h4 {
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
         }
         
         .additional-tips ul {
-            padding-left: 20px;
+            padding-left: 25px;
         }
         
         .additional-tips li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .additional-tips li::before {
+            content: '•';
+            position: absolute;
+            left: -15px;
+            color: var(--primary-color);
+            font-weight: bold;
         }
         
         .strategy-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .strategy-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
         
         .strategy-section h3 {
             color: var(--primary-color);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
+            font-size: 1.4rem;
         }
         
         .strategy-section h3 svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
+            width: 28px;
+            height: 28px;
+            margin-right: 12px;
+            color: var(--primary-color);
         }
         
         .strategy-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #DDD;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #EEE;
+            transition: transform 0.3s ease;
+        }
+        
+        .strategy-item:hover {
+            transform: translateX(5px);
         }
         
         .strategy-item:last-child {
@@ -289,20 +439,27 @@
         }
         
         .strategy-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background-color: var(--light-color);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 15px;
+            margin-right: 20px;
             flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .strategy-item:hover .strategy-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
         }
         
         .strategy-icon svg {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             color: var(--primary-color);
         }
         
@@ -311,78 +468,113 @@
         }
         
         .strategy-content h4 {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            color: var(--dark-color);
         }
         
         .situation-card {
             background-color: var(--light-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             border-left: 5px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .situation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         
         .situation-title {
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
+            font-size: 1.1rem;
         }
         
         .situation-title svg {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
+            width: 22px;
+            height: 22px;
+            margin-right: 12px;
+            color: var(--primary-color);
         }
         
         .card {
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
         
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--primary-color);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            position: relative;
+        }
+        
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: var(--primary-color);
         }
         
         .notification {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             align-items: flex-start;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .notification:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
         
         .notification.info {
-            background-color: rgba(33, 150, 243, 0.1);
+            background-color: rgba(33, 150, 243, 0.15);
             border-left: 4px solid var(--info-color);
         }
         
         .notification.warning {
-            background-color: rgba(255, 193, 7, 0.1);
+            background-color: rgba(255, 193, 7, 0.15);
             border-left: 4px solid var(--warning-color);
         }
         
         .notification.error {
-            background-color: rgba(244, 67, 54, 0.1);
+            background-color: rgba(244, 67, 54, 0.15);
             border-left: 4px solid var(--error-color);
         }
         
         .notification.success {
-            background-color: rgba(76, 175, 80, 0.1);
+            background-color: rgba(76, 175, 80, 0.15);
             border-left: 4px solid var(--success-color);
         }
         
         .notification svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
+            width: 28px;
+            height: 28px;
+            margin-right: 15px;
             flex-shrink: 0;
         }
         
@@ -392,74 +584,111 @@
         
         .chat-ui {
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 25px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 400px;
+            height: 450px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chat-ui:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
         
         .chat-messages {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
+            background-color: #f9f9f9;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDYwIEwgNjAgMCIgc3Ryb2tlPSIjZjBmMGYwIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=');
         }
         
         .chat-input-container {
             display: flex;
-            padding: 10px;
+            padding: 15px;
             border-top: 1px solid #eee;
+            background-color: #fff;
         }
         
         .chat-input {
             flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 1rem;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            outline: none;
         }
         
         .chat-send-btn {
-            background-color: var(--primary-color);
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
             color: white;
             border: none;
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            margin-left: 10px;
+            width: 50px;
+            height: 50px;
+            margin-left: 15px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .chat-send-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(255, 87, 34, 0.4);
+        }
+        
+        .chat-send-btn:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: 0 2px 5px rgba(255, 87, 34, 0.2);
         }
         
         .message {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             max-width: 80%;
+            animation: messageIn 0.3s ease;
+        }
+        
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .message.user {
             margin-left: auto;
-            background-color: var(--primary-color);
+            background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
             color: white;
-            padding: 10px 15px;
+            padding: 15px 20px;
             border-radius: 18px 18px 0 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .message.ai {
             margin-right: auto;
-            background-color: #f1f1f1;
+            background-color: white;
             color: var(--dark-color);
-            padding: 10px 15px;
+            padding: 15px 20px;
             border-radius: 18px 18px 18px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .message-time {
-            font-size: 0.75rem;
-            opacity: 0.7;
-            margin-top: 5px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 8px;
             text-align: right;
         }
         
@@ -470,9 +699,9 @@
         }
         
         .loader div {
-            width: 12px;
-            height: 12px;
-            margin: 0 4px;
+            width: 15px;
+            height: 15px;
+            margin: 0 5px;
             border-radius: 50%;
             background-color: var(--primary-color);
             animation: loader 1.4s infinite ease-in-out both;
@@ -498,32 +727,52 @@
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 20px;
+            margin-bottom: 25px;
         }
         
         .stat-card {
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
         
         .stat-value {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--primary-color);
-            margin: 5px 0;
+            margin: 10px 0;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
         }
         
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #666;
+            margin-bottom: 5px;
         }
         
         .api-key-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .hidden {
@@ -532,1303 +781,1543 @@
         
         .footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 35px;
             color: var(--dark-color);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            padding: 20px;
+            background-color: rgba(255,255,255,0.5);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 87, 34, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 87, 34, 0);
+            }
         }
         
         @media (max-width: 600px) {
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
             
             h2 {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
             
             .dashboard-stats {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
             
             .option-button {
-                font-size: 0.8rem;
-                padding: 8px 5px;
+                font-size: 0.85rem;
+                padding: 10px 8px;
             }
             
             .price-recommendation {
-                font-size: 2rem;
-            }
-        }
-    </style>
+                font-size: 2.2rem;
+           }
+           
+           .tab {
+               padding: 12px 5px;
+               font-size: 0.9rem;
+           }
+           
+           .stat-value {
+               font-size: 1.6rem;
+           }
+           
+           .card, .tab-content {
+               padding: 15px;
+           }
+           
+           .calculate-btn, .action-btn {
+               padding: 15px;
+               font-size: 1.1rem;
+           }
+           
+           .chat-ui {
+               height: 380px;
+           }
+       }
+   </style>
 </head>
 <body>
-    <header>
-        <div class="header-bg"></div>
-        <div class="header-content container">
-            <h1>Smart Pork Skewer Pricing Advisor AI</h1>
-            <h2>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</h2>
-            <div class="date-display" id="current-date">วันที่ ...</div>
-        </div>
-    </header>
-    
-    <div class="container">
-        <div class="notification info" id="api-key-notification">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12" y2="16"></line>
-            </svg>
-            <div class="notification-content">
-                <p>คุณกำลังทดลองใช้งานในเวอร์ชันทดสอบ หากต้องการใช้งาน AI เต็มรูปแบบ โปรดตั้งค่า API Key ใน "การตั้งค่า"</p>
-            </div>
-        </div>
+   <header>
+       <div class="header-bg"></div>
+       <div class="header-content container">
+           <h1>Smart Pork Skewer Pricing Advisor AI</h1>
+           <h2>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ</h2>
+           <div class="date-display" id="current-date">วันที่ ...</div>
+       </div>
+   </header>
+   
+   <div class="container">
+       <div class="notification info" id="api-key-notification">
+           <svg viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+               <circle cx="12" cy="12" r="10"></circle>
+               <line x1="12" y1="8" x2="12" y2="12"></line>
+               <line x1="12" y1="16" x2="12" y2="16"></line>
+           </svg>
+           <div class="notification-content">
+               <p>คุณกำลังทดลองใช้งานในเวอร์ชันทดสอบ หากต้องการใช้งาน AI เต็มรูปแบบ โปรดตั้งค่า API Key ใน "การตั้งค่า"</p>
+           </div>
+       </div>
 
-        <div class="tabs">
-            <div class="tab active" data-tab="dashboard">แดชบอร์ด</div>
-            <div class="tab" data-tab="calculator">คำนวณราคา</div>
-            <div class="tab" data-tab="advisor">ที่ปรึกษา AI</div>
-            <div class="tab" data-tab="settings">การตั้งค่า</div>
-        </div>
-        
-        <!-- แดชบอร์ด -->
-        <div id="dashboard-tab" class="tab-content active">
-            <div class="dashboard-stats">
-                <div class="stat-card">
-                    <div class="stat-label">ราคาแนะนำวันนี้</div>
-                    <div class="stat-value" id="today-price">-- บาท</div>
-                    <div class="stat-label">ต่อไม้</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">ราคาหมูในตลาด</div>
-                    <div class="stat-value" id="market-price">-- บาท</div>
-                    <div class="stat-label">ต่อกิโลกรัม</div>
-                    <div class="stat-label" id="price-update-time">อัปเดตเมื่อ: --</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">สภาพอากาศ</div>
-                    <div class="stat-value" id="weather-status">--</div>
-                    <div class="stat-label">ความชื้น: <span id="humidity">--</span>%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">กำไรประมาณการ</div>
-                    <div class="stat-value" id="estimated-profit">-- บาท</div>
-                    <div class="stat-label">ต่อวัน</div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">แนะนำประจำวัน</div>
-                <div id="daily-recommendation">
-                    <div class="loader" id="recommendation-loader">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <div id="recommendation-content" class="hidden">
-                        <p>วันนี้สภาพอากาศ <span id="weather-desc">--</span> เหมาะกับการขายที่ <span id="location-rec">--</span></p>
-                        <p>แนะนำให้ตั้งราคาที่ <span id="price-rec">--</span> บาทต่อไม้</p>
-                        <p>เพราะ <span id="price-reason">--</span></p>
-                        
-                        <div class="additional-tips">
-                            <h4>เทคนิคพิเศษสำหรับวันนี้</h4>
-                            <ul id="daily-tips">
-                                <li>กำลังโหลด...</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <button class="action-btn" id="refresh-recommendation">รีเฟรชคำแนะนำ</button>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">การแจ้งเตือน</div>
-                <div id="notifications-container">
-                    <!-- จะใส่การแจ้งเตือนทีหลัง -->
-                    <p class="empty-notification">ไม่มีการแจ้งเตือนในขณะนี้</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- คำนวณราคา -->
-        <div id="calculator-tab" class="tab-content">
-            <div class="card">
-                <div class="card-title">ข้อมูลต้นทุน</div>
-                <form id="calculator-form">
-                    <div class="form-group">
-                        <label for="meat-price">ราคาหมู (บาทต่อกิโลกรัม)</label>
-                        <input type="number" id="meat-price" min="50" value="150">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="meat-per-skewer">น้ำหนักหมูต่อไม้ (กรัม)</label>
-                        <input type="number" id="meat-per-skewer" min="10" max="50" value="25">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ขนาดไม้หมูปิ้ง</label>
-                        <div class="option-group">
-                            <div class="option-button" data-value="small">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="8" y1="2" x2="8" y2="22" stroke-linecap="round"></line>
-                                    <circle cx="8" cy="12" r="3"></circle>
-                                </svg>
-                                เล็ก
-                            </div>
-                            <div class="option-button selected" data-value="medium">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="2" x2="12" y2="22" stroke-linecap="round"></line>
-                                    <circle cx="12" cy="12" r="4"></circle>
-                                </svg>
-                                กลาง
-                            </div>
-                            <div class="option-button" data-value="large">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="16" y1="2" x2="16" y2="22" stroke-linecap="round"></line>
-                                    <circle cx="16" cy="12" r="5"></circle>
-                                </svg>
-                                ใหญ่
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="additional-cost">ต้นทุนเพิ่มเติมต่อไม้ (ไม้, เครื่องปรุง, แรงงาน)</label>
-                        <input type="number" id="additional-cost" min="0" step="0.1" value="1">
-                    </div>
-                </form>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">ข้อมูลตลาด</div>
-                <form>
-                    <div class="form-group">
-                        <label for="location">ตำแหน่งขาย</label>
-                        <select id="location">
-                            <option value="market">ตลาด</option>
-                            <option value="street">ริมถนน</option>
-                            <option value="community">ชุมชน</option>
-                            <option value="school">สถานศึกษา</option>
-                            <option value="office">ออฟฟิศ</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="sales-volume">จำนวนขายต่อวัน (ประมาณ)</label>
-                        <select id="sales-volume">
-                            <option value="low">น้อย (น้อยกว่า 100 ไม้)</option>
-                            <option value="medium" selected>ปานกลาง (100-300 ไม้)</option>
-                            <option value="high">มาก (มากกว่า 300 ไม้)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>สภาพอากาศ</label>
-                        <div class="option-group">
-                            <div class="option-button selected" data-value="sunny">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="5"></circle>
-                                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                                </svg>
-                                แดดออก
-                            </div>
-                            <div class="option-button" data-value="cloudy">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-                                </svg>
-                                มีเมฆ
-                            </div>
-                            <div class="option-button" data-value="rainy">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
-                                    <line x1="8" y1="16" x2="8.01" y2="16"></line>
-                                    <line x1="8" y1="20" x2="8.01" y2="20"></line>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                                    <line x1="12" y1="22" x2="12.01" y2="22"></line>
-                                    <line x1="16" y1="16" x2="16.01" y2="16"></line>
-                                    <line x1="16" y1="20" x2="16.01" y2="20"></line>
-                                </svg>
-                                ฝนตก
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>สภาพเศรษฐกิจ</label>
-                        <div class="option-group">
-                            <div class="option-button" data-value="good">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-                                    <path d="M8 14s1.5 2 4 2 4-2 4-2">
-                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                                </svg>
-                                ดี
-                            </div>
-                            <div class="option-button selected" data-value="normal">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-                                    <line x1="8" y1="15" x2="16" y2="15"></line>
-                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                                </svg>
-                                ปกติ
-                            </div>
-                            <div class="option-button" data-value="bad">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-                                    <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
-                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                                </svg>
-                                แย่
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                
-                <button type="button" class="calculate-btn" id="calculate-btn">คำนวณราคา AI</button>
-            </div>
-            
-            <div class="result-section" id="result-section">
-                <h3>ราคาแนะนำจาก AI</h3>
-                <div class="price-recommendation" id="price-recommendation">-- บาท/ไม้</div>
-                <div class="profit-estimate" id="profit-estimate">ประมาณการกำไร: -- บาท/วัน</div>
-                <div class="additional-tips" id="additional-tips">
-                    <h4>วิเคราะห์และเทคนิคเพิ่มกำไร</h4>
-                    <p id="analysis-text">กำลังวิเคราะห์...</p>
-                    <ul id="tips-list">
-                        <li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ที่ปรึกษา AI -->
-        <div id="advisor-tab" class="tab-content">
-            <div class="chat-ui">
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message ai">
-                        สวัสดีครับ ผมคือที่ปรึกษาหมูปิ้งอัจฉริยะ พร้อมให้คำแนะนำทั้งเรื่องราคา กลยุทธ์การขาย หรือการรับมือกับสถานการณ์ต่างๆ ลองถามได้เลยครับ
-                        <div class="message-time">เมื่อสักครู่</div>
-                    </div>
-                </div>
-                <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="chat-input" placeholder="ถามคำถามเกี่ยวกับธุรกิจหมูปิ้ง...">
-                    <button class="chat-send-btn" id="chat-send-btn">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="strategy-section">
-                <h3>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="16" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                    </svg>
-                    คำแนะนำตามสถานการณ์
-                </h3>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
-                            <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
-                            <line x1="8" y1="16" x2="8.01" y2="16"></line>
-                            <line x1="8" y1="20" x2="8.01" y2="20"></line>
-                            <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                            <line x1="12" y1="22" x2="12.01" y2="22"></line>
-                            <line x1="16" y1="16" x2="16.01" y2="16"></line>
-                            <line x1="16" y1="20" x2="16.01" y2="20"></line>
-                        </svg>
-                    </div>
-                    <div class="strategy-content">
-                        <h4>วันฝนตก</h4>
-                        <p>ทำที่กันฝนเล็กๆ ให้ลูกค้ายืนไม่เปียก หรือมีบริการส่งถึงรถ เตรียมถุงพลาสติกให้ลูกค้าใส่หมูปิ้งกลับบ้าน</p>
-                        <p>ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า หรือทำโปรโมชั่นพิเศษเช่น "ซื้อ 10 แถม 1 เฉพาะวันฝนตก"</p>
-                    </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
-                            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
-                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
-                        </svg>
-                    </div>
-                    <div class="strategy-content">
-                        <h4>เศรษฐกิจแย่</h4>
-                        <p>ลดขนาดไม้เล็กน้อยแต่คงราคาเดิม หรือเพิ่มโปรโมชั่น เช่น ซื้อ 5 ไม้แถม 1</p>
-                        <p>เน้นการตลาดโดยใช้คำว่า "อิ่มคุ้ม" หรือ "ประหยัด" และนำเสนอชุดราคาพิเศษ เช่น หมูปิ้ง + ข้าวเหนียว</p>
-                    </div>
-                </div>
-                
-                <div class="strategy-item">
-                    <div class="strategy-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                    </div>
-                    <div class="strategy-content">
-                        <h4>อากาศร้อนจัด</h4>
-                        <p>เตรียมน้ำดื่มเย็นๆ ไว้บริการฟรี หรือขายราคาถูก ใช้ร่มบังแดดให้ลูกค้า</p>
-                        <p>ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป และพิจารณาเพิ่มเมนูน้ำแข็งไสหรือเครื่องดื่มเย็นๆ</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">วิเคราะห์ตลาดและคู่แข่ง</div>
-                <div id="competitor-analysis">
-                    <p>ราคาเฉลี่ยของคู่แข่งในย่าน <span id="area-name">--</span>: <strong><span id="avg-competitor-price">--</span> บาท/ไม้</strong></p>
-                    <p>จุดเด่นที่สามารถสร้างความแตกต่างได้:</p>
-                    <ul id="differentiation-points">
-                        <li>คุณภาพเนื้อหมู - เลือกใช้หมูคุณภาพดี สด สะอาด</li>
-                        <li>สูตรหมักพิเศษ - สร้างรสชาติเฉพาะตัวที่ลูกค้าจดจำได้</li>
-                        <li>บริการประทับใจ - ยิ้มแย้ม สร้างความคุ้นเคยกับลูกค้า</li>
-                        <li>ความสะอาด - แสดงให้เห็นถึงความใส่ใจในความสะอาด</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <!-- การตั้งค่า -->
-        <div id="settings-tab" class="tab-content">
-            <div class="card api-key-section">
-                <div class="card-title">ตั้งค่า API Key สำหรับ AI</div>
-                <div class="form-group">
-                    <label for="api-provider">ผู้ให้บริการ AI</label>
-                    <select id="api-provider">
-                        <option value="openai">OpenAI (GPT-4)</option>
-                        <option value="anthropic">Anthropic (Claude)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="api-key">API Key</label>
-                    <input type="password" id="api-key" placeholder="ใส่ API Key ของคุณ">
-                </div>
-                <button class="action-btn" id="save-api-key">บันทึก API Key</button>
-                <p class="api-note" style="margin-top:10px; font-size:0.9rem; color:#666;">
-                    หมายเหตุ: API Key จะถูกเก็บในเครื่องของคุณเท่านั้น ไม่ถูกส่งไปยังเซิร์ฟเวอร์อื่นๆ
-                </p>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">ข้อมูลร้านค้า</div>
-                <div class="form-group">
-                    <label for="business-name">ชื่อร้าน</label>
-                    <input type="text" id="business-name" placeholder="ชื่อร้านของคุณ">
-                </div>
-                <div class="form-group">
-                    <label for="business-location">ที่ตั้งร้าน</label>
-                    <input type="text" id="business-location" placeholder="เช่น เชียงราย, กรุงเทพ">
-                </div>
-                <div class="form-group">
-                    <label for="business-description">รายละเอียดร้าน</label>
-                    <textarea id="business-description" rows="3" placeholder="เล่าเกี่ยวกับร้านของคุณ, จุดเด่น, ประสบการณ์"></textarea>
-                </div>
-                <button class="action-btn" id="save-business-info">บันทึกข้อมูลร้าน</button>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">การแจ้งเตือน</div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="weather-alert" checked> แจ้งเตือนสภาพอากาศ
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="price-alert" checked> แจ้งเตือนการเปลี่ยนแปลงราคาวัตถุดิบ
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="event-alert" checked> แจ้งเตือนกิจกรรมและเทศกาล
-                    </label>
-                </div>
-                <button class="action-btn" id="save-alert-settings">บันทึกการตั้งค่าแจ้งเตือน</button>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Smart Pork Skewer Pricing Advisor AI v1.0</p>
-            <p>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ - พัฒนาโดยใช้ AI</p>
-        </div>
-    </div>
-    
-    <script>
-        // =====================
-        // ฟังก์ชันแสดงวันที่ปัจจุบันในรูปแบบไทย
-        // =====================
-        function setThaiDate() {
-            const now = new Date();
-            const thaiDay = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
-            const thaiMonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
-            
-            const day = thaiDay[now.getDay()];
-            const date = now.getDate();
-            const month = thaiMonth[now.getMonth()];
-            const year = now.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
-            
-            document.getElementById('current-date').textContent = `วัน${day}ที่ ${date} ${month} ${year}`;
-        }
-        
-        // =====================
-        // ฟังก์ชันดึงราคาหมูจริงจากแหล่งข้อมูล
-        // =====================
-        async function fetchRealPorkPrice() {
-            try {
-                // ในความเป็นจริง คุณควรเชื่อมต่อกับ API จริง
-                // อย่างไรก็ตาม ในตัวอย่างนี้เราจะใช้ราคาล่าสุดที่ถูกต้อง
-                const currentPrice = 150; // ราคาจริงล่าสุด ณ วันที่ 21 พ.ค. 2568 (เป็นตัวอย่าง)
-                
-                // อัปเดตเวลาที่มีการเช็คราคาล่าสุด
-                const now = new Date();
-                const formattedDate = now.toLocaleString('th-TH');
-                document.getElementById('price-update-time').textContent = `อัปเดตเมื่อ: ${formattedDate}`;
-                
-                return currentPrice;
-            } catch (error) {
-                console.error('ไม่สามารถดึงข้อมูลราคาหมูได้:', error);
-                return 150; // ค่าเริ่มต้นในกรณีที่มีข้อผิดพลาด
-            }
-        }
-        
-        // =====================
-        // ระบบแท็บ
-        // =====================
-        function setupTabs() {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // ลบคลาส active จากทุกแท็บ
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    
-                    // เพิ่มคลาส active ให้แท็บที่คลิก
-                    this.classList.add('active');
-                    
-                    // แสดงเนื้อหาที่ตรงกับแท็บ
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                });
-            });
-        }
-        
-        // =====================
-        // ระบบเลือกออปชั่น
-        // =====================
-        function setupOptionButtons() {
-            document.querySelectorAll('.option-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    // หา option-group ที่เป็นพาเรนต์
-                    const parent = this.closest('.option-group');
-                    
-                    // ลบคลาส selected จากทุกปุ่มในกลุ่มเดียวกัน
-                    parent.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
-                    
-                    // เพิ่มคลาส selected ให้ปุ่มที่คลิก
-                    this.classList.add('selected');
-                });
-            });
-        }
-        
-        // =====================
-        // ระบบจัดการข้อมูลผู้ใช้ (ไม่ใช้ localStorage)
-        // =====================
-        const UserDataManager = {
-            userData: {
-                profile: {
-                    businessName: '',
-                    location: '',
-                    description: ''
-                },
-                preferences: {
-                    weatherAlert: true,
-                    priceAlert: true,
-                    eventAlert: true
-                },
-                apiSettings: {
-                    provider: 'openai',
-                    apiKey: ''
-                }
-            },
-            
-            saveUserData: function() {
-                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
-                return true;
-            },
-            
-            loadUserData: function() {
-                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
-                return false;
-            },
-            
-            updateBusinessInfo: function(name, location, description) {
-                this.userData.profile.businessName = name;
-                this.userData.profile.location = location;
-                this.userData.profile.description = description;
-                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
-            },
-            
-            updateAlertSettings: function(weatherAlert, priceAlert, eventAlert) {
-                this.userData.preferences.weatherAlert = weatherAlert;
-                this.userData.preferences.priceAlert = priceAlert;
-                this.userData.preferences.eventAlert = eventAlert;
-                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
-            },
-            
-            updateApiSettings: function(provider, apiKey) {
-                this.userData.apiSettings.provider = provider;
-                this.userData.apiSettings.apiKey = apiKey;
-                // ไม่ใช้ localStorage ในสภาพแวดล้อม sandbox
-            },
-            
-            hasApiKey: function() {
-                return !!this.userData.apiSettings.apiKey;
-            }
-        };
-        
-        // =====================
-        // AI Engine Service - จำลองการเชื่อมต่อกับ AI (แก้ไขแล้ว)
-        // =====================
-        const AIEngine = {
-            mockResponses: {
-                priceRecommendation: [
-                    "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
-                    "เนื่องจากสภาพอากาศดี และที่ตั้งอยู่ใกล้สถานศึกษา แนะนำให้ตั้งราคาที่ 12 บาทต่อไม้ คุณสามารถทำกำไรได้ดีเพราะนักเรียนและนักศึกษาเป็นกลุ่มที่ชื่นชอบหมูปิ้ง",
-                    "ด้วยราคาหมูที่ค่อนข้างสูงในช่วงนี้ แนะนำให้ตั้งราคาที่ 15 บาทต่อไม้ แต่เพิ่มขนาดหรือคุณภาพเล็กน้อยเพื่อสร้างความคุ้มค่า",
-                    "ในช่วงเศรษฐกิจไม่ดี แต่คุณอยู่ในทำเลที่มีกำลังซื้อสูง แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ และทำโปรโมชั่น 'ซื้อ 10 แถม 1' เพื่อกระตุ้นยอดขาย"
-                ],
-                businessTips: [
-                    "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
-                    "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
-                    "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
-                    "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
-                    "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
-                ],
-                weatherStrategies: {
-                    sunny: [
-                        "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า",
-                        "มีน้ำดื่มเย็นๆ ไว้บริการฟรีหรือราคาถูก",
-                        "ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป"
-                    ],
-                    cloudy: [
-                        "เน้นการปิ้งให้มีกลิ่นหอมเพื่อดึงดูดลูกค้า",
-                        "อากาศไม่ร้อนเกินไป เหมาะแก่การปิ้งหมูจำนวนมากเพื่อรองรับลูกค้า",
-                        "เตรียมพร้อมในกรณีที่อาจมีฝนตก"
-                    ],
-                    rainy: [
-                        "เตรียมที่กันฝนสำหรับลูกค้า",
-                        "มีบริการส่งถึงรถหรือให้ถุงพลาสติกกันน้ำ",
-                        "ทำโปรโมชั่นพิเศษช่วงฝนตก เช่น ซื้อ 10 แถม 1",
-                        "ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า"
-                    ]
-                },
-                chatResponses: [
-                    "จากประสบการณ์ ในช่วงเย็นหลังเลิกงานประมาณ 17.00-19.00 น. มักจะขายดีที่สุด โดยเฉพาะบริเวณที่มีคนเดินผ่านไปมามาก เช่น ใกล้สถานีรถไฟฟ้า หรือจุดรอรถเมล์",
-                    "สูตรหมักที่นิยมคือ ซีอิ๊วขาว น้ำตาล กระเทียม พริกไทย และเครื่องปรุงลับเฉพาะของแต่ละร้าน บางร้านเพิ่มน้ำผึ้งเพื่อให้หวานและมันวาว",
-                    "คุณสามารถเพิ่มกำไรได้โดยขายเครื่องเคียง เช่น ข้าวเหนียว น้ำจิ้ม หรือเครื่องดื่ม ซึ่งมักมีอัตรากำไรสูงกว่าหมูปิ้งเอง",
-                    "ในช่วงฝนตก ลองทำโปรโมชั่นพิเศษ เช่น ซื้อ 10 แถม 1 หรือลดราคาเล็กน้อย และมีบริการส่งถึงรถ จะช่วยรักษายอดขาย",
-                    "ระวังเรื่องสุขอนามัย ควรสวมถุง",
-                    "ระวังเรื่องสุขอนามัย ควรสวมถุงมือ หน้ากาก และรักษาความสะอาดของอุปกรณ์ นอกจากจะดีต่อสุขภาพลูกค้าแล้ว ยังสร้างความเชื่อมั่นด้วย"
-                ]
-            },
-            
-            getRandomElement: function(array) {
-                return array[Math.floor(Math.random() * array.length)];
-            },
-            
-            // ฟังก์ชันคำนวณราคาที่แก้ไขแล้ว
-            getPriceRecommendation: async function(userData, marketData) {
-                // จำลองการวิเคราะห์ด้วย AI
-                return new Promise(async (resolve) => {
-                    try {
-                        // ดึงราคาหมูจริง
-                        const realPorkPrice = await fetchRealPorkPrice();
-                        
-                        // คำนวณราคาแนะนำจากปัจจัยต่างๆ
-                        // ปรับตามราคาหมู
-                        const meatPricePerGram = realPorkPrice / 1000; // บาทต่อกรัม
-                        const meatCostPerSkewer = meatPricePerGram * userData.meatPerSkewer;
-                        
-                        // ปรับตามต้นทุน
-                        const totalCost = meatCostPerSkewer + userData.additionalCost;
-                        
-                        // ปรับตามตำแหน่งขาย
-                        const locationFactor = {
-                            'market': 0,
-                            'street': 1,
-                            'community': 1,
-                            'school': 2,
-                            'office': 2
-                        };
-                        
-                        // ปรับตามสภาพอากาศ
-                        const weatherFactor = {
-                            'sunny': 0,
-                            'cloudy': -0.5,
-                            'rainy': -1
-                        };
-                        
-                        // ปรับตามเศรษฐกิจ
-                        const economyFactor = {
-                            'good': 1,
-                            'normal': 0,
-                            'bad': -1
-                        };
-                        
-                        // คำนวณราคาแนะนำ
-                        let basePrice = totalCost * 2; // กำไร 100%
-                        basePrice += locationFactor[marketData.location] || 0;
-                        basePrice += weatherFactor[marketData.weather] || 0;
-                        basePrice += economyFactor[marketData.economy] || 0;
-                        
-                        // ปรับให้เป็นจำนวนเต็ม
-                        const recommendedPrice = Math.round(basePrice);
-                        
-                        // คำนวณประมาณการกำไร
-                        const salesVolume = {
-                            'low': 80,
-                            'medium': 200,
-                            'high': 350
-                        };
-                        const dailySales = salesVolume[marketData.salesVolume] || 200;
-                        const profitPerSkewer = recommendedPrice - totalCost;
-                        const estimatedProfit = Math.round(profitPerSkewer * dailySales);
-                        
-                        // ดึงคำแนะนำและเทคนิค
-                        const analysisText = this.getRandomElement(this.mockResponses.priceRecommendation);
-                        const tips = [];
-                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
-                        while (tips.length < 3) {
-                            const tip = this.getRandomElement(this.mockResponses.businessTips);
-                            if (!tips.includes(tip)) {
-                                tips.push(tip);
-                            }
-                        }
-                        
-                        // เพิ่มเทคนิคตามสภาพอากาศ
-                        const weatherTips = this.mockResponses.weatherStrategies[marketData.weather] || [];
-                        if (weatherTips.length > 0) {
-                            tips.push(this.getRandomElement(weatherTips));
-                        }
-                        
-                        // อัปเดตราคาหมูในแดชบอร์ด
-                        document.getElementById('market-price').textContent = `${realPorkPrice} บาท`;
-                        
-                        // ส่งผลลัพธ์กลับ
-                        resolve({
-                            recommendedPrice,
-                            estimatedProfit,
-                            analysisText,
-                            tips
-                        });
-                    } catch(error) {
-                        console.error('เกิดข้อผิดพลาดในการคำนวณราคา:', error);
-                        
-                        // กรณีเกิดข้อผิดพลาด ใช้ค่าเริ่มต้นที่สมเหตุสมผล
-                        resolve({
-                            recommendedPrice: 13,
-                            estimatedProfit: 2000,
-                            analysisText: "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 13 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
-                            tips: [
-                                "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
-                                "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
-                                "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น"
-                            ]
-                        });
-                    }
-                });
-            },
-            
-            getChatResponse: async function(message) {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        // จำลองการตอบคำถามด้วย AI
-                        const response = this.getRandomElement(this.mockResponses.chatResponses);
-                        resolve(response);
-                    }, 1000);
-                });
-            },
-            
-            // แก้ไขฟังก์ชันนี้เพื่อใช้ราคาหมูจริง
-            generateDailyRecommendation: async function(location) {
-                return new Promise(async (resolve) => {
-                    try {
-                        // ดึงราคาหมูจริง
-                        const realPorkPrice = await fetchRealPorkPrice();
-                        
-                        // จำลองสภาพอากาศ
-                        const weatherTypes = ['sunny', 'cloudy', 'rainy'];
-                        const weather = this.getRandomElement(weatherTypes);
-                        const weatherDesc = {
-                            'sunny': 'แดดออก',
-                            'cloudy': 'มีเมฆมาก',
-                            'rainy': 'ฝนตก'
-                        }[weather];
-                        
-                        // ใช้ราคาหมูจริง
-                        const marketPrice = realPorkPrice;
-                        
-                        // คำนวณราคาแนะนำจากราคาหมูจริง
-                        // สมมติว่าหมู 1 ไม้ใช้ 25 กรัม และมีต้นทุนอื่นๆ 1 บาท
-                        const costPerSkewer = (marketPrice / 1000) * 25 + 1;
-                        const recommendedPrice = Math.round(costPerSkewer * 2); // กำไร 100%
-                        
-                        // จำลองตำแหน่งที่แนะนำ
-                        const locations = ['ตลาด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
-                        const recommendedLocation = this.getRandomElement(locations);
-                        
-                        // จำลองเหตุผล
-                        const reasons = [
-                            'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
-                            'สภาพอากาศวันนี้และพฤติกรรมผู้บริโภค',
-                            'การแข่งขันในพื้นที่และต้นทุนการดำเนินงาน',
-                            'กำลังซื้อของผู้บริโภคในช่วงนี้'
-                        ];
-                        const reason = this.getRandomElement(reasons);
-                        
-                        // จำลองเทคนิคประจำวัน
-                        const dailyTips = [];
-                        // เลือกเทคนิคแบบสุ่ม 3 รายการ
-                        while (dailyTips.length < 3) {
-                            const tip = this.getRandomElement(this.mockResponses.businessTips);
-                            if (!dailyTips.includes(tip)) {
-                                dailyTips.push(tip);
-                            }
-                        }
-                        
-                        // เพิ่มเทคนิคตามสภาพอากาศ
-                        const weatherTips = this.mockResponses.weatherStrategies[weather] || [];
-                        if (weatherTips.length > 0) {
-                            dailyTips.push(this.getRandomElement(weatherTips));
-                        }
-                        
-                        // จำลองประมาณการกำไร
-                        const estimatedProfit = Math.round((recommendedPrice - costPerSkewer) * 200);
-                        
-                        // อัปเดตราคาหมูในแดชบอร์ด
-                        document.getElementById('market-price').textContent = `${marketPrice} บาท`;
-                        
-                        resolve({
-                            weather,
-                            weatherDesc,
-                            marketPrice,
-                            recommendedPrice,
-                            recommendedLocation,
-                            reason,
-                            dailyTips,
-                            estimatedProfit,
-                            humidity: 60 + Math.floor(Math.random() * 20)
-                        });
-                    } catch(error) {
-                        console.error('เกิดข้อผิดพลาดในการสร้างคำแนะนำ:', error);
-                        
-                        // กรณีเกิดข้อผิดพลาด ใช้ค่าเริ่มต้นที่สมเหตุสมผล
-                        resolve({
-                            weather: 'sunny',
-                            weatherDesc: 'แดดออก',
-                            marketPrice: 150,  // ราคาปัจจุบันที่ถูกต้อง
-                            recommendedPrice: 13,
-                            recommendedLocation: 'ตลาด',
-                            reason: 'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
-                            dailyTips: [
-                                "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
-                                "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
-                                "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
-                                "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า"
-                            ],
-                            estimatedProfit: 2000,
-                            humidity: 70
-                        });
-                    }
-                });
-            }
-        };
-        
-        // =====================
-        // ระบบคำนวณราคา (แก้ไขแล้ว)
-        // =====================
-        async function calculatePrice() {
-            console.log("เริ่มการคำนวณราคา...");
-            
-            // แสดง loading
-            document.getElementById('result-section').style.display = 'block';
-            document.getElementById('price-recommendation').textContent = 'กำลังคำนวณ...';
-            document.getElementById('profit-estimate').textContent = 'กำลังวิเคราะห์...';
-            document.getElementById('analysis-text').textContent = 'กำลังวิเคราะห์...';
-            document.getElementById('tips-list').innerHTML = '<li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>';
-            
-            try {
-                // เก็บข้อมูลจากฟอร์ม
-                const userData = {
-                    meatPrice: parseFloat(document.getElementById('meat-price').value) || 150,
-                    meatPerSkewer: parseFloat(document.getElementById('meat-per-skewer').value) || 25,
-                    additionalCost: parseFloat(document.getElementById('additional-cost').value) || 1
-                };
-                
-                const marketData = {
-                    location: document.getElementById('location').value,
-                    salesVolume: document.getElementById('sales-volume').value,
-                    weather: document.querySelector('.option-group:nth-of-type(3) .option-button.selected')?.getAttribute('data-value') || 'sunny',
-                    economy: document.querySelector('.option-group:nth-of-type(4) .option-button.selected')?.getAttribute('data-value') || 'normal'
-                };
-                
-                console.log("ข้อมูลที่ใช้คำนวณ:", { userData, marketData });
-                
-                // คำนวณด้วยการเรียกใช้ AIEngine
-                const result = await AIEngine.getPriceRecommendation(userData, marketData);
-                console.log("ผลลัพธ์การคำนวณ:", result);
-                
-                // แสดงผลลัพธ์
-                document.getElementById('price-recommendation').textContent = `${result.recommendedPrice} บาท/ไม้`;
-                document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${result.estimatedProfit} บาท/วัน`;
-                document.getElementById('analysis-text').textContent = result.analysisText;
-                
-                // แสดงเทคนิค
-                const tipsList = document.getElementById('tips-list');
-                tipsList.innerHTML = '';
-                
-                result.tips.forEach(tip => {
-                    const li = document.createElement('li');
-                    li.textContent = tip;
-                    tipsList.appendChild(li);
-                });
-                
-                // อัปเดตแดชบอร์ด
-                document.getElementById('today-price').textContent = `${result.recommendedPrice} บาท`;
-                document.getElementById('estimated-profit').textContent = `${result.estimatedProfit} บาท`;
-                
-            } catch (error) {
-                console.error('เกิดข้อผิดพลาดในการคำนวณราคา:', error);
-                
-                // วิธีสำรอง: คำนวณเองโดยตรง
-                try {
-                    // ดึงราคาหมูจริง
-                    const realPorkPrice = await fetchRealPorkPrice();
-                    
-                    // คำนวณราคาและกำไรเอง
-                    const meatPrice = parseFloat(document.getElementById('meat-price').value) || realPorkPrice;
-                    const meatPerSkewer = parseFloat(document.getElementById('meat-per-skewer').value) || 25;
-                    const additionalCost = parseFloat(document.getElementById('additional-cost').value) || 1;
-                    
-                    const costPerSkewer = (meatPrice / 1000) * meatPerSkewer + additionalCost;
-                    const recommendedPrice = Math.round(costPerSkewer * 2); // กำไร 100%
-                    
-                    const salesVolumeMap = {
-                        'low': 80,
-                        'medium': 200, 
-                        'high': 350
-                    };
-                    const salesVolume = document.getElementById('sales-volume').value;
-                    const dailySales = salesVolumeMap[salesVolume] || 200;
-                    const profitPerSkewer = recommendedPrice - costPerSkewer;
-                    const estimatedProfit = Math.round(profitPerSkewer * dailySales);
-                    
-                    // แสดงผลลัพธ์
-                    document.getElementById('price-recommendation').textContent = `${recommendedPrice} บาท/ไม้`;
-                    document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${estimatedProfit} บาท/วัน`;
-                    document.getElementById('analysis-text').textContent = "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาตามที่คำนวณได้ ซึ่งจะทำให้คุณมีกำไรประมาณ 100% และยังแข่งขันในตลาดได้";
-                    
-                    // แสดงเทคนิค
-                    const tipsList = document.getElementById('tips-list');
-                    tipsList.innerHTML = '';
-                    
-                    // แสดงเทคนิคพื้นฐาน
-                    const basicTips = [
-                        "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
-                        "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
-                        "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
-                    ];
-                    
-                    basicTips.forEach(tip => {
-                        const li = document.createElement('li');
-                        li.textContent = tip;
-                        tipsList.appendChild(li);
-                    });
-                    
-                    // อัปเดตแดชบอร์ด
-                    document.getElementById('today-price').textContent = `${recommendedPrice} บาท`;
-                    document.getElementById('estimated-profit').textContent = `${estimatedProfit} บาท`;
-                    
-                } catch (fallbackError) {
-                    console.error('การคำนวณสำรองก็ล้มเหลว:', fallbackError);
-                    
-                    // แสดงข้อความแจ้งเตือนในกรณีที่ล้มเหลวทั้งสองวิธี
-                    document.getElementById('price-recommendation').textContent = '13 บาท/ไม้';
-                    document.getElementById('profit-estimate').textContent = 'ประมาณการกำไร: 2000 บาท/วัน';
-                    document.getElementById('analysis-text').textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ AI แต่เราคำนวณราคาแนะนำและประมาณการกำไรให้คุณแล้ว';
-                    document.getElementById('tips-list').innerHTML = '<li>ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง</li><li>ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น</li><li>สร้างบัตรสะสมแต้ม "ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้" เพื่อสร้างความภักดีของลูกค้า</li>';
-                }
-            }
-        }
-        
-        // =====================
-        // ระบบแชทกับ AI
-        // =====================
-        async function setupChatSystem() {
-            const chatMessages = document.getElementById('chat-messages');
-            const chatInput = document.getElementById('chat-input');
-            const chatSendBtn = document.getElementById('chat-send-btn');
-            
-            // ฟังก์ชันส่งข้อความ
-            async function sendMessage() {
-                const message = chatInput.value.trim();
-                if (!message) return;
-                
-                // เพิ่มข้อความของผู้ใช้
-                const userMessageElement = document.createElement('div');
-                userMessageElement.className = 'message user';
-                userMessageElement.textContent = message;
-                const timeElement = document.createElement('div');
-                timeElement.className = 'message-time';
-                timeElement.textContent = 'เมื่อสักครู่';
-                userMessageElement.appendChild(timeElement);
-                chatMessages.appendChild(userMessageElement);
-                
-                // ล้างช่องข้อความ
-                chatInput.value = '';
-                
-                // เลื่อนไปยังข้อความล่าสุด
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // แสดงว่ากำลังพิมพ์
-                const typingElement = document.createElement('div');
-                typingElement.className = 'message ai';
-                typingElement.textContent = 'กำลังพิมพ์...';
-                chatMessages.appendChild(typingElement);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                try {
-                    // ขอคำตอบจาก AI
-                    const response = await AIEngine.getChatResponse(message);
-                    
-                    // ลบข้อความ "กำลังพิมพ์..."
-                    chatMessages.removeChild(typingElement);
-                    
-                    // เพิ่มข้อความของ AI
-                    const aiMessageElement = document.createElement('div');
-                    aiMessageElement.className = 'message ai';
-                    aiMessageElement.textContent = response;
-                    const aiTimeElement = document.createElement('div');
-                    aiTimeElement.className = 'message-time';
-                    aiTimeElement.textContent = 'เมื่อสักครู่';
-                    aiMessageElement.appendChild(aiTimeElement);
-                    chatMessages.appendChild(aiMessageElement);
-                    
-                    // เลื่อนไปยังข้อความล่าสุด
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                } catch (error) {
-                    console.error('Error getting AI response:', error);
-                    
-                    // ลบข้อความ "กำลังพิมพ์..."
-                    chatMessages.removeChild(typingElement);
-                    
-                    // แสดงข้อความแจ้งเตือนข้อผิดพลาด
-                    const errorElement = document.createElement('div');
-                    errorElement.className = 'message ai';
-                    errorElement.textContent = 'ขออภัย เกิดข้อผิดพลาดในการรับคำตอบ โปรดลองใหม่อีกครั้ง';
-                    chatMessages.appendChild(errorElement);
-                }
-            }
-            
-            // รับฟังการคลิกปุ่มส่ง
-            chatSendBtn.addEventListener('click', sendMessage);
-            
-            // รับฟังการกด Enter
-            chatInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-        }
-        
-        // =====================
-        // ระบบแดชบอร์ด (แก้ไขแล้ว)
-        // =====================
-        async function setupDashboard() {
-            const refreshBtn = document.getElementById('refresh-recommendation');
-            
-            // ฟังก์ชันรีเฟรชคำแนะนำ
-            async function refreshRecommendation() {
-                console.log("กำลังรีเฟรชคำแนะนำ...");
-                
-                // แสดง loading
-                document.getElementById('recommendation-loader').style.display = 'flex';
-                document.getElementById('recommendation-content').classList.add('hidden');
-                
-                try {
-                    // ดึงข้อมูลตำแหน่งจากการตั้งค่า หรือใช้ค่าเริ่มต้น
-                    const location = UserDataManager.userData.profile.location || 'กรุงเทพ';
-                    
-                    // ดึงราคาหมูจริง
-                    const realPorkPrice = await fetchRealPorkPrice();
-                    document.getElementById('market-price').textContent = `${realPorkPrice} บาท`;
-                    
-                    // ขอคำแนะนำประจำวัน
-                    const recommendation = await AIEngine.generateDailyRecommendation(location);
-                    console.log("ได้รับคำแนะนำ:", recommendation);
-                    
-                    // อัปเดตข้อมูลในแดชบอร์ด
-                    document.getElementById('weather-desc').textContent = recommendation.weatherDesc;
-                    document.getElementById('location-rec').textContent = recommendation.recommendedLocation;
-                    document.getElementById('price-rec').textContent = recommendation.recommendedPrice;
-                    document.getElementById('price-reason').textContent = recommendation.reason;
-                    
-                    // อัปเดตสถิติ
-                    document.getElementById('today-price').textContent = `${recommendation.recommendedPrice} บาท`;
-                    document.getElementById('market-price').textContent = `${recommendation.marketPrice} บาท`;
-                    document.getElementById('weather-status').textContent = recommendation.weatherDesc;
-                    document.getElementById('humidity').textContent = recommendation.humidity;
-                    document.getElementById('estimated-profit').textContent = `${recommendation.estimatedProfit} บาท`;
-                    
-                    // อัปเดตเทคนิค
-                    const tipsList = document.getElementById('daily-tips');
-                    tipsList.innerHTML = '';
-                    
-                    recommendation.dailyTips.forEach(tip => {
-                        const li = document.createElement('li');
-                        li.textContent = tip;
-                        tipsList.appendChild(li);
-                    });
-                    
-                    // ซ่อน loading และแสดงผลลัพธ์
-                    document.getElementById('recommendation-loader').style.display = 'none';
-                    document.getElementById('recommendation-content').classList.remove('hidden');
-                    
-                } catch (error) {
-                    console.error('Error refreshing recommendation:', error);
-                    
-                    // กรณีเกิดข้อผิดพลาด แสดงข้อมูลเริ่มต้น
-                    document.getElementById('recommendation-loader').style.display = 'none';
-                    document.getElementById('recommendation-content').classList.remove('hidden');
-                    
-                    document.getElementById('weather-desc').textContent = 'แดดออก';
-                    document.getElementById('location-rec').textContent = 'ตลาด';
-                    document.getElementById('price-rec').textContent = '13';
-                    document.getElementById('price-reason').textContent = 'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด';
-                    
-                    // อัปเดตเทคนิค
-                    const tipsList = document.getElementById('daily-tips');
-                    tipsList.innerHTML = '';
-                    
-                    const defaultTips = [
-                        "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
-                        "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
-                        "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น"
-                    ];
-                    
-                    defaultTips.forEach(tip => {
-                        const li = document.createElement('li');
-                        li.textContent = tip;
-                        tipsList.appendChild(li);
-                    });
-                }
-            }
-            
-            // รับฟังการคลิกปุ่มรีเฟรช
-            refreshBtn.addEventListener('click', refreshRecommendation);
-            
-            // โหลดคำแนะนำตอนเริ่มต้น
-            await refreshRecommendation();
-        }
-        
-        // =====================
-        // ระบบการตั้งค่า
-        // =====================
-        function setupSettings() {
-            const saveApiKeyBtn = document.getElementById('save-api-key');
-            const saveBusinessInfoBtn = document.getElementById('save-business-info');
-            const saveAlertSettingsBtn = document.getElementById('save-alert-settings');
-            
-            // โหลดข้อมูลการตั้งค่าเดิม
-            function loadSettings() {
-                if (UserDataManager.loadUserData()) {
-                    // โหลดการตั้งค่า API
-                    document.getElementById('api-provider').value = UserDataManager.userData.apiSettings.provider;
-                    document.getElementById('api-key').value = UserDataManager.userData.apiSettings.apiKey;
-                    
-                    // โหลดข้อมูลร้านค้า
-                    document.getElementById('business-name').value = UserDataManager.userData.profile.businessName;
-                    document.getElementById('business-location').value = UserDataManager.userData.profile.location;
-                    document.getElementById('business-description').value = UserDataManager.userData.profile.description;
-                    
-                    // โหลดการตั้งค่าแจ้งเตือน
-                    document.getElementById('weather-alert').checked = UserDataManager.userData.preferences.weatherAlert;
-                    document.getElementById('price-alert').checked = UserDataManager.userData.preferences.priceAlert;
-                    document.getElementById('event-alert').checked = UserDataManager.userData.preferences.eventAlert;
-                    
-                    // อัปเดตสถานะการแจ้งเตือน API Key
-                    updateApiKeyNotification();
-                }
-            }
-            
-            // อัปเดตสถานะการแจ้งเตือน API Key
-            function updateApiKeyNotification() {
-                const notification = document.getElementById('api-key-notification');
-                if (UserDataManager.hasApiKey()) {
-                    notification.style.display = 'none';
-                } else {
-                    notification.style.display = 'flex';
-                }
-            }
-            
-            // บันทึก API Key
-            saveApiKeyBtn.addEventListener('click', function() {
-                const provider = document.getElementById('api-provider').value;
-                const apiKey = document.getElementById('api-key').value;
-                
-                UserDataManager.updateApiSettings(provider, apiKey);
-                
-                alert('บันทึก API Key เรียบร้อยแล้ว');
-                updateApiKeyNotification();
-            });
-            
-            // บันทึกข้อมูลร้านค้า
-            saveBusinessInfoBtn.addEventListener('click', function() {
-                const name = document.getElementById('business-name').value;
-                const location = document.getElementById('business-location').value;
-                const description = document.getElementById('business-description').value;
-                
-                UserDataManager.updateBusinessInfo(name, location, description);
-                
-                alert('บันทึกข้อมูลร้านเรียบร้อยแล้ว');
-            });
-            
-            // บันทึกการตั้งค่าแจ้งเตือน
-            saveAlertSettingsBtn.addEventListener('click', function() {
-                const weatherAlert = document.getElementById('weather-alert').checked;
-                const priceAlert = document.getElementById('price-alert').checked;
-                const eventAlert = document.getElementById('event-alert').checked;
-                
-                UserDataManager.updateAlertSettings(weatherAlert, priceAlert, eventAlert);
-                
-                alert('บันทึกการตั้งค่าแจ้งเตือนเรียบร้อยแล้ว');
-            });
-            
-            // โหลดการตั้งค่า
-            loadSettings();
-        }
-        
-        // =====================
-        // ตรวจสอบ DOM elements ที่จำเป็น
-        // =====================
-        function checkRequiredElements() {
-            const requiredElements = [
-                'result-section',
-                'price-recommendation',
-                'profit-estimate',
-                'analysis-text',
-                'tips-list',
-                'meat-price',
-                'meat-per-skewer',
-                'additional-cost',
-                'location',
-                'sales-volume',
-                'calculate-btn'
-            ];
-            
-            const missingElements = [];
-            
-            requiredElements.forEach(id => {
-                if (!document.getElementById(id)) {
-                    missingElements.push(id);
-                    console.error(`ไม่พบ element ที่มี id: ${id}`);
-                }
-            });
-            
-            if (missingElements.length > 0) {
-                console.error('ไม่พบองค์ประกอบที่จำเป็น:', missingElements);
-                return false;
-            }
-            
-            return true;
-        }
-        
-        // =====================
-        // เริ่มต้นแอปพลิเคชัน
-        // =====================
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log("เริ่มต้นแอปพลิเคชัน...");
-            
-            // ตรวจสอบองค์ประกอบที่จำเป็น
-            if (!checkRequiredElements()) {
-                console.error("องค์ประกอบบางอย่างไม่พร้อมใช้งาน แอปพลิเคชันอาจไม่ทำงานอย่างถูกต้อง");
-            }
-            
-            // แสดงวันที่ปัจจุบัน
-            setThaiDate();
-            
-            // ตั้งค่าระบบแท็บ
-            setupTabs();
-            
-            // ตั้งค่าระบบปุ่มออปชั่น
-            setupOptionButtons();
-            
-            // ตั้งค่าระบบแชท
-            setupChatSystem();
-            
-            // ตั้งค่าแดชบอร์ด
-            try {
-                await setupDashboard();
-            } catch (error) {
-                console.error("เกิดข้อผิดพลาดในการตั้งค่าแดชบอร์ด:", error);
-            }
-            
-            // ตั้งค่าระบบการตั้งค่า
-            setupSettings();
-            
-            // ดึงราคาหมูจริงและอัปเดตค่าเริ่มต้น
-            try {
-                const realPorkPrice = await fetchRealPorkPrice();
-                document.getElementById('meat-price').value = realPorkPrice;
-                document.getElementById('market-price').textContent = `${realPorkPrice} บาท`;
-            } catch (error) {
-                console.error("เกิดข้อผิดพลาดในการดึงราคาหมู:", error);
-            }
-            
-            // รับฟังการคลิกปุ่มคำนวณราคา
-            const calculateBtn = document.getElementById('calculate-btn');
-            if (calculateBtn) {
-                // ลบ event listener เดิมที่อาจมีปัญหา (ถ้ามี)
-                const newCalculateBtn = calculateBtn.cloneNode(true);
-                calculateBtn.parentNode.replaceChild(newCalculateBtn, calculateBtn);
-                
-                // เพิ่ม event listener ใหม่
-                newCalculateBtn.addEventListener('click', function() {
-                    console.log("คลิกปุ่มคำนวณราคา");
-                    calculatePrice();
-                });
-                console.log("เพิ่ม event listener ให้ปุ่มคำนวณราคาเรียบร้อยแล้ว");
-            } else {
-                console.error("ไม่พบปุ่มคำนวณราคา");
-            }
-            
-            console.log("เริ่มต้นแอปพลิเคชันเรียบร้อยแล้ว");
-        });
-    </script>
+       <div class="tabs">
+           <div class="tab active" data-tab="dashboard">แดชบอร์ด</div>
+           <div class="tab" data-tab="calculator">คำนวณราคา</div>
+           <div class="tab" data-tab="advisor">ที่ปรึกษา AI</div>
+           <div class="tab" data-tab="settings">การตั้งค่า</div>
+       </div>
+       
+       <!-- แดชบอร์ด -->
+       <div id="dashboard-tab" class="tab-content active">
+           <div class="dashboard-stats">
+               <div class="stat-card">
+                   <div class="stat-label">ราคาแนะนำวันนี้</div>
+                   <div class="stat-value" id="today-price">-- บาท</div>
+                   <div class="stat-label">ต่อไม้</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-label">ราคาหมูในตลาด</div>
+                   <div class="stat-value" id="market-price">-- บาท</div>
+                   <div class="stat-label">ต่อกิโลกรัม</div>
+                   <div class="stat-label" id="price-update-time">อัปเดตเมื่อ: --</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-label">สภาพอากาศ</div>
+                   <div class="stat-value" id="weather-status">--</div>
+                   <div class="stat-label">ความชื้น: <span id="humidity">--</span>%</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-label">กำไรประมาณการ</div>
+                   <div class="stat-value" id="estimated-profit">-- บาท</div>
+                   <div class="stat-label">ต่อวัน</div>
+               </div>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">แนะนำประจำวัน</div>
+               <div id="daily-recommendation">
+                   <div class="loader" id="recommendation-loader">
+                       <div></div>
+                       <div></div>
+                       <div></div>
+                   </div>
+                   <div id="recommendation-content" class="hidden">
+                       <p>วันนี้สภาพอากาศ <span id="weather-desc">--</span> เหมาะกับการขายที่ <span id="location-rec">--</span></p>
+                       <p>แนะนำให้ตั้งราคาที่ <span id="price-rec">--</span> บาทต่อไม้</p>
+                       <p>เพราะ <span id="price-reason">--</span></p>
+                       
+                       <div class="additional-tips">
+                           <h4>เทคนิคพิเศษสำหรับวันนี้</h4>
+                           <ul id="daily-tips">
+                               <li>กำลังโหลด...</li>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+               <button class="action-btn pulse" id="refresh-recommendation">รีเฟรชคำแนะนำ</button>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">การแจ้งเตือน</div>
+               <div id="notifications-container">
+                   <!-- จะใส่การแจ้งเตือนทีหลัง -->
+                   <p class="empty-notification">ไม่มีการแจ้งเตือนในขณะนี้</p>
+               </div>
+           </div>
+       </div>
+       
+       <!-- คำนวณราคา -->
+       <div id="calculator-tab" class="tab-content">
+           <div class="card">
+               <div class="card-title">ข้อมูลต้นทุน</div>
+               <form id="calculator-form">
+                   <div class="form-group">
+                       <label for="meat-price">ราคาหมู (บาทต่อกิโลกรัม)</label>
+                       <input type="number" id="meat-price" min="50" value="150">
+                   </div>
+                   
+                   <div class="form-group">
+                       <label for="meat-per-skewer">น้ำหนักหมูต่อไม้ (กรัม)</label>
+                       <input type="number" id="meat-per-skewer" min="10" max="50" value="25">
+                   </div>
+                   
+                   <div class="form-group">
+                       <label>ขนาดไม้หมูปิ้ง</label>
+                       <div class="option-group">
+                           <div class="option-button" data-value="small">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <line x1="8" y1="2" x2="8" y2="22" stroke-linecap="round"></line>
+                                   <circle cx="8" cy="12" r="3"></circle>
+                               </svg>
+                               เล็ก
+                           </div>
+                           <div class="option-button selected" data-value="medium">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <line x1="12" y1="2" x2="12" y2="22" stroke-linecap="round"></line>
+                                   <circle cx="12" cy="12" r="4"></circle>
+                               </svg>
+                               กลาง
+                           </div>
+                           <div class="option-button" data-value="large">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <line x1="16" y1="2" x2="16" y2="22" stroke-linecap="round"></line>
+                                   <circle cx="16" cy="12" r="5"></circle>
+                               </svg>
+                               ใหญ่
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <div class="form-group">
+                       <label for="additional-cost">ต้นทุนเพิ่มเติมต่อไม้ (ไม้, เครื่องปรุง, แรงงาน)</label>
+                       <input type="number" id="additional-cost" min="0" step="0.1" value="1">
+                   </div>
+               </form>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">ข้อมูลตลาด</div>
+               <form>
+                   <div class="form-group">
+                       <label for="location">ตำแหน่งขาย</label>
+                       <select id="location">
+                           <option value="market">ตลาด</option>
+                           <option value="street">ริมถนน</option>
+                           <option value="community">ชุมชน</option>
+                           <option value="school">สถานศึกษา</option>
+                           <option value="office">ออฟฟิศ</option>
+                       </select>
+                   </div>
+                   
+                   <div class="form-group">
+                       <label for="sales-volume">จำนวนขายต่อวัน (ประมาณ)</label>
+                       <select id="sales-volume">
+                           <option value="low">น้อย (น้อยกว่า 100 ไม้)</option>
+                           <option value="medium" selected>ปานกลาง (100-300 ไม้)</option>
+                           <option value="high">มาก (มากกว่า 300 ไม้)</option>
+                       </select>
+                   </div>
+                   
+                   <div class="form-group">
+                       <label>สภาพอากาศ</label>
+                       <div class="option-group">
+                           <div class="option-button selected" data-value="sunny">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <circle cx="12" cy="12" r="5"></circle>
+                                   <line x1="12" y1="1" x2="12" y2="3"></line>
+                                   <line x1="12" y1="21" x2="12" y2="23"></line>
+                                   <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                   <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                   <line x1="1" y1="12" x2="3" y2="12"></line>
+                                   <line x1="21" y1="12" x2="23" y2="12"></line>
+                                   <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                   <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                               </svg>
+                               แดดออก
+                           </div>
+                           <div class="option-button" data-value="cloudy">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                               </svg>
+                               มีเมฆ
+                           </div>
+                           <div class="option-button" data-value="rainy">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                                   <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                                   <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                                   <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                   <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                                   <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                                   <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                               </svg>
+                               ฝนตก
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <div class="form-group">
+                       <label>สภาพเศรษฐกิจ</label>
+                       <div class="option-group">
+                           <div class="option-button" data-value="good">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                   <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                   <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                   <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                               </svg>
+                               ดี
+                           </div>
+                           <div class="option-button selected" data-value="normal">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                   <line x1="8" y1="15" x2="16" y2="15"></line>
+                                   <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                   <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                               </svg>
+                               ปกติ
+                           </div>
+                           <div class="option-button" data-value="bad">
+                               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                   <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                                   <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                                   <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                   <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                               </svg>
+                               แย่
+                           </div>
+                       </div>
+                   </div>
+               </form>
+               
+               <button type="button" class="calculate-btn pulse" id="calculate-btn">คำนวณราคา AI</button>
+           </div>
+           
+           <div class="result-section" id="result-section">
+               <h3>ราคาแนะนำจาก AI</h3>
+               <div class="price-recommendation" id="price-recommendation">-- บาท/ไม้</div>
+               <div class="profit-estimate" id="profit-estimate">ประมาณการกำไร: -- บาท/วัน</div>
+               <div class="additional-tips" id="additional-tips">
+                   <h4>วิเคราะห์และเทคนิคเพิ่มกำไร</h4>
+                   <p id="analysis-text">กำลังวิเคราะห์...</p>
+                   <ul id="tips-list">
+                       <li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+       
+       <!-- ที่ปรึกษา AI -->
+       <div id="advisor-tab" class="tab-content">
+           <div class="chat-ui">
+               <div class="chat-messages" id="chat-messages">
+                   <div class="message ai">
+                       สวัสดีครับ ผมคือที่ปรึกษาหมูปิ้งอัจฉริยะ พร้อมให้คำแนะนำทั้งเรื่องราคา กลยุทธ์การขาย หรือการรับมือกับสถานการณ์ต่างๆ ลองถามได้เลยครับ
+                       <div class="message-time">เมื่อสักครู่</div>
+                   </div>
+               </div>
+               <div class="chat-input-container">
+                   <input type="text" class="chat-input" id="chat-input" placeholder="ถามคำถามเกี่ยวกับธุรกิจหมูปิ้ง...">
+                   <button class="chat-send-btn" id="chat-send-btn">
+                       <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                           <line x1="22" y1="2" x2="11" y2="13"></line>
+                           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                       </svg>
+                   </button>
+               </div>
+           </div>
+           
+           <div class="strategy-section">
+               <h3>
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                       <circle cx="12" cy="12" r="10"></circle>
+                       <line x1="12" y1="16" x2="12" y2="12"></line>
+                       <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                   </svg>
+                   คำแนะนำตามสถานการณ์
+               </h3>
+               
+               <div class="strategy-item">
+                   <div class="strategy-icon">
+                       <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                           <path d="M20 16.2A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                           <line x1="8" y1="16" x2="8.01" y2="16"></line>
+                           <line x1="8" y1="20" x2="8.01" y2="20"></line>
+                           <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                           <line x1="12" y1="22" x2="12.01" y2="22"></line>
+                           <line x1="16" y1="16" x2="16.01" y2="16"></line>
+                           <line x1="16" y1="20" x2="16.01" y2="20"></line>
+                       </svg>
+                   </div>
+                   <div class="strategy-content">
+                       <h4>วันฝนตก</h4>
+                       <p>ทำที่กันฝนเล็กๆ ให้ลูกค้ายืนไม่เปียก หรือมีบริการส่งถึงรถ เตรียมถุงพลาสติกให้ลูกค้าใส่หมูปิ้งกลับบ้าน</p>
+                       <p>ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า หรือทำโปรโมชั่นพิเศษเช่น "ซื้อ 10 แถม 1 เฉพาะวันฝนตก"</p>
+                   </div>
+               </div>
+               
+               <div class="strategy-item">
+                   <div class="strategy-icon">
+                       <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                           <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
+                           <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                           <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                           <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                       </svg>
+                   </div>
+                   <div class="strategy-content">
+                       <h4>เศรษฐกิจแย่</h4>
+                       <p>ลดขนาดไม้เล็กน้อยแต่คงราคาเดิม หรือเพิ่มโปรโมชั่น เช่น ซื้อ 5 ไม้แถม 1</p>
+                       <p>เน้นการตลาดโดยใช้คำว่า "อิ่มคุ้ม" หรือ "ประหยัด" และนำเสนอชุดราคาพิเศษ เช่น หมูปิ้ง + ข้าวเหนียว</p>
+                   </div>
+               </div>
+               
+               <div class="strategy-item">
+                   <div class="strategy-icon">
+                       <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                           <circle cx="12" cy="12" r="5"></circle>
+                           <line x1="12" y1="1" x2="12" y2="3"></line>
+                           <line x1="12" y1="21" x2="12" y2="23"></line>
+                           <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                           <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                           <line x1="1" y1="12" x2="3" y2="12"></line>
+                           <line x1="21" y1="12" x2="23" y2="12"></line>
+                           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                       </svg>
+                   </div>
+                   <div class="strategy-content">
+                       <h4>อากาศร้อนจัด</h4>
+                       <p>เตรียมน้ำดื่มเย็นๆ ไว้บริการฟรี หรือขายราคาถูก ใช้ร่มบังแดดให้ลูกค้า</p>
+                       <p>ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป และพิจารณาเพิ่มเมนูน้ำแข็งไสหรือเครื่องดื่มเย็นๆ</p>
+                   </div>
+               </div>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">วิเคราะห์ตลาดและคู่แข่ง</div>
+               <div id="competitor-analysis">
+                   <p>ราคาเฉลี่ยของคู่แข่งในย่าน <span id="area-name">--</span>: <strong><span id="avg-competitor-price">--</span> บาท/ไม้</strong></p>
+                   <p>จุดเด่นที่สามารถสร้างความแตกต่างได้:</p>
+                   <ul id="differentiation-points">
+                       <li>คุณภาพเนื้อหมู - เลือกใช้หมูคุณภาพดี สด สะอาด</li>
+                       <li>สูตรหมักพิเศษ - สร้างรสชาติเฉพาะตัวที่ลูกค้าจดจำได้</li>
+                       <li>บริการประทับใจ - ยิ้มแย้ม สร้างความคุ้นเคยกับลูกค้า</li>
+                       <li>ความสะอาด - แสดงให้เห็นถึงความใส่ใจในความสะอาด</li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+       
+       <!-- การตั้งค่า -->
+       <div id="settings-tab" class="tab-content">
+           <div class="card api-key-section">
+               <div class="card-title">ตั้งค่า API Key สำหรับ AI</div>
+               <div class="form-group">
+                   <label for="api-provider">ผู้ให้บริการ AI</label>
+                   <select id="api-provider">
+                       <option value="openai">OpenAI (GPT-4)</option>
+                       <option value="anthropic">Anthropic (Claude)</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label for="api-key">API Key</label>
+                   <input type="password" id="api-key" placeholder="ใส่ API Key ของคุณ">
+               </div>
+               <button class="action-btn" id="save-api-key">บันทึก API Key</button>
+               <p class="api-note" style="margin-top:10px; font-size:0.9rem; color:#666;">
+                   หมายเหตุ: API Key จะถูกเก็บในเครื่องของคุณเท่านั้น ไม่ถูกส่งไปยังเซิร์ฟเวอร์อื่นๆ
+               </p>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">ข้อมูลร้านค้า</div>
+               <div class="form-group">
+                   <label for="business-name">ชื่อร้าน</label>
+                   <input type="text" id="business-name" placeholder="ชื่อร้านของคุณ">
+               </div>
+               <div class="form-group">
+                   <label for="business-location">ที่ตั้งร้าน</label>
+                   <input type="text" id="business-location" placeholder="เช่น เชียงราย, กรุงเทพ">
+               </div>
+               <div class="form-group">
+                   <label for="business-description">รายละเอียดร้าน</label>
+                   <textarea id="business-description" rows="3" placeholder="เล่าเกี่ยวกับร้านของคุณ, จุดเด่น, ประสบการณ์"></textarea>
+               </div>
+               <button class="action-btn" id="save-business-info">บันทึกข้อมูลร้าน</button>
+           </div>
+           
+           <div class="card">
+               <div class="card-title">การแจ้งเตือน</div>
+               <div class="form-group">
+                   <label>
+                       <input type="checkbox" id="weather-alert" checked> แจ้งเตือนสภาพอากาศ
+                   </label>
+               </div>
+               <div class="form-group">
+                   <label>
+                       <input type="checkbox" id="price-alert" checked> แจ้งเตือนการเปลี่ยนแปลงราคาวัตถุดิบ
+                   </label>
+               </div>
+               <div class="form-group">
+                   <label>
+                       <input type="checkbox" id="event-alert" checked> แจ้งเตือนกิจกรรมและเทศกาล
+                   </label>
+               </div>
+               <button class="action-btn" id="save-alert-settings">บันทึกการตั้งค่าแจ้งเตือน</button>
+           </div>
+       </div>
+       
+       <div class="footer">
+           <p>Smart Pork Skewer Pricing Advisor AI v1.0</p>
+           <p>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ - พัฒนาโดยใช้ AI</p>
+       </div>
+   </div>
+   
+   <script>
+       // =====================
+       // ฟังก์ชันแสดงวันที่ปัจจุบันในรูปแบบไทย
+       // =====================
+       function setThaiDate() {
+           const now = new Date();
+           const thaiDay = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+           const thaiMonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+           
+           const day = thaiDay[now.getDay()];
+           const date = now.getDate();
+           const month = thaiMonth[now.getMonth()];
+           const year = now.getFullYear() + 543; // แปลงเป็นปี พ.ศ.
+           
+           document.getElementById('current-date').textContent = `วัน${day}ที่ ${date} ${month} ${year}`;
+       }
+       
+       // =====================
+       // ฟังก์ชันดึงราคาหมูจริงจากแหล่งข้อมูล (ปรับปรุง)
+       // =====================
+       async function fetchRealPorkPrice() {
+           try {
+               // ในความเป็นจริง คุณควรเชื่อมต่อกับ API จริง
+               // แต่เนื่องจากเป็นตัวอย่าง เราจะใช้ราคาล่าสุดที่ถูกต้องซึ่งคงที่
+               const currentPrice = 150; // ราคาจริงล่าสุด ณ วันที่ 21 พ.ค. 2568
+               
+               // อัปเดตเวลาที่มีการเช็คราคาล่าสุด
+               const now = new Date();
+               const formattedDate = now.toLocaleString('th-TH', {
+                   year: 'numeric',
+                   month: 'long',
+                   day: 'numeric',
+                   hour: '2-digit',
+                   minute: '2-digit'
+               });
+               document.getElementById('price-update-time').textContent = `อัปเดตเมื่อ: ${formattedDate}`;
+               
+               // อัปเดตราคาในตลาดทันที
+               document.getElementById('market-price').textContent = `${currentPrice} บาท`;
+               
+               return currentPrice;
+           } catch (error) {
+               console.error('ไม่สามารถดึงข้อมูลราคาหมูได้:', error);
+               // ถ้าเกิดข้อผิดพลาด ให้ใช้ราคาล่าสุดที่ถูกต้อง
+               const fallbackPrice = 150;
+               document.getElementById('market-price').textContent = `${fallbackPrice} บาท (offline)`;
+               
+               // แสดงเวลาที่ใช้ข้อมูลออฟไลน์
+               const now = new Date();
+               const formattedDate = now.toLocaleString('th-TH');
+               document.getElementById('price-update-time').textContent = `ใช้ข้อมูลออฟไลน์: ${formattedDate}`;
+               
+               return fallbackPrice;
+           }
+       }
+       
+       // =====================
+       // ระบบแท็บ (ปรับปรุง)
+       // =====================
+       function setupTabs() {
+           document.querySelectorAll('.tab').forEach(tab => {
+               tab.addEventListener('click', function() {
+                   // เพิ่มเอฟเฟกต์เสียงคลิก (ถ้าต้องการ)
+                   // playClickSound();
+                   
+                   // ลบคลาส active จากทุกแท็บ
+                   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                   
+                   // เพิ่มคลาส active ให้แท็บที่คลิก
+                   this.classList.add('active');
+                   
+                   // แสดงเนื้อหาที่ตรงกับแท็บพร้อมเอฟเฟกต์การแสดงผล
+                   const tabId = this.getAttribute('data-tab');
+                   const tabContent = document.getElementById(`${tabId}-tab`);
+                   tabContent.classList.add('active');
+                   
+                   // เพิ่มเอฟเฟกต์ animation ที่ชัดเจน
+                   tabContent.style.animation = 'none';
+                   setTimeout(() => {
+                       tabContent.style.animation = 'fadeIn 0.5s';
+                   }, 10);
+               });
+           });
+       }
+       
+       // =====================
+       // ระบบเลือกออปชั่น (ปรับปรุง)
+       // =====================
+       function setupOptionButtons() {
+           document.querySelectorAll('.option-button').forEach(button => {
+               button.addEventListener('click', function() {
+                   // เพิ่มเอฟเฟกต์คลิก
+                   this.classList.add('pulse');
+                   setTimeout(() => {
+                       this.classList.remove('pulse');
+                   }, 500);
+                   
+                   // หา option-group ที่เป็นพาเรนต์
+                   const parent = this.closest('.option-group');
+                   
+                   // ลบคลาส selected จากทุกปุ่มในกลุ่มเดียวกัน
+                   parent.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+                   
+                   // เพิ่มคลาส selected ให้ปุ่มที่คลิก
+                   this.classList.add('selected');
+               });
+           });
+       }
+       
+       // =====================
+       // ระบบจัดการข้อมูลผู้ใช้ (ปรับปรุง)
+       // =====================
+       const UserDataManager = {
+           userData: {
+               profile: {
+                   businessName: '',
+                   location: '',
+                   description: ''
+               },
+               preferences: {
+                   weatherAlert: true,
+                   priceAlert: true,
+                   eventAlert: true
+               },
+               apiSettings: {
+                   provider: 'openai',
+                   apiKey: ''
+               },
+               lastPorkPrice: 150,
+               lastUpdate: new Date().toISOString()
+           },
+           
+           saveUserData: function() {
+               try {
+                   // ในสภาพแวดล้อมจริง ให้บันทึกข้อมูล
+                   // localStorage.setItem('userData', JSON.stringify(this.userData));
+                   return true;
+               } catch (error) {
+                   console.error('ไม่สามารถบันทึกข้อมูลผู้ใช้ได้:', error);
+                   return false;
+               }
+           },
+           
+           loadUserData: function() {
+               try {
+                   // ในสภาพแวดล้อมจริง ให้โหลดข้อมูล
+                   // const data = localStorage.getItem('userData');
+                   // if (data) {
+                   //     this.userData = JSON.parse(data);
+                   //     return true;
+                   // }
+                   return false;
+               } catch (error) {
+                   console.error('ไม่สามารถโหลดข้อมูลผู้ใช้ได้:', error);
+                   return false;
+               }
+           },
+           
+           updateBusinessInfo: function(name, location, description) {
+               this.userData.profile.businessName = name;
+               this.userData.profile.location = location;
+               this.userData.profile.description = description;
+               this.saveUserData();
+               return true;
+           },
+           
+           updateAlertSettings: function(weatherAlert, priceAlert, eventAlert) {
+               this.userData.preferences.weatherAlert = weatherAlert;
+               this.userData.preferences.priceAlert = priceAlert;
+               this.userData.preferences.eventAlert = eventAlert;
+               this.saveUserData();
+               return true;
+           },
+           
+           updateApiSettings: function(provider, apiKey) {
+               this.userData.apiSettings.provider = provider;
+               this.userData.apiSettings.apiKey = apiKey;
+               this.saveUserData();
+               
+               // อัปเดตสถานะการแจ้งเตือน API Key
+               updateApiKeyNotification();
+               return true;
+           },
+           
+           updatePorkPrice: function(price) {
+               this.userData.lastPorkPrice = price;
+               this.userData.lastUpdate = new Date().toISOString();
+               this.saveUserData();
+               return true;
+           },
+           
+           getLastPorkPrice: function() {
+               return this.userData.lastPorkPrice || 150;
+           },
+           
+           hasApiKey: function() {
+               return !!this.userData.apiSettings.apiKey;
+           }
+       };
+       
+       // ฟังก์ชันอัปเดตการแจ้งเตือน API Key
+       function updateApiKeyNotification() {
+           const notification = document.getElementById('api-key-notification');
+           if (UserDataManager.hasApiKey()) {
+               notification.style.display = 'none';
+           } else {
+               notification.style.display = 'flex';
+           }
+       }
+       
+       // =====================
+       // AI Engine Service (ปรับปรุง)
+       // =====================
+       const AIEngine = {
+           mockResponses: {
+               priceRecommendation: [
+                   "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
+                   "เนื่องจากสภาพอากาศดี และที่ตั้งอยู่ใกล้สถานศึกษา แนะนำให้ตั้งราคาที่ 12 บาทต่อไม้ คุณสามารถทำกำไรได้ดีเพราะนักเรียนและนักศึกษาเป็นกลุ่มที่ชื่นชอบหมูปิ้ง",
+                   "ด้วยราคาหมูที่ค่อนข้างสูงในช่วงนี้ แนะนำให้ตั้งราคาที่ 15 บาทต่อไม้ แต่เพิ่มขนาดหรือคุณภาพเล็กน้อยเพื่อสร้างความคุ้มค่า",
+                   "ในช่วงเศรษฐกิจไม่ดี แต่คุณอยู่ในทำเลที่มีกำลังซื้อสูง แนะนำให้ตั้งราคาที่ 10 บาทต่อไม้ และทำโปรโมชั่น 'ซื้อ 10 แถม 1' เพื่อกระตุ้นยอดขาย"
+               ],
+               businessTips: [
+                   "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                   "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                   "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
+                   "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
+                   "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
+               ],
+               weatherStrategies: {
+                   sunny: [
+                       "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า",
+                       "มีน้ำดื่มเย็นๆ ไว้บริการฟรีหรือราคาถูก",
+                       "ปิ้งหมูสดใหม่ตลอด ไม่ปิ้งเก็บไว้นานเกินไป"
+                   ],
+                   cloudy: [
+                       "เน้นการปิ้งให้มีกลิ่นหอมเพื่อดึงดูดลูกค้า",
+                       "อากาศไม่ร้อนเกินไป เหมาะแก่การปิ้งหมูจำนวนมากเพื่อรองรับลูกค้า",
+                       "เตรียมพร้อมในกรณีที่อาจมีฝนตก"
+                   ],
+                   rainy: [
+                       "เตรียมที่กันฝนสำหรับลูกค้า",
+                       "มีบริการส่งถึงรถหรือให้ถุงพลาสติกกันน้ำ",
+                       "ทำโปรโมชั่นพิเศษช่วงฝนตก เช่น ซื้อ 10 แถม 1",
+                       "ลดราคาลง 1-2 บาทเพื่อดึงดูดลูกค้า"
+                   ]
+               },
+               chatResponses: [
+                   "จากประสบการณ์ ในช่วงเย็นหลังเลิกงานประมาณ 17.00-19.00 น. มักจะขายดีที่สุด โดยเฉพาะบริเวณที่มีคนเดินผ่านไปมามาก เช่น ใกล้สถานีรถไฟฟ้า หรือจุดรอรถเมล์",
+                   "สูตรหมักที่นิยมคือ ซีอิ๊วขาว น้ำตาล กระเทียม พริกไทย และเครื่องปรุงลับเฉพาะของแต่ละร้าน บางร้านเพิ่มน้ำผึ้งเพื่อให้หวานและมันวาว",
+                   "คุณสามารถเพิ่มกำไรได้โดยขายเครื่องเคียง เช่น ข้าวเหนียว น้ำจิ้ม หรือเครื่องดื่ม ซึ่งมักมีอัตรากำไรสูงกว่าหมูปิ้งเอง",
+                   "ในช่วงฝนตก ลองทำโปรโมชั่นพิเศษ เช่น ซื้อ 10 แถม 1 หรือลดราคาเล็กน้อย และมีบริการส่งถึงรถ จะช่วยรักษายอดขาย",
+                   "ระวังเรื่องสุขอนามัย ควรสวมถุงมือ หน้ากาก และรักษาความสะอาดของอุปกรณ์ นอกจากจะดีต่อสุขภาพลูกค้าแล้ว ยังสร้างความเชื่อมั่นด้วย"
+               ]
+           },
+           
+           getRandomElement: function(array) {
+               return array[Math.floor(Math.random() * array.length)];
+           },
+           
+           // ฟังก์ชันคำนวณราคาที่ปรับปรุงแล้ว
+           getPriceRecommendation: async function(userData, marketData) {
+               // แสดง loading animation
+               return new Promise(async (resolve) => {
+                   try {
+                       // ดึงราคาหมูจริง
+                       const realPorkPrice = await fetchRealPorkPrice();
+                       
+                       // คำนวณราคาแนะนำจากปัจจัยต่างๆ
+                       // ปรับตามราคาหมู
+                       const meatPricePerGram = realPorkPrice / 1000; // บาทต่อกรัม
+                       const meatCostPerSkewer = meatPricePerGram * userData.meatPerSkewer;
+                       
+                       // ปรับตามต้นทุน
+                       const totalCost = meatCostPerSkewer + userData.additionalCost;
+                       
+                       // ปรับตามตำแหน่งขาย
+                       const locationFactor = {
+                           'market': 0,
+                           'street': 1,
+                           'community': 1,
+                           'school': 2,
+                           'office': 2
+                       };
+                       
+                       // ปรับตามสภาพอากาศ
+                       const weatherFactor = {
+                           'sunny': 0,
+                           'cloudy': -0.5,
+                           'rainy': -1
+                       };
+                       
+                       // ปรับตามเศรษฐกิจ
+                       const economyFactor = {
+                           'good': 1,
+                           'normal': 0,
+                           'bad': -1
+                       };
+                       
+                       // คำนวณราคาแนะนำ
+                       let basePrice = totalCost * 2; // กำไร 100%
+                       basePrice += locationFactor[marketData.location] || 0;
+                       basePrice += weatherFactor[marketData.weather] || 0;
+                       basePrice += economyFactor[marketData.economy] || 0;
+                       
+                       // ปรับให้เป็นจำนวนเต็ม
+                       const recommendedPrice = Math.max(Math.round(basePrice), 5); // ไม่ต่ำกว่า 5 บาท
+                       
+                       // คำนวณประมาณการกำไร
+                       const salesVolume = {
+                           'low': 80,
+                           'medium': 200,
+                           'high': 350
+                       };
+                       const dailySales = salesVolume[marketData.salesVolume] || 200;
+                       const profitPerSkewer = recommendedPrice - totalCost;
+                       const estimatedProfit = Math.round(profitPerSkewer * dailySales);
+                       
+                       // ดึงคำแนะนำและเทคนิค
+                       const analysisText = this.getRandomElement(this.mockResponses.priceRecommendation);
+                       const tips = [];
+                       // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                       while (tips.length < 3) {
+                           const tip = this.getRandomElement(this.mockResponses.businessTips);
+                           if (!tips.includes(tip)) {
+                               tips.push(tip);
+                           }
+                       }
+                       
+                       // เพิ่มเทคนิคตามสภาพอากาศ
+                       const weatherTips = this.mockResponses.weatherStrategies[marketData.weather] || [];
+                       if (weatherTips.length > 0) {
+                           tips.push(this.getRandomElement(weatherTips));
+                       }
+                       
+                       // บันทึกราคาหมูล่าสุด
+                       UserDataManager.updatePorkPrice(realPorkPrice);
+                       
+                       // อัปเดตแดชบอร์ด
+                       document.getElementById('today-price').textContent = `${recommendedPrice} บาท`;
+                       document.getElementById('estimated-profit').textContent = `${estimatedProfit} บาท`;
+                       
+                       // จำลองการประมวลผล
+                       setTimeout(() => {
+                           resolve({
+                               recommendedPrice,
+                               estimatedProfit,
+                               analysisText,
+                               tips
+                           });
+                       }, 800); // เพิ่มการหน่วงเวลาเล็กน้อยเพื่อแสดง loading
+                   } catch(error) {
+                       console.error('เกิดข้อผิดพลาดในการคำนวณราคา:', error);
+                       
+                       // กรณีเกิดข้อผิดพลาด ใช้ค่าเริ่มต้นที่สมเหตุสมผล
+                       setTimeout(() => {
+                           resolve({
+                               recommendedPrice: 13,
+                               estimatedProfit: 2000,
+                               analysisText: "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาที่ 13 บาทต่อไม้ ซึ่งจะทำให้คุณมีกำไรประมาณ 30% และยังแข่งขันในตลาดได้",
+                               tips: [
+                                   "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                                   "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                                   "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น"
+                               ]
+                           });
+                       }, 1000);
+                   }
+               });
+           },
+           
+           getChatResponse: async function(message) {
+               return new Promise(resolve => {
+                   // จำลองการประมวลผล AI
+                   setTimeout(() => {
+                       const response = this.getRandomElement(this.mockResponses.chatResponses);
+                       resolve(response);
+                   }, 1200); // เพิ่มการหน่วงเวลาเพื่อให้ดูเหมือนกำลังคิด
+               });
+           },
+           
+           // ปรับปรุงฟังก์ชันสร้างคำแนะนำรายวัน
+           generateDailyRecommendation: async function(location) {
+               return new Promise(async (resolve) => {
+                   try {
+                       // ดึงราคาหมูจริง
+                       const realPorkPrice = await fetchRealPorkPrice();
+                       
+                       // จำลองสภาพอากาศ
+                       const weatherTypes = ['sunny', 'cloudy', 'rainy'];
+                       const weather = this.getRandomElement(weatherTypes);
+                       const weatherDesc = {
+                           'sunny': 'แดดออก',
+                           'cloudy': 'มีเมฆมาก',
+                           'rainy': 'ฝนตก'
+                       }[weather];
+                       
+                       // ใช้ราคาหมูจริงในการคำนวณ
+                       const marketPrice = realPorkPrice;
+                       
+                       // คำนวณราคาแนะนำจากราคาหมูจริง
+                       // สมมติว่าหมู 1 ไม้ใช้ 25 กรัม และมีต้นทุนอื่นๆ 1 บาท
+                       const costPerSkewer = (marketPrice / 1000) * 25 + 1;
+                       const recommendedPrice = Math.round(costPerSkewer * 2); // กำไร 100%
+                       
+                       // จำลองตำแหน่งที่แนะนำ
+                       const locations = ['ตลาด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
+                       const recommendedLocation = this.getRandomElement(locations);
+                       
+                       // จำลองเหตุผล
+                       const reasons = [
+                           'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
+                           'สภาพอากาศวันนี้และพฤติกรรมผู้บริโภค',
+                           'การแข่งขันในพื้นที่และต้นทุนการดำเนินงาน',
+                           'กำลังซื้อของผู้บริโภคในช่วงนี้'
+                       ];
+                       const reason = this.getRandomElement(reasons);
+                       
+                       // จำลองเทคนิคประจำวัน
+                       const dailyTips = [];
+                       // เลือกเทคนิคแบบสุ่ม 3 รายการ
+                       while (dailyTips.length < 3) {
+                           const tip = this.getRandomElement(this.mockResponses.businessTips);
+                           if (!dailyTips.includes(tip)) {
+                               dailyTips.push(tip);
+                           }
+                       }
+                       
+                       // เพิ่มเทคนิคตามสภาพอากาศ
+                       const weatherTips = this.mockResponses.weatherStrategies[weather] || [];
+                       if (weatherTips.length > 0) {
+                           dailyTips.push(this.getRandomElement(weatherTips));
+                       }
+                       
+                       // จำลองประมาณการกำไร
+                       const estimatedProfit = Math.round((recommendedPrice - costPerSkewer) * 200);
+                       
+                       // จำลองการประมวลผล AI
+                       setTimeout(() => {
+                           resolve({
+                               weather,
+                               weatherDesc,
+                               marketPrice,
+                               recommendedPrice,
+                               recommendedLocation,
+                               reason,
+                               dailyTips,
+                               estimatedProfit,
+                               humidity: 60 + Math.floor(Math.random() * 20)
+                           });
+                       }, 1200); // เพิ่มการหน่วงเวลาเพื่อแสดง loading
+                   } catch(error) {
+                       console.error('เกิดข้อผิดพลาดในการสร้างคำแนะนำ:', error);
+                       
+                       // กรณีเกิดข้อผิดพลาด ใช้ค่าเริ่มต้นที่สมเหตุสมผล
+                       setTimeout(() => {
+                           resolve({
+                               weather: 'sunny',
+                               weatherDesc: 'แดดออก',
+                               marketPrice: 150,  // ราคาปัจจุบันที่ถูกต้อง
+                               recommendedPrice: 13,
+                               recommendedLocation: 'ตลาด',
+                               reason: 'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
+                               dailyTips: [
+                                   "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                                   "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                                   "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น",
+                                   "เตรียมร่มหรือที่กำบังแดดให้ลูกค้า"
+                               ],
+                               estimatedProfit: 2000,
+                               humidity: 70
+                           });
+                       }, 1200);
+                   }
+               });
+           }
+       };
+
+       // =====================
+       // ระบบคำนวณราคา (ปรับปรุงแล้ว)
+       // =====================
+       async function calculatePrice() {
+           console.log("เริ่มการคำนวณราคา...");
+           
+           // แสดง loading และเปลี่ยนสีปุ่ม
+           const calculateBtn = document.getElementById('calculate-btn');
+           const originalText = calculateBtn.textContent;
+           calculateBtn.textContent = "กำลังคำนวณ...";
+           calculateBtn.style.backgroundColor = "#FFA726";
+           calculateBtn.disabled = true;
+           
+           // แสดงส่วนผลลัพธ์การคำนวณพร้อม loading
+           document.getElementById('result-section').style.display = 'block';
+           document.getElementById('price-recommendation').textContent = 'กำลังคำนวณ...';
+           document.getElementById('profit-estimate').textContent = 'กำลังวิเคราะห์...';
+           document.getElementById('analysis-text').textContent = 'กำลังวิเคราะห์...';
+           document.getElementById('tips-list').innerHTML = '<li>กำลังคำนวณเทคนิคที่เหมาะสมกับคุณ...</li>';
+           
+           try {
+               // เก็บข้อมูลจากฟอร์ม
+               const userData = {
+                   meatPrice: parseFloat(document.getElementById('meat-price').value) || 150,
+                   meatPerSkewer: parseFloat(document.getElementById('meat-per-skewer').value) || 25,
+                   additionalCost: parseFloat(document.getElementById('additional-cost').value) || 1
+               };
+               
+               const marketData = {
+                   location: document.getElementById('location').value,
+                   salesVolume: document.getElementById('sales-volume').value,
+                   weather: document.querySelector('.option-group:nth-of-type(3) .option-button.selected')?.getAttribute('data-value') || 'sunny',
+                   economy: document.querySelector('.option-group:nth-of-type(4) .option-button.selected')?.getAttribute('data-value') || 'normal'
+               };
+               
+               console.log("ข้อมูลที่ใช้คำนวณ:", { userData, marketData });
+               
+               // คำนวณด้วยการเรียกใช้ AIEngine
+               const result = await AIEngine.getPriceRecommendation(userData, marketData);
+               console.log("ผลลัพธ์การคำนวณ:", result);
+               
+               // แสดงผลลัพธ์
+               document.getElementById('price-recommendation').textContent = `${result.recommendedPrice} บาท/ไม้`;
+               document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${result.estimatedProfit} บาท/วัน`;
+               document.getElementById('analysis-text').textContent = result.analysisText;
+               
+               // แสดงเทคนิค
+               const tipsList = document.getElementById('tips-list');
+               tipsList.innerHTML = '';
+               
+               result.tips.forEach(tip => {
+                   const li = document.createElement('li');
+                   li.textContent = tip;
+                   tipsList.appendChild(li);
+               });
+               
+               // เพิ่มเอฟเฟกต์เมื่อแสดงผลลัพธ์
+               const resultSection = document.getElementById('result-section');
+               resultSection.style.animation = 'none';
+               setTimeout(() => {
+                   resultSection.style.animation = 'fadeIn 0.5s';
+               }, 10);
+               
+               // อัปเดตแดชบอร์ด
+               document.getElementById('today-price').textContent = `${result.recommendedPrice} บาท`;
+               document.getElementById('estimated-profit').textContent = `${result.estimatedProfit} บาท`;
+               
+           } catch (error) {
+               console.error('เกิดข้อผิดพลาดในการคำนวณราคา:', error);
+               
+               // วิธีสำรอง: คำนวณเองโดยตรง
+               try {
+                   // ดึงราคาหมูจริง
+                   const realPorkPrice = await fetchRealPorkPrice();
+                   
+                   // คำนวณราคาและกำไรเอง
+                   const meatPrice = parseFloat(document.getElementById('meat-price').value) || realPorkPrice;
+                   const meatPerSkewer = parseFloat(document.getElementById('meat-per-skewer').value) || 25;
+                   const additionalCost = parseFloat(document.getElementById('additional-cost').value) || 1;
+                   
+                   const costPerSkewer = (meatPrice / 1000) * meatPerSkewer + additionalCost;
+                   const recommendedPrice = Math.round(costPerSkewer * 2); // กำไร 100%
+                   
+                   const salesVolumeMap = {
+                       'low': 80,
+                       'medium': 200, 
+                       'high': 350
+                   };
+                   const salesVolume = document.getElementById('sales-volume').value;
+                   const dailySales = salesVolumeMap[salesVolume] || 200;
+                   const profitPerSkewer = recommendedPrice - costPerSkewer;
+                   const estimatedProfit = Math.round(profitPerSkewer * dailySales);
+                   
+                   // แสดงผลลัพธ์
+                   document.getElementById('price-recommendation').textContent = `${recommendedPrice} บาท/ไม้`;
+                   document.getElementById('profit-estimate').textContent = `ประมาณการกำไร: ${estimatedProfit} บาท/วัน`;
+                   document.getElementById('analysis-text').textContent = "จากการวิเคราะห์ต้นทุนและสภาพตลาด แนะนำให้ตั้งราคาตามที่คำนวณได้ ซึ่งจะทำให้คุณมีกำไรประมาณ 100% และยังแข่งขันในตลาดได้";
+                   
+                   // แสดงเทคนิค
+                   const tipsList = document.getElementById('tips-list');
+                   tipsList.innerHTML = '';
+                   
+                   // แสดงเทคนิคพื้นฐาน
+                   const basicTips = [
+                       "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                       "เพิ่มเมนูพิเศษเป็นครั้งคราว เช่น 'หมูปิ้งซอสพริกไทยดำ' หรือ 'หมูปิ้งสมุนไพร' เพื่อสร้างความแปลกใหม่",
+                       "สร้างบัตรสะสมแต้ม 'ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้' เพื่อสร้างความภักดีของลูกค้า"
+                   ];
+                   
+                   basicTips.forEach(tip => {
+                       const li = document.createElement('li');
+                       li.textContent = tip;
+                       tipsList.appendChild(li);
+                   });
+                   
+                   // อัปเดตแดชบอร์ด
+                   document.getElementById('today-price').textContent = `${recommendedPrice} บาท`;
+                   document.getElementById('estimated-profit').textContent = `${estimatedProfit} บาท`;
+                   
+               } catch (fallbackError) {
+                   console.error('การคำนวณสำรองก็ล้มเหลว:', fallbackError);
+                   
+                   // แสดงข้อความแจ้งเตือนในกรณีที่ล้มเหลวทั้งสองวิธี
+                   document.getElementById('price-recommendation').textContent = '13 บาท/ไม้';
+                   document.getElementById('profit-estimate').textContent = 'ประมาณการกำไร: 2000 บาท/วัน';
+                   document.getElementById('analysis-text').textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับ AI แต่เราคำนวณราคาแนะนำและประมาณการกำไรให้คุณแล้ว';
+                   document.getElementById('tips-list').innerHTML = '<li>ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง</li><li>ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น</li><li>สร้างบัตรสะสมแต้ม "ซื้อครบ 10 ครั้ง รับฟรี 5 ไม้" เพื่อสร้างความภักดีของลูกค้า</li>';
+               }
+           } finally {
+               // คืนค่าสถานะปุ่มและข้อความเดิม
+               calculateBtn.textContent = originalText;
+               calculateBtn.style.backgroundColor = ""; // คืนค่าสีเดิม
+               calculateBtn.disabled = false;
+           }
+       }
+       
+       // =====================
+       // ระบบแชทกับ AI (ปรับปรุง)
+       // =====================
+       async function setupChatSystem() {
+           const chatMessages = document.getElementById('chat-messages');
+           const chatInput = document.getElementById('chat-input');
+           const chatSendBtn = document.getElementById('chat-send-btn');
+           
+           // ฟังก์ชันส่งข้อความ
+           async function sendMessage() {
+               const message = chatInput.value.trim();
+               if (!message) return;
+               
+               // เพิ่มข้อความของผู้ใช้
+               const userMessageElement = document.createElement('div');
+               userMessageElement.className = 'message user';
+               userMessageElement.textContent = message;
+               const timeElement = document.createElement('div');
+               timeElement.className = 'message-time';
+               timeElement.textContent = 'เมื่อสักครู่';
+               userMessageElement.appendChild(timeElement);
+               chatMessages.appendChild(userMessageElement);
+               
+               // ล้างช่องข้อความ
+               chatInput.value = '';
+               
+               // เลื่อนไปยังข้อความล่าสุด
+               chatMessages.scrollTop = chatMessages.scrollHeight;
+               
+               // แสดงว่ากำลังพิมพ์
+               const typingElement = document.createElement('div');
+               typingElement.className = 'message ai';
+               typingElement.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+               typingElement.style.padding = '10px 15px';
+               chatMessages.appendChild(typingElement);
+               chatMessages.scrollTop = chatMessages.scrollHeight;
+               
+               try {
+                   // ขอคำตอบจาก AI
+                   const response = await AIEngine.getChatResponse(message);
+                   
+                   // ลบข้อความ "กำลังพิมพ์..."
+                   chatMessages.removeChild(typingElement);
+                   
+                   // เพิ่มข้อความของ AI
+                   const aiMessageElement = document.createElement('div');
+                   aiMessageElement.className = 'message ai';
+                   
+                   // จำลองการพิมพ์ข้อความแบบทีละตัวอักษร
+                   chatMessages.appendChild(aiMessageElement);
+                   
+                   const aiTimeElement = document.createElement('div');
+                   aiTimeElement.className = 'message-time';
+                   aiTimeElement.textContent = 'เมื่อสักครู่';
+                   
+                   // แสดงข้อความที่ได้รับ
+                   aiMessageElement.textContent = response;
+                   aiMessageElement.appendChild(aiTimeElement);
+                   
+                   // เลื่อนไปยังข้อความล่าสุด
+                   chatMessages.scrollTop = chatMessages.scrollHeight;
+               } catch (error) {
+                   console.error('Error getting AI response:', error);
+                   
+                   // ลบข้อความ "กำลังพิมพ์..."
+                   chatMessages.removeChild(typingElement);
+                   
+                   // แสดงข้อความแจ้งเตือนข้อผิดพลาด
+                   const errorElement = document.createElement('div');
+                   errorElement.className = 'message ai';
+                   errorElement.textContent = 'ขออภัย เกิดข้อผิดพลาดในการรับคำตอบ โปรดลองใหม่อีกครั้ง';
+                   
+                   const errorTimeElement = document.createElement('div');
+                   errorTimeElement.className = 'message-time';
+                   errorTimeElement.textContent = 'เมื่อสักครู่';
+                   errorElement.appendChild(errorTimeElement);
+                   
+                   chatMessages.appendChild(errorElement);
+                   chatMessages.scrollTop = chatMessages.scrollHeight;
+               }
+           }
+           
+           // รับฟังการคลิกปุ่มส่ง
+           chatSendBtn.addEventListener('click', sendMessage);
+           
+           // รับฟังการกด Enter
+           chatInput.addEventListener('keypress', function(event) {
+               if (event.key === 'Enter') {
+                   sendMessage();
+               }
+           });
+           
+           // เพิ่ม style สำหรับการแสดงว่ากำลังพิมพ์
+           const style = document.createElement('style');
+           style.innerHTML = `
+               .typing-indicator {
+                   display: flex;
+                   align-items: center;
+               }
+               
+               .typing-indicator span {
+                   height: 8px;
+                   width: 8px;
+                   float: left;
+                   margin: 0 2px;
+                   background-color: #9E9E9E;
+                   display: block;
+                   border-radius: 50%;
+                   opacity: 0.4;
+               }
+               
+               .typing-indicator span:nth-of-type(1) {
+                   animation: 1s blink infinite 0.3333s;
+               }
+               
+               .typing-indicator span:nth-of-type(2) {
+                   animation: 1s blink infinite 0.6666s;
+               }
+               
+               .typing-indicator span:nth-of-type(3) {
+                   animation: 1s blink infinite 0.9999s;
+               }
+               
+               @keyframes blink {
+                   50% {
+                       opacity: 1;
+                   }
+               }
+           `;
+           document.head.appendChild(style);
+       }
+       
+       // =====================
+       // ระบบแดชบอร์ด (ปรับปรุง)
+       // =====================
+       async function setupDashboard() {
+           const refreshBtn = document.getElementById('refresh-recommendation');
+           
+           // ฟังก์ชันรีเฟรชคำแนะนำ
+           async function refreshRecommendation() {
+               console.log("กำลังรีเฟรชคำแนะนำ...");
+               
+               // แสดง loading และเปลี่ยนสถานะปุ่ม
+               const originalText = refreshBtn.textContent;
+               refreshBtn.textContent = "กำลังโหลด...";
+               refreshBtn.disabled = true;
+               
+               document.getElementById('recommendation-loader').style.display = 'flex';
+               document.getElementById('recommendation-content').classList.add('hidden');
+               
+               try {
+                   // ดึงข้อมูลตำแหน่งจากการตั้งค่า หรือใช้ค่าเริ่มต้น
+                   const location = UserDataManager.userData.profile.location || 'กรุงเทพ';
+                   
+                   // ดึงราคาหมูจริง
+                   const realPorkPrice = await fetchRealPorkPrice();
+                   document.getElementById('market-price').textContent = `${realPorkPrice} บาท`;
+                   
+                   // ขอคำแนะนำประจำวัน
+                   const recommendation = await AIEngine.generateDailyRecommendation(location);
+                   console.log("ได้รับคำแนะนำ:", recommendation);
+                   
+                   // อัปเดตข้อมูลในแดชบอร์ด
+                   document.getElementById('weather-desc').textContent = recommendation.weatherDesc;
+                   document.getElementById('location-rec').textContent = recommendation.recommendedLocation;
+                   document.getElementById('price-rec').textContent = recommendation.recommendedPrice;
+                   document.getElementById('price-reason').textContent = recommendation.reason;
+                   
+                   // อัปเดตสถิติ
+                   document.getElementById('today-price').textContent = `${recommendation.recommendedPrice} บาท`;
+                   document.getElementById('market-price').textContent = `${recommendation.marketPrice} บาท`;
+                   document.getElementById('weather-status').textContent = recommendation.weatherDesc;
+                   document.getElementById('humidity').textContent = recommendation.humidity;
+                   document.getElementById('estimated-profit').textContent = `${recommendation.estimatedProfit} บาท`;
+                   
+                   // อัปเดตเทคนิค
+                   const tipsList = document.getElementById('daily-tips');
+                   tipsList.innerHTML = '';
+                   
+                   recommendation.dailyTips.forEach(tip => {
+                       const li = document.createElement('li');
+                       li.textContent = tip;
+                       tipsList.appendChild(li);
+                   });
+                   
+                   // ซ่อน loading และแสดงผลลัพธ์พร้อมเอฟเฟกต์
+                   document.getElementById('recommendation-loader').style.display = 'none';
+                   const recommendationContent = document.getElementById('recommendation-content');
+                   recommendationContent.classList.remove('hidden');
+                   recommendationContent.style.animation = 'none';
+                   setTimeout(() => {
+                       recommendationContent.style.animation = 'fadeIn 0.5s';
+                   }, 10);
+                   
+               } catch (error) {
+                   console.error('Error refreshing recommendation:', error);
+                   
+                   // กรณีเกิดข้อผิดพลาด แสดงข้อมูลเริ่มต้น
+                   document.getElementById('recommendation-loader').style.display = 'none';
+                   document.getElementById('recommendation-content').classList.remove('hidden');
+                   
+                   document.getElementById('weather-desc').textContent = 'แดดออก';
+                   document.getElementById('location-rec').textContent = 'ตลาด';
+                   document.getElementById('price-rec').textContent = '13';
+                   document.getElementById('price-reason').textContent = 'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด';
+                   
+                   // อัปเดตเทคนิค
+                   const tipsList = document.getElementById('daily-tips');
+                   tipsList.innerHTML = '';
+                   
+                   const defaultTips = [
+                       "ลองปรับสูตรหมักให้มีเอกลักษณ์เฉพาะตัว จะช่วยสร้างความแตกต่างจากคู่แข่ง",
+                       "สร้างแพ็คเกจพิเศษ เช่น 'เซ็ตครอบครัว' ที่มีหมูปิ้งหลายไม้พร้อมข้าวเหนียวและน้ำจิ้ม",
+                       "ทำการตลาดออนไลน์ผ่าน Facebook หรือ Line เพื่อแจ้งตำแหน่งขายและโปรโมชั่น"
+                   ];
+                   
+                   defaultTips.forEach(tip => {
+                       const li = document.createElement('li');
+                       li.textContent = tip;
+                       tipsList.appendChild(li);
+                   });
+               } finally {
+                   // คืนค่าสถานะปุ่มและข้อความเดิม
+                   refreshBtn.textContent = originalText;
+                   refreshBtn.disabled = false;
+               }
+           }
+           
+           // รับฟังการคลิกปุ่มรีเฟรช
+           refreshBtn.addEventListener('click', refreshRecommendation);
+           
+           // โหลดคำแนะนำตอนเริ่มต้น
+           await refreshRecommendation();
+       }
+       
+       // =====================
+       // ระบบการตั้งค่า
+       // =====================
+       function setupSettings() {
+           const saveApiKeyBtn = document.getElementById('save-api-key');
+           const saveBusinessInfoBtn = document.getElementById('save-business-info');
+           const saveAlertSettingsBtn = document.getElementById('save-alert-settings');
+           
+           // โหลดข้อมูลการตั้งค่าเดิม
+           function loadSettings() {
+               if (UserDataManager.loadUserData()) {
+                   // โหลดการตั้งค่า API
+                   document.getElementById('api-provider').value = UserDataManager.userData.apiSettings.provider;
+                   document.getElementById('api-key').value = UserDataManager.userData.apiSettings.apiKey;
+                   
+                   // โหลดข้อมูลร้านค้า
+                   document.getElementById('business-name').value = UserDataManager.userData.profile.businessName;
+                   document.getElementById('business-location').value = UserDataManager.userData.profile.location;
+                   document.getElementById('business-description').value = UserDataManager.userData.profile.description;
+                   
+                   // โหลดการตั้งค่าแจ้งเตือน
+                   document.getElementById('weather-alert').checked = UserDataManager.userData.preferences.weatherAlert;
+                   document.getElementById('price-alert').checked = UserDataManager.userData.preferences.priceAlert;
+                   document.getElementById('event-alert').checked = UserDataManager.userData.preferences.eventAlert;
+                   
+                   // อัปเดตสถานะการแจ้งเตือน API Key
+                   updateApiKeyNotification();
+               }
+           }
+           
+           // แสดงการบันทึกสำเร็จแบบชั่วคราว
+           function showSaveSuccess(button) {
+               const originalText = button.textContent;
+               const originalColor = button.style.backgroundColor;
+               
+               // เปลี่ยนสีและข้อความปุ่ม
+               button.textContent = "บันทึกเรียบร้อย ✓";
+               button.style.backgroundColor = "#4CAF50";
+               
+               // คืนค่าเดิมหลังจาก 2 วินาที
+               setTimeout(() => {
+                   button.textContent = originalText;
+                   button.style.backgroundColor = originalColor;
+               }, 2000);
+           }
+           
+           // บันทึก API Key
+           saveApiKeyBtn.addEventListener('click', function() {
+               const provider = document.getElementById('api-provider').value;
+               const apiKey = document.getElementById('api-key').value;
+               
+               UserDataManager.updateApiSettings(provider, apiKey);
+               
+               showSaveSuccess(this);
+           });
+           
+           // บันทึกข้อมูลร้านค้า
+           saveBusinessInfoBtn.addEventListener('click', function() {
+               const name = document.getElementById('business-name').value;
+               const location = document.getElementById('business-location').value;
+               const description = document.getElementById('business-description').value;
+               
+               UserDataManager.updateBusinessInfo(name, location, description);
+               
+               showSaveSuccess(this);
+           });
+           
+           // บันทึกการตั้งค่าแจ้งเตือน
+           saveAlertSettingsBtn.addEventListener('click', function() {
+               const weatherAlert = document.getElementById('weather-alert').checked;
+               const priceAlert = document.getElementById('price-alert').checked;
+               const eventAlert = document.getElementById('event-alert').checked;
+               
+               UserDataManager.updateAlertSettings(weatherAlert, priceAlert, eventAlert);
+               
+               showSaveSuccess(this);
+           });
+           
+           // โหลดการตั้งค่า
+           loadSettings();
+       }
+       
+       // =====================
+       // ตรวจสอบ DOM elements ที่จำเป็น
+       // =====================
+       function checkRequiredElements() {
+           const requiredElements = [
+               'result-section',
+               'price-recommendation',
+               'profit-estimate',
+               'analysis-text',
+               'tips-list',
+               'meat-price',
+               'meat-per-skewer',
+               'additional-cost',
+               'location',
+               'sales-volume',
+               'calculate-btn'
+           ];
+           
+           const missingElements = [];
+           
+           requiredElements.forEach(id => {
+               if (!document.getElementById(id)) {
+                   missingElements.push(id);
+                   console.error(`ไม่พบ element ที่มี id: ${id}`);
+               }
+           });
+           
+           if (missingElements.length > 0) {
+               console.error('ไม่พบองค์ประกอบที่จำเป็น:', missingElements);
+               return false;
+           }
+           
+           return true;
+       }
+       
+       // =====================
+       // เริ่มต้นแอปพลิเคชัน
+       // =====================
+       document.addEventListener('DOMContentLoaded', async function() {
+           console.log("เริ่มต้นแอปพลิเคชัน...");
+           
+           // ตรวจสอบองค์ประกอบที่จำเป็น
+           if (!checkRequiredElements()) {
+               console.error("องค์ประกอบบางอย่างไม่พร้อมใช้งาน แอปพลิเคชันอาจไม่ทำงานอย่างถูกต้อง");
+               // แสดงข้อความแจ้งเตือนให้ผู้ใช้
+               const notification = document.createElement('div');
+               notification.className = 'notification error';
+               notification.innerHTML = `
+                   <svg viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2">
+                       <circle cx="12" cy="12" r="10"></circle>
+                       <line x1="12" y1="8" x2="12" y2="12"></line>
+                       <line x1="12" y1="16" x2="12" y2="16"></line>
+                   </svg>
+                   <div class="notification-content">
+                       <p>พบข้อผิดพลาดในการโหลดองค์ประกอบบางอย่าง โปรดลองรีเฟรชหน้าเว็บ</p>
+                   </div>
+               `;
+               document.querySelector('.container').prepend(notification);
+           }
+           
+           // แสดงวันที่ปัจจุบัน
+           setThaiDate();
+           
+           // ตั้งค่าระบบแท็บ
+           setupTabs();
+           
+           // ตั้งค่าระบบปุ่มออปชั่น
+           setupOptionButtons();
+           
+           // ตั้งค่าระบบแชท
+           setupChatSystem();
+           
+           // ตั้งค่าแดชบอร์ด
+           try {
+               await setupDashboard();
+           } catch (error) {
+               console.error("เกิดข้อผิดพลาดในการตั้งค่าแดชบอร์ด:", error);
+           }
+           
+           // ตั้งค่าระบบการตั้งค่า
+           setupSettings();
+           
+           // ดึงราคาหมูจริงและอัปเดตค่าเริ่มต้น
+           try {
+               const realPorkPrice = await fetchRealPorkPrice();
+               document.getElementById('meat-price').value = realPorkPrice;
+           } catch (error) {
+               console.error("เกิดข้อผิดพลาดในการดึงราคาหมู:", error);
+           }
+           
+           // รับฟังการคลิกปุ่มคำนวณราคา
+           const calculateBtn = document.getElementById('calculate-btn');
+           if (calculateBtn) {
+               // ลบ event listener เดิมที่อาจมีปัญหา (ถ้ามี)
+               const newCalculateBtn = calculateBtn.cloneNode(true);
+               calculateBtn.parentNode.replaceChild(newCalculateBtn, calculateBtn);
+               
+               // เพิ่ม event listener ใหม่
+               newCalculateBtn.addEventListener('click', function() {
+                   console.log("คลิกปุ่มคำนวณราคา");
+                   calculatePrice();
+               });
+               console.log("เพิ่ม event listener ให้ปุ่มคำนวณราคาเรียบร้อยแล้ว");
+           } else {
+               console.error("ไม่พบปุ่มคำนวณราคา");
+           }
+           
+           console.log("เริ่มต้นแอปพลิเคชันเรียบร้อยแล้ว");
+       });
+   </script>
 </body>
 </html>
+

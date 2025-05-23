@@ -872,7 +872,89 @@
                 opacity: 1;
             }
         }
+.wisdom-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border: 2px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
 
+        .wisdom-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+
+        .wisdom-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .wisdom-header svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .wisdom-header h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin: 0;
+        }
+
+        .wisdom-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background-color: rgba(255, 87, 34, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .wisdom-tips {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .wisdom-tips li {
+            margin-bottom: 8px;
+            list-style: none;
+            position: relative;
+            padding-left: 0;
+        }
+
+        .wisdom-quote {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+        }
+
+        .wisdom-footer {
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-top: 15px;
+        }
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.6rem;
@@ -1158,6 +1240,38 @@
                 </div>
             </div>
         </div>
+        
+        <div class="wisdom-box">
+            <div class="wisdom-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2">
+                    <path d="M9 12l2 2 4-4"></path>
+                    <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+                <h4>ข้อคิดสำหรับพ่อค้าแม่ค้า</h4>
+            </div>
+            <div class="wisdom-content">
+                <p><strong>ถ้าคิดว่าราคาที่แนะนำสูงเกินไป</strong> อย่าเพิ่งกังวลครับ!</p>
+                
+                <p>นี่คือ<span class="highlight">ต้นทุนจริง</span>ที่เราแบกรับกัน ไม่ใช่แค่ราคาเนื้อ แต่รวมแรงงาน เวลา ค่าใช้จ่ายทั้งหมด</p>
+                
+                <p><strong>AI นี้ไม่ได้สอนให้ขายแพง</strong> แต่<span class="highlight">สะกิดให้คิดกลยุทธ์ใหม่</span>:</p>
+                
+                <ul class="wisdom-tips">
+                    <li>🎯 <strong>สร้างคุณค่าเพิ่ม</strong> - หมูปิ้งคุณภาพพิเศษ, สูตรเฉพาะ</li>
+                    <li>🎪 <strong>แพ็คเกจสุดคุ้ม</strong> - เซ็ตครอบครัว, โปรโมชั่นแปลกใหม่</li>
+                    <li>💫 <strong>สร้างประสบการณ์</strong> - บริการดี, บรรยากาศอบอุ่น</li>
+                    <li>📱 <strong>ใช้เทคโนโลยี</strong> - ขายออนไลน์, พรีออเดอร์</li>
+                </ul>
+                
+                <div class="wisdom-quote">
+                    "การขายในยุคนี้ ไม่ใช่แค่ขายสินค้า แต่ขาย<strong>ประสบการณ์</strong>และ<strong>คุณค่า</strong> 
+                    ราคาที่ดีจะตามมาเอง"
+                </div>
+                
+                <p class="wisdom-footer">💪 <strong>เปลี่ยนวิกฤติเป็นโอกาส</strong> - ใช้ความท้าทายนี้พัฒนาธุรกิจให้แข็งแกร่งขึ้น!</p>
+            </div>
+        </div>
+        
         <!-- ที่ปรึกษา AI -->
         <div id="advisor-tab" class="tab-content">
             <div class="chat-ui">

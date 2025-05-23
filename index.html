@@ -875,6 +875,168 @@
             }
         }
 
+/* Color Animation สุดเจ๋ง! */
+        :root {
+            animation: mainColorShift 12s infinite;
+        }
+
+        @keyframes mainColorShift {
+            0% { 
+                --primary-color: #FF5722; 
+                --primary-dark: #E64A19;
+                --secondary-color: #FF9800;
+                --secondary-dark: #F57C00;
+            }
+            20% { 
+                --primary-color: #E91E63; 
+                --primary-dark: #C2185B;
+                --secondary-color: #F06292;
+                --secondary-dark: #E91E63;
+            }
+            40% { 
+                --primary-color: #9C27B0; 
+                --primary-dark: #7B1FA2;
+                --secondary-color: #BA68C8;
+                --secondary-dark: #9C27B0;
+            }
+            60% { 
+                --primary-color: #3F51B5; 
+                --primary-dark: #303F9F;
+                --secondary-color: #7986CB;
+                --secondary-dark: #3F51B5;
+            }
+            80% { 
+                --primary-color: #00BCD4; 
+                --primary-dark: #0097A7;
+                --secondary-color: #4DD0E1;
+                --secondary-dark: #00BCD4;
+            }
+            100% { 
+                --primary-color: #FF5722; 
+                --primary-dark: #E64A19;
+                --secondary-color: #FF9800;
+                --secondary-dark: #F57C00;
+            }
+        }
+
+        /* Background Gradient Animation */
+        body {
+            background: linear-gradient(-45deg, #FFF8E1, #FFECB3, #E8F5E8, #E3F2FD, #FCE4EC);
+            background-size: 400% 400%;
+            animation: bodyGradientShift 15s ease infinite;
+        }
+
+        @keyframes bodyGradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 25%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 75%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header Animation */
+        header {
+            animation: headerColorShift 10s infinite;
+        }
+
+        @keyframes headerColorShift {
+            0% { background: linear-gradient(135deg, #FF5722, #E64A19); }
+            20% { background: linear-gradient(135deg, #E91E63, #C2185B); }
+            40% { background: linear-gradient(135deg, #9C27B0, #7B1FA2); }
+            60% { background: linear-gradient(135deg, #3F51B5, #303F9F); }
+            80% { background: linear-gradient(135deg, #00BCD4, #0097A7); }
+            100% { background: linear-gradient(135deg, #FF5722, #E64A19); }
+        }
+
+        /* Button Animation */
+        .calculate-btn, .action-btn {
+            animation: buttonColorShift 8s infinite;
+        }
+
+        @keyframes buttonColorShift {
+            0% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+            25% { background: linear-gradient(145deg, #E91E63, #C2185B); }
+            50% { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
+            75% { background: linear-gradient(145deg, #3F51B5, #303F9F); }
+            100% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+        }
+
+        /* Selected Option Animation */
+        .option-button.selected {
+            animation: selectedButtonShift 6s infinite;
+        }
+
+        @keyframes selectedButtonShift {
+            0% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+            33% { background: linear-gradient(145deg, #E91E63, #C2185B); }
+            66% { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
+            100% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+        }
+
+        /* Result Section Animation */
+        .result-section {
+            animation: resultColorShift 9s infinite;
+        }
+
+        @keyframes resultColorShift {
+            0% { background: linear-gradient(145deg, #FF9800, #F57C00); }
+            25% { background: linear-gradient(145deg, #F06292, #E91E63); }
+            50% { background: linear-gradient(145deg, #BA68C8, #9C27B0); }
+            75% { background: linear-gradient(145deg, #7986CB, #3F51B5); }
+            100% { background: linear-gradient(145deg, #FF9800, #F57C00); }
+        }
+
+        /* Tab Animation */
+        .tab.active {
+            animation: tabActiveShift 7s infinite;
+        }
+
+        @keyframes tabActiveShift {
+            0% { border-bottom-color: #FF5722; }
+            25% { border-bottom-color: #E91E63; }
+            50% { border-bottom-color: #9C27B0; }
+            75% { border-bottom-color: #3F51B5; }
+            100% { border-bottom-color: #FF5722; }
+        }
+
+        /* Chat Send Button Animation */
+        .chat-send-btn {
+            animation: chatButtonShift 5s infinite;
+        }
+
+        @keyframes chatButtonShift {
+            0% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+            50% { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
+            100% { background: linear-gradient(145deg, #FF5722, #E64A19); }
+        }
+
+        /* Stat Card Top Border Animation */
+        .stat-card::before {
+            animation: statBorderShift 11s infinite;
+        }
+
+        @keyframes statBorderShift {
+            0% { background: linear-gradient(90deg, #FF5722, #FF9800); }
+            25% { background: linear-gradient(90deg, #E91E63, #F06292); }
+            50% { background: linear-gradient(90deg, #9C27B0, #BA68C8); }
+            75% { background: linear-gradient(90deg, #3F51B5, #7986CB); }
+            100% { background: linear-gradient(90deg, #FF5722, #FF9800); }
+        }
+
+        /* Date Display Animation */
+        .date-display {
+            animation: dateDisplayShift 13s infinite;
+        }
+
+        @keyframes dateDisplayShift {
+            0% { background-color: #FF9800; }
+            20% { background-color: #F06292; }
+            40% { background-color: #BA68C8; }
+            60% { background-color: #7986CB; }
+            80% { background-color: #4DD0E1; }
+            100% { background-color: #FF9800; }
+        }
+        
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.6rem;

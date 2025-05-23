@@ -1111,6 +1111,7 @@
             <div class="tab active" data-tab="dashboard">หน้าหลัก</div>
             <div class="tab" data-tab="calculator">คำนวณราคา</div>
             <div class="tab" data-tab="advisor">ที่ปรึกษา AI</div>
+            <div class="tab" data-tab="sales">บันทึกยอดขาย</div>             
             <div class="tab" data-tab="settings">การตั้งค่า</div>
         </div>
 
@@ -1474,7 +1475,60 @@
                 <button class="action-btn" id="save-alert-settings">บันทึกการตั้งค่าแจ้งเตือน</button>
             </div>
         </div>
+<!-- บันทึกยอดขาย -->
+<div id="sales-tab" class="tab-content">
+  <div class="card">
+    <div class="card-title">บันทึกยอดขายประจำวัน</div>
+    
+    <div class="form-group">
+      <label for="sale-date">วันที่</label>
+      <input type="date" id="sale-date">
+    </div>
+    
+    <div class="form-group">
+      <label for="prepared-amount">จำนวนที่เตรียมไป (ไม้)</label>
+      <input type="number" id="prepared-amount" min="0" placeholder="เช่น 150">
+    </div>
+    
+    <div class="form-group">
+      <label for="sold-amount">ขายได้จริง (ไม้)</label>
+      <input type="number" id="sold-amount" min="0" placeholder="เช่น 140">
+    </div>
+    
+    <div class="form-group">
+      <label for="weather-condition">สภาพอากาศวันนั้น</label>
+      <select id="weather-condition">
+        <option value="sunny">แดดออก</option>
+        <option value="cloudy">มีเมฆ</option>
+        <option value="rainy">ฝนตก</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="sale-notes">หมายเหตุ (ถ้ามี)</label>
+      <textarea id="sale-notes" rows="3" placeholder="เช่น วันหยุด, เทศกาล, เงินเดือนออก"></textarea>
+    </div>
+    
+    <button class="action-btn" id="save-sales-btn">บันทึกยอดขาย</button>
+  </div>
 
+  <!-- แสดงข้อมูล 7 วันย้อนหลัง -->
+  <div class="card">
+    <div class="card-title">ยอดขาย 7 วันย้อนหลัง</div>
+    <div id="sales-history">
+      <p>ยังไม่มีข้อมูล กรุณาบันทึกยอดขายก่อน</p>
+    </div>
+  </div>
+
+  <!-- พยากรณ์วันพรุ่งนี้ -->
+  <div class="card">
+    <div class="card-title">แนะนำการเตรียมวันพรุ่งนี้</div>
+    <div id="prediction-result" style="text-align: center; padding: 20px;">
+      <div style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;" id="predicted-amount">-- ไม้</div>
+      <p id="prediction-reason">กรุณาบันทึกข้อมูลอย่างน้อย 3 วัน เพื่อให้ระบบคำนวณได้</p>
+    </div>
+  </div>
+</div>       
         <div class="footer">
             <p>Smart Pork Skewer Pricing Advisor AI v2.0</p>
             <p>ที่ปรึกษาราคาหมูปิ้งอัจฉริยะ - พัฒนาโดยใช้ AI และ Firebase</p>
@@ -2345,6 +2399,155 @@
             });
         }
 
+}
+        
+        // เพิ่ม code ใหม่ตรงนี้ เริ่มจากบรรทัดนี้
+        // =====================
+        // ระบบบันทึกยอดขาย
+        // =====================
+        const SalesManager = {
+          
+          // บันทึกยอดขาย
+          saveDailySales: async function(salesData) {
+            try {
+              await db.collection('daily_sales').add({
+                userId: UserDataManager.currentUserId,
+                date: salesData.date,
+                prepared: salesData.prepared,
+                sold: salesData.sold,
+                leftover: salesData.prepared - salesData.sold,
+                weather: salesData.weather,
+                notes: salesData.notes,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              });
+              return true;
+            } catch (error) {
+              console.error('Error saving sales data:', error);
+              return false;
+            }
+          },
+
+          // ดึงข้อมูล 7 วันย้อนหลัง
+          getLast7DaysSales: async function() {
+            try {
+              const sevenDaysAgo = new Date();
+              sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+              
+              const snapshot = await db.collection('daily_sales')
+                .where('userId', '==', UserDataManager.currentUserId)
+                .where('date', '>=', sevenDaysAgo.toISOString().split('T')[0])
+                .orderBy('date', 'desc')
+                .get();
+              
+              return snapshot.docs.map(doc => doc.data());
+            } catch (error) {
+              console.error('Error getting sales history:', error);
+              return [];
+            }
+          },
+
+          // คำนวณการพยากรณ์
+          calculatePrediction: function(salesHistory) {
+            if (salesHistory.length < 3) {
+              return { amount: 0, reason: 'ต้องมีข้อมูลอย่างน้อย 3 วัน' };
+            }
+
+            // คำนวณเฉลี่ยยอดขาย
+            const avgSold = salesHistory.reduce((sum, day) => sum + day.sold, 0) / salesHistory.length;
+            
+            // ปรับตามวันในสัปดาห์
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayOfWeek = tomorrow.getDay();
+            
+            let prediction = Math.round(avgSold);
+            
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+              prediction = Math.round(avgSold * 0.8); // วันหยุดลด 20%
+            }
+            
+            // เผื่อ 10%
+            const recommendedAmount = Math.round(prediction * 1.1);
+            
+            return {
+              amount: recommendedAmount,
+              reason: `จากข้อมูล ${salesHistory.length} วัน เฉลี่ยขาย ${Math.round(avgSold)} ไม้/วัน`
+            };
+          }
+        };
+
+        // ตั้งค่าหน้าบันทึกยอดขาย
+        function setupSalesTracking() {
+          const saveSalesBtn = document.getElementById('save-sales-btn');
+          
+          // ตั้งวันที่เป็นวันนี้
+          document.getElementById('sale-date').value = new Date().toISOString().split('T')[0];
+          
+          saveSalesBtn.addEventListener('click', async function() {
+            const salesData = {
+              date: document.getElementById('sale-date').value,
+              prepared: parseInt(document.getElementById('prepared-amount').value) || 0,
+              sold: parseInt(document.getElementById('sold-amount').value) || 0,
+              weather: document.getElementById('weather-condition').value,
+              notes: document.getElementById('sale-notes').value
+            };
+            
+            if (salesData.prepared === 0 || salesData.sold === 0) {
+              alert('กรุณากรอกจำนวนที่เตรียมไปและขายได้');
+              return;
+            }
+            
+            const success = await SalesManager.saveDailySales(salesData);
+            
+            if (success) {
+              alert('บันทึกข้อมูลเรียบร้อย!');
+              document.getElementById('prepared-amount').value = '';
+              document.getElementById('sold-amount').value = '';
+              document.getElementById('sale-notes').value = '';
+              await updateSalesDisplay();
+            } else {
+              alert('เกิดข้อผิดพลาดในการบันทึก');
+            }
+          });
+        }
+
+        // อัปเดตการแสดงผลข้อมูลยอดขาย
+        async function updateSalesDisplay() {
+          const salesHistory = await SalesManager.getLast7DaysSales();
+          const historyContainer = document.getElementById('sales-history');
+          
+          if (salesHistory.length === 0) {
+            historyContainer.innerHTML = '<p>ยังไม่มีข้อมูล กรุณาบันทึกยอดขายก่อน</p>';
+          } else {
+            let html = '<div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse;">';
+            html += '<tr style="background-color: #f5f5f5;"><th style="padding: 8px; border: 1px solid #ddd;">วันที่</th><th style="padding: 8px; border: 1px solid #ddd;">เตรียม</th><th style="padding: 8px; border: 1px solid #ddd;">ขาย</th><th style="padding: 8px; border: 1px solid #ddd;">เหลือ</th><th style="padding: 8px; border: 1px solid #ddd;">อากาศ</th></tr>';
+            
+            salesHistory.forEach(sale => {
+              html += `<tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">${sale.date}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${sale.prepared}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${sale.sold}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${sale.leftover}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${sale.weather === 'sunny' ? '☀️' : sale.weather === 'cloudy' ? '☁️' : '🌧️'}</td>
+              </tr>`;
+            });
+            
+            html += '</table></div>';
+            historyContainer.innerHTML = html;
+          }
+          
+          // อัปเดตการพยากรณ์
+          const prediction = SalesManager.calculatePrediction(salesHistory);
+          document.getElementById('predicted-amount').textContent = prediction.amount > 0 ? `${prediction.amount} ไม้` : '-- ไม้';
+          document.getElementById('prediction-reason').textContent = prediction.reason;
+        }
+        // จบ code ที่เพิ่ม
+        
+        // =====================
+        // ตรวจสอบ DOM elements ที่จำเป็น
+        // =====================
+        function checkRequiredElements() {
+            
         // =====================
         // ตรวจสอบ DOM elements ที่จำเป็น
         // =====================
@@ -2426,7 +2629,7 @@
             }
 
             setupSettings();
-
+            setupSalesTracking();            
             // ดึงราคาหมูจริงและอัปเดตค่าเริ่มต้น
             try {
                 const realPorkPrice = await fetchRealPorkPrice();

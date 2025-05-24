@@ -1964,56 +1964,54 @@
 
             // เริ่มต้นระบบ Auth พร้อม timeout และ retry
             initAuth: function() {
-                if (this.initializationPromise) {
-                    return this.initializationPromise;
+    if (this.initializationPromise) {
+        return this.initializationPromise;
+    }
+
+    this.initializationPromise = new Promise((resolve, reject) => {
+        console.log('🔐 เริ่มต้นการเชื่อมต่อ Firebase...');
+        
+        const timeout = setTimeout(() => {
+            console.error('❌ Firebase timeout');
+            this.currentUserId = 'offline-user-' + Date.now();
+            this.isInitialized = true;
+            resolve({ uid: this.currentUserId });
+        }, 10000);
+
+        auth.onAuthStateChanged(async (user) => {
+            try {
+                clearTimeout(timeout);
+                
+                if (user) {
+                    this.currentUserId = user.uid;
+                    console.log('✅ User logged in:', this.currentUserId);
+                } else {
+                    try {
+                        const result = await auth.signInAnonymously();
+                        this.currentUserId = result.user.uid;
+                        console.log('✅ Anonymous login successful');
+                    } catch (authError) {
+                        console.warn('⚠️ Using offline mode');
+                        this.currentUserId = 'offline-user-' + Date.now();
+                    }
                 }
+                
+                this.isInitialized = true;
+                await this.loadUserData();
+                resolve({ uid: this.currentUserId });
+                
+            } catch (error) {
+                clearTimeout(timeout);
+                console.error('❌ Auth error:', error);
+                this.currentUserId = 'offline-user-' + Date.now();
+                this.isInitialized = true;
+                resolve({ uid: this.currentUserId });
+            }
+        });
+    });
 
-                this.initializationPromise = new Promise((resolve, reject) => {
-                    console.log('🔐 เริ่มต้นการเชื่อมต่อ Firebase...');
-                    
-                    const timeout = setTimeout(() => {
-                        console.error('❌ Firebase initialization timeout');
-                        reject(new Error('Firebase initialization timeout'));
-                    }, 15000); // เพิ่มเป็น 15 วินาที
-
-                    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-                        try {
-                            clearTimeout(timeout);
-                            
-                            if (user) {
-                                this.currentUserId = user.uid;
-                                console.log('✅ User logged in:', this.currentUserId);
-                                await this.loadUserData();
-                                this.isInitialized = true;
-                                unsubscribe();
-                                resolve(user);
-                            } else {
-                                console.log('🔄 Attempting anonymous login...');
-                                try {
-                                    const result = await auth.signInAnonymously();
-                                    this.currentUserId = result.user.uid;
-                                    console.log('✅ Anonymous login successful:', this.currentUserId);
-                                    this.isInitialized = true;
-                                    unsubscribe();
-                                    resolve(result.user);
-                                } catch (authError) {
-                                    console.error('❌ Anonymous login failed:', authError);
-                                    unsubscribe();
-                                    reject(authError);
-                                }
-                            }
-                        } catch (error) {
-                            clearTimeout(timeout);
-                            console.error('❌ Authentication process failed:', error);
-                            unsubscribe();
-                            reject(error);
-                        }
-                    });
-                });
-
-                return this.initializationPromise;
-            },
-
+    return this.initializationPromise;
+},
             // บันทึกข้อมูลลง Firestore พร้อม error handling และ retry
             saveUserData: async function(retryCount = 0) {
                 if (!this.isInitialized || !this.currentUserId) {
@@ -2243,59 +2241,50 @@
 
         const SalesManager = {
             // บันทึกยอดขาย พร้อม validation และ error handling
-            saveDailySales: async function(salesData) {
-                console.log('💾 เริ่มต้นบันทึกยอดขาย:', salesData);
+             {
+    saveDailySales: async function(salesData) {
+    console.log('💾 เริ่มต้นบันทึกยอดขาย:', salesData);
 
-                // ตรวจสอบการเชื่อมต่อ Firebase
-                if (!UserDataManager.isInitialized || !UserDataManager.currentUserId) {
-                    console.error('❌ User not initialized for sales saving');
-                    throw new Error('ระบบยังไม่พร้อม กรุณารอสักครู่แล้วลองใหม่');
-                }
+    if (!salesData.date) throw new Error('กรุณาเลือกวันที่');
+    if (!salesData.prepared || salesData.prepared <= 0) throw new Error('กรุณาใส่จำนวนที่เตรียม');
+    if (salesData.sold < 0) throw new Error('จำนวนที่ขายได้ไม่สามารถติดลบได้');
+    if (salesData.sold > salesData.prepared) throw new Error('จำนวนที่ขายได้ไม่สามารถมากกว่าที่เตรียมได้');
+    if (!salesData.averagePrice || salesData.averagePrice <= 0) throw new Error('กรุณาใส่ราคาเฉลี่ย');
 
-                // Validate ข้อมูล
-                const validationResult = this.validateSalesData(salesData);
-                if (!validationResult.isValid) {
-                    console.error('❌ Sales data validation failed:', validationResult.errors);
-                    throw new Error(validationResult.errors.join(', '));
-                }
+    if (!UserDataManager.isInitialized) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
 
-                try {
-                    const revenue = salesData.sold * salesData.averagePrice;
-                    const sellThroughRate = Math.round((salesData.sold / salesData.prepared) * 100);
+    if (!UserDataManager.currentUserId) {
+        throw new Error('ระบบยังไม่พร้อม กรุณารอสักครู่แล้วลองใหม่');
+    }
 
-                    const salesRecord = {
-                        userId: UserDataManager.currentUserId,
-                        date: salesData.date,
-                        prepared: parseInt(salesData.prepared),
-                        sold: parseInt(salesData.sold),
-                        leftover: parseInt(salesData.prepared) - parseInt(salesData.sold),
-                        averagePrice: parseFloat(salesData.averagePrice),
-                        revenue: revenue,
-                        weather: salesData.weather || 'sunny',
-                        notes: salesData.notes || '',
-                        sellThroughRate: sellThroughRate,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    };
+    try {
+        const revenue = salesData.sold * salesData.averagePrice;
+        const sellThroughRate = Math.round((salesData.sold / salesData.prepared) * 100);
 
-                    console.log('📝 Sales record to save:', salesRecord);
+        const salesRecord = {
+            userId: UserDataManager.currentUserId,
+            date: salesData.date,
+            prepared: parseInt(salesData.prepared),
+            sold: parseInt(salesData.sold),
+            leftover: parseInt(salesData.prepared) - parseInt(salesData.sold),
+            averagePrice: parseFloat(salesData.averagePrice),
+            revenue: revenue,
+            weather: salesData.weather || 'sunny',
+            notes: salesData.notes || '',
+            sellThroughRate: sellThroughRate,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
 
-                    await db.collection('daily_sales').add(salesRecord);
-                    console.log('✅ Sales data saved successfully');
-                    
-                    return true;
-                } catch (error) {
-                    console.error('❌ Error saving sales data:', error);
-                    
-                    if (error.code === 'permission-denied') {
-                        throw new Error('ไม่มีสิทธิ์ในการบันทึกข้อมูล');
-                    } else if (error.code === 'unavailable') {
-                        throw new Error('บริการฐานข้อมูลไม่พร้อมใช้งาน');
-                    } else {
-                        throw new Error('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
-                    }
-                }
-            },
-
+        await db.collection('daily_sales').add(salesRecord);
+        console.log('✅ Sales data saved successfully');
+        return true;
+    } catch (error) {
+        console.error('❌ Error saving sales data:', error);
+        throw new Error('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+    }
+},
             // ตรวจสอบข้อมูลยอดขาย
             validateSalesData: function(data) {
                 const errors = [];
@@ -3532,35 +3521,57 @@
         }
 
         async function calculateBusinessAnalysis() {
-            console.log('🧮 เริ่มต้นการคำนวณการวิเคราะห์ธุรกิจ...');
-            
-            try {
-                const selectedCard = document.querySelector('.business-type-card.selected');
-                if (!selectedCard) {
-                    showNotification('กรุณาเลือกรูปแบบธุรกิจก่อน', 'warning');
-                    return;
-                }
+    console.log('🧮 เริ่มต้นการคำนวณ...');
+    
+    const selectedCard = document.querySelector('.business-type-card.selected');
+    if (!selectedCard) {
+        alert('กรุณาเลือกรูปแบบธุรกิจก่อน');
+        return;
+    }
 
-                const businessType = selectedCard.getAttribute('data-type');
-                const calculateBtn = document.getElementById('calculate-business-btn');
-                
-                if (!calculateBtn) {
-                    console.error('❌ Calculate button not found');
-                    return;
-                }
+    const businessType = selectedCard.getAttribute('data-type');
+    const calculateBtn = document.getElementById('calculate-business-btn');
+    
+    if (!calculateBtn) return;
 
-                // รีเซ็ตและแสดงสถานะ loading
-                const originalText = calculateBtn.textContent;
-                calculateBtn.textContent = "🧮 กำลังวิเคราะห์...";
-                calculateBtn.style.background = "linear-gradient(145deg, #FFA726, #FF9800)";
-                calculateBtn.disabled = true;
+    const originalText = calculateBtn.textContent;
+    calculateBtn.textContent = "🧮 กำลังวิเคราะห์...";
+    calculateBtn.disabled = true;
 
-                // ซ่อนผลลัพธ์เก่า
-                const resultSection = document.getElementById('business-analysis-result');
-                if (resultSection) {
-                    resultSection.style.display = 'none';
-                }
+    try {
+        const formData = collectFormData(businessType);
+        const marketData = collectMarketData();
 
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const costs = BusinessEngine.calculateCosts(businessType, formData, marketData);
+        const pricing = BusinessEngine.analyzePricing(costs, marketData, businessType);
+        const marketPosition = BusinessEngine.analyzeMarketPosition(pricing, businessType);
+
+        const analysis = {
+            businessType: businessType,
+            costs: costs,
+            pricing: pricing,
+            marketPosition: marketPosition,
+            analysisText: `จากการวิเคราะห์ธุรกิจ${BusinessEngine.businessModels[businessType].name} แนะนำให้ตั้งราคาที่ ${pricing.recommended.price} บาทต่อไม้ ซึ่งจะให้กำไรประมาณ ${pricing.recommended.margin}%`,
+            tips: AIEngine.businessTips[businessType] || AIEngine.businessTips.producer
+        };
+
+        displayBusinessAnalysis(analysis);
+        
+        document.getElementById('today-price').textContent = `${pricing.recommended.price} บาท`;
+        document.getElementById('estimated-profit').textContent = `${pricing.recommended.dailyProfit} บาท`;
+
+        console.log('✅ Analysis completed');
+        
+    } catch (error) {
+        console.error('❌ Error in analysis:', error);
+        alert('เกิดข้อผิดพลาดในการวิเคราะห์ โปรดลองใหม่อีกครั้ง');
+    } finally {
+        calculateBtn.textContent = originalText;
+        calculateBtn.disabled = false;
+    }
+}
                 // รวบรวมข้อมูลจากฟอร์ม
                 const formData = collectFormData(businessType);
                 const marketData = collectMarketData();
@@ -4482,159 +4493,74 @@
        // ระบบแดชบอร์ด (แก้ไข Error Handling)
        // =====================
 
-       async function setupDashboard() {
-           console.log('📊 กำลังตั้งค่าแดชบอร์ด...');
-           
-           try {
-               const refreshBtn = document.getElementById('refresh-recommendation');
+async function setupDashboard() {
+    console.log('📊 กำลังตั้งค่าแดชบอร์ด...');
+    
+    const refreshBtn = document.getElementById('refresh-recommendation');
+    
+    async function refreshRecommendation() {
+        console.log("🔄 กำลังรีเฟรชคำแนะนำ...");
+        
+        if (!refreshBtn) return;
 
-               async function refreshRecommendation() {
-                   console.log("🔄 กำลังรีเฟรชคำแนะนำ...");
-                   
-                   if (!refreshBtn) {
-                       console.warn('⚠️ Refresh button not found');
-                       return;
-                   }
+        const originalText = refreshBtn.textContent;
+        refreshBtn.textContent = "🔄 กำลังโหลด...";
+        refreshBtn.disabled = true;
 
-                   const originalText = refreshBtn.textContent;
-                   refreshBtn.textContent = "🔄 กำลังโหลด...";
-                   refreshBtn.disabled = true;
+        try {
+            const weatherTypes = ['sunny', 'cloudy', 'rainy'];
+            const weather = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
+            
+            const weatherDesc = {
+                'sunny': 'แดดออก ร้อนจัด',
+                'cloudy': 'มีเมฆมาก อากาศเย็นสบาย',
+                'rainy': 'ฝนตกเล็กน้อย'
+            }[weather];
 
-                   try {
-                       // ดึงราคาหมูจริง พร้อม timeout
-                       const realPorkPrice = await Promise.race([
-                           fetchRealPorkPrice(),
-                           new Promise((_, reject) => 
-                               setTimeout(() => reject(new Error('Timeout')), 5000)
-                           )
-                       ]);
+            const locations = ['ตลาดสด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
+            const recommendedLocation = locations[Math.floor(Math.random() * locations.length)];
+            
+            const realPorkPrice = 185 + Math.floor(Math.random() * 20);
+            const costPerSkewer = (realPorkPrice / 1000) * 25 + 1.5;
+            const recommendedPrice = Math.round(costPerSkewer * 1.8);
 
-                       // สร้างข้อมูลสำหรับคำแนะนำ
-                       const weatherTypes = ['sunny', 'cloudy', 'rainy'];
-                       const weather = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
+            document.getElementById('weather-desc').textContent = weatherDesc;
+            document.getElementById('location-rec').textContent = recommendedLocation;
+            document.getElementById('price-rec').textContent = recommendedPrice;
+            document.getElementById('today-price').textContent = `${recommendedPrice} บาท`;
+            document.getElementById('weather-status').textContent = weatherDesc.split(' ')[0];
+            document.getElementById('humidity').textContent = 55 + Math.floor(Math.random() * 30);
+            
+            const estimatedProfit = Math.round((recommendedPrice - costPerSkewer) * 180);
+            document.getElementById('estimated-profit').textContent = `${estimatedProfit} บาท`;
 
-                       const weatherDesc = {
-                           'sunny': 'แดดออก ร้อนจัด',
-                           'cloudy': 'มีเมฆมาก อากาศเย็นสบาย',
-                           'rainy': 'ฝนตกเล็กน้อย'
-                       }[weather];
+            const tips = AIEngine.businessTips.producer;
+            const tipsList = document.getElementById('daily-tips');
+            if (tipsList) {
+                tipsList.innerHTML = '';
+                tips.slice(0, 3).forEach(tip => {
+                    const li = document.createElement('li');
+                    li.textContent = tip;
+                    tipsList.appendChild(li);
+                });
+            }
 
-                       const locations = ['ตลาดสด', 'หน้าโรงเรียน', 'ใกล้ออฟฟิศ', 'ในชุมชน', 'ริมถนนใหญ่'];
-                       const recommendedLocation = locations[Math.floor(Math.random() * locations.length)];
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+        } catch (error) {
+            console.error('Error refreshing:', error);
+        } finally {
+            refreshBtn.textContent = originalText;
+            refreshBtn.disabled = false;
+        }
+    }
 
-                       // คำนวณราคาแนะนำตามราคาหมูจริง
-                       const costPerSkewer = (realPorkPrice / 1000) * 25 + 1.5; // 25g เนื้อ + ต้นทุนอื่น
-                       const recommendedPrice = Math.round(costPerSkewer * 1.8); // กำไร 80%
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', refreshRecommendation);
+    }
 
-                       const reasons = [
-                           'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด',
-                           'สภาพอากาศวันนี้และพฤติกรรมผู้บริโภค',
-                           'การแข่งขันในพื้นที่และต้นทุนการดำเนินงาน',
-                           'กำลังซื้อของผู้บริโภคในช่วงนี้และเทรนด์ตลาด'
-                       ];
-                       const reason = reasons[Math.floor(Math.random() * reasons.length)];
-
-                       // อัปเดตข้อมูลในแดชบอร์ด
-                       const updates = {
-                           'weather-desc': weatherDesc,
-                           'location-rec': recommendedLocation,
-                           'price-rec': recommendedPrice,
-                           'price-reason': reason,
-                           'today-price': `${recommendedPrice} บาท`,
-                           'weather-status': weatherDesc.split(' ')[0],
-                           'humidity': 55 + Math.floor(Math.random() * 30)
-                       };
-
-                       Object.entries(updates).forEach(([id, value]) => {
-                           const element = document.getElementById(id);
-                           if (element) {
-                               element.textContent = value;
-                           }
-                       });
-
-                       const estimatedProfit = Math.round((recommendedPrice - costPerSkewer) * 180); // 180 ไม้ต่อวัน
-                       const estimatedProfitElement = document.getElementById('estimated-profit');
-                       if (estimatedProfitElement) {
-                           estimatedProfitElement.textContent = `${estimatedProfit} บาท`;
-                       }
-
-                       // อัปเดตเทคนิค
-                       const dailyTips = [];
-                       const businessType = UserDataManager.userData.businessData?.selectedType || 'producer';
-                       const tips = AIEngine.businessTips[businessType] || AIEngine.businessTips.producer;
-
-                       // เลือกเทคนิค 3 อย่างแบบสุ่ม
-                       while (dailyTips.length < 3 && tips.length > 0) {
-                           const tip = AIEngine.getRandomElement(tips);
-                           if (!dailyTips.includes(tip)) {
-                               dailyTips.push(tip);
-                           }
-                       }
-
-                       // เพิ่มเทคนิคตามสภาพอากาศ
-                       const weatherTips = AIEngine.weatherStrategies[weather] || [];
-                       if (weatherTips.length > 0) {
-                           dailyTips.push(AIEngine.getRandomElement(weatherTips));
-                       }
-
-                       const tipsList = document.getElementById('daily-tips');
-                       if (tipsList) {
-                           tipsList.innerHTML = '';
-                           dailyTips.forEach((tip, index) => {
-                               const li = document.createElement('li');
-                               li.textContent = tip;
-                               li.style.animationDelay = `${index * 0.1}s`;
-                               li.classList.add('slide-in');
-                               tipsList.appendChild(li);
-                           });
-                       }
-
-                       showNotification('คำแนะนำได้รับการอัปเดตแล้ว! 🎯', 'success');
-
-                   } catch (error) {
-                       console.error('❌ Error refreshing recommendation:', error);
-                       
-                       // ข้อมูลสำรอง
-                       const fallbackUpdates = {
-                           'weather-desc': 'แดดออก',
-                           'location-rec': 'ตลาด',
-                           'price-rec': '15',
-                           'price-reason': 'ราคาวัตถุดิบปัจจุบันและความต้องการในตลาด'
-                       };
-
-                       Object.entries(fallbackUpdates).forEach(([id, value]) => {
-                           const element = document.getElementById(id);
-                           if (element) {
-                               element.textContent = value;
-                           }
-                       });
-
-                       showNotification('ใช้ข้อมูลสำรองเนื่องจากการเชื่อมต่อมีปัญหา', 'warning');
-                   } finally {
-                       refreshBtn.textContent = originalText;
-                       refreshBtn.disabled = false;
-                   }
-               }
-
-               if (refreshBtn) {
-                   refreshBtn.addEventListener('click', refreshRecommendation);
-               }
-
-               // โหลดข้อมูลเริ่มต้น
-               await refreshRecommendation();
-               await updateDashboardSummary();
-
-               console.log('✅ Dashboard initialized');
-           } catch (error) {
-               console.error('❌ Error setting up dashboard:', error);
-           }
-       }
-
-       // =====================
-       // Error Handler และ Notification System (ปรับปรุง)
-       // =====================
-
-       function setupErrorHandling() {
+    await refreshRecommendation();
+}
            console.log('🛡️ กำลังตั้งค่าระบบจัดการข้อผิดพลาด...');
            
            window.addEventListener('error', function(event) {

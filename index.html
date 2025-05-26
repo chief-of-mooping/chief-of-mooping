@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -65,6 +64,22 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-card {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ef4444 100%);
+            height: 6px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -207,10 +222,10 @@ const domainInfo = {
         ]
     }
 };
-
-// ฐานข้อมูลทฤษฎี
+        // ฐานข้อมูลทฤษฎี
 const researchDatabase = {
     theories: {
+        // การตลาดดิจิทัล (7 ทฤษฎี)
         'tam': {
             id: 'tam',
             name: 'Technology Acceptance Model (TAM)',
@@ -222,10 +237,23 @@ const researchDatabase = {
             keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user', 'เทคโนโลยี', 'ยอมรับ', 'ระบบ', 'ดิจิทัล'],
             level: 2,
             statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
-            description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน'
+            description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน เหมาะสำหรับศึกษาการยอมรับระบบสารสนเทศ แอปพลิเคชัน และเทคโนโลยีใหม่ๆ'
         },
-        'tpb': {
-            id: 'tpb',
+        'utaut': {
+            id: 'utaut',
+            name: 'Unified Theory of Acceptance and Use of Technology (UTAUT)',
+            author: 'Venkatesh et al. (2003)',
+            domain: 'digital_marketing',
+            factors: ['Performance Expectancy', 'Effort Expectancy', 'Social Influence', 'Facilitating Conditions', 'Behavioral Intention'],
+            relationships: 'PE + EE + SI + FC → Behavioral Intention → Use Behavior',
+            prediction: 'ความคาดหวังในประสิทธิภาพ ความง่าย อิทธิพลทางสังคม และสภาพแวดล้อมที่สนับสนุนจะส่งผลต่อการใช้เทคโนโลยี',
+            keywords: ['technology', 'acceptance', 'performance', 'effort', 'social', 'เทคโนโลยี', 'ประสิทธิภาพ', 'ความคาดหวัง'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่พัฒนามาจาก TAM โดยรวมทฤษฎีต่างๆ 8 ทฤษฎีเข้าด้วยกัน เน้นปัจจัยที่หลากหลายในการยอมรับเทคโนโลยี'
+        },
+        'tpb_digital': {
+            id: 'tpb_digital',
             name: 'Theory of Planned Behavior (TPB)',
             author: 'Ajzen (1991)',
             domain: 'digital_marketing',
@@ -235,8 +263,62 @@ const researchDatabase = {
             keywords: ['behavior', 'intention', 'attitude', 'norm', 'control', 'พฤติกรรม', 'ความตั้งใจ', 'ทัศนคติ'],
             level: 2,
             statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
-            description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติต่อพฤติกรรม บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้'
+            description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐาน และการควบคุมที่รับรู้ เหมาะสำหรับศึกษาพฤติกรรมผู้บริโภคออนไลน์'
         },
+        'diffusion': {
+            id: 'diffusion',
+            name: 'Diffusion of Innovation Theory',
+            author: 'Rogers (2003)',
+            domain: 'digital_marketing',
+            factors: ['Relative Advantage', 'Compatibility', 'Complexity', 'Trialability', 'Observability'],
+            relationships: 'Innovation Attributes → Adoption Decision → Implementation',
+            prediction: 'คุณลักษณะของนวัตกรรมจะส่งผลต่อความเร็วและระดับการยอมรับในสังคม',
+            keywords: ['innovation', 'diffusion', 'adoption', 'technology', 'spread', 'นวัตกรรม', 'การแพร่กระจาย', 'การยอมรับ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายกระบวนการแพร่กระจายของนวัตกรรมในสังคม เหมาะสำหรับศึกษาการยอมรับเทคโนโลยีใหม่และผลิตภัณฑ์ดิจิทัล'
+        },
+        'trust_digital': {
+            id: 'trust_digital',
+            name: 'Trust Theory in Digital Environment',
+            author: 'McKnight et al. (2002)',
+            domain: 'digital_marketing',
+            factors: ['Trust Propensity', 'Institution-Based Trust', 'Trusting Beliefs', 'Trusting Intentions'],
+            relationships: 'Trust Propensity + Institution Trust → Trusting Beliefs → Trusting Intentions → Risk-Taking Behavior',
+            prediction: 'ความไว้วางใจในสภาพแวดล้อมดิจิทัลจะส่งผลต่อพฤติกรรมการเสี่ยงและการตัดสินใจซื้อออนไลน์',
+            keywords: ['trust', 'digital', 'online', 'security', 'confidence', 'ความไว้วางใจ', 'ออนไลน์', 'ความปลอดภัย'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายความไว้วางใจในสภาพแวดล้อมดิจิทัล เหมาะสำหรับศึกษาการซื้อขายออนไลน์และบริการดิจิทัล'
+        },
+        'ecommerce_adoption': {
+            id: 'ecommerce_adoption',
+            name: 'E-commerce Adoption Model',
+            author: 'Gefen & Straub (2000)',
+            domain: 'digital_marketing',
+            factors: ['Perceived Risk', 'Trust', 'Perceived Usefulness', 'Perceived Ease of Use', 'Purchase Intention'],
+            relationships: 'Trust + PU + PEOU - Perceived Risk → Purchase Intention → Purchase Behavior',
+            prediction: 'ความไว้วางใจ ประโยชน์ที่รับรู้ ความง่าย และความเสี่ยงที่รับรู้จะส่งผลต่อการซื้อขายออนไลน์',
+            keywords: ['ecommerce', 'adoption', 'online', 'purchase', 'trust', 'อีคอมเมิร์ซ', 'การซื้อขาย', 'ออนไลน์'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายการยอมรับและการใช้งานระบบอีคอมเมิร์ซ โดยเน้นความไว้วางใจและความเสี่ยงที่รับรู้'
+        },
+        'social_commerce': {
+            id: 'social_commerce',
+            name: 'Social Commerce Theory',
+            author: 'Liang & Turban (2011)',
+            domain: 'digital_marketing',
+            factors: ['Social Support', 'Social Presence', 'Trust', 'Relationship Quality', 'Purchase Intention'],
+            relationships: 'Social Support + Social Presence → Trust + Relationship Quality → Purchase Intention',
+            prediction: 'การสนับสนุนทางสังคมและการรับรู้การมีอยู่ทางสังคมจะส่งผลต่อความไว้วางใจและความตั้งใจซื้อ',
+            keywords: ['social', 'commerce', 'media', 'community', 'relationship', 'สังคม', 'การค้า', 'ชุมชน', 'ความสัมพันธ์'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM', 'Mediation Analysis'],
+            description: 'ทฤษฎีที่อธิบายการซื้อขายผ่านสื่อสังคมออนไลน์ โดยเน้นอิทธิพลของเครือข่ายสังคมต่อพฤติกรรมการซื้อ'
+        },
+
+        // ทุนทางสังคม (7 ทฤษฎี)
         'social_capital': {
             id: 'social_capital',
             name: 'Social Capital Theory',
@@ -250,6 +332,85 @@ const researchDatabase = {
             statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
             description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ'
         },
+        'network_theory': {
+            id: 'network_theory',
+            name: 'Social Network Theory',
+            author: 'Granovetter (1973)',
+            domain: 'social_capital',
+            factors: ['Network Size', 'Network Density', 'Weak Ties', 'Strong Ties', 'Structural Holes'],
+            relationships: 'Network Structure → Information Flow → Access to Resources → Performance',
+            prediction: 'โครงสร้างของเครือข่ายสังคมจะส่งผลต่อการเข้าถึงทรัพยากรและข้อมูล',
+            keywords: ['network', 'ties', 'structure', 'connection', 'relationship', 'เครือข่าย', 'การเชื่อมต่อ', 'โครงสร้าง'],
+            level: 3,
+            statistics: ['Data Screening', 'Network Analysis', 'SEM', 'Centrality Measures'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของโครงสร้างเครือข่ายสังคมต่อพฤติกรรมและผลลัพธ์ของบุคคล'
+        },
+        'social_exchange': {
+            id: 'social_exchange',
+            name: 'Social Exchange Theory',
+            author: 'Blau (1964)',
+            domain: 'social_capital',
+            factors: ['Reciprocity', 'Trust', 'Commitment', 'Benefits', 'Costs'],
+            relationships: 'Benefits - Costs → Satisfaction → Trust + Commitment → Reciprocity',
+            prediction: 'การแลกเปลี่ยนทางสังคมจะขึ้นอยู่กับสมดุลระหว่างผลประโยชน์และต้นทุนที่เกิดขึ้น',
+            keywords: ['exchange', 'reciprocity', 'trust', 'commitment', 'benefit', 'การแลกเปลี่ยน', 'ความไว้วางใจ', 'ผลประโยชน์'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความสัมพันธ์ทางสังคมในรูปแบบของการแลกเปลี่ยนผลประโยชน์ซึ่งกันและกัน'
+        },
+        'social_support': {
+            id: 'social_support',
+            name: 'Social Support Theory',
+            author: 'House (1981)',
+            domain: 'social_capital',
+            factors: ['Emotional Support', 'Instrumental Support', 'Informational Support', 'Appraisal Support'],
+            relationships: 'Social Support → Stress Reduction → Well-being → Performance',
+            prediction: 'การสนับสนุนทางสังคมจะช่วยลดความเครียดและเพิ่มความเป็นอยู่ที่ดีของบุคคล',
+            keywords: ['support', 'emotional', 'instrumental', 'information', 'การสนับสนุน', 'อารมณ์', 'ข้อมูล'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression', 'Mediation Analysis'],
+            description: 'ทฤษฎีที่อธิบายรูปแบบและผลกระทบของการสนับสนุนทางสังคมต่อสุขภาวะและประสิทธิภาพ'
+        },
+        'social_identity': {
+            id: 'social_identity',
+            name: 'Social Identity Theory',
+            author: 'Tajfel & Turner (1979)',
+            domain: 'social_capital',
+            factors: ['In-group Identification', 'Out-group Perception', 'Social Categorization', 'Group Cohesion'],
+            relationships: 'Social Categorization → In-group Identification → Group Cohesion → Collective Behavior',
+            prediction: 'การระบุตัวตนกับกลุ่มจะส่งผลต่อพฤติกรรมและการสร้างความสามัคคีในกลุ่ม',
+            keywords: ['identity', 'group', 'categorization', 'cohesion', 'อัตลักษณ์', 'กลุ่ม', 'ความสามัคคี'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายการก่อตัวของอัตลักษณ์ทางสังคมและผลกระทบต่อพฤติกรรมกลุ่ม'
+        },
+        'community_engagement': {
+            id: 'community_engagement',
+            name: 'Community Engagement Theory',
+            author: 'Putnam (2000)',
+            domain: 'social_capital',
+            factors: ['Civic Participation', 'Social Trust', 'Community Networks', 'Collective Efficacy'],
+            relationships: 'Civic Participation → Social Trust + Community Networks → Collective Efficacy → Community Development',
+            prediction: 'การมีส่วนร่วมในชุมชนจะสร้างความไว้วางใจและเครือข่ายที่นำไปสู่การพัฒนาชุมชน',
+            keywords: ['community', 'engagement', 'civic', 'participation', 'trust', 'ชุมชน', 'การมีส่วนร่วม', 'พลเมือง'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายกระบวนการมีส่วนร่วมในชุมชนและผลกระทบต่อการพัฒนาทุนทางสังคม'
+        },
+        'knowledge_sharing': {
+            id: 'knowledge_sharing',
+            name: 'Knowledge Sharing Theory',
+            author: 'Nonaka & Takeuchi (1995)',
+            domain: 'social_capital',
+            factors: ['Willingness to Share', 'Knowledge Quality', 'Trust', 'Reciprocity', 'Shared Vision'],
+            relationships: 'Trust + Reciprocity + Shared Vision → Willingness to Share → Knowledge Quality → Innovation',
+            prediction: 'ความไว้วางใจและวิสัยทัศน์ร่วมจะส่งผลต่อการแบ่งปันความรู้และการสร้างนวัตกรรม',
+            keywords: ['knowledge', 'sharing', 'trust', 'reciprocity', 'innovation', 'ความรู้', 'การแบ่งปัน', 'นวัตกรรม'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM', 'Mediation Analysis'],
+            description: 'ทฤษฎีที่อธิบายการแบ่งปันความรู้ในองค์กรและชุมชน โดยเน้นบทบาทของทุนทางสังคม'
+        }
+        // การบริหาร (7 ทฤษฎี)
         'rbv': {
             id: 'rbv',
             name: 'Resource-Based View (RBV)',
@@ -263,6 +424,179 @@ const researchDatabase = {
             statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
             description: 'ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน'
         },
+        'dynamic_capabilities': {
+            id: 'dynamic_capabilities',
+            name: 'Dynamic Capabilities Theory',
+            author: 'Teece et al. (1997)',
+            domain: 'management',
+            factors: ['Sensing Capabilities', 'Seizing Capabilities', 'Transforming Capabilities', 'Learning Orientation'],
+            relationships: 'Sensing → Seizing → Transforming → Sustainable Competitive Advantage',
+            prediction: 'ความสามารถในการรับรู้ การจับโอกาส และการปรับตัวจะส่งผลต่อความได้เปรียบที่ยั่งยืน',
+            keywords: ['dynamic', 'capabilities', 'transformation', 'adaptation', 'learning', 'ความสามารถ', 'การปรับตัว', 'การเรียนรู้'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความสามารถขององค์กรในการปรับตัวและเปลี่ยนแปลงเพื่อรักษาความได้เปรียบ'
+        },
+        'transformational_leadership': {
+            id: 'transformational_leadership',
+            name: 'Transformational Leadership Theory',
+            author: 'Bass (1985)',
+            domain: 'management',
+            factors: ['Idealized Influence', 'Inspirational Motivation', 'Intellectual Stimulation', 'Individual Consideration'],
+            relationships: 'Transformational Leadership → Employee Motivation → Performance → Organizational Effectiveness',
+            prediction: 'ภาวะผู้นำการเปลี่ยนแปลงจะส่งผลต่อแรงจูงใจและประสิทธิภาพของพนักงาน',
+            keywords: ['leadership', 'transformation', 'motivation', 'influence', 'ภาวะผู้นำ', 'การเปลี่ยนแปลง', 'แรงจูงใจ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีภาวะผู้นำที่เน้นการสร้างแรงบันดาลใจและการพัฒนาศักยภาพของผู้ตาม'
+        },
+        'organizational_culture': {
+            id: 'organizational_culture',
+            name: 'Organizational Culture Theory',
+            author: 'Schein (1985)',
+            domain: 'management',
+            factors: ['Artifacts', 'Espoused Values', 'Basic Assumptions', 'Cultural Strength'],
+            relationships: 'Basic Assumptions → Espoused Values → Artifacts → Organizational Behavior',
+            prediction: 'วัฒนธรรมองค์กรจะส่งผลต่อพฤติกรรมและประสิทธิภาพขององค์กร',
+            keywords: ['culture', 'values', 'assumptions', 'behavior', 'วัฒนธรรม', 'ค่านิยม', 'พฤติกรรม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายองค์ประกอบและผลกระทบของวัฒนธรรมองค์กรต่อการดำเนินงาน'
+        },
+        'knowledge_management': {
+            id: 'knowledge_management',
+            name: 'Knowledge Management Theory',
+            author: 'Nonaka & Takeuchi (1995)',
+            domain: 'management',
+            factors: ['Knowledge Creation', 'Knowledge Storage', 'Knowledge Transfer', 'Knowledge Application'],
+            relationships: 'Knowledge Creation → Storage → Transfer → Application → Organizational Learning',
+            prediction: 'การจัดการความรู้อย่างเป็นระบบจะส่งผลต่อการเรียนรู้และนวัตกรรมขององค์กร',
+            keywords: ['knowledge', 'management', 'learning', 'innovation', 'transfer', 'ความรู้', 'การจัดการ', 'นวัตกรรม'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายกระบวนการจัดการความรู้ในองค์กรเพื่อสร้างความได้เปรียบทางการแข่งขัน'
+        },
+        'strategic_alignment': {
+            id: 'strategic_alignment',
+            name: 'Strategic Alignment Theory',
+            author: 'Henderson & Venkatraman (1993)',
+            domain: 'management',
+            factors: ['Business Strategy', 'IT Strategy', 'Organizational Infrastructure', 'IT Infrastructure'],
+            relationships: 'Strategy Alignment → Resource Optimization → Performance Improvement',
+            prediction: 'การสอดคล้องระหว่างกลยุทธ์และโครงสร้างจะส่งผลต่อประสิทธิภาพองค์กร',
+            keywords: ['strategy', 'alignment', 'integration', 'performance', 'กลยุทธ์', 'การสอดคล้อง', 'ประสิทธิภาพ'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความสำคัญของการสอดคล้องกันระหว่างกลยุทธ์และการดำเนินงาน'
+        },
+        'change_management': {
+            id: 'change_management',
+            name: 'Change Management Theory',
+            author: 'Kotter (1995)',
+            domain: 'management',
+            factors: ['Urgency', 'Coalition', 'Vision', 'Communication', 'Empowerment', 'Quick Wins'],
+            relationships: 'Change Readiness → Change Implementation → Change Sustainability → Performance',
+            prediction: 'การจัดการการเปลี่ยนแปลงอย่างเป็นระบบจะส่งผลต่อความสำเร็จของการเปลี่ยนแปลง',
+            keywords: ['change', 'management', 'transformation', 'adaptation', 'การเปลี่ยนแปลง', 'การจัดการ', 'การปรับตัว'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายกระบวนการและปัจจัยสำคัญในการจัดการการเปลี่ยนแปลงองค์กร'
+        },
+
+        // การเงิน (7 ทฤษฎี)
+        'capm': {
+            id: 'capm',
+            name: 'Capital Asset Pricing Model (CAPM)',
+            author: 'Sharpe (1964)',
+            domain: 'finance',
+            factors: ['Risk-Free Rate', 'Market Risk Premium', 'Beta', 'Expected Return'],
+            relationships: 'Risk-Free Rate + Beta × Market Risk Premium → Expected Return',
+            prediction: 'ผลตอบแทนที่คาดหวังจะขึ้นอยู่กับความเสี่ยงระบบที่วัดด้วยค่าเบต้า',
+            keywords: ['asset', 'pricing', 'risk', 'return', 'beta', 'สินทรัพย์', 'ราคา', 'ความเสี่ยง', 'ผลตอบแทน'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Regression Analysis'],
+            description: 'แบบจำลองการตั้งราคาสินทรัพย์ทุนที่อธิบายความสัมพันธ์ระหว่างความเสี่ยงและผลตอบแทน'
+        },
+        'modigliani_miller': {
+            id: 'modigliani_miller',
+            name: 'Modigliani-Miller Theory',
+            author: 'Modigliani & Miller (1958)',
+            domain: 'finance',
+            factors: ['Debt Ratio', 'Cost of Equity', 'Cost of Debt', 'Tax Shield', 'Financial Risk'],
+            relationships: 'Capital Structure → Cost of Capital → Firm Value',
+            prediction: 'โครงสร้างเงินทุนจะส่งผลต่อต้นทุนเงินทุนและมูลค่าของบริษัท',
+            keywords: ['capital', 'structure', 'debt', 'equity', 'value', 'เงินทุน', 'หนี้สิน', 'มูลค่า'],
+            level: 3,
+            statistics: ['Data Screening', 'Panel Data Analysis', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของโครงสร้างเงินทุนต่อมูลค่าบริษัทและต้นทุนเงินทุน'
+        },
+        'behavioral_finance': {
+            id: 'behavioral_finance',
+            name: 'Behavioral Finance Theory',
+            author: 'Kahneman & Tversky (1979)',
+            domain: 'finance',
+            factors: ['Loss Aversion', 'Overconfidence', 'Anchoring', 'Mental Accounting', 'Herding Behavior'],
+            relationships: 'Cognitive Biases → Investment Decisions → Market Anomalies',
+            prediction: 'อคติทางความคิดจะส่งผลต่อการตัดสินใจลงทุนและพฤติกรรมในตลาดทุน',
+            keywords: ['behavioral', 'psychology', 'bias', 'decision', 'พฤติกรรม', 'จิตวิทยา', 'อคติ', 'การตัดสินใจ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของปัจจัยทางจิตวิทยาต่อการตัดสินใจทางการเงิน'
+        },
+        'portfolio_theory': {
+            id: 'portfolio_theory',
+            name: 'Modern Portfolio Theory',
+            author: 'Markowitz (1952)',
+            domain: 'finance',
+            factors: ['Expected Return', 'Risk (Variance)', 'Correlation', 'Diversification', 'Efficient Frontier'],
+            relationships: 'Diversification → Risk Reduction → Optimal Portfolio → Maximum Return',
+            prediction: 'การกระจายการลงทุนจะช่วยลดความเสี่ยงโดยไม่ลดผลตอบแทนที่คาดหวัง',
+            keywords: ['portfolio', 'diversification', 'risk', 'return', 'optimization', 'พอร์ตโฟลิโอ', 'การกระจาย', 'เหมาะสม'],
+            level: 3,
+            statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Optimization Models'],
+            description: 'ทฤษฎีการลงทุนที่อธิบายการสร้างพอร์ตโฟลิโอที่เหมาะสมระหว่างความเสี่ยงและผลตอบแทน'
+        },
+        'dividend_policy': {
+            id: 'dividend_policy',
+            name: 'Dividend Policy Theory',
+            author: 'Miller & Modigliani (1961)',
+            domain: 'finance',
+            factors: ['Dividend Yield', 'Retention Ratio', 'Growth Opportunities', 'Tax Effects', 'Signaling'],
+            relationships: 'Dividend Policy → Cash Flow → Shareholder Value → Stock Price',
+            prediction: 'นโยบายเงินปันผลจะส่งผลต่อมูลค่าหุ้นและความมั่งคั่งของผู้ถือหุ้น',
+            keywords: ['dividend', 'policy', 'payout', 'growth', 'value', 'เงินปันผล', 'นโยบาย', 'การเติบโต'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Time Series Analysis', 'Regression Analysis'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของนโยบายการจ่ายเงินปันผลต่อมูลค่าบริษัท'
+        },
+        'agency_theory': {
+            id: 'agency_theory',
+            name: 'Agency Theory',
+            author: 'Jensen & Meckling (1976)',
+            domain: 'finance',
+            factors: ['Agency Costs', 'Monitoring Costs', 'Bonding Costs', 'Residual Loss', 'Ownership Structure'],
+            relationships: 'Separation of Ownership → Agency Problems → Agency Costs → Firm Performance',
+            prediction: 'การแยกความเป็นเจ้าของออกจากการควบคุมจะสร้างต้นทุนตัวแทนที่ส่งผลต่อประสิทธิภาพ',
+            keywords: ['agency', 'ownership', 'control', 'costs', 'governance', 'ตัวแทน', 'ความเป็นเจ้าของ', 'การควบคุม'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'Multiple Regression', 'Panel Data'],
+            description: 'ทฤษฎีที่อธิบายปัญหาและต้นทุนที่เกิดจากการแยกความเป็นเจ้าของออกจากการจัดการ'
+        },
+        'pecking_order': {
+            id: 'pecking_order',
+            name: 'Pecking Order Theory',
+            author: 'Myers & Majluf (1984)',
+            domain: 'finance',
+            factors: ['Internal Financing', 'Debt Financing', 'Equity Financing', 'Information Asymmetry', 'Financial Hierarchy'],
+            relationships: 'Information Asymmetry → Financing Preference → Capital Structure Decisions',
+            prediction: 'บริษัทจะเลือกแหล่งเงินทุนตามลำดับความต้องการ เริ่มจากเงินทุนภายในก่อน',
+            keywords: ['pecking', 'order', 'financing', 'hierarchy', 'asymmetry', 'ลำดับ', 'การระดมทุน', 'ข้อมูล'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Logistic Regression', 'Panel Data Analysis'],
+            description: 'ทฤษฎีที่อธิบายลำดับการเลือกแหล่งเงินทุนของบริษัทตามข้อมูลที่ไม่สมมาตร'
+        },
+
+        // ทรัพยากรมนุษย์ (7 ทฤษฎี)
         'expectancy_theory': {
             id: 'expectancy_theory',
             name: 'Expectancy Theory',
@@ -275,31 +609,1035 @@ const researchDatabase = {
             level: 2,
             statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression'],
             description: 'ทฤษฎีแรงจูงใจที่อธิบายการตัดสินใจของบุคคลในการทำงาน'
+        },
+        'two_factor_theory': {
+            id: 'two_factor_theory',
+            name: 'Two-Factor Theory (Herzberg)',
+            author: 'Herzberg (1959)',
+            domain: 'hr',
+            factors: ['Hygiene Factors', 'Motivator Factors', 'Job Satisfaction', 'Job Dissatisfaction'],
+            relationships: 'Hygiene Factors → Prevent Dissatisfaction, Motivators → Create Satisfaction',
+            prediction: 'ปัจจัยอนามัยจะป้องกันความไม่พอใจ ขณะที่ปัจจัยจูงใจจะสร้างความพอใจ',
+            keywords: ['satisfaction', 'motivation', 'hygiene', 'factors', 'ความพอใจ', 'แรงจูงใจ', 'ปัจจัย'],
+            level: 1,
+            statistics: ['Descriptive Statistics', 'T-test', 'ANOVA'],
+            description: 'ทฤษฎีที่แยกปัจจัยที่ทำให้เกิดความพอใจและไม่พอใจในการทำงานออกจากกัน'
+        },
+        'job_characteristics': {
+            id: 'job_characteristics',
+            name: 'Job Characteristics Model',
+            author: 'Hackman & Oldham (1976)',
+            domain: 'hr',
+            factors: ['Skill Variety', 'Task Identity', 'Task Significance', 'Autonomy', 'Feedback'],
+            relationships: 'Job Characteristics → Psychological States → Work Outcomes',
+            prediction: 'ลักษณะงานจะส่งผลต่อสภาวะจิตใจและผลลัพธ์การทำงาน',
+            keywords: ['job', 'characteristics', 'autonomy', 'feedback', 'variety', 'งาน', 'ลักษณะ', 'อิสรภาพ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'แบบจำลองที่อธิบายความสัมพันธ์ระหว่างลักษณะงานและผลลัพธ์การทำงาน'
+        },
+        'organizational_commitment': {
+            id: 'organizational_commitment',
+            name: 'Organizational Commitment Theory',
+            author: 'Meyer & Allen (1991)',
+            domain: 'hr',
+            factors: ['Affective Commitment', 'Continuance Commitment', 'Normative Commitment'],
+            relationships: 'Antecedents → Three Components of Commitment → Work Outcomes',
+            prediction: 'ความผูกพันต่อองค์กรมี 3 ประเภท คือ อารมณ์ ความต่อเนื่อง และบรรทัดฐาน',
+            keywords: ['commitment', 'affective', 'continuance', 'normative', 'loyalty', 'ความผูกพัน', 'ความภักดี'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความผูกพันของพนักงานต่อองค์กรใน 3 มิติ'
+        },
+        'equity_theory': {
+            id: 'equity_theory',
+            name: 'Equity Theory',
+            author: 'Adams (1963)',
+            domain: 'hr',
+            factors: ['Inputs', 'Outcomes', 'Referent Others', 'Equity Perception', 'Motivation'],
+            relationships: 'Input/Outcome Ratio Comparison → Equity Perception → Behavioral Response',
+            prediction: 'การรับรู้ความเป็นธรรมจะส่งผลต่อแรงจูงใจและพฤติกรรมการทำงาน',
+            keywords: ['equity', 'fairness', 'justice', 'comparison', 'motivation', 'ความเป็นธรรม', 'ความยุติธรรม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของการรับรู้ความเป็นธรรมต่อแรงจูงใจ'
+        },
+        'social_cognitive': {
+            id: 'social_cognitive',
+            name: 'Social Cognitive Theory',
+            author: 'Bandura (1986)',
+            domain: 'hr',
+            factors: ['Self-Efficacy', 'Outcome Expectations', 'Goals', 'Observational Learning'],
+            relationships: 'Self-Efficacy + Outcome Expectations → Goals → Performance',
+            prediction: 'ความเชื่อมั่นในตนเองและความคาดหวังผลลัพธ์จะส่งผลต่อการตั้งเป้าหมายและประสิทธิภาพ',
+            keywords: ['self-efficacy', 'learning', 'observation', 'goals', 'confidence', 'ความมั่นใจ', 'การเรียนรู้'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายการเรียนรู้และพัฒนาพฤติกรรมผ่านการสังเกตและความเชื่อมั่นในตนเอง'
+        },
+        'work_engagement': {
+            id: 'work_engagement',
+            name: 'Work Engagement Theory',
+            author: 'Kahn (1990), Schaufeli et al. (2002)',
+            domain: 'hr',
+            factors: ['Vigor', 'Dedication', 'Absorption', 'Job Resources', 'Personal Resources'],
+            relationships: 'Job Resources + Personal Resources → Work Engagement → Performance + Well-being',
+            prediction: 'ทรัพยากรงานและส่วนบุคคลจะส่งผลต่อความผูกพันในงานและผลลัพธ์ที่ดี',
+            keywords: ['engagement', 'vigor', 'dedication', 'absorption', 'resources', 'ความผูกพัน', 'พลัง', 'ทุ่มเท'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความผูกพันในงานเป็นสภาวะจิตใจเชิงบวกที่มีพลัง ทุ่มเท และมุ่งมั่น'
         }
-    },
-    
-    levels: {
+        // โซ่อุปทาน (7 ทฤษฎี)
+        'supply_chain_management': {
+            id: 'supply_chain_management',
+            name: 'Supply Chain Management Theory',
+            author: 'Christopher (1992)',
+            domain: 'supply_chain',
+            factors: ['Integration', 'Coordination', 'Collaboration', 'Information Sharing', 'Trust'],
+            relationships: 'Integration + Coordination → Collaboration → Information Sharing → Performance',
+            prediction: 'การบูรณาการและประสานงานในโซ่อุปทานจะส่งผลต่อประสิทธิภาพโดยรวม',
+            keywords: ['supply', 'chain', 'integration', 'coordination', 'collaboration', 'โซ่อุปทาน', 'การบูรณาการ', 'ประสานงาน'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีการจัดการโซ่อุปทานที่เน้นการบูรณาการและความร่วมมือระหว่างคู่ค้า'
+        },
+        'transaction_cost': {
+            id: 'transaction_cost',
+            name: 'Transaction Cost Economics',
+            author: 'Williamson (1985)',
+            domain: 'supply_chain',
+            factors: ['Asset Specificity', 'Uncertainty', 'Frequency', 'Transaction Costs', 'Governance Structure'],
+            relationships: 'Transaction Characteristics → Transaction Costs → Governance Choice → Performance',
+            prediction: 'ลักษณะของธุรกรรมจะส่งผลต่อต้นทุนธุรกรรมและการเลือกโครงสร้างการกำกับดูแล',
+            keywords: ['transaction', 'cost', 'governance', 'specificity', 'uncertainty', 'ธุรกรรม', 'ต้นทุน', 'การกำกับ'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'Multiple Regression', 'Structural Models'],
+            description: 'ทฤษฎีเศรษฐศาสตร์ต้นทุนธุรกรรมที่อธิบายการเลือกรูปแบบการจัดการโซ่อุปทาน'
+        },
+        'lean_management': {
+            id: 'lean_management',
+            name: 'Lean Management Theory',
+            author: 'Womack & Jones (1996)',
+            domain: 'supply_chain',
+            factors: ['Value Stream', 'Waste Elimination', 'Continuous Improvement', 'Pull System', 'Perfection'],
+            relationships: 'Lean Principles → Waste Reduction → Efficiency → Customer Value',
+            prediction: 'หลักการลีนจะช่วยลดความสูญเปล่าและเพิ่มประสิทธิภาพในโซ่อุปทาน',
+            keywords: ['lean', 'waste', 'efficiency', 'improvement', 'value', 'ลีน', 'ความสูญเปล่า', 'ประสิทธิภาพ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Before-After Analysis', 'Process Analysis'],
+            description: 'ทฤษฎีการจัดการแบบลีนที่มุ่งเน้นการลดความสูญเปล่าและสร้างคุณค่าให้ลูกค้า'
+        },
+        'agile_supply_chain': {
+            id: 'agile_supply_chain',
+            name: 'Agile Supply Chain Theory',
+            author: 'Christopher (2000)',
+            domain: 'supply_chain',
+            factors: ['Flexibility', 'Responsiveness', 'Speed', 'Adaptability', 'Market Sensitivity'],
+            relationships: 'Market Uncertainty → Agility Requirements → Flexible Capabilities → Competitive Advantage',
+            prediction: 'ความคล่องตัวในโซ่อุปทานจะช่วยให้องค์กรตอบสนองต่อการเปลี่ยนแปลงได้ดีขึ้น',
+            keywords: ['agile', 'flexibility', 'responsiveness', 'speed', 'adaptation', 'ความคล่องตัว', 'การตอบสนอง'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีโซ่อุปทานที่คล่องตัว เน้นความยืดหยุ่นและการตอบสนองต่อความไม่แน่นอน'
+        },
+        'green_supply_chain': {
+            id: 'green_supply_chain',
+            name: 'Green Supply Chain Management',
+            author: 'Srivastava (2007)',
+            domain: 'supply_chain',
+            factors: ['Environmental Management', 'Green Purchasing', 'Green Manufacturing', 'Green Logistics', 'Reverse Logistics'],
+            relationships: 'Environmental Pressure → Green Practices → Environmental Performance → Business Performance',
+            prediction: 'การจัดการโซ่อุปทานสีเขียวจะส่งผลต่อทั้งประสิทธิภาพสิ่งแวดล้อมและธุรกิจ',
+            keywords: ['green', 'environment', 'sustainability', 'eco-friendly', 'สีเขียว', 'สิ่งแวดล้อม', 'ความยั่งยืน'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีการจัดการโซ่อุปทานที่เป็นมิตรกับสิ่งแวดล้อมและยั่งยืน'
+        },
+        'supply_chain_resilience': {
+            id: 'supply_chain_resilience',
+            name: 'Supply Chain Resilience Theory',
+            author: 'Ponomarov & Holcomb (2009)',
+            domain: 'supply_chain',
+            factors: ['Redundancy', 'Flexibility', 'Velocity', 'Visibility', 'Collaboration'],
+            relationships: 'Resilience Capabilities → Risk Mitigation → Recovery Speed → Competitive Advantage',
+            prediction: 'ความสามารถในการฟื้นตัวของโซ่อุปทานจะช่วยลดผลกระทบจากความเสี่ยง',
+            keywords: ['resilience', 'risk', 'recovery', 'disruption', 'flexibility', 'ความยืดหยุ่น', 'ความเสี่ยง', 'การฟื้นตัว'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีความยืดหยุ่นของโซ่อุปทานในการรับมือกับความไม่แน่นอนและวิกฤต'
+        },
+        'bullwhip_effect': {
+            id: 'bullwhip_effect',
+            name: 'Bullwhip Effect Theory',
+            author: 'Lee et al. (1997)',
+            domain: 'supply_chain',
+            factors: ['Demand Forecast', 'Order Batching', 'Price Fluctuation', 'Shortage Gaming', 'Information Distortion'],
+            relationships: 'Information Distortion → Demand Amplification → Inventory Fluctuation → Cost Increase',
+            prediction: 'การบิดเบือนข้อมูลจะทำให้เกิดการขยายตัวของความต้องการในโซ่อุปทาน',
+            keywords: ['bullwhip', 'demand', 'forecast', 'information', 'distortion', 'ความต้องการ', 'การพยากรณ์', 'ข้อมูล'],
+            level: 2,
+            statistics: ['Time Series Analysis', 'Variance Analysis', 'Correlation Analysis'],
+            description: 'ทฤษฎีที่อธิบายปรากฏการณ์การขยายตัวของความผันผวนในโซ่อุปทาน'
+        },
+
+        // การค้าระหว่างประเทศ (7 ทฤษฎี)
+        'comparative_advantage': {
+            id: 'comparative_advantage',
+            name: 'Comparative Advantage Theory',
+            author: 'Ricardo (1817)',
+            domain: 'international_trade',
+            factors: ['Production Costs', 'Opportunity Cost', 'Specialization', 'Trade Benefits', 'Resource Allocation'],
+            relationships: 'Comparative Advantage → Specialization → Trade → Mutual Benefits',
+            prediction: 'ประเทศจะได้ประโยชน์จากการค้าเมื่อเชี่ยวชาญในสินค้าที่มีต้นทุนโอกาสต่ำ',
+            keywords: ['comparative', 'advantage', 'trade', 'specialization', 'cost', 'ความได้เปรียบ', 'การค้า', 'ความเชี่ยวชาญ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Comparative Analysis', 'Trade Intensity Index'],
+            description: 'ทฤษฎีพื้นฐานของการค้าระหว่างประเทศที่อธิบายประโยชน์จากการเชี่ยวชาญ'
+        },
+        'product_life_cycle': {
+            id: 'product_life_cycle',
+            name: 'Product Life Cycle Theory',
+            author: 'Vernon (1966)',
+            domain: 'international_trade',
+            factors: ['Innovation Stage', 'Growth Stage', 'Maturity Stage', 'Decline Stage', 'Location Advantage'],
+            relationships: 'Product Development → Export → Foreign Production → Import Competition',
+            prediction: 'รูปแบบการค้าจะเปลี่ยนแปลงตามวงจรชีวิตของผลิตภัณฑ์',
+            keywords: ['product', 'life', 'cycle', 'innovation', 'export', 'import', 'ผลิตภัณฑ์', 'วงจรชีวิต', 'นวัตกรรม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Time Series Analysis', 'Trend Analysis'],
+            description: 'ทฤษฎีที่อธิบายการเปลี่ยนแปลงของรูปแบบการค้าตามวงจรชีวิตผลิตภัณฑ์'
+        },
+        'gravity_model': {
+            id: 'gravity_model',
+            name: 'Gravity Model of Trade',
+            author: 'Tinbergen (1962)',
+            domain: 'international_trade',
+            factors: ['Economic Size (GDP)', 'Distance', 'Population', 'Common Language', 'Trade Agreements'],
+            relationships: 'Economic Size × Population / Distance → Trade Volume',
+            prediction: 'ปริมาณการค้าจะขึ้นอยู่กับขนาดเศรษฐกิจและระยะทางระหว่างประเทศ',
+            keywords: ['gravity', 'distance', 'GDP', 'trade', 'volume', 'แรงดึงดูด', 'ระยะทาง', 'ปริมาณการค้า'],
+            level: 3,
+            statistics: ['Log-Linear Regression', 'Panel Data Analysis', 'Fixed Effects Model'],
+            description: 'แบบจำลองแรงดึงดูดที่อธิบายปัจจัยกำหนดปริมาณการค้าระหว่างประเทศ'
+        },
+        'new_trade_theory': {
+            id: 'new_trade_theory',
+            name: 'New Trade Theory',
+            author: 'Krugman (1979)',
+            domain: 'international_trade',
+            factors: ['Economies of Scale', 'Product Differentiation', 'Monopolistic Competition', 'Network Effects'],
+            relationships: 'Economies of Scale → Product Differentiation → Intra-industry Trade → Welfare Gains',
+            prediction: 'การประหยัดต่อขนาดและการแยกความแตกต่างของสินค้าจะส่งผลต่อรูปแบบการค้า',
+            keywords: ['scale', 'differentiation', 'monopolistic', 'competition', 'intra-industry', 'ขนาด', 'การแข่งขัน', 'อุตสาหกรรม'],
+            level: 3,
+            statistics: ['Data Screening', 'Industry Analysis', 'Market Structure Analysis'],
+            description: 'ทฤษฎีการค้าใหม่ที่เน้นการประหยัดต่อขนาดและการแข่งขันแบบผูกขาด'
+        },
+        'heckscher_ohlin': {
+            id: 'heckscher_ohlin',
+            name: 'Heckscher-Ohlin Theory',
+            author: 'Heckscher (1919), Ohlin (1933)',
+            domain: 'international_trade',
+            factors: ['Factor Endowments', 'Factor Intensity', 'Factor Prices', 'Trade Pattern', 'Factor Price Equalization'],
+            relationships: 'Factor Endowments → Comparative Advantage → Trade Specialization → Factor Price Convergence',
+            prediction: 'ประเทศจะส่งออกสินค้าที่ใช้ปัจจัยการผลิตที่มีความอุดมสมบูรณ์มาก',
+            keywords: ['factor', 'endowments', 'intensity', 'specialization', 'ปัจจัยการผลิต', 'ความอุดมสมบูรณ์', 'ความเชี่ยวชาญ'],
+            level: 3,
+            statistics: ['Factor Analysis', 'Trade Intensity Analysis', 'Revealed Comparative Advantage'],
+            description: 'ทฤษฎีที่อธิบายรูปแบบการค้าจากความแตกต่างของปัจจัยการผลิตระหว่างประเทศ'
+        },
+        'trade_creation_diversion': {
+            id: 'trade_creation_diversion',
+            name: 'Trade Creation and Diversion Theory',
+            author: 'Viner (1950)',
+            domain: 'international_trade',
+            factors: ['Trade Creation', 'Trade Diversion', 'Tariff Elimination', 'Welfare Effects', 'Economic Integration'],
+            relationships: 'Economic Integration → Trade Creation/Diversion → Welfare Changes',
+            prediction: 'การรวมกลุ่มทางเศรษฐกิจจะสร้างทั้งการสร้างและการเบี่ยงเบนการค้า',
+            keywords: ['creation', 'diversion', 'integration', 'tariff', 'welfare', 'การสร้าง', 'การเบี่ยงเบน', 'สวัสดิการ'],
+            level: 2,
+            statistics: ['Before-After Analysis', 'Welfare Analysis', 'Trade Flow Analysis'],
+            description: 'ทฤษฎีที่อธิบายผลกระทบของการรวมกลุ่มทางเศรษฐกิจต่อรูปแบบการค้า'
+        },
+        'export_competitiveness': {
+            id: 'export_competitiveness',
+            name: 'Export Competitiveness Theory',
+            author: 'Porter (1990)',
+            domain: 'international_trade',
+            factors: ['Factor Conditions', 'Demand Conditions', 'Related Industries', 'Firm Strategy', 'Government', 'Chance'],
+            relationships: 'Diamond Factors → Competitive Advantage → Export Performance',
+            prediction: 'ความสามารถในการส่งออกจะขึ้นอยู่กับปัจจัยเพชรที่สร้างความได้เปรียบการแข่งขัน',
+            keywords: ['competitiveness', 'export', 'diamond', 'advantage', 'performance', 'ความสามารถแข่งขัน', 'การส่งออก'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีเพชรของพอร์เตอร์ที่อธิบายความได้เปรียบการแข่งขันในการส่งออก'
+        },
+
+        // กลยุทธ์ (7 ทฤษฎี)
+        'porters_five_forces': {
+            id: 'porters_five_forces',
+            name: "Porter's Five Forces Model",
+            author: 'Porter (1980)',
+            domain: 'strategy',
+            factors: ['Threat of New Entrants', 'Bargaining Power of Suppliers', 'Bargaining Power of Buyers', 'Threat of Substitutes', 'Competitive Rivalry'],
+            relationships: 'Five Forces → Industry Attractiveness → Profitability → Strategic Positioning',
+            prediction: 'ห้าแรงที่มีอิทธิพลต่ออุตสาหกรรมจะกำหนดความน่าสนใจและผลกำไรของธุรกิจ',
+            keywords: ['forces', 'competition', 'strategy', 'industry', 'rivalry', 'แรง', 'การแข่งขัน', 'กลยุทธ์', 'อุตสาหกรรม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Industry Analysis', 'Competitive Analysis'],
+            description: 'แบบจำลองห้าแรงของพอร์เตอร์ที่วิเคราะห์แรงขับเคลื่อนการแข่งขันในอุตสาหกรรม'
+        },
+        'generic_strategies': {
+            id: 'generic_strategies',
+            name: 'Generic Competitive Strategies',
+            author: 'Porter (1980)',
+            domain: 'strategy',
+            factors: ['Cost Leadership', 'Differentiation', 'Focus Strategy', 'Competitive Scope', 'Competitive Advantage'],
+            relationships: 'Strategic Choice → Competitive Advantage → Superior Performance',
+            prediction: 'การเลือกกลยุทธ์ทั่วไปที่เหมาะสมจะสร้างความได้เปรียบการแข่งขันที่ยั่งยืน',
+            keywords: ['cost', 'differentiation', 'focus', 'competitive', 'advantage', 'ต้นทุน', 'ความแตกต่าง', 'การมุ่งเน้น'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Strategy Classification', 'Performance Analysis'],
+            description: 'กลยุทธ์การแข่งขันทั่วไปที่อธิบายวิธีการสร้างความได้เปรียบการแข่งขัน'
+        },
+        'blue_ocean': {
+            id: 'blue_ocean',
+            name: 'Blue Ocean Strategy',
+            author: 'Kim & Mauborgne (2005)',
+            domain: 'strategy',
+            factors: ['Value Innovation', 'Eliminate Factors', 'Reduce Factors', 'Raise Factors', 'Create Factors'],
+            relationships: 'Value Innovation → Uncontested Market Space → Profitable Growth',
+            prediction: 'การสร้างนวัตกรรมคุณค่าจะเปิดพื้นที่ตลาดใหม่ที่ไม่มีการแข่งขัน',
+            keywords: ['blue', 'ocean', 'innovation', 'value', 'uncontested', 'market', 'มหาสมุทรสีฟ้า', 'นวัตกรรม'],
+            level: 2,
+            statistics: ['Strategy Canvas Analysis', 'Value Curve Analysis', 'Market Analysis'],
+            description: 'กลยุทธ์มหาสมุทรสีฟ้าที่มุ่งสร้างตลาดใหม่แทนการแข่งขันในตลาดเดิม'
+        },
+        'swot_analysis': {
+            id: 'swot_analysis',
+            name: 'SWOT Analysis Framework',
+            author: 'Andrews (1971)',
+            domain: 'strategy',
+            factors: ['Strengths', 'Weaknesses', 'Opportunities', 'Threats', 'Strategic Fit'],
+            relationships: 'Internal Analysis + External Analysis → Strategic Options → Strategy Formulation',
+            prediction: 'การวิเคราะห์จุดแข็ง จุดอ่อน โอกาส และภัยคุกคามจะช่วยในการกำหนดกลยุทธ์',
+            keywords: ['SWOT', 'strengths', 'weaknesses', 'opportunities', 'threats', 'จุดแข็ง', 'จุดอ่อน', 'โอกาส'],
+            level: 1,
+            statistics: ['Descriptive Statistics', 'Factor Analysis', 'Priority Matrix'],
+            description: 'กรอบการวิเคราะห์ SWOT สำหรับการประเมินสถานการณ์และกำหนดกลยุทธ์'
+        },
+        'balanced_scorecard': {
+            id: 'balanced_scorecard',
+            name: 'Balanced Scorecard',
+            author: 'Kaplan & Norton (1992)',
+            domain: 'strategy',
+            factors: ['Financial Perspective', 'Customer Perspective', 'Internal Process', 'Learning & Growth'],
+            relationships: 'Strategy → Four Perspectives → KPIs → Performance Measurement',
+            prediction: 'การวัดผลแบบสมดุลจะช่วยแปลงกลยุทธ์เป็นการปฏิบัติที่วัดผลได้',
+            keywords: ['balanced', 'scorecard', 'perspective', 'KPI', 'performance', 'การวัดผล', 'ดุลยภาพ', 'มุมมอง'],
+            level: 3,
+            statistics: ['Performance Measurement', 'Correlation Analysis', 'Cause-Effect Analysis'],
+            description: 'กรอบการวัดผลแบบสมดุลที่แปลงกลยุทธ์เป็นตัวชี้วัดในสี่มุมมอง'
+        },
+        'innovation_strategy': {
+            id: 'innovation_strategy',
+            name: 'Innovation Strategy Theory',
+            author: 'Christensen (1997)',
+            domain: 'strategy',
+            factors: ['Disruptive Innovation', 'Sustaining Innovation', 'Technology Adoption', 'Market Response', 'Value Network'],
+            relationships: 'Innovation Type → Market Disruption → Competitive Dynamics → Industry Transformation',
+            prediction: 'นวัตกรรมที่ทำลายล้างจะเปลี่ยนแปลงอุตสาหกรรมและสร้างผู้นำใหม่',
+            keywords: ['innovation', 'disruptive', 'technology', 'transformation', 'นวัตกรรม', 'การทำลายล้าง', 'เทคโนโลยี'],
+            level: 3,
+            statistics: ['Data Screening', 'Innovation Measurement', 'Technology Diffusion Analysis'],
+            description: 'ทฤษฎีนวัตกรรมที่อธิบายการเปลี่ยนแปลงอุตสาหกรรมจากนวัตกรรมทำลายล้าง'
+        },
+        'strategic_alliances': {
+            id: 'strategic_alliances',
+            name: 'Strategic Alliance Theory',
+            author: 'Gulati (1998)',
+            domain: 'strategy',
+            factors: ['Partner Selection', 'Alliance Structure', 'Trust', 'Knowledge Sharing', 'Performance'],
+            relationships: 'Partner Compatibility → Alliance Formation → Knowledge Transfer → Mutual Benefits',
+            prediction: 'ความเข้ากันได้ของพันธมิตรและการแบ่งปันความรู้จะส่งผลต่อความสำเร็จของพันธมิตร',
+            keywords: ['alliance', 'partnership', 'collaboration', 'knowledge', 'trust', 'พันธมิตร', 'ความร่วมมือ', 'ความไว้วางใจ'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีพันธมิตรเชิงกลยุทธ์ที่อธิบายการสร้างและจัดการความร่วมมือระหว่างองค์กร'
+        }
+        // ความยั่งยืน (7 ทฤษฎี)
+        'triple_bottom_line': {
+            id: 'triple_bottom_line',
+            name: 'Triple Bottom Line Theory',
+            author: 'Elkington (1997)',
+            domain: 'sustainability',
+            factors: ['Economic Performance', 'Environmental Performance', 'Social Performance', 'Stakeholder Value'],
+            relationships: 'Economic + Environmental + Social → Sustainable Performance → Long-term Value',
+            prediction: 'ความสำเร็จที่ยั่งยืนต้องสร้างคุณค่าในด้านเศรษฐกิจ สิ่งแวดล้อม และสังคม',
+            keywords: ['triple', 'bottom', 'line', 'sustainability', 'economic', 'environmental', 'social', 'ยั่งยืน', 'สิ่งแวดล้อม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีผลตอบแทนสามด้านที่เน้นการสร้างคุณค่าอย่างยั่งยืนใน 3 มิติ'
+        },
+        'stakeholder_theory': {
+            id: 'stakeholder_theory',
+            name: 'Stakeholder Theory',
+            author: 'Freeman (1984)',
+            domain: 'sustainability',
+            factors: ['Stakeholder Identification', 'Stakeholder Influence', 'Stakeholder Engagement', 'Value Creation'],
+            relationships: 'Stakeholder Engagement → Value Co-creation → Sustainable Performance',
+            prediction: 'การมีส่วนร่วมของผู้มีส่วนได้ส่วนเสียจะส่งผลต่อความยั่งยืนขององค์กร',
+            keywords: ['stakeholder', 'engagement', 'value', 'sustainability', 'responsibility', 'ผู้มีส่วนได้ส่วนเสีย', 'การมีส่วนร่วม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+            description: 'ทฤษฎีผู้มีส่วนได้ส่วนเสียที่เน้นการสร้างคุณค่าร่วมกันเพื่อความยั่งยืน'
+        },
+        'csr_theory': {
+            id: 'csr_theory',
+            name: 'Corporate Social Responsibility Theory',
+            author: 'Carroll (1991)',
+            domain: 'sustainability',
+            factors: ['Economic Responsibility', 'Legal Responsibility', 'Ethical Responsibility', 'Philanthropic Responsibility'],
+            relationships: 'CSR Dimensions → Corporate Reputation → Stakeholder Trust → Business Performance',
+            prediction: 'ความรับผิดชอบต่อสังคมจะส่งผลต่อชื่อเสียงและผลการดำเนินงานของบริษัท',
+            keywords: ['CSR', 'responsibility', 'social', 'ethical', 'reputation', 'ความรับผิดชอบ', 'สังคม', 'จริยธรรม'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีความรับผิดชอบต่อสังคมที่อธิบายบทบาทของธุรกิจต่อสังคม'
+        },
+        'green_innovation': {
+            id: 'green_innovation',
+            name: 'Green Innovation Theory',
+            author: 'Chen et al. (2006)',
+            domain: 'sustainability',
+            factors: ['Green Product Innovation', 'Green Process Innovation', 'Environmental Regulation', 'Market Demand'],
+            relationships: 'Environmental Pressure → Green Innovation → Competitive Advantage → Performance',
+            prediction: 'นวัตกรรมสีเขียวจะสร้างความได้เปรียบการแข่งขันและผลการดำเนินงานที่ดี',
+            keywords: ['green', 'innovation', 'environment', 'product', 'process', 'สีเขียว', 'นวัตกรรม', 'สิ่งแวดล้อม'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+            description: 'ทฤษฎีนวัตกรรมสีเขียวที่อธิบายการพัฒนาผลิตภัณฑ์และกระบวนการที่เป็นมิตรต่อสิ่งแวดล้อม'
+        },
+        'circular_economy': {
+            id: 'circular_economy',
+            name: 'Circular Economy Theory',
+            author: 'Ellen MacArthur Foundation (2013)',
+            domain: 'sustainability',
+            factors: ['Reduce', 'Reuse', 'Recycle', 'Resource Efficiency', 'Waste Minimization'],
+            relationships: 'Circular Principles → Resource Optimization → Waste Reduction → Sustainable Value',
+            prediction: 'หลักการเศรษฐกิจหมุนเวียนจะช่วยลดของเสียและเพิ่มประสิทธิภาพการใช้ทรัพยากร',
+            keywords: ['circular', 'economy', 'resource', 'waste', 'efficiency', 'หมุนเวียน', 'เศรษฐกิจ', 'ทรัพยากร'],
+            level: 3,
+            statistics: ['Data Screening', 'Resource Flow Analysis', 'Life Cycle Assessment'],
+            description: 'ทฤษฎีเศรษฐกิจหมุนเวียนที่เน้นการใช้ทรัพยากรอย่างมีประสิทธิภาพและลดของเสีย'
+        },
+        'sustainability_reporting': {
+            id: 'sustainability_reporting',
+            name: 'Sustainability Reporting Theory',
+            author: 'GRI Standards (2016)',
+            domain: 'sustainability',
+            factors: ['Environmental Disclosure', 'Social Disclosure', 'Economic Disclosure', 'Transparency', 'Accountability'],
+            relationships: 'Sustainability Reporting → Transparency → Stakeholder Trust → Reputation',
+            prediction: 'การรายงานความยั่งยืนจะเพิ่มความโปร่งใสและความไว้วางใจของผู้มีส่วนได้ส่วนเสีย',
+            keywords: ['reporting', 'disclosure', 'transparency', 'accountability', 'GRI', 'การรายงาน', 'ความโปร่งใส'],
+            level: 2,
+            statistics: ['Content Analysis', 'Disclosure Index', 'Correlation Analysis'],
+            description: 'ทฤษฎีการรายงานความยั่งยืนที่เน้นการเปิดเผยข้อมูลด้านสิ่งแวดล้อมและสังคม'
+        },
+        'shared_value': {
+            id: 'shared_value',
+            name: 'Creating Shared Value Theory',
+            author: 'Porter & Kramer (2011)',
+            domain: 'sustainability',
+            factors: ['Social Needs', 'Business Opportunities', 'Value Creation', 'Competitive Advantage', 'Social Impact'],
+            relationships: 'Social Needs → Business Innovation → Shared Value → Sustainable Competitive Advantage',
+            prediction: 'การสร้างคุณค่าร่วมจะทำให้ธุรกิจและสังคมได้ประโยชน์พร้อมกัน',
+            keywords: ['shared', 'value', 'social', 'business', 'innovation', 'impact', 'ร่วม', 'คุณค่า', 'สังคม'],
+            level: 3,
+            statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM', 'Impact Measurement'],
+            description: 'ทฤษฎีการสร้างคุณค่าร่วมที่เชื่อมโยงความสำเร็จทางธุรกิจกับผลกระทบเชิงบวกต่อสังคม'
+        },
+
+        // บริหารความเสี่ยง (7 ทฤษฎี)
+        'enterprise_risk_management': {
+            id: 'enterprise_risk_management',
+            name: 'Enterprise Risk Management (ERM)',
+            author: 'COSO (2004)',
+            domain: 'risk_management',
+            factors: ['Risk Identification', 'Risk Assessment', 'Risk Response', 'Risk Monitoring', 'Risk Culture'],
+            relationships: 'Risk Framework → Risk Management → Value Protection → Performance Enhancement',
+            prediction: 'การบริหารความเสี่ยงแบบองค์รวมจะช่วยปกป้องและเพิ่มมูลค่าขององค์กร',
+            keywords: ['enterprise', 'risk', 'management', 'assessment', 'monitoring', 'องค์กร', 'ความเสี่ยง', 'การประเมิน'],
+            level: 3,
+            statistics: ['Data Screening', 'Risk Assessment Models', 'Factor Analysis', 'Regression Analysis'],
+            description: 'กรอบการบริหารความเสี่ยงระดับองค์กรที่ครอบคลุมทุกประเภทความเสี่ยง'
+        },
+        'operational_risk': {
+            id: 'operational_risk',
+            name: 'Operational Risk Theory',
+            author: 'Basel Committee (2006)',
+            domain: 'risk_management',
+            factors: ['Process Risk', 'People Risk', 'Systems Risk', 'External Risk', 'Risk Controls'],
+            relationships: 'Operational Activities → Risk Exposure → Risk Controls → Loss Prevention',
+            prediction: 'ความเสี่ยงจากการดำเนินงานจะเกิดจากกระบวนการ คน ระบบ และปัจจัยภายนอก',
+            keywords: ['operational', 'process', 'systems', 'people', 'controls', 'การดำเนินงาน', 'กระบวนการ', 'ระบบ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Risk Measurement', 'Control Testing'],
+            description: 'ทฤษฎีความเสี่ยงจากการดำเนินงานที่เกิดจากความล้มเหลวของกระบวนการภายใน'
+        },
+        'credit_risk': {
+            id: 'credit_risk',
+            name: 'Credit Risk Management Theory',
+            author: 'Altman (1968)',
+            domain: 'risk_management',
+            factors: ['Probability of Default', 'Loss Given Default', 'Exposure at Default', 'Credit Rating', 'Collateral'],
+            relationships: 'Credit Assessment → Risk Pricing → Portfolio Management → Loss Mitigation',
+            prediction: 'ความเสี่ยงด้านเครดิตขึ้นอยู่กับความน่าจะเป็นของการผิดนัดและความสูญเสียที่คาดการณ์',
+            keywords: ['credit', 'default', 'rating', 'collateral', 'portfolio', 'เครดิต', 'ผิดนัด', 'การจัดอันดับ'],
+            level: 3,
+            statistics: ['Logistic Regression', 'Survival Analysis', 'Credit Scoring Models'],
+            description: 'ทฤษฎีการบริหารความเสี่ยงด้านเครดิตในสถาบันการเงินและองค์กร'
+        },
+        'market_risk': {
+            id: 'market_risk',
+            name: 'Market Risk Management Theory',
+            author: 'Jorion (2007)',
+            domain: 'risk_management',
+            factors: ['Interest Rate Risk', 'Foreign Exchange Risk', 'Equity Risk', 'Commodity Risk', 'Volatility'],
+            relationships: 'Market Factors → Price Movements → Portfolio Value → Risk Measures (VaR)',
+            prediction: 'ความเสี่ยงด้านตลาดเกิดจากการเปลี่ยนแปลงของปัจจัยตลาดที่ส่งผลต่อมูลค่าพอร์ตโฟลิโอ',
+            keywords: ['market', 'interest', 'exchange', 'volatility', 'VaR', 'ตลาด', 'อัตราดอกเบิ้ย', 'อัตราแลกเปลี่ยน'],
+            level: 3,
+            statistics: ['Time Series Analysis', 'GARCH Models', 'Value at Risk (VaR)', 'Monte Carlo Simulation'],
+            description: 'ทฤษฎีการบริหารความเสี่ยงด้านตลาดที่เกิดจากการเปลี่ยนแปลงของราคาตลาด'
+        },
+        'liquidity_risk': {
+            id: 'liquidity_risk',
+            name: 'Liquidity Risk Theory',
+            author: 'Brunnermeier & Pedersen (2009)',
+            domain: 'risk_management',
+            factors: ['Funding Liquidity', 'Market Liquidity', 'Cash Flow', 'Asset Liquidity', 'Liquidity Buffer'],
+            relationships: 'Liquidity Needs → Funding Sources → Liquidity Gap → Risk Management',
+            prediction: 'ความเสี่ยงด้านสภาพคล่องเกิดจากความไม่สามารถในการหาเงินทุนหรือขายสินทรัพย์',
+            keywords: ['liquidity', 'funding', 'cash', 'flow', 'assets', 'สภาพคล่อง', 'เงินทุน', 'กระแสเงินสด'],
+            level: 2,
+            statistics: ['Cash Flow Analysis', 'Liquidity Ratios', 'Stress Testing'],
+            description: 'ทฤษฎีความเสี่ยงด้านสภาพคล่องที่เกิดจากการขาดแคลนเงินทุนหรือความยากในการขายสินทรัพย์'
+        },
+        'cyber_risk': {
+            id: 'cyber_risk',
+            name: 'Cyber Risk Management Theory',
+            author: 'NIST Framework (2014)',
+            domain: 'risk_management',
+            factors: ['Threat Identification', 'Vulnerability Assessment', 'Impact Analysis', 'Security Controls', 'Incident Response'],
+            relationships: 'Cyber Threats → Vulnerabilities → Security Incidents → Business Impact',
+            prediction: 'ความเสี่ยงไซเบอร์เกิดจากภัยคุกคามที่ใช้ประโยชน์จากช่องโหว่ของระบบเทคโนโลยี',
+            keywords: ['cyber', 'security', 'threat', 'vulnerability', 'incident', 'ไซเบอร์', 'ความปลอดภัย', 'ภัยคุกคาม'],
+            level: 3,
+            statistics: ['Risk Assessment Models', 'Incident Analysis', 'Threat Intelligence Analysis'],
+            description: 'ทฤษฎีการบริหารความเสี่ยงไซเบอร์ในยุคดิจิทัลที่องค์กรพึ่งพาเทคโนโลยี'
+        },
+        'behavioral_risk': {
+            id: 'behavioral_risk',
+            name: 'Behavioral Risk Theory',
+            author: 'Kahneman & Tversky (1979)',
+            domain: 'risk_management',
+            factors: ['Cognitive Biases', 'Risk Perception', 'Decision Making', 'Human Error', 'Risk Culture'],
+            relationships: 'Cognitive Biases → Risk Perception → Decision Errors → Operational Losses',
+            prediction: 'อคติทางความคิดและการรับรู้ความเสี่ยงจะส่งผลต่อการตัดสินใจและข้อผิดพลาด',
+            keywords: ['behavioral', 'bias', 'perception', 'decision', 'error', 'พฤติกรรม', 'อคติ', 'การรับรู้'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Behavioral Analysis', 'Error Analysis'],
+            description: 'ทฤษฎีความเสี่ยงเชิงพฤติกรรมที่เกิดจากอคติและข้อผิดพลาดของมนุษย์'
+        },
+
+        // บริหารโครงการ (7 ทฤษฎี)
+        'pmbok_theory': {
+            id: 'pmbok_theory',
+            name: 'Project Management Body of Knowledge (PMBOK)',
+            author: 'PMI (2017)',
+            domain: 'project_management',
+            factors: ['Scope Management', 'Time Management', 'Cost Management', 'Quality Management', 'Risk Management'],
+            relationships: 'PM Knowledge Areas → Project Processes → Project Success → Stakeholder Satisfaction',
+            prediction: 'การปฏิบัติตามมาตรฐานการบริหารโครงการจะเพิ่มโอกาสความสำเร็จของโครงการ',
+            keywords: ['PMBOK', 'project', 'management', 'scope', 'time', 'cost', 'quality', 'โครงการ', 'การจัดการ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Performance Measurement', 'Success Factor Analysis'],
+            description: 'มาตรฐานการบริหารโครงการที่ครอบคลุมความรู้และกระบวนการที่จำเป็น'
+        },
+        'agile_methodology': {
+            id: 'agile_methodology',
+            name: 'Agile Project Management Theory',
+            author: 'Beck et al. (2001)',
+            domain: 'project_management',
+            factors: ['Iterative Development', 'Customer Collaboration', 'Responding to Change', 'Working Software', 'Team Empowerment'],
+            relationships: 'Agile Principles → Iterative Delivery → Customer Feedback → Product Improvement',
+            prediction: 'การพัฒนาแบบ Agile จะช่วยตอบสนองการเปลี่ยนแปลงและความต้องการของลูกค้าได้ดีขึ้น',
+            keywords: ['agile', 'iterative', 'scrum', 'collaboration', 'change', 'คล่องตัว', 'ทำซ้ำ', 'ความร่วมมือ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Performance Metrics', 'Team Effectiveness Analysis'],
+            description: 'วิธีการบริหารโครงการแบบ Agile ที่เน้นความยืดหยุ่นและการตอบสนองการเปลี่ยนแปลง'
+        },
+        'critical_path_method': {
+            id: 'critical_path_method',
+            name: 'Critical Path Method (CPM)',
+            author: 'Kelley & Walker (1959)',
+            domain: 'project_management',
+            factors: ['Activity Duration', 'Dependencies', 'Critical Path', 'Float Time', 'Resource Allocation'],
+            relationships: 'Activity Network → Critical Path → Project Duration → Resource Optimization',
+            prediction: 'การระบุเส้นทางวิกฤตจะช่วยเพิ่มประสิทธิภาพการจัดการเวลาและทรัพยากร',
+            keywords: ['critical', 'path', 'duration', 'dependencies', 'schedule', 'เส้นทางวิกฤต', 'ระยะเวลา', 'กำหนดการ'],
+            level: 2,
+            statistics: ['Network Analysis', 'Time Series Analysis', 'Optimization Analysis'],
+            description: 'วิธีการหาเส้นทางวิกฤตในการจัดการเวลาและการจัดลำดับกิจกรรมโครงการ'
+        },
+        'earned_value_management': {
+            id: 'earned_value_management',
+            name: 'Earned Value Management (EVM)',
+            author: 'Fleming & Koppelman (2010)',
+            domain: 'project_management',
+            factors: ['Planned Value (PV)', 'Earned Value (EV)', 'Actual Cost (AC)', 'Schedule Performance', 'Cost Performance'],
+            relationships: 'PV + EV + AC → Performance Indices → Project Control → Corrective Actions',
+            prediction: 'การวัดค่าที่ได้รับจะช่วยติดตามและควบคุมประสิทธิภาพของโครงการ',
+            keywords: ['earned', 'value', 'planned', 'actual', 'performance', 'ค่าที่ได้รับ', 'ประสิทธิภาพ', 'การควบคุม'],
+            level: 3,
+            statistics: ['Performance Measurement', 'Variance Analysis', 'Forecasting Models'],
+            description: 'วิธีการวัดและควบคุมประสิทธิภาพโครงการด้านเวลาและต้นทุน'
+        },
+        'project_risk_management': {
+            id: 'project_risk_management',
+            name: 'Project Risk Management Theory',
+            author: 'Chapman & Ward (2003)',
+            domain: 'project_management',
+            factors: ['Risk Identification', 'Risk Analysis', 'Risk Response', 'Risk Monitoring', 'Contingency Planning'],
+            relationships: 'Risk Identification → Risk Analysis → Risk Response → Risk Control → Project Success',
+            prediction: 'การบริหารความเสี่ยงอย่างเป็นระบบจะเพิ่มโอกาสความสำเร็จของโครงการ',
+            keywords: ['project', 'risk', 'identification', 'analysis', 'response', 'โครงการ', 'ความเสี่ยง', 'การวิเคราะห์'],
+            level: 3,
+            statistics: ['Risk Assessment', 'Monte Carlo Simulation', 'Sensitivity Analysis'],
+            description: 'กระบวนการบริหารความเสี่ยงในโครงการตั้งแต่การระบุถึงการควบคุม'
+        },
+        'stakeholder_management': {
+            id: 'stakeholder_management',
+            name: 'Project Stakeholder Management Theory',
+            author: 'Cleland & Ireland (2007)',
+            domain: 'project_management',
+            factors: ['Stakeholder Identification', 'Stakeholder Analysis', 'Engagement Strategy', 'Communication Plan', 'Relationship Management'],
+            relationships: 'Stakeholder Analysis → Engagement Strategy → Communication → Stakeholder Support → Project Success',
+            prediction: 'การจัดการผู้มีส่วนได้ส่วนเสียอย่างมีประสิทธิภาพจะส่งผลต่อความสำเร็จของโครงการ',
+            keywords: ['stakeholder', 'engagement', 'communication', 'relationship', 'support', 'ผู้มีส่วนได้ส่วนเสีย', 'การสื่อสาร'],
+            level: 2,
+            statistics: ['Stakeholder Analysis', 'Communication Effectiveness', 'Relationship Assessment'],
+            description: 'การจัดการความสัมพันธ์และการมีส่วนร่วมของผู้มีส่วนได้ส่วนเสียในโครงการ'
+        },
+        'team_dynamics': {
+            id: 'team_dynamics',
+            name: 'Project Team Dynamics Theory',
+            author: 'Tuckman (1965)',
+            domain: 'project_management',
+            factors: ['Forming', 'Storming', 'Norming', 'Performing', 'Team Effectiveness'],
+            relationships: 'Team Formation → Team Development → Team Performance → Project Outcomes',
+            prediction: 'การพัฒนาทีมตามขั้นตอนจะส่งผลต่อประสิทธิภาพและผลลัพธ์ของโครงการ',
+            keywords: ['team', 'dynamics', 'forming', 'performing', 'effectiveness', 'ทีม', 'พลวัต', 'ประสิทธิภาพ'],
+            level: 2,
+            statistics: ['Team Assessment', 'Performance Measurement', 'Behavioral Analysis'],
+            description: 'การศึกษาพลวัตทีมและการพัฒนาประสิทธิภาพทีมงานในโครงการ'
+        },
+
+        // วิเคราะห์ธุรกิจ (7 ทฤษฎี)
+        'business_intelligence': {
+            id: 'business_intelligence',
+            name: 'Business Intelligence Theory',
+            author: 'Watson & Wixom (2007)',
+            domain: 'business_analytics',
+            factors: ['Data Integration', 'Data Warehousing', 'OLAP', 'Reporting', 'Decision Support'],
+            relationships: 'Data Integration → Information Processing → Business Insights → Decision Making',
+            prediction: 'ระบบ BI จะช่วยเปลี่ยนข้อมูลเป็นข้อมูลเชิงลึกเพื่อการตัดสินใจที่ดีขึ้น',
+            keywords: ['business', 'intelligence', 'data', 'analytics', 'decision', 'ธุรกิจ', 'ข้อมูล', 'การวิเคราะห์'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Data Mining', 'Trend Analysis', 'Reporting'],
+            description: 'ทฤษฎีระบบสารสนเทศเพื่อการตัดสินใจที่เปลี่ยนข้อมูลเป็นความรู้'
+        },
+        'big_data_analytics': {
+            id: 'big_data_analytics',
+            name: 'Big Data Analytics Theory',
+            author: 'Chen et al. (2012)',
+            domain: 'business_analytics',
+            factors: ['Volume', 'Velocity', 'Variety', 'Veracity', 'Value Creation'],
+            relationships: '5Vs of Big Data → Analytics Capabilities → Business Insights → Competitive Advantage',
+            prediction: 'การวิเคราะห์ข้อมูลขนาดใหญ่จะสร้างความได้เปรียบการแข่งขันและคุณค่าทางธุรกิจ',
+            keywords: ['big', 'data', 'analytics', 'volume', 'velocity', 'variety', 'ข้อมูลขนาดใหญ่', 'การวิเคราะห์'],
+            level: 3,
+            statistics: ['Machine Learning', 'Predictive Analytics', 'Text Mining', 'Network Analysis'],
+            description: 'ทฤษฎีการวิเคราะห์ข้อมูลขนาดใหญ่ที่มีความหลากหลายและความเร็วสูง'
+        },
+        'predictive_analytics': {
+            id: 'predictive_analytics',
+            name: 'Predictive Analytics Theory',
+            author: 'Shmueli & Koppius (2011)',
+            domain: 'business_analytics',
+            factors: ['Historical Data', 'Statistical Models', 'Machine Learning', 'Predictive Models', 'Forecasting Accuracy'],
+            relationships: 'Historical Data → Model Building → Prediction → Business Decisions → Performance Improvement',
+            prediction: 'การวิเคราะห์เชิงพยากรณ์จะช่วยคาดการณ์แนวโน้มและรูปแบบในอนาคต',
+            keywords: ['predictive', 'analytics', 'forecasting', 'models', 'machine', 'learning', 'พยากรณ์', 'แบบจำลอง'],
+            level: 3,
+            statistics: ['Time Series Analysis', 'Regression Models', 'Machine Learning', 'Model Validation'],
+            description: 'ทฤษฎีการวิเคราะห์เชิงพยากรณ์เพื่อคาดการณ์เหตุการณ์ในอนาคต'
+        },
+        'data_mining': {
+            id: 'data_mining',
+            name: 'Data Mining Theory',
+            author: 'Fayyad et al. (1996)',
+            domain: 'business_analytics',
+            factors: ['Pattern Discovery', 'Knowledge Extraction', 'Association Rules', 'Clustering', 'Classification'],
+            relationships: 'Data Preparation → Pattern Discovery → Knowledge Extraction → Business Applications',
+            prediction: 'การขุดข้อมูลจะช่วยค้นหารูปแบบและความรู้ที่ซ่อนอยู่ในข้อมูล',
+            keywords: ['data', 'mining', 'pattern', 'discovery', 'knowledge', 'extraction', 'การขุดข้อมูล', 'รูปแบบ', 'ความรู้'],
+           level: 3,
+           statistics: ['Clustering Analysis', 'Association Rules', 'Decision Trees', 'Neural Networks'],
+           description: 'ทฤษฎีการขุดข้อมูลเพื่อค้นหารูปแบบและความรู้ที่ซ่อนอยู่ในข้อมูล'
+       },
+       'customer_analytics': {
+           id: 'customer_analytics',
+           name: 'Customer Analytics Theory',
+           author: 'Kumar & Reinartz (2016)',
+           domain: 'business_analytics',
+           factors: ['Customer Segmentation', 'Customer Lifetime Value', 'Churn Prediction', 'Cross-selling', 'Customer Journey'],
+           relationships: 'Customer Data → Analytics → Customer Insights → Marketing Strategy → Customer Value',
+           prediction: 'การวิเคราะห์ลูกค้าจะช่วยเข้าใจพฤติกรรมและสร้างกลยุทธ์การตลาดที่มีประสิทธิภาพ',
+           keywords: ['customer', 'analytics', 'segmentation', 'lifetime', 'value', 'churn', 'ลูกค้า', 'การแบ่งกลุ่ม', 'คุณค่า'],
+           level: 3,
+           statistics: ['Cluster Analysis', 'Survival Analysis', 'RFM Analysis', 'Cohort Analysis'],
+           description: 'ทฤษฎีการวิเคราะห์ลูกค้าเพื่อเข้าใจพฤติกรรมและสร้างคุณค่า'
+       },
+       'digital_transformation': {
+           id: 'digital_transformation',
+           name: 'Digital Transformation Theory',
+           author: 'Westerman et al. (2014)',
+           domain: 'business_analytics',
+           factors: ['Digital Strategy', 'Technology Adoption', 'Process Innovation', 'Organizational Change', 'Digital Capabilities'],
+           relationships: 'Digital Strategy → Technology Implementation → Process Transformation → Business Value',
+           prediction: 'การเปลี่ยนผ่านสู่ดิจิทัลจะสร้างความสามารถใหม่และคุณค่าทางธุรกิจ',
+           keywords: ['digital', 'transformation', 'technology', 'innovation', 'capabilities', 'ดิจิทัล', 'เทคโนโลยี', 'นวัตกรรม'],
+           level: 3,
+           statistics: ['Digital Maturity Assessment', 'Technology Adoption Models', 'Change Management Metrics'],
+           description: 'ทฤษฎีการเปลี่ยนผ่านสู่ดิจิทัลเพื่อสร้างความสามารถในการแข่งขันใหม่'
+       },
+       'ai_adoption': {
+           id: 'ai_adoption',
+           name: 'Artificial Intelligence Adoption Theory',
+           author: 'Davenport & Ronanki (2018)',
+           domain: 'business_analytics',
+           factors: ['AI Readiness', 'Data Quality', 'Technical Infrastructure', 'Organizational Culture', 'AI Capabilities'],
+           relationships: 'AI Readiness → Implementation → AI Capabilities → Business Performance → Competitive Advantage',
+           prediction: 'การนำ AI มาใช้จะเพิ่มประสิทธิภาพและสร้างความได้เปรียบการแข่งขัน',
+           keywords: ['artificial', 'intelligence', 'AI', 'automation', 'machine', 'learning', 'ปัญญาประดิษฐ์', 'อัตโนมัติ'],
+           level: 3,
+           statistics: ['AI Maturity Assessment', 'Performance Measurement', 'Impact Analysis', 'ROI Calculation'],
+           description: 'ทฤษฎีการนำปัญญาประดิษฐ์มาใช้ในองค์กรเพื่อเพิ่มประสิทธิภาพ'
+       }
+   },
+        levels: {
         1: {
             name: 'ระดับพื้นฐาน',
-            steps: '3-5 ขั้นตอน',
+            steps: '5-7 ขั้นตอน',
             description: 'เหมาะสำหรับนักศึกษาใหม่หรือการวิจัยเบื้องต้น',
-            methods: ['Descriptive Statistics', 'Reliability Analysis', 'T-test/ANOVA', 'Correlation']
+            methods: [
+                'Data Preparation',
+                'Descriptive Statistics', 
+                'Reliability Analysis',
+                'Normality Testing',
+                'T-test/ANOVA',
+                'Correlation Analysis',
+                'Simple Regression'
+            ],
+            details: {
+                'Data Preparation': {
+                    description: 'การเตรียมและทำความสะอาดข้อมูลก่อนการวิเคราะห์',
+                    purpose: 'ตรวจสอบความถูกต้องและครบถ้วนของข้อมูล จัดการข้อมูลที่ขาดหายหรือผิดปกติ',
+                    result: 'ข้อมูลที่สะอาดและพร้อมสำหรับการวิเคราะห์ รายงานคุณภาพข้อมูล',
+                    criteria: 'ข้อมูลสูญหาย < 5%, ไม่มีค่าผิดปกติที่รุนแรง, รูปแบบข้อมูลสอดคล้อง',
+                    duration: '1-2 วัน',
+                    caution: 'ระวังการลบข้อมูลมากเกินไป อาจส่งผลต่อความเป็นตัวแทนของกลุ่มตัวอย่าง'
+                },
+                'Descriptive Statistics': {
+                    description: 'การวิเคราะห์สถิติเชิงพรรณนาเพื่อสรุปลักษณะของข้อมูล',
+                    purpose: 'อธิบายลักษณะทั่วไปของตัวอย่าง เช่น อายุ เพศ การศึกษา และตัวแปรสำคัญ',
+                    result: 'ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด ความถี่ เปอร์เซ็นต์',
+                    criteria: 'ครอบคลุมตัวแปรทั้งหมด มีการแปลผลที่ชัดเจน',
+                    duration: '1 วัน',
+                    caution: 'ตรวจสอบค่าผิดปกติที่อาจส่งผลต่อการวิเคราะห์ขั้นตอนต่อไป'
+                },
+                'Reliability Analysis': {
+                    description: 'การทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha',
+                    purpose: 'ตรวจสอบความสอดคล้องภายในของข้อคำถามในแต่ละมิติ',
+                    result: 'ค่า Cronbach\'s Alpha สำหรับแต่ละมิติ รายการข้อคำถามที่ควรปรับปรุง',
+                    criteria: 'Alpha ≥ 0.70 ยอมรับได้, ≥ 0.80 ดี, ≥ 0.90 ดีมาก',
+                    duration: '1-2 วัน',
+                    caution: 'หาก Alpha ต่ำเกินไป ต้องทบทวนข้อคำถามหรือลบข้อคำถามที่ไม่เหมาะสม'
+                },
+                'Normality Testing': {
+                    description: 'การทดสอบการแจกแจงปกติของข้อมูล',
+                    purpose: 'ตรวจสอบว่าข้อมูลมีการแจกแจงแบบปกติหรือไม่ เพื่อเลือกสถิติที่เหมาะสม',
+                    result: 'ผลการทดสอบ Kolmogorov-Smirnov หรือ Shapiro-Wilk พร้อมกราฟ Histogram',
+                    criteria: 'p-value > 0.05 แสดงการแจกแจงปกติ, Skewness และ Kurtosis อยู่ในช่วง ±2',
+                    duration: '0.5 วัน',
+                    caution: 'หากข้อมูลไม่เป็นปกติ อาจต้องใช้สถิติไม่อิงพารามิเตอร์'
+                },
+                'T-test/ANOVA': {
+                    description: 'การเปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
+                    purpose: 'ทดสอบความแตกต่างอย่างมีนัยสำคัญระหว่างกลุ่มตัวอย่าง',
+                    result: 'ค่าสถิติ t หรือ F, p-value, และขนาดผลกระทบ (Effect Size)',
+                    criteria: 'p-value < 0.05 = แตกต่างอย่างมีนัยสำคัญ, Effect Size: 0.2=เล็ก, 0.5=กลาง, 0.8=ใหญ่',
+                    duration: '1 วัน',
+                    caution: 'ตรวจสอบสมมติะานของการทดสอบ เช่น ความเป็นอิสระและความแปรปรวนเท่ากัน'
+                },
+                'Correlation Analysis': {
+                    description: 'การวิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
+                    purpose: 'ศึกษาทิศทางและความแรงของความสัมพันธ์ระหว่างตัวแปร',
+                    result: 'ค่าสัมประสิทธิ์สหสัมพันธ์ (r) และระดับนัยสำคัญ',
+                    criteria: '|r| < 0.3=อ่อน, 0.3-0.7=ปานกลาง, > 0.7=แรง, p-value < 0.05',
+                    duration: '1 วัน',
+                    caution: 'ความสัมพันธ์ไม่ได้หมายถึงความเป็นเหตุเป็นผล'
+                },
+                'Simple Regression': {
+                    description: 'การวิเคราะห์การถดถอยอย่างง่ายระหว่างตัวแปรต้นและตัวแปรตาม',
+                    purpose: 'ทำนายและอธิบายความสัมพันธ์เชิงเส้นระหว่างตัวแปร 2 ตัว',
+                    result: 'สมการการถดถอย ค่า R², ความมีนัยสำคัญของโมเดล',
+                    criteria: 'R² > 0.1=อธิบายได้, p-value < 0.05, สมมติฐานการถดถอยเป็นไปตามเกณฑ์',
+                    duration: '1-2 วัน',
+                    caution: 'ตรวจสอบสมมติฐานการถดถอย: ความเป็นเส้นตรง ความเป็นอิสระ และความแปรปรวนคงที่'
+                }
+            }
         },
         2: {
             name: 'ระดับกลาง',
-            steps: '6-8 ขั้นตอน',
+            steps: '8-10 ขั้นตอน',
             description: 'เหมาะสำหรับการวิจัยระดับปริญญาโทหรือมีประสบการณ์บ้าง',
-            methods: ['Data Preparation', 'Descriptive', 'Reliability', 'EFA', 'Multiple Regression']
+            methods: [
+                'Data Screening',
+                'Descriptive Statistics',
+                'Reliability Analysis',
+                'Validity Testing',
+                'Exploratory Factor Analysis (EFA)',
+                'Assumption Testing',
+                'Multiple Regression',
+                'Mediation Analysis',
+                'Model Interpretation'
+            ],
+            details: {
+                'Data Screening': {
+                    description: 'การตรวจสอบข้อมูลอย่างละเอียดก่อนการวิเคราะห์',
+                    purpose: 'ตรวจหาค่าผิดปกติ ข้อมูลสูญหาย และการแจกแจงของข้อมูล',
+                    result: 'รายงานคุณภาพข้อมูล การจัดการค่าผิดปกติ และข้อมูลที่พร้อมใช้',
+                    criteria: 'Missing data < 10%, ไม่มี Extreme outliers, การแจกแจงใกล้เคียงปกติ',
+                    duration: '2-3 วัน',
+                    caution: 'การจัดการค่าผิดปกติต้องระวังไม่ให้เปลี่ยนธรรมชาติของข้อมูล'
+                },
+                'Descriptive Statistics': {
+                    description: 'สถิติเชิงพรรณนาแบบครอบคลุมสำหรับทุกตัวแปร',
+                    purpose: 'อธิบายลักษณะของกลุ่มตัวอย่างและตัวแปรทั้งหมดในการศึกษา',
+                    result: 'ตารางสรุปสถิติ กราฟแสดงการกระจาย และการเปรียบเทียบกลุ่มย่อย',
+                    criteria: 'ครอบคลุมทุกตัวแปร มีการนำเสนอที่เข้าใจง่าย',
+                    duration: '1-2 วัน',
+                    caution: 'ใส่ใจรายละเอียดการแปลผลให้สอดคล้องกับบริบทการวิจัย'
+                },
+                'Reliability Analysis': {
+                    description: 'การทดสอบความเชื่อมั่นแบบละเอียดของเครื่องมือวัด',
+                    purpose: 'ประเมินความสอดคล้องภายในและความเสถียรของแบบสอบถาม',
+                    result: 'Cronbach\'s Alpha, Item-Total Correlation, Alpha if Item Deleted',
+                    criteria: 'Alpha ≥ 0.70, Item-Total Correlation ≥ 0.30, การปรับปรุงแบบสอบถาม',
+                    duration: '2 วัน',
+                    caution: 'การลบข้อคำถามต้องพิจารณาเนื้อหาและทฤษฎีประกอบ'
+                },
+                'Validity Testing': {
+                    description: 'การทดสอบความตรงของเครื่องมือวัด',
+                    purpose: 'ตรวจสอบว่าแบบสอบถามวัดสิ่งที่ต้องการวัดจริงหรือไม่',
+                    result: 'Content Validity, Construct Validity, Convergent และ Discriminant Validity',
+                    criteria: 'ผู้เชี่ยวชาญเห็นด้วย > 80%, Factor Loading > 0.5, AVE > 0.5',
+                    duration: '2-3 วัน',
+                    caution: 'ความตรงเป็นเรื่องของคุณภาพงานวิจัย ไม่ควรมองข้าม'
+                },
+                'Exploratory Factor Analysis (EFA)': {
+                    description: 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝง',
+                    purpose: 'ลดจำนวนตัวแปรและค้นหาปัจจัยแฝงที่อธิบายความแปรปรวน',
+                    result: 'จำนวนองค์ประกอบ Factor Loading การอธิบายความแปรปรวน',
+                    criteria: 'KMO > 0.7, Bartlett\'s Test มีนัยสำคัญ, Factor Loading > 0.5, Eigenvalue > 1',
+                    duration: '2-3 วัน',
+                    caution: 'การตั้งชื่อองค์ประกอบต้องสอดคล้องกับทฤษฎีและเนื้อหา'
+                },
+                'Assumption Testing': {
+                    description: 'การทดสอบสมมติฐานสำหรับการวิเคราะห์ขั้นสูง',
+                    purpose: 'ตรวจสอบความเหมาะสมของข้อมูลสำหรับการวิเคราะห์ Multiple Regression',
+                    result: 'ผลการทดสอบ Linearity, Independence, Homoscedasticity, Normality',
+                    criteria: 'ความสัมพันธ์เป็นเส้นตรง, ไม่มี Multicollinearity (VIF < 5), ความคลาดเคลื่อนกระจายปกติ',
+                    duration: '1-2 วัน',
+                    caution: 'หากละเมิดสมมติฐาน ต้องปรับปรุงข้อมูลหรือเปลี่ยนวิธีการวิเคราะห์'
+                },
+                'Multiple Regression': {
+                    description: 'การวิเคราะห์การถดถอยพหุคูณเพื่อทำนายตัวแปรตาม',
+                    purpose: 'ศึกษาผลกระทบของตัวแปรต้นหลายตัวต่อตัวแปรตาม',
+                    result: 'สมการการถดถอย ค่า R² ค่าสัมประสิทธิ์การถดถอย และความมีนัยสำคัญ',
+                    criteria: 'R² > 0.2=อธิบายได้ดี, p-value < 0.05, Beta coefficients มีนัยสำคัญ',
+                    duration: '2-3 วัน',
+                    caution: 'ระวัง Multicollinearity และ Overfitting ของโมเดล'
+                },
+                'Mediation Analysis': {
+                    description: 'การวิเคราะห์ตัวแปรคั่นกลางในความสัมพันธ์เชิงสาเหตุ',
+                    purpose: 'ทดสอบว่าตัวแปรใดเป็นตัวกลางในการส่งผลจากตัวแปรต้นไปยังตัวแปรตาม',
+                    result: 'Direct Effect, Indirect Effect, Total Effect และ Bootstrapping Confidence Intervals',
+                    criteria: 'Indirect Effect มีนัยสำคัญ (CI ไม่ครอบคลุม 0), สอดคล้องกับทฤษฎี',
+                    duration: '2-3 วัน',
+                    caution: 'ต้องมีพื้นฐานทฤษฎีที่แข็งแกร่งในการระบุตัวแปรคั่นกลาง'
+                },
+                'Model Interpretation': {
+                    description: 'การตีความและนำเสนอผลการวิเคราะห์',
+                    purpose: 'อธิบายความหมายของผลลัพธ์ในบริบทของการวิจัยและทฤษฎี',
+                    result: 'การตีความที่เข้าใจง่าย ข้อเสนอแนะ และข้อจำกัดของการศึกษา',
+                    criteria: 'สอดคล้องกับทฤษฎี นำไปใช้ประโยชน์ได้ มีการอภิปรายอย่างสมดุล',
+                    duration: '2-3 วัน',
+                    caution: 'ระวังการตีความเกินจริงหรือสรุปนอกเหนือจากข้อมูล'
+                }
+            }
         },
         3: {
             name: 'ระดับสูง',
-            steps: '10-15 ขั้นตอน',
+            steps: '12-15 ขั้นตอน',
             description: 'เหมาะสำหรับการวิจัยระดับปริญญาเอกหรือมืออาชีพ',
-            methods: ['Data Screening', 'CMB Testing', 'EFA', 'CFA', 'SEM', 'Mediation/Moderation']
-        }
-    }
+            methods: [
+                'Data Screening & Cleaning',
+                'Missing Data Analysis',
+                'Common Method Bias Testing',
+                'Descriptive & Preliminary Analysis',
+                'Reliability & Validity Assessment',
+                'Exploratory Factor Analysis (EFA)',
+                'Confirmatory Factor Analysis (CFA)',
+                'Measurement Model Evaluation',
+                'Structural Equation Modeling (SEM)',
+                'Mediation & Moderation Analysis',
+                'Model Comparison & Refinement',
+                'Robustness Testing',
+                'Cross-Validation',
+                'Results Interpretation & Reporting'
+            ],
+            details: {
+                'Data Screening & Cleaning': {
+                    description: 'การตรวจสอบและทำความสะอาดข้อมูลอย่างละเอียดและเป็นระบบ',
+                    purpose: 'ตรวจหาและจัดการปัญหาข้อมูลทุกประเภท รวมถึงการประเมินคุณภาพข้อมูล',
+                    result: 'ข้อมูลที่สะอาดและมีคุณภาพสูง รายงานการจัดการปัญหาข้อมูล',
+                    criteria: 'Missing data < 5%, Outliers ถูกจัดการอย่างเหมาะสม, Data entry errors = 0',
+                    duration: '3-4 วัน',
+                    caution: 'ต้องบันทึกทุกขั้นตอนการจัดการข้อมูลเพื่อความโปร่งใสและทำซ้ำได้'
+                },
+                'Missing Data Analysis': {
+                    description: 'การวิเคราะห์รูปแบบของข้อมูลที่ขาดหายและการจัดการ',
+                    purpose: 'ตรวจสอบว่าข้อมูลขาดหายแบบสุ่มหรือมีรูปแบบ และเลือกวิธีการจัดการที่เหมาะสม',
+                    result: 'รูปแบบการขาดหาย (MCAR, MAR, MNAR) และวิธีการ Imputation ที่เหมาะสม',
+                    criteria: 'Little\'s MCAR Test, การเปรียบเทียบวิธี Imputation ต่างๆ',
+                    duration: '2-3 วัน',
+                    caution: 'การ Imputation ที่ไม่เหมาะสมอาจทำให้ผลลัพธ์บิดเบือน'
+                },
+                'Common Method Bias Testing': {
+                    description: 'การทดสอบอคติจากการใช้แหล่งข้อมูลเดียวกัน',
+                    purpose: 'ตรวจสอบว่าการใช้แบบสอบถามเดียวกันวัดทั้งตัวแปรต้นและตามส่งผลต่อความสัมพันธ์หรือไม่',
+                    result: 'ผลการทดสอบ Harman\'s Single Factor Test และ Marker Variable Technique',
+                    criteria: 'Single factor อธิบายความแปรปรวน < 50%, Marker variable ไม่มีนัยสำคัญ',
+                    duration: '1-2 วัน',
+                    caution: 'CMB เป็นปัญหาร้ายแรงที่อาจทำให้ผลการวิจัยไม่น่าเชื่อถือ'
+                },
+                'Descriptive & Preliminary Analysis': {
+                    description: 'การวิเคราะห์เชิงพรรณนาและเบื้องต้นอย่างครอบคลุม',
+                    purpose: 'สำรวจข้อมูลเพื่อเข้าใจลักษณะและเตรียมความพร้อมสำหรับการวิเคราะห์ขั้นสูง',
+                    result: 'สถิติเชิงพรรณนา การกระจาย ความสัมพันธ์เบื้องต้น',
+                    criteria: 'ครอบคลุมทุกตัวแปร มีการนำเสนอด้วยกราฟและตาราง',
+                    duration: '2-3 วัน',
+                    caution: 'ต้องให้ความสำคัญกับการตีความในบริบทของทฤษฎีและการวิจัย'
+                },
+                'Reliability & Validity Assessment': {
+                    description: 'การประเมินความเชื่อมั่นและความตรงอย่างละเอียด',
+                    purpose: 'ตรวจสอบคุณภาพของเครื่องมือวัดในทุกมิติของความเชื่อมั่นและความตรง',
+                    result: 'Internal Consistency, Test-retest, Content, Construct, Convergent, Discriminant Validity',
+                    criteria: 'Alpha ≥ 0.80, AVE ≥ 0.50, CR ≥ 0.70, HTMT < 0.90',
+                    duration: '3-4 วัน',
+                    caution: 'ความตรงและความเชื่อมั่นเป็นรากฐานของการวิจัยที่มีคุณภาพ'
+                },
+                'Exploratory Factor Analysis (EFA)': {
+                    description: 'การวิเคราะห์องค์ประกอบเชิงสำรวจแบบละเอียดและรอบคอบ',
+                    purpose: 'ค้นหาโครงสร้างแฝงของตัวแปรและยืนยันการจัดกลุ่มของข้อคำถาม',
+                    result: 'โครงสร้างองค์ประกอบ Factor Loading Pattern Matrix',
+                    criteria: 'KMO > 0.80, Factor Loading > 0.60, Cross-loading < 0.40',
+                    duration: '3-4 วัน',
+                    caution: 'การตีความองค์ประกอบต้องสมเหตุสมผลทั้งทางทฤษฎีและสถิติ'
+                },
+                'Confirmatory Factor Analysis (CFA)': {
+                    description: 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบโมเดลการวัด',
+                    purpose: 'ยืนยันโครงสร้างที่ได้จาก EFA และทดสอบความตรงเชิงโครงสร้าง',
+                    result: 'Model Fit Indices, Factor Loadings, Modification Indices',
+                    criteria: 'χ²/df < 3, CFI/TLI ≥ 0.95, RMSEA ≤ 0.08, SRMR ≤ 0.08',
+                    duration: '3-4 วัน',
+                    caution: 'การปรับแก้โมเดลต้องมีเหตุผลทางทฤษฎี ไม่ใช่เพียงเพื่อปรับปรุงค่าสถิติ'
+               },
+               'Measurement Model Evaluation': {
+                   description: 'การประเมินโมเดลการวัดอย่างครอบคลุม',
+                   purpose: 'ตรวจสอบคุณภาพของโมเดลการวัดก่อนนำไปใช้ในโมเดลโครงสร้าง',
+                   result: 'Construct Reliability, Convergent Validity, Discriminant Validity',
+                   criteria: 'Factor Loading ≥ 0.70, AVE ≥ 0.50, CR ≥ 0.80, √AVE > Inter-construct correlations',
+                   duration: '2-3 วัน',
+                   caution: 'โมเดลการวัดที่ไม่ดีจะส่งผลต่อความน่าเชื่อถือของโมเดลโครงสร้าง'
+               },
+               'Structural Equation Modeling (SEM)': {
+                   description: 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบสมมติฐาน',
+                   purpose: 'ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรตามทฤษฎีที่กำหนด',
+                   result: 'Path Coefficients, R², Model Fit, Direct และ Indirect Effects',
+                   criteria: 'Model Fit ตามเกณฑ์, Path Coefficients มีนัยสำคัญ, R² > 0.25=อธิบายได้ดี',
+                   duration: '4-5 วัน',
+                   caution: 'SEM ต้องการขนาดตัวอย่างใหญ่และโมเดลทฤษฎีที่แข็งแกร่ง'
+               },
+               'Mediation & Moderation Analysis': {
+                   description: 'การวิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับอย่างละเอียด',
+                   purpose: 'ทดสอบกลไกการส่งผ่านอิทธิพลและเงื่อนไขที่ทำให้ความสัมพันธ์เปลี่ยนแปลง',
+                   result: 'Mediation Effects, Moderation Effects, Conditional Effects, Bootstrapping Results',
+                   criteria: 'Indirect Effects CI ไม่ครอบคลุม 0, Interaction Terms มีนัยสำคัญ',
+                   duration: '3-4 วัน',
+                   caution: 'ต้องมีการออกแบบการวิจัยและทฤษฎีที่รองรับการวิเคราะห์นี้'
+               },
+               'Model Comparison & Refinement': {
+                   description: 'การเปรียบเทียบและปรับปรุงโมเดลทางเลือก',
+                   purpose: 'หาโมเดลที่ดีที่สุดโดยเปรียบเทียบโมเดลต่างๆ และปรับปรุงตามข้อมูลเชิงประจักษ์',
+                   result: 'Model Comparison Statistics, Best-fitting Model, Theoretical Justifications',
+                   criteria: 'AIC/BIC ต่ำกว่า, Chi-square difference test มีนัยสำคัญ, Parsimony',
+                   duration: '2-3 วัน',
+                   caution: 'การเปรียบเทียบโมเดลต้องมีเหตุผลทางทฤษฎี ไม่ใช่เพียงการทดลองแบบสุ่ม'
+               },
+               'Robustness Testing': {
+                   description: 'การทดสอบความแข็งแกร่งของผลลัพธ์',
+                   purpose: 'ตรวจสอบความเสถียรของผลลัพธ์ภายใต้เงื่อนไขและสมมติฐานที่แตกต่าง',
+                   result: 'Sensitivity Analysis Results, Alternative Model Results, Outlier Impact',
+                   criteria: 'ผลลัพธ์คงที่ภายใต้เงื่อนไขต่างๆ, ไม่ขึ้นอยู่กับ Outliers',
+                   duration: '2-3 วัน',
+                   caution: 'การทดสอบความแข็งแกร่งช่วยเพิ่มความน่าเชื่อถือของผลการวิจัย'
+               },
+               'Cross-Validation': {
+                   description: 'การตรวจสอบความถูกต้องของโมเดลด้วยข้อมูลชุดใหม่',
+                   purpose: 'ทดสอบความสามารถในการทำนายและทั่วไปของโมเดลที่พัฒนา',
+                   result: 'Cross-validation Statistics, Prediction Accuracy, Model Generalizability',
+                   criteria: 'ค่าความผิดพลาดต่ำ, R² cross-validation ใกล้เคียง R² original',
+                   duration: '2-3 วัน',
+                   caution: 'Cross-validation สำคัญสำหรับโมเดลที่จะนำไปใช้ในทางปฏิบัติ'
+               },
+               'Results Interpretation & Reporting': {
+                   description: 'การตีความและรายงานผลลัพธ์อย่างครอบคลุมและชัดเจน',
+                   purpose: 'นำเสนอผลการวิจัยในรูปแบบที่เข้าใจง่ายและมีประโยชน์ต่อทั้งนักวิชาการและผู้ปฏิบัติ',
+                   result: 'การตีความที่ลึกซึ้ง ข้อเสนะแนะเชิงทฤษฎีและปฏิบัติ ข้อจำกัดและงานวิจัยต่อเนื่อง',
+                   criteria: 'สอดคล้องกับทฤษฎี มีนัยสำคัญทางปฏิบัติ การนำเสนอชัดเจน',
+                   duration: '4-5 วัน',
+                   caution: 'การตีความต้องระมัดระวังไม่ให้เกินขอบเขตของข้อมูลและวิธีการ'
+               }
+           }
+       }
+   }
 };
-
         // ฟังก์ชันการจัดการสาขาวิชา
 function selectDomain(domain) {
     currentState.selectedDomain = domain;
@@ -431,37 +1769,41 @@ function findRelevantTheories(topic) {
         
         // ถ้าผู้ใช้เลือกสาขา ให้คะแนนพิเศษ
         if (currentState.selectedDomain && theory.domain === currentState.selectedDomain) {
-            score += 5;
+            score += 10;
         }
         
         // ตรวจสอบ keywords
         theory.keywords.forEach(keyword => {
             if (topicLower.includes(keyword.toLowerCase())) {
-                score += 2;
+                score += 3;
             }
         });
+
+        // ตรวจสอบ level ที่เลือก
+        if (currentState.level && theory.level <= currentState.level) {
+            score += 2;
+        }
 
         if (score > 0) {
             relevantTheories.push({ ...theory, score });
         }
     });
 
-    // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
+    // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยมตามสาขา
     if (relevantTheories.length === 0) {
-        return [
-            researchDatabase.theories.tam,
-            researchDatabase.theories.tpb,
-            researchDatabase.theories.social_capital
-        ].map(theory => ({ ...theory, score: 1 }));
+        const domain = currentState.selectedDomain || 'digital_marketing';
+        return Object.values(researchDatabase.theories)
+            .filter(theory => theory.domain === domain)
+            .slice(0, 5)
+            .map(theory => ({ ...theory, score: 1 }));
     }
 
     // เรียงลำดับตาม score
     return relevantTheories
         .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
+        .slice(0, 5);
 }
-
-function analyzeTopic() {
+        function analyzeTopic() {
     const topic = document.getElementById('researchTopic').value;
     
     // ถ้าไม่ได้ใส่โจทย์แต่เลือกสาขาแล้ว ให้ใช้โจทย์ทั่วไป
@@ -508,7 +1850,8 @@ function restart() {
    };
    render();
 }
-        // Landing Page
+
+// Landing Page
 function renderLanding() {
     return `
         <div class="min-h-screen relative overflow-hidden fade-in">
@@ -526,7 +1869,7 @@ function renderLanding() {
                         Research Methodology Advisor - AI Powered
                     </p>
                     <p class="text-lg text-white/80 mt-2">
-                        เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 25+ ทฤษฎี 12 สาขาวิชา
+                        เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 84 ทฤษฎี 12 สาขาวิชา
                     </p>
                 </div>
 
@@ -644,7 +1987,8 @@ function renderLanding() {
         </div>
     `;
 }
-        // Level Selection
+
+// Level Selection
 function renderLevelSelection() {
     return `
         <div class="min-h-screen relative overflow-hidden fade-in">
@@ -676,7 +2020,7 @@ function renderLevelSelection() {
                             
                             <div class="space-y-4 mb-8">
                                 <div class="bg-white/20 rounded-xl p-4">
-                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 3-5 ขั้นตอน</span>
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 5-7 ขั้นตอน</span>
                                 </div>
                                 <div class="bg-white/20 rounded-xl p-4">
                                     <span class="text-white font-semibold">📅 ระยะเวลา: 2-3 เดือน</span>
@@ -707,7 +2051,7 @@ function renderLevelSelection() {
                             
                             <div class="space-y-4 mb-8">
                                 <div class="bg-white/20 rounded-xl p-4">
-                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 6-8 ขั้นตอน</span>
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 8-10 ขั้นตอน</span>
                                 </div>
                                 <div class="bg-white/20 rounded-xl p-4">
                                     <span class="text-white font-semibold">📅 ระยะเวลา: 4-6 เดือน</span>
@@ -738,7 +2082,7 @@ function renderLevelSelection() {
                             
                             <div class="space-y-4 mb-8">
                                 <div class="bg-white/20 rounded-xl p-4">
-                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 10-15 ขั้นตอน</span>
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 12-15 ขั้นตอน</span>
                                 </div>
                                 <div class="bg-white/20 rounded-xl p-4">
                                     <span class="text-white font-semibold">📅 ระยะเวลา: 8-12 เดือน</span>
@@ -769,7 +2113,8 @@ function renderLevelSelection() {
         </div>
     `;
 }
-        // Theory Selection
+
+// Theory Selection
 function renderTheorySelection() {
     const relevantTheories = findRelevantTheories(currentState.topic);
     
@@ -980,7 +2325,8 @@ function switchTab(tabName) {
     
     document.getElementById('tab-content').innerHTML = content;
 }
-        // Theory Tab
+
+// Theory Tab
 function renderTheoryTab() {
     const theory = currentState.theory;
     return `
@@ -1000,7 +2346,7 @@ function renderTheoryTab() {
                             </div>
                             <div>
                                 <span class="font-medium text-blue-100">สาขา:</span>
-                                <p class="text-blue-50 capitalize">${theory.domain.replace('_', ' ')}</p>
+                                <p class="text-blue-50 capitalize">${domainInfo[theory.domain].name}</p>
                             </div>
                             <div>
                                 <span class="font-medium text-blue-100">ระดับ:</span>
@@ -1183,40 +2529,58 @@ function renderStatisticsTab() {
             <div class="mb-8 bg-white/5 rounded-lg p-6 border border-white/10">
                 <h3 class="text-lg font-semibold text-white mb-4">📋 ภาพรวมขั้นตอน</h3>
                 <p class="text-white/80 mb-4">${levelInfo.description}</p>
-                <div class="flex flex-wrap gap-2">
-                    ${levelInfo.methods.map((method, index) => `
-                        <div class="flex items-center">
-                            <div class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium">
-                                ${index + 1}. ${method}
+                <div class="overflow-x-auto">
+                    <div class="flex gap-2 pb-2">
+                        ${levelInfo.methods.map((method, index) => `
+                            <div class="flex items-center min-w-fit">
+                                <div class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap">
+                                    ${index + 1}. ${method}
+                                </div>
+                                ${index < levelInfo.methods.length - 1 ? '<div class="text-white/40 mx-2">→</div>' : ''}
                             </div>
-                            ${index < levelInfo.methods.length - 1 ? '<div class="text-white/40 mx-2">→</div>' : ''}
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
                 </div>
             </div>
 
             <div class="grid gap-6">
                 ${levelInfo.methods.map((method, index) => `
-                    <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+                    <div class="bg-white/5 rounded-lg p-6 border border-white/10 step-card" style="border-left-color: ${getStepColor(index)}">
                         <div class="flex items-start gap-4 mb-4">
-                            <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                            <div class="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-lg" style="background: ${getStepColor(index)}">
                                 ${index + 1}
                             </div>
                             <div class="flex-1">
                                 <h3 class="text-xl font-bold text-white mb-2">${method}</h3>
-                                <p class="text-white/80">วิเคราะห์ข้อมูลด้วยวิธี ${method}</p>
+                                <p class="text-white/80">${levelInfo.details[method]?.description || 'วิเคราะห์ข้อมูลด้วยวิธี ' + method}</p>
                                 <div class="mt-2 inline-block bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm border border-blue-500/30">
-                                    ⏱️ ระยะเวลา: ${index === 0 ? '1-2 วัน' : index === 1 ? '2-3 วัน' : '3-4 วัน'}
+                                    ⏱️ ระยะเวลา: ${levelInfo.details[method]?.duration || 'ระบุไม่ได้'}
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white/5 rounded p-4 border border-white/20">
-                            <h4 class="font-medium text-white mb-2">📝 รายละเอียด:</h4>
-                            <p class="text-white/70 text-sm">
-                                ${getMethodDescription(method, level)}
-                            </p>
-                        </div>
+                        ${levelInfo.details[method] ? `
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <div class="bg-white/5 rounded p-4 border border-white/20">
+                                    <h4 class="font-medium text-green-300 mb-2">🎯 วัตถุประสงค์:</h4>
+                                    <p class="text-white/70 text-sm">${levelInfo.details[method].purpose}</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-4 border border-white/20">
+                                    <h4 class="font-medium text-blue-300 mb-2">📈 ผลที่ได้:</h4>
+                                    <p class="text-white/70 text-sm">${levelInfo.details[method].result}</p>
+                                </div>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-white/5 rounded p-4 border border-white/20">
+                                    <h4 class="font-medium text-purple-300 mb-2">📏 เกณฑ์การตีความ:</h4>
+                                    <p class="text-white/70 text-sm">${levelInfo.details[method].criteria}</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-4 border border-white/20">
+                                    <h4 class="font-medium text-yellow-300 mb-2">⚠️ ข้อควรระวัง:</h4>
+                                    <p class="text-white/70 text-sm">${levelInfo.details[method].caution}</p>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `).join('')}
             </div>
@@ -1246,35 +2610,21 @@ function renderStatisticsTab() {
                         <ul class="text-sm text-white/80 space-y-1">
                             <li>• CFI, TLI ≥ 0.95</li>
                             <li>• RMSEA ≤ 0.08</li>
-                           <li>• χ²/df < 3</li>
-                       </ul>
-                   </div>
-               </div>
-           </div>
-       </div>
-   `;
+                            <li>• χ²/df < 3</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
-// Helper function for method descriptions
-function getMethodDescription(method, level) {
-   const descriptions = {
-       'Descriptive Statistics': 'วิเคราะห์ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด และการแจกแจงของข้อมูล',
-       'Reliability Analysis': 'ทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha และ Item-Total Correlation',
-       'T-test/ANOVA': 'เปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
-       'Correlation': 'วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
-       'Data Preparation': 'ทำความสะอาดข้อมูล ตรวจสอบค่าผิดปกติ และจัดการข้อมูลสูญหาย',
-       'EFA': 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝงของตัวแปร',
-       'Multiple Regression': 'วิเคราะห์ความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรต้นหลายตัวกับตัวแปรตาม',
-       'Data Screening': 'ตรวจสอบข้อมูลอย่างละเอียด รวมถึง Multivariate Outliers และ Normality',
-       'CMB Testing': 'ทดสอบ Common Method Bias ด้วย Harman\'s Single Factor Test',
-       'CFA': 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบความตรงเชิงโครงสร้าง',
-       'SEM': 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบความสัมพันธ์เชิงสาเหตุแบบเต็ม',
-       'Mediation/Moderation': 'วิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับ'
-   };
-   
-   return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
+// Helper function สำหรับสีของแต่ละขั้นตอน
+function getStepColor(index) {
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'];
+    return colors[index % colors.length];
 }
-        // Export PDF Function
+// Export PDF Function
 function exportPDF() {
     try {
         const element = document.getElementById('export-content');
@@ -1359,7 +2709,34 @@ function exportPDF() {
         alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
     }
 }
-        // Main Render Function
+
+// Helper function for method descriptions (สำหรับ level 1 และ 2)
+function getMethodDescription(method, level) {
+    const descriptions = {
+        'Data Preparation': 'ทำความสะอาดข้อมูล ตรวจสอบค่าผิดปกติ และจัดการข้อมูลสูญหาย',
+        'Descriptive Statistics': 'วิเคราะห์ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด และการแจกแจงของข้อมูล',
+        'Reliability Analysis': 'ทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha และ Item-Total Correlation',
+        'Normality Testing': 'ทดสอบการแจกแจงปกติของข้อมูลเพื่อเลือกสถิติที่เหมาะสม',
+        'T-test/ANOVA': 'เปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
+        'Correlation Analysis': 'วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
+        'Simple Regression': 'วิเคราะห์ความสัมพันธ์เชิงเส้นระหว่างตัวแปร 2 ตัว',
+        'Data Screening': 'ตรวจสอบข้อมูลอย่างละเอียด รวมถึง Multivariate Outliers และ Normality',
+        'Validity Testing': 'ทดสอบความตรงของเครื่องมือวัดในด้านต่างๆ',
+        'Exploratory Factor Analysis (EFA)': 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝงของตัวแปร',
+        'Assumption Testing': 'ทดสอบสมมติฐานสำหรับการวิเคราะห์ขั้นสูง',
+        'Multiple Regression': 'วิเคราะห์ความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรต้นหลายตัวกับตัวแปรตาม',
+        'Mediation Analysis': 'วิเคราะห์ตัวแปรคั่นกลางในความสัมพันธ์เชิงสาเหตุ',
+        'Model Interpretation': 'การตีความและนำเสนอผลการวิเคราะห์อย่างละเอียด',
+        'Common Method Bias Testing': 'ทดสอบ Common Method Bias ด้วย Harman\'s Single Factor Test',
+        'Confirmatory Factor Analysis (CFA)': 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบความตรงเชิงโครงสร้าง',
+        'Structural Equation Modeling (SEM)': 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบความสัมพันธ์เชิงสาเหตุแบบเต็ม',
+        'Mediation & Moderation Analysis': 'วิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับ'
+    };
+    
+    return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
+}
+
+// Main Render Function
 function render() {
     const app = document.getElementById('app');
     
@@ -1425,7 +2802,7 @@ if (document.readyState === 'loading') {
 }
 
 // End of script tag
-</script>
+    </script>
 
 </body>
 </html>

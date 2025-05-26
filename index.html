@@ -1,1 +1,1102 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบปรึกษาการวิจัยเชิงปริมาณ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+        }
 
+        .card-3d {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .tab-inactive {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tab-inactive:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="animated-bg">
+    <div id="app"></div>
+    <script>
+// State Management
+let currentState = {
+    page: 'landing',
+    topic: '',
+    level: null,
+    theory: null,
+    activeTab: 'theory',
+    activeSPSSGuide: 'descriptive',
+    selectedDomain: null
+};
+
+// ฐานข้อมูลทฤษฎี (เฉพาะที่จำเป็น)
+const researchDatabase = {
+    theories: {
+        'tam': {
+            id: 'tam',
+            name: 'Technology Acceptance Model (TAM)',
+            author: 'Davis (1989)',
+            domain: 'digital_marketing',
+            factors: ['Perceived Usefulness (PU)', 'Perceived Ease of Use (PEOU)', 'Attitude Toward Using', 'Behavioral Intention'],
+            relationships: 'PU + PEOU → Attitude → Behavioral Intention → Actual Use',
+            prediction: 'การรับรู้ประโยชน์และความง่ายในการใช้งานจะส่งผลต่อทัศนคติและความตั้งใจในการใช้เทคโนโลยี',
+            keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user', 'เทคโนโลยี', 'ยอมรับ', 'ระบบ', 'ดิจิทัล'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน'
+        },
+        'tpb': {
+            id: 'tpb',
+            name: 'Theory of Planned Behavior (TPB)',
+            author: 'Ajzen (1991)',
+            domain: 'digital_marketing',
+            factors: ['Attitude Toward Behavior', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
+            relationships: 'Attitude + Subjective Norm + PBC → Behavioral Intention → Behavior',
+            prediction: 'ทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้จะส่งผลต่อความตั้งใจและพฤติกรรม',
+            keywords: ['behavior', 'intention', 'attitude', 'norm', 'control', 'พฤติกรรม', 'ความตั้งใจ', 'ทัศนคติ'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+            description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติต่อพฤติกรรม บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้'
+        },
+        'social_capital': {
+            id: 'social_capital',
+            name: 'Social Capital Theory',
+            author: 'Coleman (1988), Bourdieu (1986)',
+            domain: 'social_capital',
+            factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
+            relationships: 'Structural + Relational + Cognitive → Social Capital → Performance Outcomes',
+            prediction: 'ทุนทางสังคมในรูปแบบต่างๆ จะส่งผลต่อประสิทธิภาพและผลลัพธ์ขององค์กรและบุคคล',
+            keywords: ['social', 'capital', 'network', 'relationship', 'trust', 'สังคม', 'ทุน', 'เครือข่าย', 'ความสัมพันธ์'],
+            level: 2,
+            statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+            description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ'
+        }
+    },
+    
+    levels: {
+        1: {
+            name: 'ระดับพื้นฐาน',
+            steps: '3-5 ขั้นตอน',
+            description: 'เหมาะสำหรับนักศึกษาใหม่หรือการวิจัยเบื้องต้น',
+            methods: ['Descriptive Statistics', 'Reliability Analysis', 'T-test/ANOVA', 'Correlation']
+        },
+        2: {
+            name: 'ระดับกลาง',
+            steps: '6-8 ขั้นตอน',
+            description: 'เหมาะสำหรับการวิจัยระดับปริญญาโทหรือมีประสบการณ์บ้าง',
+            methods: ['Data Preparation', 'Descriptive', 'Reliability', 'EFA', 'Multiple Regression']
+        },
+        3: {
+            name: 'ระดับสูง',
+            steps: '10-15 ขั้นตอน',
+            description: 'เหมาะสำหรับการวิจัยระดับปริญญาเอกหรือมืออาชีพ',
+            methods: ['Data Screening', 'CMB Testing', 'EFA', 'CFA', 'SEM', 'Mediation/Moderation']
+        }
+    }
+};
+      // ฟังก์ชันหลัก
+function selectDomain(domain) {
+    currentState.selectedDomain = domain;
+    
+    // Update UI
+    document.querySelectorAll('.domain-btn').forEach(btn => {
+        btn.classList.remove('bg-white/30', 'border-yellow-400');
+        btn.classList.add('bg-white/10', 'border-white/30');
+    });
+    
+    event.target.closest('.domain-btn').classList.remove('bg-white/10', 'border-white/30');
+    event.target.closest('.domain-btn').classList.add('bg-white/30', 'border-yellow-400');
+    
+    // Show selected domain
+    const domainNames = {
+        'digital_marketing': 'การตลาดดิจิทัล',
+        'social_capital': 'ทุนทางสังคม',
+        'management': 'การบริหาร',
+        'finance': 'การเงิน',
+        'hr': 'ทรัพยากรมนุษย์'
+    };
+    
+    document.getElementById('selected-domain').classList.remove('hidden');
+    document.getElementById('domain-name').textContent = domainNames[domain];
+}
+
+function clearDomain() {
+    currentState.selectedDomain = null;
+    document.getElementById('selected-domain').classList.add('hidden');
+    
+    document.querySelectorAll('.domain-btn').forEach(btn => {
+        btn.classList.remove('bg-white/30', 'border-yellow-400');
+        btn.classList.add('bg-white/10', 'border-white/30');
+    });
+}
+
+function setExample(text, domain = null) {
+    document.getElementById('researchTopic').value = text;
+    if (domain) {
+        selectDomain(domain);
+    }
+}
+
+function findRelevantTheories(topic) {
+    const topicLower = topic.toLowerCase();
+    const relevantTheories = [];
+
+    Object.values(researchDatabase.theories).forEach(theory => {
+        let score = 0;
+        
+        // ถ้าผู้ใช้เลือกสาขา ให้คะแนนพิเศษ
+        if (currentState.selectedDomain && theory.domain === currentState.selectedDomain) {
+            score += 5;
+        }
+        
+        // ตรวจสอบ keywords
+        theory.keywords.forEach(keyword => {
+            if (topicLower.includes(keyword.toLowerCase())) {
+                score += 2;
+            }
+        });
+
+        if (score > 0) {
+            relevantTheories.push({ ...theory, score });
+        }
+    });
+
+    // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
+    if (relevantTheories.length === 0) {
+        return [
+            researchDatabase.theories.tam,
+            researchDatabase.theories.tpb,
+            researchDatabase.theories.social_capital
+        ].map(theory => ({ ...theory, score: 1 }));
+    }
+
+    // เรียงลำดับตาม score
+    return relevantTheories
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+}
+
+function analyzeTopic() {
+    const topic = document.getElementById('researchTopic').value;
+    if (topic.trim()) {
+        currentState.topic = topic;
+        currentState.page = 'level';
+        render();
+    } else {
+        alert('กรุณาใส่โจทย์วิจัย 📝');
+    }
+}
+
+function selectLevel(level) {
+    currentState.level = level;
+    currentState.page = 'theory';
+    render();
+}
+
+function selectTheory(theoryId) {
+    currentState.theory = researchDatabase.theories[theoryId];
+    currentState.page = 'results';
+    render();
+}
+
+function restart() {
+    currentState = {
+        page: 'landing',
+        topic: '',
+        level: null,
+        theory: null,
+        activeTab: 'theory',
+        activeSPSSGuide: 'descriptive',
+        selectedDomain: null
+    };
+    render();
+}
+      // Landing Page
+function renderLanding() {
+    return `
+        <div class="min-h-screen relative overflow-hidden fade-in">
+            <div class="container mx-auto px-4 py-16 relative z-10">
+                <div class="text-center mb-16">
+                    <div class="text-8xl mb-6">🎓</div>
+                    <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+                        <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                            ระบบปรึกษาการวิจัย
+                        </span>
+                        <br>
+                        <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
+                    </h1>
+                    <p class="text-2xl text-white/90 font-medium drop-shadow-md">
+                        Research Methodology Advisor - AI Powered
+                    </p>
+                    <p class="text-lg text-white/80 mt-2">
+                        เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 25+ ทฤษฎี 12 สาขาวิชา
+                    </p>
+                </div>
+
+                <div class="max-w-6xl mx-auto">
+                    <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
+                        <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                            🔍 เริ่มต้นการวิเคราะห์โจทย์วิจัยของคุณ
+                        </h2>
+
+                        <!-- เลือกสาขาวิชา -->
+                        <div class="mb-8">
+                            <label class="block text-white font-semibold mb-4 text-lg">
+                                🎯 เลือกสาขาวิชาของคุณ (ทางเลือก):
+                            </label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+                                <button onclick="selectDomain('digital_marketing')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📱</div>
+                                    <div class="text-white font-medium text-sm">การตลาดดิจิทัล</div>
+                                </button>
+                                <button onclick="selectDomain('social_capital')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🤝</div>
+                                    <div class="text-white font-medium text-sm">ทุนทางสังคม</div>
+                                </button>
+                                <button onclick="selectDomain('management')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🏢</div>
+                                    <div class="text-white font-medium text-sm">การบริหาร</div>
+                                </button>
+                                <button onclick="selectDomain('finance')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">💰</div>
+                                    <div class="text-white font-medium text-sm">การเงิน</div>
+                                </button>
+                                <button onclick="selectDomain('hr')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">👥</div>
+                                    <div class="text-white font-medium text-sm">ทรัพยากรมนุษย์</div>
+                                </button>
+                            </div>
+                            <div id="selected-domain" class="hidden">
+                                <div class="bg-white/20 rounded-lg p-3 mb-4">
+                                    <span class="text-white font-medium">สาขาที่เลือก: </span>
+                                    <span id="domain-name" class="text-yellow-200 font-bold"></span>
+                                    <button onclick="clearDomain()" class="ml-2 text-red-300 hover:text-red-100">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-white font-semibold mb-4 text-lg">
+                                💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา:
+                            </label>
+                            <textarea
+                                id="researchTopic"
+                                placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
+                                class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
+                                style="background: rgba(255,255,255,0.9);"
+                            ></textarea>
+                        </div>
+
+                        <button
+                            onclick="analyzeTopic()"
+                            class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all text-xl"
+                        >
+                            ✨ วิเคราะห์โจทย์วิจัยด้วย AI
+                        </button>
+
+                        <div class="mt-10">
+                            <h3 class="text-xl font-bold text-white mb-6 text-center">
+                                🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
+                            </h3>
+                            <div class="grid gap-4">
+                                <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
+                                        <div>
+                                            <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                                        <div>
+                                            <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                                            <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค', 'digital_marketing')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
+                                        <div>
+                                            <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
+                                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+      // Level Selection
+function renderLevelSelection() {
+    return `
+        <div class="min-h-screen relative overflow-hidden fade-in">
+            <div class="container mx-auto px-4 py-12 relative z-10">
+                <div class="text-center mb-12">
+                    <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+                        🎯 เลือกระดับความซับซ้อน
+                    </h1>
+                    <div class="glass rounded-2xl p-6 max-w-4xl mx-auto">
+                        <p class="text-white/90 mb-3 text-lg">📝 โจทย์วิจัยของคุณ:</p>
+                        <p class="text-white font-bold text-xl">${currentState.topic}</p>
+                    </div>
+                </div>
+
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Level 1 -->
+                        <div class="bg-gradient-to-br from-green-400 to-blue-500 rounded-3xl p-8 card-3d">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">📊</div>
+                                <h3 class="text-3xl font-bold text-white mb-2">ระดับพื้นฐาน</h3>
+                                <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                    <span class="font-bold text-white">BEGINNER</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 3-5 ขั้นตอน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📅 ระยะเวลา: 2-3 เดือน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">🎓 เหมาะสำหรับ: นักศึกษาปริญญาตรี</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📊 วิธีการ: สถิติเบื้องต้น</span>
+                                </div>
+                            </div>
+                            
+                            <button onclick="selectLevel(1)" 
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg">
+                                ✅ เลือกระดับนี้
+                            </button>
+                        </div>
+
+                        <!-- Level 2 -->
+                        <div class="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 card-3d">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">📈</div>
+                                <h3 class="text-3xl font-bold text-white mb-2">ระดับกลาง</h3>
+                                <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                    <span class="font-bold text-white">INTERMEDIATE</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 6-8 ขั้นตอน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📅 ระยะเวลา: 4-6 เดือน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">🎓 เหมาะสำหรับ: นักศึกษาปริญญาโท</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📊 วิธีการ: EFA + Regression</span>
+                                </div>
+                            </div>
+                            
+                            <button onclick="selectLevel(2)" 
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg">
+                                ✅ เลือกระดับนี้
+                            </button>
+                        </div>
+
+                        <!-- Level 3 -->
+                        <div class="bg-gradient-to-br from-purple-400 to-pink-500 rounded-3xl p-8 card-3d">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">🎯</div>
+                                <h3 class="text-3xl font-bold text-white mb-2">ระดับสูง</h3>
+                                <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                    <span class="font-bold text-white">ADVANCED</span>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">⏱️ ขั้นตอน: 10-15 ขั้นตอน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📅 ระยะเวลา: 8-12 เดือน</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">🎓 เหมาะสำหรับ: นักศึกษาปริญญาเอก</span>
+                                </div>
+                                <div class="bg-white/20 rounded-xl p-4">
+                                    <span class="text-white font-semibold">📊 วิธีการ: CFA + SEM</span>
+                                </div>
+                            </div>
+                            
+                            <button onclick="selectLevel(3)" 
+                                    class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg">
+                                ✅ เลือกระดับนี้
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <button onclick="restart()" 
+                            class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                        ← กลับไปแก้ไขโจทย์
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+      // Theory Selection
+function renderTheorySelection() {
+    const relevantTheories = findRelevantTheories(currentState.topic);
+    
+    return `
+        <div class="min-h-screen relative overflow-hidden fade-in">
+            <div class="container mx-auto px-4 py-8 relative z-10">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+                            🧠 เลือกทฤษฎีที่เหมาะสมกับการวิจัย
+                        </h1>
+                        <div class="glass rounded-lg p-4 shadow-sm">
+                            <p class="text-white/90 mb-2">โจทย์วิจัย: <span class="font-medium text-white">${currentState.topic}</span></p>
+                            <p class="text-white/90">ระดับที่เลือก: <span class="font-medium text-white">ระดับ ${currentState.level}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6">
+                        ${relevantTheories.map((theory) => `
+                            <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 transition-all duration-200 hover:shadow-lg card-3d theory-card">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800 mb-2">${theory.name}</h3>
+                                        <p class="text-gray-600">ผู้พัฒนา: ${theory.author}</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            ระดับ ${theory.level === 1 ? 'พื้นฐาน' : theory.level === 2 ? 'กลาง' : 'สูง'}
+                                        </span>
+                                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                            คะแนน: ${theory.score}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <p class="text-gray-700 mb-4">${theory.description}</p>
+
+                                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 mb-2">🎯 ปัจจัยหลัก:</h4>
+                                        <ul class="text-sm text-gray-600 space-y-1">
+                                            ${theory.factors.map(factor => `
+                                                <li class="flex items-center">
+                                                    <span class="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                                                    ${factor}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-800 mb-2">📊 วิธีการวิเคราะห์:</h4>
+                                        <ul class="text-sm text-gray-600 space-y-1">
+                                            ${theory.statistics.map(stat => `
+                                                <li class="flex items-center">
+                                                    <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                                    ${stat}
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                    <h4 class="font-semibold text-gray-800 mb-2">🔗 ความสัมพันธ์ระหว่างตัวแปร:</h4>
+                                    <p class="text-sm text-gray-700 font-mono bg-white p-2 rounded border">
+                                        ${theory.relationships}
+                                    </p>
+                                </div>
+
+                                <div class="bg-amber-50 rounded-lg p-4 mb-4">
+                                    <h4 class="font-semibold text-amber-800 mb-2">💡 การคาดการณ์:</h4>
+                                    <p class="text-sm text-amber-700">${theory.prediction}</p>
+                                </div>
+
+                                <button onclick="selectTheory('${theory.id}')" 
+                                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
+                                    ✅ เลือกทฤษฎีนี้
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button onclick="goToLevel()" 
+                                class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                            ← กลับไปเลือกระดับ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function goToLevel() {
+    currentState.page = 'level';
+    render();
+}
+      // Results Page with Tab System
+function renderResults() {
+    return `
+        <div class="min-h-screen relative overflow-hidden fade-in">
+            <div class="container mx-auto px-4 py-8 relative z-10">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Header -->
+                    <div class="glass rounded-lg p-6 shadow-sm mb-6">
+                        <h1 class="text-3xl font-bold text-white mb-4">
+                            🎉 แผนการวิจัยของคุณ
+                        </h1>
+                        <div class="grid md:grid-cols-3 gap-4 text-sm">
+                            <div>
+                                <span class="text-white/90">โจทย์วิจัย:</span>
+                                <p class="font-medium text-white">${currentState.topic}</p>
+                            </div>
+                            <div>
+                                <span class="text-white/90">ระดับ:</span>
+                                <p class="font-medium text-white">ระดับ ${currentState.level}</p>
+                            </div>
+                            <div>
+                                <span class="text-white/90">ทฤษฎี:</span>
+                                <p class="font-medium text-white">${currentState.theory.name}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex gap-3">
+                            <button onclick="exportPDF()" 
+                                    class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                                📄 Export PDF
+                            </button>
+                            <button onclick="restart()" 
+                                    class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                🔄 เริ่มใหม่
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="glass rounded-lg shadow-sm mb-6">
+                        <div class="flex border-b border-white/20">
+                            <button onclick="switchTab('theory')" 
+                                    class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-active" 
+                                    data-tab="theory">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="text-lg">📚</span>
+                                    <span>ข้อมูลทฤษฎี</span>
+                                </div>
+                            </button>
+                            <button onclick="switchTab('research')" 
+                                    class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-inactive" 
+                                    data-tab="research">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="text-lg">📋</span>
+                                    <span>แผนการวิจัย</span>
+                                </div>
+                            </button>
+                            <button onclick="switchTab('statistics')" 
+                                    class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-inactive" 
+                                    data-tab="statistics">
+                                <div class="flex items-center justify-center gap-2">
+                                    <span class="text-lg">📊</span>
+                                    <span>ขั้นตอนสถิติ</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="export-content" class="glass rounded-lg shadow-sm">
+                        <div id="tab-content">
+                            ${renderTheoryTab()}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Tab switching function
+function switchTab(tabName) {
+    currentState.activeTab = tabName;
+    
+    // Update tab appearance
+    document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('tab-inactive');
+    });
+    
+    document.querySelector(`[data-tab="${tabName}"]`).classList.remove('tab-inactive');
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('tab-active');
+
+    // Update content
+    let content = '';
+    switch(tabName) {
+        case 'theory':
+            content = renderTheoryTab();
+            break;
+        case 'research':
+            content = renderResearchPlanTab();
+            break;
+        case 'statistics':
+            content = renderStatisticsTab();
+            break;
+    }
+    
+    document.getElementById('tab-content').innerHTML = content;
+}
+      // Theory Tab
+function renderTheoryTab() {
+    const theory = currentState.theory;
+    return `
+        <div class="p-8">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                📚 ข้อมูลทฤษฎี: ${theory.name}
+            </h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                        <h3 class="text-lg font-semibold text-blue-200 mb-3">ข้อมูลพื้นฐาน</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="font-medium text-blue-100">ผู้พัฒนา:</span>
+                                <p class="text-blue-50">${theory.author}</p>
+                            </div>
+                            <div>
+                                <span class="font-medium text-blue-100">สาขา:</span>
+                                <p class="text-blue-50 capitalize">${theory.domain.replace('_', ' ')}</p>
+                            </div>
+                            <div>
+                                <span class="font-medium text-blue-100">ระดับ:</span>
+                                <p class="text-blue-50">ระดับ ${theory.level}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                        <h3 class="text-lg font-semibold text-green-200 mb-3">คำอธิบาย</h3>
+                        <p class="text-green-50">${theory.description}</p>
+                    </div>
+
+                    <div class="bg-purple-500/20 rounded-lg p-6 border border-purple-500/30">
+                        <h3 class="text-lg font-semibold text-purple-200 mb-3">การคาดการณ์</h3>
+                        <p class="text-purple-50">${theory.prediction}</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                        <h3 class="text-lg font-semibold text-amber-200 mb-4">ปัจจัยหลัก</h3>
+                        <div class="space-y-3">
+                            ${theory.factors.map((factor, index) => `
+                                <div class="flex items-start gap-3">
+                                    <span class="bg-amber-400 text-amber-900 px-2 py-1 rounded text-sm font-medium min-w-[24px] text-center">
+                                        ${index + 1}
+                                    </span>
+                                    <span class="text-amber-50">${factor}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-500/20 rounded-lg p-6 border border-gray-500/30">
+                        <h3 class="text-lg font-semibold text-gray-200 mb-3">ความสัมพันธ์</h3>
+                        <div class="bg-white/10 p-4 rounded border">
+                            <code class="text-gray-100 font-mono text-sm break-all">${theory.relationships}</code>
+                        </div>
+                        <p class="text-sm text-gray-300 mt-3">
+                            💡 <strong>สัญลักษณ์:</strong> → หมายถึง "ส่งผลต่อ", + หมายถึง "ร่วมกับ"
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-500/20 rounded-lg p-6 border border-rose-500/30">
+                        <h3 class="text-lg font-semibold text-rose-200 mb-3">วิธีการวิเคราะห์</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${theory.statistics.map(stat => `
+                                <span class="bg-rose-400/30 text-rose-100 px-3 py-1 rounded-full text-sm border border-rose-400/50">
+                                    ${stat}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Research Plan Tab
+function renderResearchPlanTab() {
+    const level = currentState.level;
+    
+    return `
+        <div class="p-8">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                📋 แผนการวิจัยที่แนะนำ
+            </h2>
+            
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                    <h3 class="text-lg font-semibold text-blue-200 mb-4">🔬 ประเภทและวิธีการวิจัย</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-blue-100 mb-2">ประเภทการวิจัย:</h4>
+                            <p class="text-blue-50 text-sm">${level >= 2 ? 'การวิจัยเชิงปริมาณแบบสำรวจ (Quantitative Survey)' : 'การวิจัยเชิงพรรณนา (Descriptive Research)'}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-blue-100 mb-2">ปรัชญาการวิจัย:</h4>
+                            <p class="text-blue-50 text-sm">ปรัชญาการวิจัยเชิงบวกนิยม (Positivism)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-blue-100 mb-2">แนวทางการวิจัย:</h4>
+                            <p class="text-blue-50 text-sm">การวิจัยเชิงนิรนัย (Deductive Research)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-blue-100 mb-2">กลยุทธ์การวิจัย:</h4>
+                            <p class="text-blue-50 text-sm">การสำรวจโดยใช้แบบสอบถาม (Survey Strategy)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                    <h3 class="text-lg font-semibold text-green-200 mb-4">👥 กลุ่มตัวอย่างและขอบเขต</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-green-100 mb-2">ขนาดกลุ่มตัวอย่าง:</h4>
+                            <p class="text-green-50 text-sm">${level === 1 ? '200-300 คน' : level === 2 ? '300-500 คน' : '500+ คน'}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-green-100 mb-2">วิธีการสุ่มตัวอย่าง:</h4>
+                            <p class="text-green-50 text-sm">${level >= 2 ? 'การสุ่มตัวอย่างแบบหลายขั้นตอน (Multi-stage Sampling)' : 'การสุ่มตัวอย่างแบบง่าย (Simple Random Sampling)'}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-green-100 mb-2">ช่วงเวลาการศึกษา:</h4>
+                            <p class="text-green-50 text-sm">${level >= 3 ? 'การศึกษาข้ามเวลา (Cross-sectional with Longitudinal elements)' : 'การศึกษาข้ามหน้าตัด (Cross-sectional Study)'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                <h3 class="text-lg font-semibold text-amber-200 mb-4">⏰ แผนการดำเนินงานแนะนำ</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                            2-3 สัปดาห์
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-amber-100 mb-1">เตรียมการ</h4>
+                            <p class="text-amber-50 text-sm">ศึกษาทฤษฎี • ออกแบบแบบสอบถาม • ทดสอบเครื่องมือ</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                            4-6 สัปดาห์
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-amber-100 mb-1">เก็บข้อมูล</h4>
+                            <p class="text-amber-50 text-sm">แจกแบบสอบถาม • ติดตามการตอบกลับ • ตรวจสอบความสมบูรณ์</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                            ${level >= 3 ? '6-8 สัปดาห์' : '3-4 สัปดาห์'}
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-amber-100 mb-1">วิเคราะห์ข้อมูล</h4>
+                            <p class="text-amber-50 text-sm">ทำความสะอาดข้อมูล • วิเคราะห์ทางสถิติ • ตีความผลลัพธ์</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                            3-4 สัปดาห์
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-amber-100 mb-1">เขียนรายงาน</h4>
+                            <p class="text-amber-50 text-sm">เขียนร่าง • ปรับปรุงเนื้อหา • จัดทำรูปแบบสุดท้าย</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Statistics Tab
+function renderStatisticsTab() {
+    const level = currentState.level;
+    const levelInfo = researchDatabase.levels[level];
+    
+    return `
+        <div class="p-8">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                📊 ขั้นตอนการวิเคราะห์ทางสถิติ (ระดับ ${level})
+            </h2>
+            
+            <div class="mb-8 bg-white/5 rounded-lg p-6 border border-white/10">
+                <h3 class="text-lg font-semibold text-white mb-4">📋 ภาพรวมขั้นตอน</h3>
+                <p class="text-white/80 mb-4">${levelInfo.description}</p>
+                <div class="flex flex-wrap gap-2">
+                    ${levelInfo.methods.map((method, index) => `
+                        <div class="flex items-center">
+                            <div class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium">
+                                ${index + 1}. ${method}
+                            </div>
+                            ${index < levelInfo.methods.length - 1 ? '<div class="text-white/40 mx-2">→</div>' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="grid gap-6">
+                ${levelInfo.methods.map((method, index) => `
+                    <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                                ${index + 1}
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-white mb-2">${method}</h3>
+                                <p class="text-white/80">วิเคราะห์ข้อมูลด้วยวิธี ${method}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+      // Export PDF Function
+function exportPDF() {
+    try {
+        const element = document.getElementById('export-content');
+        if (!element) {
+            alert('ไม่พบเนื้อหาที่จะ Export');
+            return;
+        }
+
+        // Show loading overlay
+        const loadingOverlay = document.createElement('div');
+        loadingOverlay.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+                <div style="color: white; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                    <div style="font-size: 1.5rem; font-weight: bold;">กำลังสร้าง PDF...</div>
+                    <div style="margin-top: 0.5rem;">กรุณารอสักครู่</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(loadingOverlay);
+
+        setTimeout(async () => {
+            try {
+                const canvas = await html2canvas(element, {
+                    scale: 1.5,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: element.scrollWidth,
+                    height: element.scrollHeight
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                const fileName = `Research_Plan_${currentState.theory.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                pdf.save(fileName);
+
+                document.body.removeChild(loadingOverlay);
+                
+                // Show success message
+                const successOverlay = document.createElement('div');
+                successOverlay.innerHTML = `
+                    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(34, 197, 94, 0.95); color: white; padding: 2rem; border-radius: 1rem; text-align: center; z-index: 9999;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                        <div style="font-size: 1.2rem; font-weight: bold;">PDF ถูกสร้างเรียบร้อยแล้ว!</div>
+                        <div style="margin-top: 0.5rem;">ไฟล์ได้รับการดาวน์โหลดแล้ว</div>
+                    </div>
+                `;
+                document.body.appendChild(successOverlay);
+                
+                setTimeout(() => {
+                    document.body.removeChild(successOverlay);
+                }, 3000);
+
+            } catch (error) {
+                document.body.removeChild(loadingOverlay);
+                console.error('Error generating PDF:', error);
+                alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
+            }
+        }, 500);
+
+    } catch (error) {
+        console.error('Error in exportPDF:', error);
+        alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
+    }
+}
+      // Main Render Function
+function render() {
+    const app = document.getElementById('app');
+    
+    try {
+        switch(currentState.page) {
+            case 'landing':
+                app.innerHTML = renderLanding();
+                break;
+            case 'level':
+                app.innerHTML = renderLevelSelection();
+                break;
+            case 'theory':
+                app.innerHTML = renderTheorySelection();
+                break;
+            case 'results':
+                app.innerHTML = renderResults();
+                break;
+            default:
+                app.innerHTML = renderLanding();
+        }
+    } catch (error) {
+        console.error('Render error:', error);
+        app.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h1 class="text-2xl font-bold mb-2">เกิดข้อผิดพลาด</h1>
+                    <p class="mb-4">กรุณารีเฟรชหน้าเว็บและลองใหม่อีกครั้ง</p>
+                    <button onclick="window.location.reload()" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        รีเฟรชหน้าเว็บ
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing app...');
+    render();
+});
+
+// Fallback initialization
+window.addEventListener('load', function() {
+    console.log('Window loaded, checking app...');
+    if (!document.getElementById('app').innerHTML.trim()) {
+        render();
+    }
+});
+
+// Error handling
+window.addEventListener('error', function(event) {
+    console.error('Global error:', event.error);
+});
+
+// Initial render call (immediate)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+} else {
+    render();
+}
+      // End of script tag
+</script>
+
+</body>
+</html>

@@ -327,7 +327,35 @@
 
                 // เพิ่มทฤษฎีอื่นๆ ต่อไปเรื่อยๆ...
             },
-
+            // เพิ่มก่อน closing bracket ของ theories object
+'pecking_order': {
+    id: 'pecking_order',
+    name: 'Pecking Order Theory',
+    author: 'Myers & Majluf (1984)',
+    domain: 'finance',
+    factors: ['Internal Financing', 'Debt Financing', 'Equity Financing', 'Information Asymmetry'],
+    relationships: 'Information Asymmetry → Financing Preference → Capital Structure',
+    prediction: 'บริษัทจะเลือกใช้แหล่งเงินทุนตามลำดับ: เงินทุนภายใน หนี้ และหุ้นสามัญ',
+    keywords: ['financing', 'capital', 'structure', 'debt', 'equity', 'การเงิน', 'โครงสร้างเงินทุน'],
+    level: 2,
+    statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Panel Regression'],
+    description: 'ทฤษฎีที่อธิบายการเลือกใช้แหล่งเงินทุนของบริษัทตามลำดับความชอบ',
+    references: ['Myers, S. C., & Majluf, N. S. (1984). Corporate financing and investment decisions.']
+},
+'social_exchange': {
+    id: 'social_exchange',
+    name: 'Social Exchange Theory',
+    author: 'Homans (1958), Blau (1964)',
+    domain: 'hr',
+    factors: ['Costs', 'Benefits', 'Reciprocity', 'Trust'],
+    relationships: 'Benefits - Costs → Exchange Satisfaction → Relationship Continuation',
+    prediction: 'ความสัมพันธ์จะดำเนินต่อไปเมื่อผลประโยชน์ที่ได้รับมากกว่าต้นทุนที่เสียไป',
+    keywords: ['exchange', 'reciprocity', 'trust', 'benefits', 'costs', 'การแลกเปลี่ยน', 'ความไว้วางใจ'],
+    level: 2,
+    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'SEM'],
+    description: 'ทฤษฎีที่อธิบายความสัมพันธ์ทางสังคมในรูปแบบการแลกเปลี่ยนผลประโยชน์',
+    references: ['Homans, G. C. (1958). Social behavior as exchange.', 'Blau, P. M. (1964). Exchange and power in social life.']
+}
             levels: {
                 1: {
                     name: 'ระดับพื้นฐาน',

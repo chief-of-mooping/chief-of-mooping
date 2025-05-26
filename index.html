@@ -831,161 +831,326 @@
            theory: null,
            activeTab: 'theory',
            activeSPSSGuide: 'descriptive'
-       };
+           selectedDomain: null  // เพิ่มบรรทัดนี้       };
+// เพิ่มฟังก์ชันใหม่
+function selectDomain(domain) {
+    currentState.selectedDomain = domain;
+    
+    // Update UI
+    document.querySelectorAll('.domain-btn').forEach(btn => {
+        btn.classList.remove('bg-white/30', 'border-yellow-400');
+        btn.classList.add('bg-white/10', 'border-white/30');
+    });
+    
+    event.target.closest('.domain-btn').classList.remove('bg-white/10', 'border-white/30');
+    event.target.closest('.domain-btn').classList.add('bg-white/30', 'border-yellow-400');
+    
+    // Show selected domain
+    const domainNames = {
+        'digital_marketing': 'การตลาดดิจิทัล',
+        'social_capital': 'ทุนทางสังคม',
+        'management': 'การบริหาร',
+        'finance': 'การเงิน',
+        'hr': 'ทรัพยากรมนุษย์',
+        'supply_chain': 'โซ่อุปทาน',
+        'international_trade': 'การค้าระหว่างประเทศ',
+        'strategy': 'กลยุทธ์',
+        'sustainability': 'ความยั่งยืน',
+        'risk_management': 'บริหารความเสี่ยง',
+        'project_management': 'บริหารโครงการ',
+        'business_analytics': 'วิเคราะห์ธุรกิจ'
+    };
+    
+    document.getElementById('selected-domain').classList.remove('hidden');
+    document.getElementById('domain-name').textContent = domainNames[domain];
+}
 
-       // ฟังก์ชันค้นหาทฤษฎีอัจฉริยะ
-       function findRelevantTheories(topic) {
-           const topicLower = topic.toLowerCase();
-           const relevantTheories = [];
+function clearDomain() {
+    currentState.selectedDomain = null;
+    document.getElementById('selected-domain').classList.add('hidden');
+    
+    document.querySelectorAll('.domain-btn').forEach(btn => {
+        btn.classList.remove('bg-white/30', 'border-yellow-400');
+        btn.classList.add('bg-white/10', 'border-white/30');
+    });
+}
 
-           Object.values(researchDatabase.theories).forEach(theory => {
-               let score = 0;
-               
-               // ตรวจสอบ keywords
-               theory.keywords.forEach(keyword => {
-                   if (topicLower.includes(keyword.toLowerCase())) {
-                       score += 2;
-                   }
-               });
+function setExample(text, domain = null) {
+    document.getElementById('researchTopic').value = text;
+    if (domain) {
+        selectDomain(domain);
+    }
+    }     // ปรับฟังก์ชันค้นหาทฤษฎี
+function findRelevantTheories(topic) {
+    const topicLower = topic.toLowerCase();
+    const relevantTheories = [];
 
-               // ตรวจสอบชื่อทฤษฎี
-               if (topicLower.includes(theory.name.toLowerCase())) {
-                   score += 3;
-               }
+    Object.values(researchDatabase.theories).forEach(theory => {
+        let score = 0;
+        
+        // ถ้าผู้ใช้เลือกสาขา ให้คะแนนพิเศษ
+        if (currentState.selectedDomain && theory.domain === currentState.selectedDomain) {
+            score += 5; // คะแนนพิเศษสูง
+        }
+        
+        // ตรวจสอบ keywords
+        theory.keywords.forEach(keyword => {
+            if (topicLower.includes(keyword.toLowerCase())) {
+                score += 2;
+            }
+        });
 
-               // Domain-based scoring
-               if (topicLower.includes('เทคโนโลยี') || topicLower.includes('ดิจิทัล') || topicLower.includes('ออนไลน์') || topicLower.includes('ระบบ')) {
-                   if (theory.domain === 'digital_marketing') score += 3;
-               }
-               
-               if (topicLower.includes('สังคม') || topicLower.includes('เครือข่าย') || topicLower.includes('ความสัมพันธ์') || topicLower.includes('ชุมชน')) {
-                   if (theory.domain === 'social_capital') score += 3;
-               }
+        // ตรวจสอบชื่อทฤษฎี
+        if (topicLower.includes(theory.name.toLowerCase())) {
+            score += 3;
+        }
 
-               if (topicLower.includes('บริหาร') || topicLower.includes('องค์กร') || topicLower.includes('จัดการ') || topicLower.includes('ผู้บริหาร')) {
-                   if (theory.domain === 'management') score += 3;
-               }
+        // Domain-based scoring (เหมือนเดิม...)
+        if (topicLower.includes('เทคโนโลยี') || topicLower.includes('ดิจิทัล') || topicLower.includes('ออนไลน์') || topicLower.includes('ระบบ')) {
+            if (theory.domain === 'digital_marketing') score += 3;
+        }
+        
+        if (topicLower.includes('สังคม') || topicLower.includes('เครือข่าย') || topicLower.includes('ความสัมพันธ์') || topicLower.includes('ชุมชน')) {
+            if (theory.domain === 'social_capital') score += 3;
+        }
 
-               if (topicLower.includes('การเงิน') || topicLower.includes('ลงทุน') || topicLower.includes('หุ้น') || topicLower.includes('พอร์ต')) {
-                   if (theory.domain === 'finance') score += 3;
-               }
+        if (topicLower.includes('บริหาร') || topicLower.includes('องค์กร') || topicLower.includes('จัดการ') || topicLower.includes('ผู้บริหาร')) {
+            if (theory.domain === 'management') score += 3;
+        }
 
-               if (topicLower.includes('พนักงาน') || topicLower.includes('แรงจูงใจ') || topicLower.includes('ความพึงพอใจ') || topicLower.includes('ทรัพยากรมนุษย์')) {
-                   if (theory.domain === 'hr') score += 3;
-               }
+        if (topicLower.includes('การเงิน') || topicLower.includes('ลงทุน') || topicLower.includes('หุ้น') || topicLower.includes('พอร์ต')) {
+            if (theory.domain === 'finance') score += 3;
+        }
 
-               if (topicLower.includes('โซ่อุปทาน') || topicLower.includes('ซัพพลาย') || topicLower.includes('โลจิสติกส์') || topicLower.includes('การจัดส่ง')) {
-                   if (theory.domain === 'supply_chain') score += 3;
-               }
+        if (topicLower.includes('พนักงาน') || topicLower.includes('แรงจูงใจ') || topicLower.includes('ความพึงพอใจ') || topicLower.includes('ทรัพยากรมนุษย์')) {
+            if (theory.domain === 'hr') score += 3;
+        }
 
-               if (score > 0) {
-                   relevantTheories.push({ ...theory, score });
-               }
-           });
+        if (topicLower.includes('โซ่อุปทาน') || topicLower.includes('ซัพพลาย') || topicLower.includes('โลจิสติกส์') || topicLower.includes('การจัดส่ง')) {
+            if (theory.domain === 'supply_chain') score += 3;
+        }
 
-           // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
-           if (relevantTheories.length === 0) {
-               return [
-                   researchDatabase.theories.tam,
-                   researchDatabase.theories.tpb,
-                   researchDatabase.theories.social_capital
-               ].map(theory => ({ ...theory, score: 1 }));
-           }
+        if (topicLower.includes('โครงการ') || topicLower.includes('project')) {
+            if (theory.domain === 'project_management') score += 3;
+        }
 
-           // เรียงลำดับตาม score และ filter ตาม level
-           return relevantTheories
-               .sort((a, b) => b.score - a.score)
-               .slice(0, 3);
-       }
+        if (score > 0) {
+            relevantTheories.push({ ...theory, score });
+        }
+    });
+
+    // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
+    if (relevantTheories.length === 0) {
+        return [
+            researchDatabase.theories.tam,
+            researchDatabase.theories.tpb,
+            researchDatabase.theories.social_capital
+        ].map(theory => ({ ...theory, score: 1 }));
+    }
+
+    // เรียงลำดับตาม score
+    return relevantTheories
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+}
 
        // Landing Page
-       function renderLanding() {
-           return `
-               <div class="min-h-screen relative overflow-hidden fade-in">
-                   <div class="container mx-auto px-4 py-16 relative z-10">
-                       <div class="text-center mb-16">
-                           <div class="text-8xl mb-6">🎓</div>
-                           <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
-                               <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                                   ระบบปรึกษาการวิจัย
-                               </span>
-                               <br>
-                               <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
-                           </h1>
-                           <p class="text-2xl text-white/90 font-medium drop-shadow-md">
-                               Research Methodology Advisor - AI Powered
-                           </p>
-                           <p class="text-lg text-white/80 mt-2">
-                               เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 30+ ทฤษฎี 12 สาขาวิชา
-                           </p>
-                       </div>
+       // Landing Page
+function renderLanding() {
+    return `
+        <div class="min-h-screen relative overflow-hidden fade-in">
+            <div class="container mx-auto px-4 py-16 relative z-10">
+                <div class="text-center mb-16">
+                    <div class="text-8xl mb-6">🎓</div>
+                    <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+                        <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                            ระบบปรึกษาการวิจัย
+                        </span>
+                        <br>
+                        <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
+                    </h1>
+                    <p class="text-2xl text-white/90 font-medium drop-shadow-md">
+                        Research Methodology Advisor - AI Powered
+                    </p>
+                    <p class="text-lg text-white/80 mt-2">
+                        เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 25+ ทฤษฎี 12 สาขาวิชา
+                    </p>
+                </div>
 
-                       <div class="max-w-5xl mx-auto">
-                           <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
-                               <h2 class="text-3xl font-bold text-white mb-8 text-center">
-                                   🔍 เริ่มต้นการวิเคราะห์โจทย์วิจัยของคุณ
-                               </h2>
-                               
-                               <div class="mb-8">
-                                   <label class="block text-white font-semibold mb-4 text-lg">
-                                       💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา:
-                                   </label>
-                                   <textarea
-                                       id="researchTopic"
-                                       placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
-                                       class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
-                                       style="background: rgba(255,255,255,0.9);"
-                                   ></textarea>
-                               </div>
+                <div class="max-w-6xl mx-auto">
+                    <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
+                        <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                            🔍 เริ่มต้นการวิเคราะห์โจทย์วิจัยของคุณ
+                        </h2>
 
-                               <button
-                                   onclick="analyzeTopic()"
-                                   class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all text-xl"
-                               >
-                                   ✨ วิเคราะห์โจทย์วิจัยด้วย AI
-                               </button>
+                        <!-- เลือกสาขาวิชา -->
+                        <div class="mb-8">
+                            <label class="block text-white font-semibold mb-4 text-lg">
+                                🎯 เลือกสาขาวิชาของคุณ (ทางเลือก):
+                            </label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+                                <button onclick="selectDomain('digital_marketing')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📱</div>
+                                    <div class="text-white font-medium text-sm">การตลาดดิจิทัล</div>
+                                </button>
+                                <button onclick="selectDomain('social_capital')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🤝</div>
+                                    <div class="text-white font-medium text-sm">ทุนทางสังคม</div>
+                                </button>
+                                <button onclick="selectDomain('management')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🏢</div>
+                                    <div class="text-white font-medium text-sm">การบริหาร</div>
+                                </button>
+                                <button onclick="selectDomain('finance')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">💰</div>
+                                    <div class="text-white font-medium text-sm">การเงิน</div>
+                                </button>
+                                <button onclick="selectDomain('hr')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">👥</div>
+                                    <div class="text-white font-medium text-sm">ทรัพยากรมนุษย์</div>
+                                </button>
+                                <button onclick="selectDomain('supply_chain')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🚚</div>
+                                    <div class="text-white font-medium text-sm">โซ่อุปทาน</div>
+                                </button>
+                                <button onclick="selectDomain('international_trade')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🌍</div>
+                                    <div class="text-white font-medium text-sm">การค้าระหว่างประเทศ</div>
+                                </button>
+                                <button onclick="selectDomain('strategy')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🎯</div>
+                                    <div class="text-white font-medium text-sm">กลยุทธ์</div>
+                                </button>
+                                <button onclick="selectDomain('sustainability')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🌱</div>
+                                    <div class="text-white font-medium text-sm">ความยั่งยืน</div>
+                                </button>
+                                <button onclick="selectDomain('risk_management')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⚠️</div>
+                                    <div class="text-white font-medium text-sm">บริหารความเสี่ยง</div>
+                                </button>
+                                <button onclick="selectDomain('project_management')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📊</div>
+                                    <div class="text-white font-medium text-sm">บริหารโครงการ</div>
+                                </button>
+                                <button onclick="selectDomain('business_analytics')" 
+                                        class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-3 text-center transition-all group">
+                                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📈</div>
+                                    <div class="text-white font-medium text-sm">วิเคราะห์ธุรกิจ</div>
+                                </button>
+                            </div>
+                            <div id="selected-domain" class="hidden">
+                                <div class="bg-white/20 rounded-lg p-3 mb-4">
+                                    <span class="text-white font-medium">สาขาที่เลือก: </span>
+                                    <span id="domain-name" class="text-yellow-200 font-bold"></span>
+                                    <button onclick="clearDomain()" class="ml-2 text-red-300 hover:text-red-100">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <label class="block text-white font-semibold mb-4 text-lg">
+                                💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา:
+                            </label>
+                            <textarea
+                                id="researchTopic"
+                                placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
+                                class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
+                                style="background: rgba(255,255,255,0.9);"
+                            ></textarea>
+                        </div>
 
-                               <div class="mt-10">
-                                   <h3 class="text-xl font-bold text-white mb-6 text-center">
-                                       🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
-                                   </h3>
-                                   <div class="grid gap-4">
-                                       <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา')" 
-                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                                           <div class="flex items-center gap-4">
-                                               <span class="text-3xl group-hover:scale-110 transition-transform">💻</span>
-                                               <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
-                                           </div>
-                                       </button>
-                                       <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน')" 
-                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                                           <div class="flex items-center gap-4">
-                                               <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
-                                               <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
-                                           </div>
-                                       </button>
-                                       <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค')" 
-                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                                           <div class="flex items-center gap-4">
-                                               <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
-                                               <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
-                                           </div>
-                                       </button>
-                                       <button onclick="setExample('วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการในองค์กร')" 
-                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                                           <div class="flex items-center gap-4">
-                                               <span class="text-3xl group-hover:scale-110 transition-transform">📊</span>
-                                               <span class="text-white font-medium">วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการในองค์กร</span>
-                                           </div>
-                                       </button>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           `;
-       }
+                        <button
+                            onclick="analyzeTopic()"
+                            class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all text-xl"
+                        >
+                            ✨ วิเคราะห์โจทย์วิจัยด้วย AI
+                        </button>
+
+                        <div class="mt-10">
+                            <h3 class="text-xl font-bold text-white mb-6 text-center">
+                                🎯 ตัวอย่างโจทย์วิจัยยอดนิยมแต่ละสาขา
+                            </h3>
+                            <div class="grid gap-4">
+                                <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
+                                        <div>
+                                            <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                                        <div>
+                                            <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                                            <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค', 'digital_marketing')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
+                                        <div>
+                                            <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
+                                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการในองค์กร', 'project_management')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">📊</span>
+                                        <div>
+                                            <span class="text-white font-medium">วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการในองค์กร</span>
+                                            <div class="text-yellow-200 text-sm mt-1">บริหารโครงการ</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('ศึกษาแรงจูงใจและความพึงพอใจในการทำงานของพนักงาน', 'hr')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">👥</span>
+                                        <div>
+                                            <span class="text-white font-medium">ศึกษาแรงจูงใจและความพึงพอใจในการทำงานของพนักงาน</span>
+                                            <div class="text-yellow-200 text-sm mt-1">ทรัพยากรมนุษย์</div>
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onclick="setExample('วิเคราะห์ความได้เปรียบทางการแข่งขันของทรัพยากรองค์กร', 'management')" 
+                                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-3xl group-hover:scale-110 transition-transform">🏢</span>
+                                        <div>
+                                            <span class="text-white font-medium">วิเคราะห์ความได้เปรียบทางการแข่งขันของทรัพยากรองค์กร</span>
+                                            <div class="text-yellow-200 text-sm mt-1">การบริหาร</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
        // Level Selection
        function renderLevelSelection() {

@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบปรึกษาการวิจัยเชิงปริมาณ</title>
+    <title>ระบบปรึกษาการวิจัยเชิงปริมาณ - Research Methodology Advisor</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         
@@ -13,7 +15,6 @@
             font-family: 'Inter', sans-serif; 
         }
 
-        /* 3D Card Effects */
         .card-3d {
             transition: all 0.3s ease;
             transform-style: preserve-3d;
@@ -24,7 +25,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        /* Gradient Backgrounds */
         .bg-gradient-green {
             background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
         }
@@ -41,18 +41,6 @@
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
         }
 
-        /* Button Effects */
-        .btn-3d {
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .btn-3d:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-        }
-
-        /* Animated Background */
         .animated-bg {
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
@@ -65,38 +53,32 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Effect */
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Equal Height Cards */
         .equal-height {
             min-height: 420px;
             display: flex;
             flex-direction: column;
         }
 
-        .equal-height .card-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        .tab-active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
         }
 
-        .equal-height .card-button {
-            margin-top: auto;
+        .tab-inactive {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Fade transition */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tab-inactive:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
         }
     </style>
 </head>
@@ -104,539 +86,1692 @@
     <div id="app"></div>
 
     <script>
-        // ข้อมูลทฤษฎี
-        const theories = {
-            tam: {
-                name: 'Technology Acceptance Model (TAM)',
-                author: 'Davis (1989)',
-                description: 'ทฤษฎีการยอมรับเทคโนโลยี เน้นการรับรู้ประโยชน์และความง่ายในการใช้งาน สำหรับการศึกษาพฤติกรรมการใช้เทคโนโลยีใหม่',
-                factors: ['Perceived Usefulness', 'Perceived Ease of Use', 'Attitude Toward Using', 'Behavioral Intention'],
-                keywords: ['เทคโนโลยี', 'ดิจิทัล', 'ออนไลน์', 'ระบบ', 'technology', 'digital', 'system', 'การยอมรับ']
+        // ฐานข้อมูลทฤษฎีครบ 12 สาขา 30+ ทฤษฎี
+        const researchDatabase = {
+            theories: {
+                // === การตลาดดิจิทัล ===
+                'tam': {
+                    id: 'tam',
+                    name: 'Technology Acceptance Model (TAM)',
+                    author: 'Davis (1989)',
+                    domain: 'digital_marketing',
+                    factors: ['Perceived Usefulness (PU)', 'Perceived Ease of Use (PEOU)', 'Attitude Toward Using', 'Behavioral Intention'],
+                    relationships: 'PU + PEOU → Attitude → Behavioral Intention → Actual Use',
+                    prediction: 'การรับรู้ประโยชน์และความง่ายในการใช้งานจะส่งผลต่อทัศนคติและความตั้งใจในการใช้เทคโนโลยี',
+                    keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user', 'เทคโนโลยี', 'ยอมรับ', 'ระบบ', 'ดิจิทัล'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน เป็นทฤษฎียอดนิยมในการศึกษาการยอมรับเทคโนโลยีใหม่ๆ',
+                    references: ['Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology.', 'Venkatesh, V., & Davis, F. D. (2000). A theoretical extension of the technology acceptance model.']
+                },
+                'tpb': {
+                    id: 'tpb',
+                    name: 'Theory of Planned Behavior (TPB)',
+                    author: 'Ajzen (1991)',
+                    domain: 'digital_marketing',
+                    factors: ['Attitude Toward Behavior', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
+                    relationships: 'Attitude + Subjective Norm + PBC → Behavioral Intention → Behavior',
+                    prediction: 'ทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้จะส่งผลต่อความตั้งใจและพฤติกรรม',
+                    keywords: ['behavior', 'intention', 'attitude', 'norm', 'control', 'พฤติกรรม', 'ความตั้งใจ', 'ทัศนคติ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+                    description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติต่อพฤติกรรม บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้',
+                    references: ['Ajzen, I. (1991). The theory of planned behavior. Organizational behavior and human decision processes.', 'Fishbein, M., & Ajzen, I. (2010). Predicting and changing behavior: The reasoned action approach.']
+                },
+                'utaut': {
+                    id: 'utaut',
+                    name: 'Unified Theory of Acceptance and Use of Technology (UTAUT)',
+                    author: 'Venkatesh et al. (2003)',
+                    domain: 'digital_marketing',
+                    factors: ['Performance Expectancy', 'Effort Expectancy', 'Social Influence', 'Facilitating Conditions'],
+                    relationships: 'PE + EE + SI → Behavioral Intention, FC + BI → Use Behavior',
+                    prediction: 'ความคาดหวังด้านประสิทธิภาพ ความพยายาม อิทธิพลสังคม และสภาพแวดล้อมที่สนับสนุนจะส่งผลต่อการใช้เทคโนโลยี',
+                    keywords: ['technology', 'acceptance', 'performance', 'effort', 'social', 'facilitating', 'เทคโนโลยี', 'ประสิทธิภาพ'],
+                    level: 3,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+                    description: 'ทฤษฎีรวมที่อธิบายการยอมรับและใช้เทคโนโลยี รวมจากทฤษฎีต่างๆ เป็นแบบจำลองเดียวที่ครอบคลุม',
+                    references: ['Venkatesh, V., Morris, M. G., Davis, G. B., & Davis, F. D. (2003). User acceptance of information technology.', 'Venkatesh, V., Thong, J., & Xu, X. (2012). Consumer acceptance and use of information technology.']
+                },
+                'social_commerce': {
+                    id: 'social_commerce',
+                    name: 'Social Commerce Theory',
+                    author: 'Wang & Zhang (2012)',
+                    domain: 'digital_marketing',
+                    factors: ['Social Support', 'Social Presence', 'Trust', 'Purchase Intention'],
+                    relationships: 'Social Support + Social Presence → Trust → Purchase Intention → Purchase Behavior',
+                    prediction: 'การสนับสนุนทางสังคมและการรับรู้การมีอยู่ทางสังคมจะส่งผลต่อความไว้วางใจและความตั้งใจซื้อ',
+                    keywords: ['social', 'commerce', 'trust', 'purchase', 'online', 'สังคม', 'การค้า', 'ความไว้วางใจ', 'ซื้อ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายพฤติกรรมการซื้อในสื่อสังคมออนไลน์ โดยเน้นที่อิทธิพลของปัจจัยทางสังคม',
+                    references: ['Wang, C., & Zhang, P. (2012). The evolution of social commerce.', 'Hajli, M. N. (2014). A study of the impact of social media on consumers.']
+                },
+                'digital_marketing_adoption': {
+                    id: 'digital_marketing_adoption',
+                    name: 'Digital Marketing Adoption Theory',
+                    author: 'Chaffey & Ellis-Chadwick (2019)',
+                    domain: 'digital_marketing',
+                    factors: ['Perceived Benefits', 'Organizational Readiness', 'External Pressure', 'Adoption Intention'],
+                    relationships: 'Perceived Benefits + Organizational Readiness + External Pressure → Adoption Intention → Adoption',
+                    prediction: 'การรับรู้ประโยชน์ ความพร้อมขององค์กร และแรงกดดันภายนอกจะส่งผลต่อการยอมรับการตลาดดิจิทัล',
+                    keywords: ['digital', 'marketing', 'adoption', 'organization', 'benefits', 'ดิจิทัล', 'การตลาด', 'องค์กร'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายการยอมรับและนำเครื่องมือการตลาดดิจิทัลมาใช้ในองค์กร',
+                    references: ['Chaffey, D., & Ellis-Chadwick, F. (2019). Digital marketing.', 'Tiago, M. T. P. M. B., & Veríssimo, J. M. C. (2014). Digital marketing and social media.']
+                },
+
+                // === ทุนทางสังคม ===
+                'social_capital': {
+                    id: 'social_capital',
+                    name: 'Social Capital Theory',
+                    author: 'Coleman (1988), Bourdieu (1986)',
+                    domain: 'social_capital',
+                    factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
+                    relationships: 'Structural + Relational + Cognitive → Social Capital → Performance Outcomes',
+                    prediction: 'ทุนทางสังคมในรูปแบบต่างๆ จะส่งผลต่อประสิทธิภาพและผลลัพธ์ขององค์กรและบุคคล',
+                    keywords: ['social', 'capital', 'network', 'relationship', 'trust', 'สังคม', 'ทุน', 'เครือข่าย', 'ความสัมพันธ์'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ',
+                    references: ['Coleman, J. S. (1988). Social capital in the creation of human capital.', 'Bourdieu, P. (1986). The forms of capital.']
+                },
+                'social_network': {
+                    id: 'social_network',
+                    name: 'Social Network Theory',
+                    author: 'Granovetter (1973)',
+                    domain: 'social_capital',
+                    factors: ['Network Structure', 'Tie Strength', 'Network Density', 'Centrality'],
+                    relationships: 'Network Structure + Tie Strength → Information Flow → Outcomes',
+                    prediction: 'โครงสร้างเครือข่ายและความแข็งแกร่งของความสัมพันธ์จะส่งผลต่อการไหลของข้อมูลและผลลัพธ์',
+                    keywords: ['network', 'ties', 'structure', 'centrality', 'information', 'เครือข่าย', 'โครงสร้าง', 'ข้อมูล'],
+                    level: 3,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+                    description: 'ทฤษฎีที่อธิบายผลกระทบของโครงสร้างเครือข่ายทางสังคมต่อพฤติกรรมและผลลัพธ์',
+                    references: ['Granovetter, M. S. (1973). The strength of weak ties.', 'Burt, R. S. (2005). Brokerage and closure: An introduction to social capital.']
+                },
+
+                // === การบริหาร ===
+                'rbv': {
+                    id: 'rbv',
+                    name: 'Resource-Based View (RBV)',
+                    author: 'Barney (1991)',
+                    domain: 'management',
+                    factors: ['Valuable Resources', 'Rare Resources', 'Inimitable Resources', 'Organized Resources'],
+                    relationships: 'VRIO Resources → Competitive Advantage → Superior Performance',
+                    prediction: 'ทรัพยากรที่มีคุณค่า หายาก เลียนแบบยาก และจัดการได้ดีจะสร้างความได้เปรียบทางการแข่งขัน',
+                    keywords: ['resource', 'competitive', 'advantage', 'valuable', 'rare', 'ทรัพยากร', 'การแข่งขัน', 'ความได้เปรียบ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน',
+                    references: ['Barney, J. (1991). Firm resources and sustained competitive advantage.', 'Wernerfelt, B. (1984). A resource-based view of the firm.']
+                },
+                'dynamic_capabilities': {
+                    id: 'dynamic_capabilities',
+                    name: 'Dynamic Capabilities Theory',
+                    author: 'Teece et al. (1997)',
+                    domain: 'management',
+                    factors: ['Sensing Capabilities', 'Seizing Capabilities', 'Reconfiguring Capabilities', 'Learning Orientation'],
+                    relationships: 'Sensing + Seizing + Reconfiguring → Dynamic Capabilities → Competitive Advantage',
+                    prediction: 'ความสามารถในการรับรู้ ยึดครอง และปรับเปลี่ยนจะช่วยองค์กรปรับตัวและสร้างความได้เปรียบ',
+                    keywords: ['dynamic', 'capabilities', 'adaptation', 'change', 'learning', 'ความสามารถ', 'การปรับตัว'],
+                    level: 3,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+                    description: 'ทฤษฎีที่อธิบายความสามารถขององค์กรในการปรับตัวและพัฒนาในสภาวะแวดล้อมที่เปลี่ยนแปลง',
+                    references: ['Teece, D. J., Pisano, G., & Shuen, A. (1997). Dynamic capabilities and strategic management.', 'Eisenhardt, K. M., & Martin, J. A. (2000). Dynamic capabilities.']
+                },
+                'institutional_theory': {
+                    id: 'institutional_theory',
+                    name: 'Institutional Theory',
+                    author: 'DiMaggio & Powell (1983)',
+                    domain: 'management',
+                    factors: ['Coercive Pressure', 'Mimetic Pressure', 'Normative Pressure', 'Institutional Compliance'],
+                    relationships: 'Coercive + Mimetic + Normative → Institutional Pressure → Organizational Behavior',
+                    prediction: 'แรงกดดันจากสถาบันในรูปแบบต่างๆ จะส่งผลต่อพฤติกรรมและการตัดสินใจขององค์กร',
+                    keywords: ['institutional', 'pressure', 'compliance', 'organization', 'legitimacy', 'สถาบัน', 'องค์กร'],
+                    level: 3,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+                    description: 'ทฤษฎีที่อธิบายอิทธิพลของสถาบันและสภาพแวดล้อมต่อโครงสร้างและพฤติกรรมองค์กร',
+                    references: ['DiMaggio, P. J., & Powell, W. W. (1983). The iron cage revisited.', 'Scott, W. R. (2014). Institutions and organizations.']
+                },
+                'agency_theory': {
+                    id: 'agency_theory',
+                    name: 'Agency Theory',
+                    author: 'Jensen & Meckling (1976)',
+                    domain: 'management',
+                    factors: ['Principal-Agent Relationship', 'Information Asymmetry', 'Moral Hazard', 'Monitoring Costs'],
+                    relationships: 'Information Asymmetry + Moral Hazard → Agency Problems → Monitoring Costs',
+                    prediction: 'ความไม่สมมาตรของข้อมูลและปัญหาทางจริยธรรมจะสร้างต้นทุนในการควบคุมและกำกับดูแล',
+                    keywords: ['agency', 'principal', 'agent', 'asymmetry', 'monitoring', 'ตัวแทน', 'ควบคุม'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายความสัมพันธ์ระหว่างเจ้าของและผู้จัดการ รวมถึงปัญหาที่เกิดขึ้น',
+                    references: ['Jensen, M. C., & Meckling, W. H. (1976). Theory of the firm.', 'Fama, E. F., & Jensen, M. C. (1983). Separation of ownership and control.']
+                },
+
+                // === โซ่อุปทาน ===
+                'scm_performance': {
+                    id: 'scm_performance',
+                    name: 'Supply Chain Management Performance Theory',
+                    author: 'Christopher (2016)',
+                    domain: 'supply_chain',
+                    factors: ['Integration', 'Collaboration', 'Information Sharing', 'Performance'],
+                    relationships: 'Integration + Collaboration + Information Sharing → SCM Performance',
+                    prediction: 'การบูรณาการ การร่วมมือ และการแบ่งปันข้อมูลจะส่งผลต่อประสิทธิภาพการจัดการโซ่อุปทาน',
+                    keywords: ['supply', 'chain', 'integration', 'collaboration', 'performance', 'โซ่อุปทาน', 'บูรณาการ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายปัจจัยที่ส่งผลต่อประสิทธิภาพการจัดการโซ่อุปทาน',
+                    references: ['Christopher, M. (2016). Logistics & supply chain management.', 'Mentzer, J. T., et al. (2001). Defining supply chain management.']
+                },
+
+                // === การเงิน ===
+                'modern_portfolio': {
+                    id: 'modern_portfolio',
+                    name: 'Modern Portfolio Theory (MPT)',
+                    author: 'Markowitz (1952)',
+                    domain: 'finance',
+                    factors: ['Expected Return', 'Risk (Variance)', 'Correlation', 'Efficient Frontier'],
+                    relationships: 'Expected Return + Risk + Correlation → Optimal Portfolio → Maximum Utility',
+                    prediction: 'การกระจายการลงทุนอย่างเหมาะสมจะช่วยลดความเสี่ยงและเพิ่มผลตอบแทนที่คาดหวัง',
+                    keywords: ['portfolio', 'risk', 'return', 'diversification', 'efficient', 'ผลตอบแทน', 'ความเสี่ยง'],
+                    level: 3,
+                    statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Multiple Regression', 'Optimization'],
+                    description: 'ทฤษฎีการจัดพอร์ตการลงทุนที่เน้นการสร้างสมดุลระหว่างความเสี่ยงและผลตอบแทน',
+                    references: ['Markowitz, H. (1952). Portfolio selection.', 'Sharpe, W. F. (1964). Capital asset prices.']
+                },
+                'capm': {
+                    id: 'capm',
+                    name: 'Capital Asset Pricing Model (CAPM)',
+                    author: 'Sharpe (1964), Lintner (1965)',
+                    domain: 'finance',
+                    factors: ['Risk-free Rate', 'Market Risk Premium', 'Beta', 'Expected Return'],
+                    relationships: 'Risk-free Rate + Beta × Market Risk Premium → Expected Return',
+                    prediction: 'ผลตอบแทนที่คาดหวังจะขึ้นอยู่กับอัตราปลอดความเสี่ยงและความเสี่ยงเทียบกับตลาด',
+                    keywords: ['capm', 'beta', 'risk', 'return', 'market', 'pricing', 'ราคา', 'สินทรัพย์'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Regression Analysis'],
+                    description: 'แบบจำลองการกำหนดราคาสินทรัพย์ทุนที่อธิบายความสัมพันธ์ระหว่างความเสี่ยงและผลตอบแทน',
+                    references: ['Sharpe, W. F. (1964). Capital asset prices.', 'Lintner, J. (1965). The valuation of risk assets.']
+                },
+
+                // === ทรัพยากรมนุษย์ ===
+                'expectancy_theory': {
+                    id: 'expectancy_theory',
+                    name: 'Expectancy Theory',
+                    author: 'Vroom (1964)',
+                    domain: 'hr',
+                    factors: ['Expectancy', 'Instrumentality', 'Valence', 'Motivation'],
+                    relationships: 'Expectancy × Instrumentality × Valence → Motivation → Performance',
+                    prediction: 'แรงจูงใจจะขึ้นอยู่กับความคาดหวัง ความเชื่อมโยง และคุณค่าของผลลัพธ์',
+                    keywords: ['expectancy', 'motivation', 'performance', 'valence', 'instrumentality', 'แรงจูงใจ', 'ประสิทธิภาพ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression'],
+                    description: 'ทฤษฎีแรงจูงใจที่อธิบายการตัดสินใจของบุคคลในการทำงาน',
+                    references: ['Vroom, V. H. (1964). Work and motivation.', 'Lawler, E. E., & Porter, L. W. (1967). The effect of performance on job satisfaction.']
+                },
+                'job_characteristics': {
+                    id: 'job_characteristics',
+                    name: 'Job Characteristics Model',
+                    author: 'Hackman & Oldham (1976)',
+                    domain: 'hr',
+                    factors: ['Skill Variety', 'Task Identity', 'Task Significance', 'Autonomy', 'Feedback'],
+                    relationships: 'Core Job Characteristics → Psychological States → Work Outcomes',
+                    prediction: 'ลักษณะงานหลักจะส่งผลต่อสภาพจิตใจและผลลัพธ์การทำงาน',
+                    keywords: ['job', 'characteristics', 'autonomy', 'feedback', 'satisfaction', 'งาน', 'ความพึงพอใจ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'แบบจำลองที่อธิบายผลกระทบของลักษณะงานต่อแรงจูงใจและความพึงพอใจ',
+                    references: ['Hackman, J. R., & Oldham, G. R. (1976). Motivation through the design of work.', 'Hackman, J. R., & Oldham, G. R. (1980). Work redesign.']
+                },
+
+                // เพิ่มทฤษฎีอื่นๆ ต่อไปเรื่อยๆ...
             },
-            tpb: {
-                name: 'Theory of Planned Behavior (TPB)',
-                author: 'Ajzen (1991)',
-                description: 'ทฤษฎีพฤติกรรมตามแผน อธิบายความตั้งใจและพฤติกรรมผ่านทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรม',
-                factors: ['Attitude Toward Behavior', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
-                keywords: ['พฤติกรรม', 'ทัศนคติ', 'ความตั้งใจ', 'behavior', 'attitude', 'intention', 'การควบคุม']
-            },
-            social_capital: {
-                name: 'Social Capital Theory',
-                author: 'Coleman (1988)',
-                description: 'ทฤษฎีทุนทางสังคม อธิบายคุณค่าของความสัมพันธ์และเครือข่ายทางสังคม ที่ส่งผลต่อประสิทธิภาพและผลลัพธ์',
-                factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
-                keywords: ['สังคม', 'เครือข่าย', 'ความสัมพันธ์', 'social', 'network', 'relationship', 'ทุน', 'องค์กร']
-            }
-        };
 
-        // State management
-        let currentState = {
-            page: 'landing',
-            topic: '',
-            level: null,
-            theory: null
-        };
+            levels: {
+                1: {
+                    name: 'ระดับพื้นฐาน',
+                    steps: '3-5 ขั้นตอน',
+                    description: 'เหมาะสำหรับนักศึกษาใหม่หรือการวิจัยเบื้องต้น',
+                    methods: ['Descriptive Statistics', 'Reliability Analysis', 'T-test/ANOVA', 'Correlation'],
+                    statisticalSteps: [
+                        {
+                            step: 1,
+                            name: 'การเตรียมข้อมูล',
+                            description: 'ตรวจสอบและทำความสะอาดข้อมูล',
+                            details: ['ตรวจสอบข้อมูลสูญหาย (Missing Data)', 'ตรวจสอบค่าผิดปกติ (Outliers)', 'การรหัสข้อมูล (Data Coding)'],
+                            tools: ['Frequencies', 'Descriptives', 'Missing Value Analysis'],
+                            duration: '1-2 วัน'
+                        },
+                        {
+                            step: 2,
+                            name: 'สถิติเชิงพรรณนา',
+                            description: 'อธิบายลักษณะของข้อมูลและกลุ่มตัวอย่าง',
+                            details: ['ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน', 'ความถี่และร้อยละ', 'การแจกแจงของข้อมูล'],
+                           tools: ['Descriptive Statistics', 'Frequencies', 'Charts'],
+                           duration: '1 วัน'
+                       },
+                       {
+                           step: 3,
+                           name: 'การทดสอบความเชื่อมั่น',
+                           description: 'ตรวจสอบความคงที่ของเครื่องมือวัด',
+                           details: ['Cronbach\'s Alpha ≥ 0.70', 'Item-Total Correlation ≥ 0.30', 'การปรับปรุงข้อคำถาม'],
+                           tools: ['Reliability Analysis', 'Scale Statistics'],
+                           duration: '1 วัน'
+                       },
+                       {
+                           step: 4,
+                           name: 'การทดสอบสมมติฐาน',
+                           description: 'ทดสอบความสัมพันธ์และความแตกต่าง',
+                           details: ['T-test สำหรับเปรียบเทียบค่าเฉลี่ย', 'ANOVA สำหรับเปรียบเทียบหลายกลุ่ม', 'Correlation Analysis'],
+                           tools: ['Independent T-test', 'One-way ANOVA', 'Pearson Correlation'],
+                           duration: '2-3 วัน'
+                       }
+                   ]
+               },
+               2: {
+                   name: 'ระดับกลาง',
+                   steps: '6-8 ขั้นตอน',
+                   description: 'เหมาะสำหรับการวิจัยระดับปริญญาโทหรือมีประสบการณ์บ้าง',
+                   methods: ['Data Preparation', 'Descriptive', 'Reliability', 'EFA', 'Multiple Regression'],
+                   statisticalSteps: [
+                       {
+                           step: 1,
+                           name: 'การเตรียมและตรวจสอบข้อมูล',
+                           description: 'ทำความสะอาดและตรวจสอบคุณภาพข้อมูล',
+                           details: ['Missing Data Analysis', 'Outlier Detection', 'Normality Testing', 'Linearity Assessment'],
+                           tools: ['Missing Value Analysis', 'Explore', 'Regression Diagnostics'],
+                           duration: '2-3 วัน'
+                       },
+                       {
+                           step: 2,
+                           name: 'สถิติเชิงพรรณนา',
+                           description: 'วิเคราะห์ลักษณะข้อมูลเชิงลึก',
+                           details: ['Descriptive Statistics', 'Correlation Matrix', 'Cross-tabulation'],
+                           tools: ['Descriptives', 'Correlations', 'Crosstabs'],
+                           duration: '1-2 วัน'
+                       },
+                       {
+                           step: 3,
+                           name: 'การทดสอบความเชื่อมั่น',
+                           description: 'ประเมินความน่าเชื่อถือของตัวแปร',
+                           details: ['Cronbach\'s Alpha ≥ 0.70', 'Item Analysis', 'Scale Purification'],
+                           tools: ['Reliability Analysis', 'Item Statistics'],
+                           duration: '1-2 วัน'
+                       },
+                       {
+                           step: 4,
+                           name: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
+                           description: 'ค้นหาโครงสร้างแฝงของตัวแปร',
+                           details: ['KMO ≥ 0.60', 'Bartlett\'s Test p < 0.05', 'Factor Loading ≥ 0.50', 'Total Variance Explained ≥ 60%'],
+                           tools: ['Factor Analysis', 'Principal Component'],
+                           duration: '3-4 วัน'
+                       },
+                       {
+                           step: 5,
+                           name: 'การวิเคราะห์การถดถอยพหุคูณ',
+                           description: 'ทดสอบความสัมพันธ์เชิงสาเหตุ',
+                           details: ['Multiple R ≥ 0.30', 'R² และ Adjusted R²', 'VIF < 5 (ไม่มี Multicollinearity)', 'Residual Analysis'],
+                           tools: ['Multiple Regression', 'Stepwise Regression'],
+                           duration: '3-4 วัน'
+                       },
+                       {
+                           step: 6,
+                           name: 'การทดสอบเพิ่มเติม (ทางเลือก)',
+                           description: 'วิเคราะห์เชิงลึกตามความต้องการ',
+                           details: ['Cluster Analysis', 'Discriminant Analysis', 'ANOVA with Post-hoc'],
+                           tools: ['K-Means Cluster', 'Discriminant Analysis', 'Post Hoc Tests'],
+                           duration: '2-3 วัน'
+                       }
+                   ]
+               },
+               3: {
+                   name: 'ระดับสูง',
+                   steps: '10-15 ขั้นตอน',
+                   description: 'เหมาะสำหรับการวิจัยระดับปริญญาเอกหรือมืออาชีพ',
+                   methods: ['Data Screening', 'CMB Testing', 'EFA', 'CFA', 'SEM', 'Mediation/Moderation'],
+                   statisticalSteps: [
+                       {
+                           step: 1,
+                           name: 'การคัดกรองและเตรียมข้อมูล',
+                           description: 'การตรวจสอบข้อมูลอย่างละเอียด',
+                           details: ['Missing Data Pattern Analysis', 'Multivariate Outliers (Mahalanobis Distance)', 'Normality (Skewness & Kurtosis)', 'Linearity & Homoscedasticity'],
+                           tools: ['Missing Value Analysis', 'Regression', 'Explore'],
+                           duration: '3-4 วัน'
+                       },
+                       {
+                           step: 2,
+                           name: 'การทดสอบ Common Method Bias (CMB)',
+                           description: 'ตรวจสอบอคติจากวิธีการเก็บข้อมูล',
+                           details: ['Harman\'s Single Factor Test', 'Variance Explained < 50%', 'Marker Variable Technique'],
+                           tools: ['Factor Analysis', 'SPSS Syntax'],
+                           duration: '2-3 วัน'
+                       },
+                       {
+                           step: 3,
+                           name: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
+                           description: 'สำรวจโครงสร้างตัวแปรแฝง',
+                           details: ['KMO ≥ 0.60', 'Bartlett\'s Test Significant', 'Factor Loading ≥ 0.50', 'Cross-loading < 0.40'],
+                           tools: ['Factor Analysis', 'Promax Rotation'],
+                           duration: '3-4 วัน'
+                       },
+                       {
+                           step: 4,
+                           name: 'การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)',
+                           description: 'ยืนยันโครงสร้างการวัด',
+                           details: ['χ²/df < 3', 'CFI, TLI ≥ 0.95', 'RMSEA ≤ 0.08', 'SRMR ≤ 0.08', 'Factor Loading ≥ 0.70'],
+                           tools: ['AMOS', 'LISREL', 'Mplus'],
+                           duration: '4-5 วัน'
+                       },
+                       {
+                           step: 5,
+                           name: 'การทดสอบความเที่ยงและความตรง',
+                           description: 'ประเมินคุณภาพการวัด',
+                           details: ['Composite Reliability ≥ 0.70', 'AVE ≥ 0.50', 'Discriminant Validity (Fornell-Larcker)', 'HTMT < 0.85'],
+                           tools: ['AMOS', 'Excel Calculation'],
+                           duration: '2-3 วัน'
+                       },
+                       {
+                           step: 6,
+                           name: 'การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)',
+                           description: 'ทดสอบโมเดลทฤษฎีแบบเต็ม',
+                           details: ['Model Fit Indices', 'Path Coefficients', 'R² Values', 'Effect Sizes'],
+                           tools: ['AMOS', 'LISREL', 'Mplus'],
+                           duration: '4-5 วัน'
+                       },
+                       {
+                           step: 7,
+                           name: 'การวิเคราะห์ตัวแปรคั่นกลางและกำกับ',
+                           description: 'ทดสอบกลไกและเงื่อนไขแห่งผล',
+                           details: ['Mediation Analysis (Bootstrap)', 'Moderation Analysis', 'Conditional Effects'],
+                           tools: ['PROCESS Macro', 'AMOS', 'Hayes Method'],
+                           duration: '3-4 วัน'
+                       },
+                       {
+                           step: 8,
+                           name: 'การวิเคราะห์หลายกลุ่ม (Multi-group Analysis)',
+                           description: 'เปรียบเทียบโมเดลข้ามกลุ่ม',
+                           details: ['Measurement Invariance', 'Structural Invariance', 'Critical Ratio Differences'],
+                           tools: ['AMOS Multi-group', 'SPSS Syntax'],
+                           duration: '3-4 วัน'
+                       }
+                   ]
+               }
+           },
 
-        // ฟังก์ชันค้นหาทฤษฎี
-        function findTheory(topic) {
-            const topicLower = topic.toLowerCase();
-            
-            for (let key in theories) {
-                const theory = theories[key];
-                for (let keyword of theory.keywords) {
-                    if (topicLower.includes(keyword.toLowerCase())) {
-                        return theory;
-                    }
-                }
-            }
-            
-            return theories.tam; // default
-        }
+           spssGuides: {
+               descriptive: {
+                   title: 'สถิติเชิงพรรณนา',
+                   icon: '📈',
+                   steps: [
+                       {
+                           step: 'เปิดโปรแกรม SPSS',
+                           instruction: 'File → Open → Data... เลือกไฟล์ข้อมูลของคุณ (.sav, .xlsx, .csv)',
+                           menu: 'File > Open > Data',
+                           image: '💾'
+                       },
+                       {
+                           step: 'เลือกตัวแปรสำหรับวิเคราะห์',
+                           instruction: 'Analyze → Descriptive Statistics → Descriptives',
+                           menu: 'Analyze > Descriptive Statistics > Descriptives',
+                           image: '📊'
+                       },
+                       {
+                           step: 'ตั้งค่าการวิเคราะห์',
+                           instruction: 'ย้ายตัวแปรไปยัง Variable(s) box และเลือก Options สำหรับ Mean, Std. Deviation, Minimum, Maximum',
+                           menu: 'Options: Mean, Std. Deviation, Min, Max',
+                           image: '⚙️'
+                       },
+                       {
+                           step: 'ดูผลลัพธ์',
+                           instruction: 'ตรวจสอบ Output Window สำหรับ Descriptive Statistics Table',
+                           menu: 'Output Window',
+                           image: '📋'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'การตีความผลลัพธ์',
+                       criteria: [
+                           'Mean: ค่าเฉลี่ยของตัวแปร ใช้อธิบายระดับของตัวแปร',
+                           'Std. Deviation: ความแปรปรวนของข้อมูล ยิ่งต่ำยิ่งสม่ำเสมอ',
+                           'Skewness: การเบ้ ระหว่าง -2 ถึง +2 ถือว่าปกติ',
+                           'Kurtosis: การแหลม ระหว่าง -2 ถึง +2 ถือว่าปกติ'
+                       ]
+                   },
+                   template: 'จากการวิเคราะห์ข้อมูลเชิงพรรณนา พบว่า ตัวแปร [ชื่อตัวแปร] มีค่าเฉลี่ย X.XX (SD = X.XX) ซึ่งอยู่ในระดับ[สูง/กลาง/ต่ำ] การแจกแจงของข้อมูลมีลักษณะ[ปกติ/เบ้ซ้าย/เบ้ขวา] (Skewness = X.XX, Kurtosis = X.XX)'
+               },
+               reliability: {
+                   title: 'การทดสอบความเชื่อมั่น',
+                   icon: '🔒',
+                   steps: [
+                       {
+                           step: 'เข้าสู่เมนู Reliability',
+                           instruction: 'Analyze → Scale → Reliability Analysis',
+                           menu: 'Analyze > Scale > Reliability Analysis',
+                           image: '🔍'
+                       },
+                       {
+                           step: 'เลือกตัวแปรในมิติเดียวกัน',
+                           instruction: 'ย้ายข้อคำถามที่วัดตัวแปรเดียวกันไปยัง Items box',
+                           menu: 'Items Selection',
+                           image: '📝'
+                       },
+                       {
+                           step: 'ตั้งค่า Statistics',
+                           instruction: 'คลิก Statistics → เลือก Scale if item deleted และ Item-total correlations',
+                           menu: 'Statistics > Scale if item deleted',
+                           image: '📊'
+                       },
+                       {
+                           step: 'ดูผลลัพธ์ Cronbach\'s Alpha',
+                           instruction: 'ตรวจสอบค่า Cronbach\'s Alpha ≥ 0.70 และ Corrected Item-Total Correlation ≥ 0.30',
+                           menu: 'Reliability Statistics Table',
+                           image: '✅'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'เกณฑ์การตีความ',
+                       criteria: [
+                           'Cronbach\'s Alpha ≥ 0.70: ความเชื่อมั่นที่ยอมรับได้',
+                           'Cronbach\'s Alpha ≥ 0.80: ความเชื่อมั่นที่ดี',
+                           'Cronbach\'s Alpha ≥ 0.90: ความเชื่อมั่นที่ดีมาก',
+                           'Corrected Item-Total Correlation ≥ 0.30: ข้อคำถามมีความสัมพันธ์ดีกับมิติ'
+                       ]
+                   },
+                   template: 'การทดสอบความเชื่อมั่นของแบบสอบถาม พบว่า ตัวแปร [ชื่อตัวแปร] มีค่า Cronbach\'s Alpha เท่ากับ X.XX ซึ่ง[สูงกว่า/เท่ากับ]เกณฑ์ที่ยอมรับได้ (α ≥ 0.70) แสดงว่าแบบสอบถามมีความเชื่อมั่น[ที่ดี/ที่ยอมรับได้]'
+               },
+               efa: {
+                   title: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
+                   icon: '🔍',
+                   steps: [
+                       {
+                           step: 'เข้าสู่เมนู Factor Analysis',
+                           instruction: 'Analyze → Dimension Reduction → Factor',
+                           menu: 'Analyze > Dimension Reduction > Factor',
+                           image: '🎯'
+                       },
+                       {
+                           step: 'เลือกตัวแปรทั้งหมด',
+                           instruction: 'ย้ายตัวแปรทั้งหมดที่ต้องการวิเคราะห์ไปยัง Variables box',
+                           menu: 'Variables Selection',
+                           image: '📋'
+                       },
+                       {
+                           step: 'ตั้งค่า Descriptives',
+                           instruction: 'คลิก Descriptives → เลือก KMO and Bartlett\'s test of sphericity',
+                           menu: 'Descriptives > KMO and Bartlett test',
+                           image: '📊'
+                       },
+                       {
+                           step: 'ตั้งค่า Extraction',
+                           instruction: 'คลิก Extraction → เลือก Principal components หรือ Maximum likelihood',
+                           menu: 'Extraction > Principal Components',
+                           image: '⚙️'
+                       },
+                       {
+                           step: 'ตั้งค่า Rotation',
+                           instruction: 'คลิก Rotation → เลือก Varimax (orthogonal) หรือ Promax (oblique)',
+                           menu: 'Rotation > Varimax/Promax',
+                           image: '🔄'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'เกณฑ์การตีความ EFA',
+                       criteria: [
+                           'KMO ≥ 0.60: ข้อมูลเหมาะสมสำหรับ Factor Analysis',
+                           'Bartlett\'s Test p < 0.05: ตัวแปรมีความสัมพันธ์กัน',
+                           'Factor Loading ≥ 0.50: ข้อคำถามอยู่ในองค์ประกอบนั้น',
+                           'Total Variance Explained ≥ 60%: องค์ประกอบอธิบายความแปรปรวนได้ดี'
+                       ]
+                   },
+                   template: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ พบว่า ค่า KMO เท่ากับ X.XX (> 0.60) และ Bartlett\'s Test มีนัยสำคัญทางสถิติ (p < 0.05) แสดงว่าข้อมูลเหมาะสมสำหรับการวิเคราะห์องค์ประกอบ จากการวิเคราะห์พบองค์ประกอบ X องค์ประกอบ ที่สามารถอธิบายความแปรปรวนได้ XX.XX%'
+               },
+               regression: {
+                   title: 'การวิเคราะห์การถดถอยพหุคูณ',
+                   icon: '📈',
+                   steps: [
+                       {
+                           step: 'เข้าสู่เมนู Regression',
+                           instruction: 'Analyze → Regression → Linear',
+                           menu: 'Analyze > Regression > Linear',
+                           image: '📈'
+                       },
+                       {
+                           step: 'กำหนดตัวแปร',
+                           instruction: 'ย้าย Dependent Variable (ตัวแปรตาม) และ Independent Variables (ตัวแปรต้น)',
+                           menu: 'Dependent/Independent Variables',
+                           image: '🎯'
+                       },
+                       {
+                           step: 'ตั้งค่า Statistics',
+                           instruction: 'คลิก Statistics → เลือก Estimates, Model fit, Collinearity diagnostics',
+                           menu: 'Statistics > Estimates, Model fit',
+                           image: '📊'
+                       },
+                       {
+                           step: 'ตั้งค่า Plots',
+                           instruction: 'คลิก Plots → เลือก *ZPRED vs *ZRESID สำหรับตรวจสอบ assumptions',
+                           menu: 'Plots > ZPRED vs ZRESID',
+                           image: '📉'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'เกณฑ์การตีความ Regression',
+                       criteria: [
+                           'R Square: สัดส่วนความแปรปรวนที่อธิบายได้ (ยิ่งสูงยิ่งดี)',
+                           'F-statistic p < 0.05: โมเดลมีความหมายทางสถิติ',
+                           'Beta Coefficients p < 0.05: ตัวแปรมีอิทธิพลอย่างมีนัยสำคัญ',
+                           'VIF < 5: ไม่มีปัญหา Multicollinearity'
+                       ]
+                   },
+                   template: 'การวิเคราะห์การถดถอยพหุคูณ พบว่า โมเดลมีความหมายทางสถิติ (F = XX.XX, p < 0.05) โดยตัวแปรต้นสามารถอธิบายความแปรปรวนของตัวแปรตามได้ XX.XX% (Adjusted R² = X.XX) ตัวแปร[ชื่อตัวแปร]มีอิทธิพลต่อ[ตัวแปรตาม]อย่างมีนัยสำคัญ (β = X.XX, p < 0.05)'
+               },
+               cfa: {
+                   title: 'การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)',
+                   icon: '✅',
+                   steps: [
+                       {
+                           step: 'เปิดโปรแกรม AMOS',
+                           instruction: 'เปิด AMOS Graphics และสร้าง Path Diagram ใหม่',
+                           menu: 'AMOS Graphics > New Path Diagram',
+                           image: '🎨'
+                       },
+                       {
+                           step: 'วาดโมเดลการวัด',
+                           instruction: 'ใช้เครื่องมือ Draw latent variables และ Draw observed variables',
+                           menu: 'Draw Tools > Latent/Observed Variables',
+                           image: '✏️'
+                       },
+                       {
+                           step: 'เชื่อมโยงข้อมูล',
+                           instruction: 'File → Data Files → เลือกไฟล์ข้อมูล SPSS (.sav)',
+                           menu: 'File > Data Files > Select SPSS file',
+                           image: '🔗'
+                       },
+                       {
+                           step: 'รันการวิเคราะห์',
+                           instruction: 'Analyze → Calculate Estimates หรือกด Ctrl+F9',
+                           menu: 'Analyze > Calculate Estimates',
+                           image: '▶️'
+                       },
+                       {
+                           step: 'ดูผลลัพธ์',
+                           instruction: 'View → Text Output หรือ View → Estimates เพื่อดู Fit Indices',
+                           menu: 'View > Text Output/Estimates',
+                           image: '📊'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'เกณฑ์การตีความ CFA',
+                       criteria: [
+                           'χ²/df < 3: ความกลมกลืนของโมเดลดี',
+                           'CFI, TLI ≥ 0.95: ความกลมกลืนเปรียบเทียบดี',
+                           'RMSEA ≤ 0.08: ความคลาดเคลื่อนต่ำ',
+                           'SRMR ≤ 0.08: ความคลาดเคลื่อนของ residual ต่ำ',
+                           'Factor Loading ≥ 0.70: ตัวบ่งชี้วัดตัวแปรแฝงได้ดี'
+                       ]
+                   },
+                   template: 'การวิเคราะห์องค์ประกอบเชิงยืนยัน พบว่า โมเดลมีความกลมกลืนกับข้อมูลเชิงประจักษ์ χ²/df = X.XX, CFI = X.XX, TLI = X.XX, RMSEA = X.XX, SRMR = X.XX ซึ่งเป็นไปตามเกณฑ์ที่ยอมรับได้ แสดงว่าโมเดลการวัดมีความตรงเชิงโครงสร้าง'
+               },
+               sem: {
+                   title: 'การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)',
+                   icon: '🏗️',
+                   steps: [
+                       {
+                           step: 'สร้าง Full Structural Model',
+                           instruction: 'ใน AMOS วาดโมเดลเต็มที่รวม Measurement Model + Structural Model',
+                           menu: 'AMOS > Draw Full Model',
+                           image: '🎨'
+                       },
+                       {
+                           step: 'กำหนด Path Coefficients',
+                           instruction: 'วาดเส้นเชื่อมจากตัวแปรต้นไปตัวแปรตาม ตามทฤษฎี',
+                           menu: 'Draw Paths > Structural Paths',
+                           image: '➡️'
+                       },
+                       {
+                           step: 'ตั้งค่า Model Identification',
+                           instruction: 'กำหนดค่าคงที่ (Fix) Factor Loading = 1 สำหรับตัวบ่งชี้อ้างอิง',
+                           menu: 'Object Properties > Fix Parameter',
+                           image: '🔧'
+                       },
+                       {
+                           step: 'รันและตรวจสอบ Model Fit',
+                           instruction: 'Calculate Estimates และตรวจสอบ Fit Indices ทั้งหมด',
+                           menu: 'Analyze > Calculate Estimates',
+                           image: '📊'
+                       },
+                       {
+                           step: 'ตีความ Path Coefficients',
+                           instruction: 'ดู Standardized Estimates สำหรับความแข็งแกร่งของความสัมพันธ์',
+                           menu: 'View > Standardized Estimates',
+                           image: '📈'
+                       }
+                   ],
+                   interpretation: {
+                       title: 'เกณฑ์การตีความ SEM',
+                       criteria: [
+                           'Model Fit เหมือน CFA: χ²/df < 3, CFI ≥ 0.95, RMSEA ≤ 0.08',
+                           'Path Coefficients p < 0.05: ความสัมพันธ์มีนัยสำคัญ',
+                           'R² ≥ 0.25: ตัวแปรตามถูกอธิบายได้ดีพอสมควร',
+                           'Effect Size: Small (0.10), Medium (0.30), Large (0.50)'
+                       ]
+                   },
+                   template: 'การวิเคราะห์โมเดลสมการโครงสร้าง พบว่า โมเดลมีความกลมกลืนกับข้อมูลเชิงประจักษ์ในระดับที่ยอมรับได้ (χ²/df = X.XX, CFI = X.XX, RMSEA = X.XX) ผลการวิเคราะห์แสดงว่า [ตัวแปรต้น] มีอิทธิพลเชิงบวกต่อ [ตัวแปรตาม] อย่างมีนัยสำคัญทางสถิติ (β = X.XX, p < 0.05)'
+               }
+           }
+       };
 
-        // Landing Page
-        function renderLanding() {
-            return `
-                <div class="min-h-screen relative overflow-hidden fade-in">
-                    <div class="container mx-auto px-4 py-16 relative z-10">
-                        <div class="text-center mb-16">
-                            <div class="text-8xl mb-6">🎓</div>
-                            <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
-                                <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                                    ระบบปรึกษาการวิจัย
-                                </span>
-                                <br>
-                                <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
-                            </h1>
-                            <p class="text-2xl text-white/90 font-medium drop-shadow-md">
-                                Research Methodology Advisor
-                            </p>
-                            <p class="text-lg text-white/80 mt-2">
-                                เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร AI-Powered
-                            </p>
-                        </div>
+       // State management
+       let currentState = {
+           page: 'landing',
+           topic: '',
+           level: null,
+           theory: null
+       };
 
-                        <div class="max-w-5xl mx-auto">
-                            <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
-                                <h2 class="text-3xl font-bold text-white mb-8 text-center">
-                                    🔍 เริ่มต้นการวิเคราะห์โจทย์วิจัยของคุณ
-                                </h2>
-                                
-                                <div class="mb-8">
-                                    <label class="block text-white font-semibold mb-4 text-lg">
-                                        💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา:
-                                    </label>
-                                    <textarea
-                                        id="researchTopic"
-                                        placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
-                                        class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
-                                        style="background: rgba(255,255,255,0.9);"
-                                    ></textarea>
-                                </div>
+       // ฟังก์ชันค้นหาทฤษฎีอัจฉริยะ
+       function findRelevantTheories(topic) {
+           const topicLower = topic.toLowerCase();
+           const relevantTheories = [];
+           Object.values(researchDatabase.theories).forEach(theory => {
+               let score = 0;
+               
+               // ตรวจสอบ keywords
+               theory.keywords.forEach(keyword => {
+                   if (topicLower.includes(keyword.toLowerCase())) {
+                       score += 2;
+                   }
+               });
 
-                                <button
-                                    onclick="analyzeTopic()"
-                                    class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-xl"
-                                >
-                                    ✨ วิเคราะห์โจทย์วิจัยด้วย AI
-                                </button>
+               // ตรวจสอบชื่อทฤษฎี
+               if (topicLower.includes(theory.name.toLowerCase())) {
+                   score += 3;
+               }
 
-                                <div class="mt-10">
-                                    <h3 class="text-xl font-bold text-white mb-6 text-center">
-                                        🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
-                                    </h3>
-                                    <div class="grid gap-4">
-                                        <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา')" 
-                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
-                                            <div class="flex items-center gap-4">
-                                                <span class="text-3xl group-hover:scale-110 transition-transform">💻</span>
-                                                <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
-                                            </div>
-                                        </button>
-                                        <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน')" 
-                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
-                                            <div class="flex items-center gap-4">
-                                                <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
-                                                <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
-                                            </div>
-                                        </button>
-                                        <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค')" 
-                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
-                                            <div class="flex items-center gap-4">
-                                                <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
-                                                <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+               // Domain-based scoring
+               if (topicLower.includes('เทคโนโลยี') || topicLower.includes('ดิจิทัล') || topicLower.includes('ออนไลน์') || topicLower.includes('ระบบ')) {
+                   if (theory.domain === 'digital_marketing') score += 3;
+               }
+               
+               if (topicLower.includes('สังคม') || topicLower.includes('เครือข่าย') || topicLower.includes('ความสัมพันธ์') || topicLower.includes('ชุมชน')) {
+                   if (theory.domain === 'social_capital') score += 3;
+               }
 
-        // Level Selection Page  
-        function renderLevelSelection() {
-            return `
-                <div class="min-h-screen relative overflow-hidden fade-in">
-                    <div class="container mx-auto px-4 py-12 relative z-10">
-                        <div class="text-center mb-12">
-                            <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
-                                🎯 เลือกระดับความซับซ้อน
-                            </h1>
-                            <div class="glass rounded-2xl p-6 max-w-4xl mx-auto">
-                                <p class="text-white/90 mb-3 text-lg">📝 โจทย์วิจัยของคุณ:</p>
-                                <p class="text-white font-bold text-xl">${currentState.topic}</p>
-                            </div>
-                        </div>
+               if (topicLower.includes('บริหาร') || topicLower.includes('องค์กร') || topicLower.includes('จัดการ') || topicLower.includes('ผู้บริหาร')) {
+                   if (theory.domain === 'management') score += 3;
+               }
 
-                        <div class="max-w-7xl mx-auto">
-                            <div class="grid md:grid-cols-3 gap-8">
-                                <!-- Level 1 Card -->
-                                <div class="equal-height bg-gradient-green rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="card-content">
-                                        <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4">📊</div>
-                                            <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับพื้นฐาน</h3>
-                                            <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
-                                                <span class="font-bold text-gray-800">BEGINNER</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="space-y-4 mb-8">
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">3-5 ขั้นตอน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">2-3 เดือน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">ต่ำ</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-8">
-                                            <p class="text-gray-800 font-medium mb-4 text-center">
-                                                🎓 เหมาะสำหรับ:
-                                            </p>
-                                            <div class="space-y-2">
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• นักศึกษาปริญญาตรี</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• ผู้เริ่มต้นทำวิจัย</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• งานวิจัยเบื้องต้น</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button onclick="selectLevel(1)" 
-                                            class="card-button w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                        ✅ เลือกระดับนี้
-                                    </button>
-                                </div>
+               if (topicLower.includes('การเงิน') || topicLower.includes('ลงทุน') || topicLower.includes('หุ้น') || topicLower.includes('พอร์ต')) {
+                   if (theory.domain === 'finance') score += 3;
+               }
 
-                                <!-- Level 2 Card -->
-                                <div class="equal-height bg-gradient-blue rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="card-content">
-                                        <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4">📈</div>
-                                            <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับกลาง</h3>
-                                            <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
-                                                <span class="font-bold text-gray-800">INTERMEDIATE</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="space-y-4 mb-8">
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">6-8 ขั้นตอน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">4-6 เดือน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">กลาง</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-8">
-                                            <p class="text-gray-800 font-medium mb-4 text-center">
-                                                🎓 เหมาะสำหรับ:
-                                            </p>
-                                            <div class="space-y-2">
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• นักศึกษาปริญญาโท</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• มีประสบการณ์การวิจัยบ้าง</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• งานวิจัยระดับกลาง</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button onclick="selectLevel(2)" 
-                                            class="card-button w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                        ✅ เลือกระดับนี้
-                                    </button>
-                                </div>
+               if (topicLower.includes('พนักงาน') || topicLower.includes('แรงจูงใจ') || topicLower.includes('ความพึงพอใจ') || topicLower.includes('ทรัพยากรมนุษย์')) {
+                   if (theory.domain === 'hr') score += 3;
+               }
 
-                                <!-- Level 3 Card -->
-                                <div class="equal-height bg-gradient-purple rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="card-content">
-                                        <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4">🎯</div>
-                                            <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับสูง</h3>
-                                            <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
-                                                <span class="font-bold text-gray-800">ADVANCED</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="space-y-4 mb-8">
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">10-15 ขั้นตอน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">8-12 เดือน</span>
-                                                </div>
-                                            </div>
-                                            <div class="bg-white/20 rounded-xl p-4">
-                                                <div class="flex justify-between items-center">
-                                                    <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
-                                                    <span class="font-bold text-gray-800 text-lg">สูง</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-8">
-                                            <p class="text-gray-800 font-medium mb-4 text-center">
-                                                🎓 เหมาะสำหรับ:
-                                            </p>
-                                            <div class="space-y-2">
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• นักศึกษาปริญญาเอก</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• นักวิจัยมืออาชีพ</span>
-                                                </div>
-                                                <div class="bg-white/30 rounded-lg p-3">
-                                                    <span class="text-gray-800">• งานวิจัยระดับสูง</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button onclick="selectLevel(3)" 
-                                            class="card-button w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                        ✅ เลือกระดับนี้
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+               if (topicLower.includes('โซ่อุปทาน') || topicLower.includes('ซัพพลาย') || topicLower.includes('โลจิสติกส์') || topicLower.includes('การจัดส่ง')) {
+                   if (theory.domain === 'supply_chain') score += 3;
+               }
 
-                        <!-- Navigation -->
-                        <div class="text-center mt-12">
-                            <button onclick="restart()" 
-                                    class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all btn-3d">
-                                ← กลับไปแก้ไขโจทย์
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
+               if (score > 0) {
+                   relevantTheories.push({ ...theory, score });
+               }
+           });
 
-        // Results Page
-        function renderResults() {
-            const theory = currentState.theory;
-            return `
-                <div class="min-h-screen relative overflow-hidden fade-in">
-                    <div class="container mx-auto px-4 py-12 relative z-10">
-                        <div class="max-w-5xl mx-auto">
-                            <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
-                                <div class="text-center mb-8">
-                                    <div class="text-6xl mb-4">🎉</div>
-                                    <h1 class="text-4xl font-bold text-white mb-4">
-                                        แผนการวิจัยของคุณพร้อมแล้ว!
-                                    </h1>
-                                </div>
-                                
-                                <div class="grid gap-8 mb-10">
-                                    <!-- ข้อมูลการวิจัย -->
-                                    <div class="bg-gradient-amber rounded-2xl p-6 card-3d">
-                                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                                            📚 ข้อมูลการวิจัยของคุณ
-                                        </h2>
-                                        <div class="grid md:grid-cols-2 gap-4">
-                                            <div class="bg-white/30 rounded-xl p-4">
-                                                <span class="font-semibold text-gray-800">📝 โจทย์วิจัย:</span>
-                                                <p class="text-gray-800 mt-2">${currentState.topic}</p>
-                                            </div>
-                                            <div class="bg-white/30 rounded-xl p-4">
-                                                <span class="font-semibold text-gray-800">🎯 ระดับความซับซ้อน:</span>
-                                                <p class="text-gray-800 mt-2 font-bold">ระดับ ${currentState.level}</p>
-                                            </div>
-                                            <div class="bg-white/30 rounded-xl p-4">
-                                                <span class="font-semibold text-gray-800">🧠 ทฤษฎีที่แนะนำ:</span>
-                                                <p class="text-gray-800 mt-2 font-bold">${theory.name}</p>
-                                            </div>
-                                            <div class="bg-white/30 rounded-xl p-4">
-                                                <span class="font-semibold text-gray-800">👨‍🔬 ผู้พัฒนาทฤษฎี:</span>
-                                                <p class="text-gray-800 mt-2">${theory.author}</p>
-                                            </div>
-                                        </div>
-                                    </div>
+           // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
+           if (relevantTheories.length === 0) {
+               return [
+                   researchDatabase.theories.tam,
+                   researchDatabase.theories.tpb,
+                   researchDatabase.theories.social_capital
+               ].map(theory => ({ ...theory, score: 1 }));
+           }
 
-                                    <!-- ปัจจัยหลักของทฤษฎี -->
-                                    <div class="bg-gradient-green rounded-2xl p-6 card-3d">
-                                        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                                            🎯 ปัจจัยหลักของทฤษฎี
-                                        </h2>
-                                        <div class="grid md:grid-cols-2 gap-4">
-                                            ${theory.factors.map((factor, index) => `
-                                                <div class="bg-white/30 rounded-xl p-4 flex items-center gap-4 group hover:bg-white/40 transition-all">
-                                                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                                        ${index + 1}
-                                                    </div>
-                                                    <span class="text-gray-800 font-medium">${factor}</span>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                    </div>
+           // เรียงลำดับตาม score
+           return relevantTheories
+               .sort((a, b) => b.score - a.score)
+               .slice(0, 3);
+       }
 
-                                    <!-- คำอธิบายทฤษฎี -->
-                                    <div class="bg-gradient-blue rounded-2xl p-6 card-3d">
-                                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                                            💡 คำอธิบายทฤษฎี
-                                        </h2>
-                                        <div class="bg-white/30 rounded-xl p-6">
-                                            <p class="text-gray-800 text-lg leading-relaxed">${theory.description}</p>
-                                            </div>
-                                   </div>
+       // Landing Page
+       function renderLanding() {
+           return `
+               <div class="min-h-screen relative overflow-hidden">
+                   <div class="container mx-auto px-4 py-16 relative z-10">
+                       <div class="text-center mb-16">
+                           <div class="text-8xl mb-6">🎓</div>
+                           <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+                               <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                                   ระบบปรึกษาการวิจัย
+                               </span>
+                               <br>
+                               <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
+                           </h1>
+                           <p class="text-2xl text-white/90 font-medium drop-shadow-md">
+                               Research Methodology Advisor
+                           </p>
+                           <p class="text-lg text-white/80 mt-2">
+                               เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร AI-Powered
+                           </p>
+                       </div>
 
-                                   <!-- ขั้นตอนการดำเนินงาน -->
-                                   <div class="bg-gradient-purple rounded-2xl p-6 card-3d">
-                                       <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                                           📋 ขั้นตอนการดำเนินงานแนะนำ
-                                       </h2>
-                                       <div class="space-y-4">
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">1</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">🧹 การเตรียมข้อมูล</h4>
-                                                   <p class="text-gray-700 mt-2">ทำความสะอาดข้อมูล ตรวจสอบค่าสูญหายและค่าผิดปกติ รวมถึงการจัดรูปแบบข้อมูลให้พร้อมสำหรับการวิเคราะห์</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 3-5 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                           
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">2</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">📊 การวิเคราะห์เชิงพรรณนา</h4>
-                                                   <p class="text-gray-700 mt-2">วิเคราะห์ลักษณะของข้อมูลและกลุ่มตัวอย่าง หาค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน และการแจกแจงของข้อมูล</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 2-3 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">🔒 การทดสอบความเชื่อมั่น</h4>
-                                                   <p class="text-gray-700 mt-2">ตรวจสอบ Cronbach's Alpha ของแต่ละตัวแปร (≥ 0.70) เพื่อให้แน่ใจว่าแบบสอบถามมีความน่าเชื่อถือ</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 1-2 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-
-                                           ${currentState.level >= 2 ? `
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">4</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">🔍 การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)</h4>
-                                                   <p class="text-gray-700 mt-2">ตรวจสอบโครงสร้างของตัวแปรแฝง ดูว่าข้อคำถามจับกลุ่มกันอย่างไร (KMO ≥ 0.60, Factor Loading ≥ 0.50)</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 3-5 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                           ` : ''}
-
-                                           ${currentState.level >= 3 ? `
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">5</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">✅ การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)</h4>
-                                                   <p class="text-gray-700 mt-2">ยืนยันโครงสร้างการวัดด้วย AMOS/LISREL ตรวจสอบ Model Fit (CFI ≥ 0.95, RMSEA ≤ 0.08)</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 5-7 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                           
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">6</div>
-                                               <div>
-                                                   <h4 class="font-bold text-gray-800 text-lg">🏗️ การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)</h4>
-                                                   <p class="text-gray-700 mt-2">ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปร วิเคราะห์ Path Coefficients และ Effect Sizes</p>
-                                                   <div class="bg-white/50 rounded-lg p-2 mt-2">
-                                                       <span class="text-sm font-medium text-gray-800">⏱️ ระยะเวลา: 7-10 วัน</span>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                           ` : ''}
-                                       </div>
-                                   </div>
-
-                                   <!-- เกณฑ์การตีความ -->
-                                   <div class="bg-white/10 rounded-2xl p-6 card-3d border border-white/20">
-                                       <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                                           📏 เกณฑ์การตีความผลลัพธ์
-                                       </h2>
-                                       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                           <div class="bg-white/10 rounded-xl p-4 border border-white/20">
-                                               <h4 class="font-bold text-green-300 mb-3">🔒 ความเชื่อมั่น</h4>
-                                               <ul class="space-y-2 text-white text-sm">
-                                                   <li>• Cronbach's Alpha ≥ 0.70</li>
-                                                   <li>• Composite Reliability ≥ 0.70</li>
-                                                   <li>• Item-Total Correlation ≥ 0.30</li>
-                                               </ul>
-                                           </div>
-                                           <div class="bg-white/10 rounded-xl p-4 border border-white/20">
-                                               <h4 class="font-bold text-blue-300 mb-3">✅ ความตรง</h4>
-                                               <ul class="space-y-2 text-white text-sm">
-                                                   <li>• Factor Loading ≥ 0.50 (EFA)</li>
-                                                   <li>• Factor Loading ≥ 0.70 (CFA)</li>
-                                                   <li>• AVE ≥ 0.50</li>
-                                               </ul>
-                                           </div>
-                                           <div class="bg-white/10 rounded-xl p-4 border border-white/20">
-                                               <h4 class="font-bold text-purple-300 mb-3">🎯 Model Fit</h4>
-                                               <ul class="space-y-2 text-white text-sm">
-                                                   <li>• CFI, TLI ≥ 0.95</li>
-                                                   <li>• RMSEA ≤ 0.08</li>
-                                                   <li>• χ²/df < 3</li>
-                                               </ul>
-                                           </div>
-                                       </div>
-                                   </div>
+                       <div class="max-w-5xl mx-auto">
+                           <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
+                               <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                                   🔍 เริ่มต้นการวิเคราะห์โจทย์วิจัยของคุณ
+                               </h2>
+                               
+                               <div class="mb-8">
+                                   <label class="block text-white font-semibold mb-4 text-lg">
+                                       💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา:
+                                   </label>
+                                   <textarea
+                                       id="researchTopic"
+                                       placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
+                                       class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
+                                       style="background: rgba(255,255,255,0.9);"
+                                   ></textarea>
                                </div>
 
-                               <!-- Action Buttons -->
-                               <div class="flex flex-wrap gap-4 justify-center">
-                                   <button onclick="window.print()" 
-                                           class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-lg flex items-center gap-3">
-                                       🖨️ พิมพ์แผนการวิจัย
-                                   </button>
-                                   <button onclick="restart()" 
-                                           class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-lg flex items-center gap-3">
-                                       🔄 เริ่มใหม่
-                                   </button>
-                               </div>
+                               <button
+                                   onclick="analyzeTopic()"
+                                   class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all text-xl"
+                               >
+                                   ✨ วิเคราะห์โจทย์วิจัยด้วย AI
+                               </button>
 
-                               <!-- Success Message -->
-                               <div class="text-center mt-8 glass rounded-2xl p-6">
-                                   <div class="text-4xl mb-3">🎊</div>
-                                   <h3 class="text-2xl font-bold text-white mb-2">ขอแสดงความยินดี!</h3>
-                                   <p class="text-white/90">คุณได้รับแผนการวิจัยที่สมบูรณ์แล้ว พร้อมเริ่มต้นการวิจัยของคุณ</p>
+                               <div class="mt-10">
+                                   <h3 class="text-xl font-bold text-white mb-6 text-center">
+                                       🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
+                                   </h3>
+                                   <div class="grid gap-4">
+                                       <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา')" 
+                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                           <div class="flex items-center gap-4">
+                                               <span class="text-3xl group-hover:scale-110 transition-transform">💻</span>
+                                               <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                                           </div>
+                                       </button>
+                                       <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน')" 
+                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                           <div class="flex items-center gap-4">
+                                               <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                                               <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                                           </div>
+                                       </button>
+                                       <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค')" 
+                                               class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                           <div class="flex items-center gap-4">
+                                               <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
+                                               <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
+                                           </div>
+                                       </button>
+                                   </div>
                                </div>
                            </div>
                        </div>
                    </div>
                </div>
            `;
+       }
+
+       // Level Selection Page  
+       function renderLevelSelection() {
+           return `
+               <div class="min-h-screen relative overflow-hidden">
+                   <div class="container mx-auto px-4 py-12 relative z-10">
+                       <div class="text-center mb-12">
+                           <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+                               🎯 เลือกระดับความซับซ้อน
+                           </h1>
+                           <div class="glass rounded-2xl p-6 max-w-4xl mx-auto">
+                               <p class="text-white/90 mb-3 text-lg">📝 โจทย์วิจัยของคุณ:</p>
+                               <p class="text-white font-bold text-xl">${currentState.topic}</p>
+                           </div>
+                       </div>
+
+                       <div class="max-w-7xl mx-auto">
+                           <div class="grid md:grid-cols-3 gap-8">
+                               <!-- Level 1 Card -->
+                               <div class="equal-height bg-gradient-green rounded-3xl p-8 card-3d relative overflow-hidden">
+                                   <div class="flex flex-col h-full">
+                                       <div class="text-center mb-6">
+                                           <div class="text-6xl mb-4">📊</div>
+                                           <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับพื้นฐาน</h3>
+                                           <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                               <span class="font-bold text-gray-800">BEGINNER</span>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="space-y-4 mb-8 flex-grow">
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">3-5 ขั้นตอน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">2-3 เดือน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">ต่ำ</span>
+                                               </div>
+                                           </div>
+                                           
+                                           <div>
+                                               <p class="text-gray-800 font-medium mb-4 text-center">
+                                                   🎓 เหมาะสำหรับ:
+                                               </p>
+                                               <div class="space-y-2">
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• นักศึกษาปริญญาตรี</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• ผู้เริ่มต้นทำวิจัย</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• งานวิจัยเบื้องต้น</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       <button onclick="selectLevel(1)" 
+                                               class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg mt-auto">
+                                           ✅ เลือกระดับนี้
+                                       </button>
+                                   </div>
+                               </div>
+
+                               <!-- Level 2 Card -->
+                               <div class="equal-height bg-gradient-blue rounded-3xl p-8 card-3d relative overflow-hidden">
+                                   <div class="flex flex-col h-full">
+                                       <div class="text-center mb-6">
+                                           <div class="text-6xl mb-4">📈</div>
+                                           <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับกลาง</h3>
+                                           <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                               <span class="font-bold text-gray-800">INTERMEDIATE</span>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="space-y-4 mb-8 flex-grow">
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">6-8 ขั้นตอน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">4-6 เดือน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">กลาง</span>
+                                               </div>
+                                           </div>
+                                           
+                                           <div>
+                                               <p class="text-gray-800 font-medium mb-4 text-center">
+                                                   🎓 เหมาะสำหรับ:
+                                               </p>
+                                               <div class="space-y-2">
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• นักศึกษาปริญญาโท</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• มีประสบการณ์การวิจัยบ้าง</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• งานวิจัยระดับกลาง</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       <button onclick="selectLevel(2)" 
+                                               class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg mt-auto">
+                                           ✅ เลือกระดับนี้
+                                       </button>
+                                   </div>
+                               </div>
+
+                               <!-- Level 3 Card -->
+                               <div class="equal-height bg-gradient-purple rounded-3xl p-8 card-3d relative overflow-hidden">
+                                   <div class="flex flex-col h-full">
+                                       <div class="text-center mb-6">
+                                           <div class="text-6xl mb-4">🎯</div>
+                                           <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับสูง</h3>
+                                           <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                               <span class="font-bold text-gray-800">ADVANCED</span>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="space-y-4 mb-8 flex-grow">
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">⏱️ ขั้นตอน:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">10-15 ขั้นตอน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">📅 ระยะเวลา:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">8-12 เดือน</span>
+                                               </div>
+                                           </div>
+                                           <div class="bg-white/20 rounded-xl p-4">
+                                               <div class="flex justify-between items-center">
+                                                   <span class="text-gray-800 font-semibold">💰 งบประมาณ:</span>
+                                                   <span class="font-bold text-gray-800 text-lg">สูง</span>
+                                               </div>
+                                           </div>
+                                           
+                                           <div>
+                                               <p class="text-gray-800 font-medium mb-4 text-center">
+                                                   🎓 เหมาะสำหรับ:
+                                               </p>
+                                               <div class="space-y-2">
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• นักศึกษาปริญญาเอก</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• นักวิจัยมืออาชีพ</span>
+                                                   </div>
+                                                   <div class="bg-white/30 rounded-lg p-3">
+                                                       <span class="text-gray-800">• งานวิจัยระดับสูง</span>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       <button onclick="selectLevel(3)" 
+                                               class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg mt-auto">
+                                           ✅ เลือกระดับนี้
+                                       </button>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                       <!-- Navigation -->
+                       <div class="text-center mt-12">
+                           <button onclick="restart()" 
+                                   class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                               ← กลับไปแก้ไขโจทย์
+                           </button>
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Theory Selection Page
+       function renderTheorySelection() {
+           const relevantTheories = findRelevantTheories(currentState.topic);
+           let selectedTheoryId = null;
+
+           return `
+               <div class="min-h-screen relative overflow-hidden">
+                   <div class="container mx-auto px-4 py-8 relative z-10">
+                       <div class="max-w-6xl mx-auto">
+                           <div class="text-center mb-8">
+                               <h1 class="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+                                   🧠 เลือกทฤษฎีที่เหมาะสมกับการวิจัย
+                               </h1>
+                               <div class="glass rounded-lg p-4 shadow-sm">
+                                   <p class="text-white/90 mb-2">โจทย์วิจัย: <span class="font-medium text-white">${currentState.topic}</span></p>
+                                   <p class="text-white/90">ระดับที่เลือก: <span class="font-medium text-white">ระดับ ${currentState.level}</span></p>
+                               </div>
+                           </div>
+
+                           <div class="grid gap-6" id="theoryCards">
+                               ${relevantTheories.map((theory) => `
+                                   <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 transition-all duration-200 hover:shadow-lg card-3d theory-card" data-theory-id="${theory.id}">
+                                       <div class="flex justify-between items-start mb-4">
+                                           <div>
+                                               <h3 class="text-xl font-bold text-gray-800 mb-2">${theory.name}</h3>
+                                               <p class="text-gray-600">ผู้พัฒนา: ${theory.author}</p>
+                                           </div>
+                                           <div class="flex gap-2">
+                                               <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                                   ระดับ ${theory.level === 1 ? 'พื้นฐาน' : theory.level === 2 ? 'กลาง' : 'สูง'}
+                                               </span>
+                                           </div>
+                                       </div>
+
+                                       <p class="text-gray-700 mb-4">${theory.description}</p>
+
+                                       <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                           <div>
+                                               <h4 class="font-semibold text-gray-800 mb-2">🎯 ปัจจัยหลัก:</h4>
+                                               <ul class="text-sm text-gray-600 space-y-1">
+                                                   ${theory.factors.map(factor => `
+                                                       <li class="flex items-center">
+                                                           <span class="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                                                           ${factor}
+                                                       </li>
+                                                   `).join('')}
+                                               </ul>
+                                           </div>
+                                           <div>
+                                               <h4 class="font-semibold text-gray-800 mb-2">📊 วิธีการวิเคราะห์:</h4>
+                                               <ul class="text-sm text-gray-600 space-y-1">
+                                                   ${theory.statistics.map(stat => `
+                                                       <li class="flex items-center">
+                                                           <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                                           ${stat}
+                                                       </li>
+                                                   `).join('')}
+                                               </ul>
+                                           </div>
+                                       </div>
+
+                                       <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                           <h4 class="font-semibold text-gray-800 mb-2">🔗 ความสัมพันธ์ระหว่างตัวแปร:</h4>
+                                           <p class="text-sm text-gray-700 font-mono bg-white p-2 rounded border">
+                                               ${theory.relationships}
+                                           </p>
+                                       </div>
+
+                                       <div class="bg-amber-50 rounded-lg p-4 mb-4">
+                                           <h4 class="font-semibold text-amber-800 mb-2">💡 การคาดการณ์:</h4>
+                                           <p class="text-sm text-amber-700">${theory.prediction}</p>
+                                       </div>
+
+                                       <div class="flex gap-3">
+                                           <button onclick="selectTheory('${theory.id}')" 
+                                                   class="flex-1 py-2 px-4 rounded-lg font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 select-theory-btn" 
+                                                   data-theory-id="${theory.id}">
+                                               เลือกทฤษฎีนี้
+                                           </button>
+                                       </div>
+                                   </div>
+                               `).join('')}
+                           </div>
+
+                           <div class="text-center mt-8">
+                               <button onclick="goToLevel()" 
+                                       class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                                   ← กลับไปเลือกระดับ
+                               </button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Results Page with Tab System
+       function renderResults() {
+           return `
+               <div class="min-h-screen relative overflow-hidden">
+                   <div class="container mx-auto px-4 py-8 relative z-10">
+                       <div class="max-w-7xl mx-auto">
+                           <!-- Header -->
+                           <div class="glass rounded-lg p-6 shadow-sm mb-6">
+                               <h1 class="text-3xl font-bold text-white mb-4">
+                                   🎉 แผนการวิจัยของคุณ
+                               </h1>
+                               <div class="grid md:grid-cols-3 gap-4 text-sm">
+                                   <div>
+                                       <span class="text-white/90">โจทย์วิจัย:</span>
+                                       <p class="font-medium text-white">${currentState.topic}</p>
+                                   </div>
+                                   <div>
+                                       <span class="text-white/90">ระดับความซับซ้อน:</span>
+                                       <p class="font-medium text-white">ระดับ ${currentState.level}</p>
+                                   </div>
+                                   <div>
+                                       <span class="text-white/90">ทฤษฎีที่เลือก:</span>
+                                       <p class="font-medium text-white">${currentState.theory.name}</p>
+                                   </div>
+                               </div>
+                               <div class="mt-4 flex gap-3">
+                                   <button onclick="exportPDF()" 
+                                           class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                                       📄 Export PDF
+                                   </button>
+                                   <button onclick="restart()" 
+                                           class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                       🔄 เริ่มใหม่
+                                   </button>
+                               </div>
+                           </div>
+
+                           <!-- Tab Navigation -->
+                           <div class="glass rounded-lg shadow-sm mb-6">
+                               <div class="flex border-b border-white/20">
+                                   <button onclick="switchTab('theory')" 
+                                           class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-button tab-active" 
+                                           data-tab="theory">
+                                       <div class="flex items-center justify-center gap-2">
+                                           <span class="text-lg">📚</span>
+                                           <span>ข้อมูลทฤษฎี</span>
+                                       </div>
+                                   </button>
+                                   <button onclick="switchTab('research')" 
+                                           class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-button tab-inactive" 
+                                           data-tab="research">
+                                       <div class="flex items-center justify-center gap-2">
+                                           <span class="text-lg">📋</span>
+                                           <span>แผนการวิจัย</span>
+                                       </div>
+                                   </button>
+                                   <button onclick="switchTab('statistics')" 
+                                           class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-button tab-inactive" 
+                                           data-tab="statistics">
+                                       <div class="flex items-center justify-center gap-2">
+                                           <span class="text-lg">📊</span>
+                                           <span>ขั้นตอนสถิติ</span>
+                                       </div>
+                                   </button>
+                                   <button onclick="switchTab('spss')" 
+                                           class="flex-1 py-4 px-6 text-center font-medium transition-colors tab-button tab-inactive" 
+                                           data-tab="spss">
+                                       <div class="flex items-center justify-center gap-2">
+                                           <span class="text-lg">💻</span>
+                                           <span>คู่มือ SPSS</span>
+                                       </div>
+                                   </button>
+                               </div>
+                           </div>
+
+                           <!-- Tab Content -->
+                           <div id="export-content" class="glass rounded-lg shadow-sm">
+                               <div id="tab-content">
+                                   ${renderTheoryTab()}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Theory Tab Content
+       function renderTheoryTab() {
+           const theory = currentState.theory;
+           return `
+               <div class="p-8">
+                   <div class="mb-8">
+                       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                           📚 ข้อมูลทฤษฎี: ${theory.name}
+                       </h2>
+                   </div>
+
+                   <div class="grid lg:grid-cols-2 gap-8">
+                       <!-- ข้อมูลพื้นฐาน -->
+                       <div class="space-y-6">
+                           <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                               <h3 class="text-lg font-semibold text-blue-200 mb-3">ข้อมูลพื้นฐาน</h3>
+                               <div class="space-y-3">
+                                   <div>
+                                       <span class="font-medium text-blue-100">ผู้พัฒนาทฤษฎี:</span>
+                                       <p class="text-blue-50">${theory.author}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-blue-100">สาขาการใช้งาน:</span>
+                                       <p class="text-blue-50 capitalize">${theory.domain.replace('_', ' ')}</p>
+                                   </div>
+                                   <div>
+                                       <span class="font-medium text-blue-100">ระดับความซับซ้อน:</span>
+                                       <p class="text-blue-50">ระดับ ${theory.level}</p>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                               <h3 class="text-lg font-semibold text-green-200 mb-3">วัตถุประสงค์ของทฤษฎี</h3>
+                               <p class="text-green-50">${theory.description}</p>
+                           </div>
+
+                           <div class="bg-purple-500/20 rounded-lg p-6 border border-purple-500/30">
+                               <h3 class="text-lg font-semibold text-purple-200 mb-3">การคาดการณ์ผลลัพธ์</h3>
+                               <p class="text-purple-50">${theory.prediction}</p>
+                           </div>
+                       </div>
+
+                       <!-- ปัจจัยและความสัมพันธ์ -->
+                       <div class="space-y-6">
+                           <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                               <h3 class="text-lg font-semibold text-amber-200 mb-4">ปัจจัยหลักของทฤษฎี</h3>
+                               <div class="space-y-3">
+                                   ${theory.factors.map((factor, index) => `
+                                       <div class="flex items-start gap-3">
+                                           <span class="bg-amber-400 text-amber-900 px-2 py-1 rounded text-sm font-medium min-w-[24px] text-center">
+                                               ${index + 1}
+                                           </span>
+                                           <span class="text-amber-50">${factor}</span>
+                                       </div>
+                                   `).join('')}
+                               </div>
+                           </div>
+
+                           <div class="bg-gray-500/20 rounded-lg p-6 border border-gray-500/30">
+                               <h3 class="text-lg font-semibold text-gray-200 mb-3">ความสัมพันธ์ระหว่างตัวแปร</h3>
+                               <div class="bg-white/10 p-4 rounded-lg border border-white/20">
+                                   <code class="text-gray-100 font-mono text-sm break-all">
+                                       ${theory.relationships}
+                                   </code>
+                               </div>
+                               <p class="text-sm text-gray-300 mt-3">
+                                   💡 <strong>สัญลักษณ์:</strong> → หมายถึง "ส่งผลต่อ" หรือ "ทำนาย", + หมายถึง "ร่วมกับ"
+                               </p>
+                           </div>
+
+                           <div class="bg-rose-500/20 rounded-lg p-6 border border-rose-500/30">
+                               <h3 class="text-lg font-semibold text-rose-200 mb-3">คำศัพท์สำคัญ</h3>
+                               <div class="flex flex-wrap gap-2">
+                                   ${theory.keywords.map(keyword => `
+                                       <span class="bg-rose-400/30 text-rose-100 px-3 py-1 rounded-full text-sm border border-rose-400/50">
+                                           ${keyword}
+                                       </span>
+                                   `).join('')}
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- งานวิจัยอ้างอิง -->
+                   <div class="mt-8 bg-gray-500/10 rounded-lg p-6 border border-gray-500/20">
+                       <h3 class="text-lg font-semibold text-gray-200 mb-4">📖 งานวิจัยอ้างอิงที่สำคัญ</h3>
+                       <div class="grid md:grid-cols-1 gap-4">
+                           ${theory.references ? theory.references.map(ref => `
+                               <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                   <p class="text-sm text-gray-300">${ref}</p>
+                               </div>
+                           `).join('') : `
+                               <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                   <p class="text-sm text-gray-300">งานวิจัยต้นฉบับของ ${theory.author}</p>
+                               </div>
+                           `}
+                       </div>
+                   </div>
+
+                   <!-- ข้อควรระวัง -->
+                   <div class="mt-6 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-6">
+                       <h3 class="text-lg font-semibold text-yellow-200 mb-3">⚠️ ข้อควรระวังในการใช้ทฤษฎี</h3>
+                       <ul class="text-yellow-100 space-y-2 text-sm">
+                           <li>• ตรวจสอบความเหมาะสมของทฤษฎีกับบริบทการวิจัยของคุณ</li>
+                           <li>• พิจารณาข้อจำกัดและสมมติฐานของทฤษฎี</li>
+                           <li>• ศึกษางานวิจัยล่าสุดที่ใช้ทฤษฎีนี้เพื่อความทันสมัย</li>
+                           <li>• ปรับปรุงตัวแปรให้เหมาะสมกับบริบทเฉพาะของคุณ</li>
+                       </ul>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Research Plan Tab Content
+       function renderResearchPlanTab() {
+           const theory = currentState.theory;
+           const level = currentState.level;
+           
+           return `
+               <div class="p-8">
+                   <div class="mb-8">
+                       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                           📋 แผนการวิจัยที่แนะนำ
+                       </h2>
+                       <p class="text-white/80">
+                           แผนการวิจัยที่เหมาะสมสำหรับทฤษฎี ${theory.name} ในระดับ ${level}
+                       </p>
+                   </div>
+
+                   <!-- ประเภทการวิจัย -->
+                   <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                       <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                           <h3 class="text-lg font-semibold text-blue-200 mb-4">🔬 ประเภทและวิธีการวิจัย</h3>
+                           <div class="space-y-4">
+                               <div>
+                                   <h4 class="font-medium text-blue-100 mb-2">ประเภทการวิจัย:</h4>
+                                   <p class="text-blue-50 text-sm">${level >= 2 ? 'การวิจัยเชิงปริมาณแบบสำรวจ (Quantitative Survey Research)' : 'การวิจัยเชิงพรรณนา (Descriptive Research)'}</p>
+                               </div>
+                               <div>
+                                   <h4 class="font-medium text-blue-100 mb-2">ปรัชญาการวิจัย:</h4>
+                                   <p class="text-blue-50 text-sm">ปรัชญาการวิจัยเชิงบวกนิยม (Positivism)</p>
+                               </div>
+                               <div>
+                                   <h4 class="font-medium text-blue-100 mb-2">แนวทางการวิจัย:</h4>
+                                   <p class="text-blue-50 text-sm">การวิจัยเชิงนิรนัย (Deductive Research)</p>
+                               </div>
+                               <div>
+                                   <h4 class="font-medium text-blue-100 mb-2">กลยุทธ์การวิจัย:</h4>
+                                   <p class="text-blue-50 text-sm">การสำรวจโดยใช้แบบสอบถาม (Survey Strategy)</p>
+                               </div>
+                           </div>
+                       </div>
+
+                       <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                           <h3 class="text-lg font-semibold text-green-200 mb-4">👥 กลุ่มตัวอย่างและขอบเขต</h3>
+                           <div class="space-y-4">
+                               <div>
+                                   <h4 class="font-medium text-green-100 mb-2">ขนาดกลุ่มตัวอย่าง:</h4>
+                                   <p class="text-green-50 text-sm">${level === 1 ? '200-300 คน' : level === 2 ? '300-500 คน' : '500+ คน'}</p>
+                               </div>
+                               <div>
+                                   <h4 class="font-medium text-green-100 mb-2">วิธีการสุ่มตัวอย่าง:</h4>
+                                   <p class="text-green-50 text-sm">${level >= 2 ? 'การสุ่มตัวอย่างแบบหลายขั้นตอน (Multi-stage Sampling)' : 'การสุ่มตัวอย่างแบบง่าย (Simple Random Sampling)'}</p>
+                               </div>
+                               <div>
+                                   <h4 class="font-medium text-green-100 mb-2">ช่วงเวลาการศึกษา:</h4>
+                                   <p class="text-green-50 text-sm">${level >= 3 ? 'การศึกษาข้ามเวลา (Cross-sectional with Longitudinal elements)' : 'การศึกษาข้ามหน้าตัด (Cross-sectional Study)'}</p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                   <!-- Timeline -->
+                   <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                       <h3 class="text-lg font-semibold text-amber-200 mb-4">⏰ แผนการดำเนินงานแนะนำ</h3>
+                       <div class="space-y-4">
+                           ${[
+                               { phase: 'เตรียมการ', duration: '2-3 สัปดาห์', tasks: ['ศึกษาทฤษฎี', 'ออกแบบแบบสอบถาม', 'ทดสอบเครื่องมือ'] },
+                               { phase: 'เก็บข้อมูล', duration: '4-6 สัปดาห์', tasks: ['แจกแบบสอบถาม', 'ติดตามการตอบกลับ', 'ตรวจสอบความสมบูรณ์'] },
+                               { phase: 'วิเคราะห์ข้อมูล', duration: level >= 3 ? '6-8 สัปดาห์' : '3-4 สัปดาห์', tasks: ['ทำความสะอาดข้อมูล', 'วิเคราะห์ทางสถิติ', 'ตีความผลลัพธ์'] },
+                               { phase: 'เขียนรายงาน', duration: '3-4 สัปดาห์', tasks: ['เขียนร่าง', 'ปรับปรุงเนื้อหา', 'จัดทำรูปแบบสุดท้าย'] }
+                           ].map((item, index) => `
+                               <div class="flex gap-4 items-start">
+                                   <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                                       ${item.duration}
+                                   </div>
+                                   <div class="flex-1">
+                                       <h4 class="font-medium text-amber-100 mb-1">${item.phase}</h4>
+                                       <p class="text-amber-50 text-sm">${item.tasks.join(' • ')}</p>
+                                   </div>
+                               </div>
+                           `).join('')}
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Statistics Tab Content  
+       function renderStatisticsTab() {
+           const level = currentState.level;
+           const steps = researchDatabase.levels[level].statisticalSteps;
+           
+           return `
+               <div class="p-8">
+                   <div class="mb-8">
+                       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                           📊 ขั้นตอนการวิเคราะห์ทางสถิติ (ระดับ ${level})
+                       </h2>
+                       <p class="text-white/80">
+                           ขั้นตอนการวิเคราะห์ข้อมูลแบบละเอียดสำหรับทฤษฎี ${currentState.theory.name}
+                       </p>
+                   </div>
+
+                   <!-- Progress Timeline -->
+                   <div class="mb-8 bg-white/5 rounded-lg p-6 border border-white/10">
+                       <h3 class="text-lg font-semibold text-white mb-4">🗺️ แผนที่ขั้นตอนการวิเคราะห์</h3>
+                       <div class="flex items-center space-x-2 overflow-x-auto pb-4">
+                           ${steps.map((step, index) => `
+                               <div class="flex items-center">
+                                   <div class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white min-w-[120px] text-center">
+                                       ${step.step}. ${step.name}
+                                   </div>
+                                   ${index < steps.length - 1 ? '<div class="flex-shrink-0 text-white/40 mx-2">→</div>' : ''}
+                               </div>
+                           `).join('')}
+                       </div>
+                   </div>
+
+                   <!-- Detailed Steps -->
+                   <div class="space-y-6">
+                       ${steps.map((step) => `
+                           <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+                               <div class="flex items-start gap-4 mb-4">
+                                   <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                                       ${step.step}
+                                   </div>
+                                   <div class="flex-1">
+                                       <h3 class="text-xl font-bold text-white mb-2">${step.name}</h3>
+                                       <p class="text-white/80">${step.description}</p>
+                                       <div class="mt-2 inline-block bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm border border-blue-500/30">
+                                           ⏱️ ระยะเวลา: ${step.duration}
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="grid md:grid-cols-2 gap-6">
+                                   <div>
+                                       <h4 class="font-semibold text-white mb-3">📝 รายการที่ต้องทำ</h4>
+                                       <ul class="space-y-2">
+                                           ${step.details.map(detail => `
+                                               <li class="flex items-start gap-2">
+                                                   <span class="flex-shrink-0 w-2 h-2 bg-green-400 rounded-full mt-2"></span>
+                                                   <span class="text-sm text-white/90">${detail}</span>
+                                               </li>
+                                           `).join('')}
+                                       </ul>
+                                   </div>
+
+                                   <div>
+                                       <h4 class="font-semibold text-white mb-3">🛠️ เครื่องมือที่ใช้</h4>
+                                       <ul class="space-y-2">
+                                           ${step.tools.map(tool => `
+                                               <li class="flex items-center gap-2">
+                                                   <span class="flex-shrink-0 w-2 h-2 bg-blue-400 rounded-full"></span>
+                                                   <span class="text-sm text-white/90 bg-white/10 px-2 py-1 rounded border border-white/20">
+                                                       ${tool}
+                                                   </span>
+                                               </li>
+                                           `).join('')}
+                                       </ul>
+                                   </div>
+                               </div>
+                           </div>
+                       `).join('')}
+                   </div>
+
+                   <!-- เกณฑ์มาตรฐาน -->
+                   <div class="mt-8 bg-gray-500/10 rounded-lg p-6 border border-gray-500/20">
+                       <h3 class="text-lg font-semibold text-gray-200 mb-4">📊 เกณฑ์มาตรฐานการตีความสถิติ</h3>
+                       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                           <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                               <h4 class="font-medium text-green-300 mb-2">ความเชื่อมั่น (Reliability)</h4>
+                               <ul class="text-sm text-white/80 space-y-1">
+                                   <li>• Cronbach's Alpha ≥ 0.70</li>
+                                   <li>• Composite Reliability ≥ 0.70</li>
+                                   <li>• Item-Total Correlation ≥ 0.30</li>
+                               </ul>
+                           </div>
+                           <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                               <h4 class="font-medium text-blue-300 mb-2">ความตรง (Validity)</h4>
+                               <ul class="text-sm text-white/80 space-y-1">
+                                   <li>• Factor Loading ≥ 0.50 (EFA)</li>
+                                   <li>• Factor Loading ≥ 0.70 (CFA)</li>
+                                   <li>• AVE ≥ 0.50</li>
+                               </ul>
+                           </div>
+                           <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                               <h4 class="font-medium text-purple-300 mb-2">ความกลมกลืนของโมเดล</h4>
+                               <ul class="text-sm text-white/80 space-y-1">
+                                   <li>• CFI, TLI ≥ 0.95</li>
+                                   <li>• RMSEA ≤ 0.08</li>
+                                   <li>• χ²/df < 3</li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // SPSS Guide Tab Content
+       function renderSPSSTab() {
+           const level = currentState.level;
+           let activeGuide = 'descriptive';
+           
+           const availableGuides = ['descriptive', 'reliability', 'efa', 'regression'];
+           if (level >= 3) {
+               availableGuides.push('cfa', 'sem');
+           }
+           
+           return `
+               <div class="p-8">
+                   <div class="mb-8">
+                       <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                           💻 คู่มือการใช้งาน SPSS (ระดับ ${level})
+                       </h2>
+                       <p class="text-white/80">
+                           คำแนะนำการใช้งาน SPSS แบบทีละขั้นตอนสำหรับการวิเคราะห์ข้อมูล
+                       </p>
+                   </div>
+
+                   <!-- Guide Navigation -->
+                   <div class="mb-8 bg-white/5 rounded-lg shadow-sm overflow-hidden border border-white/10">
+                       <div class="flex flex-wrap border-b border-white/20" id="spss-guide-nav">
+                           ${availableGuides.map((guideKey, index) => {
+                               const guide = researchDatabase.spssGuides[guideKey];
+                               return `
+                                   <button onclick="switchSPSSGuide('${guideKey}')" 
+                                           class="flex-1 min-w-[150px] py-4 px-6 text-center font-medium transition-colors spss-guide-btn ${index === 0 ? 'bg-amber-500 text-white' : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'}" 
+                                           data-guide="${guideKey}">
+                                       <div class="flex items-center justify-center gap-2">
+                                           <span class="text-lg">${guide.icon}</span>
+                                           <span class="text-sm">${guide.title}</span>
+                                       </div>
+                                   </button>
+                               `;
+                           }).join('')}
+                       </div>
+                   </div>
+
+                   <!-- Guide Content -->
+                   <div id="spss-guide-content">
+                       ${renderSPSSGuideContent('descriptive')}
+                   </div>
+               </div>
+           `;
+       }
+
+       // Render specific SPSS Guide Content
+       function renderSPSSGuideContent(guideKey) {
+           const guide = researchDatabase.spssGuides[guideKey];
+           
+           return `
+               <div class="bg-white/5 rounded-lg shadow-sm border border-white/10">
+                   <div class="p-6">
+                       <div class="mb-6">
+                           <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                               ${guide.icon} ${guide.title}
+                           </h3>
+                       </div>
+
+                       <!-- Steps -->
+                       <div class="mb-8">
+                           <h4 class="text-lg font-semibold text-white mb-4">📋 ขั้นตอนการดำเนินงาน</h4>
+                           <div class="space-y-6">
+                               ${guide.steps.map((step, index) => `
+                                   <div class="flex gap-4 p-4 bg-white/5 rounded-lg border border-white/10">
+                                       <div class="flex-shrink-0">
+                                           <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                               ${index + 1}
+                                           </div>
+                                       </div>
+                                       <div class="flex-1">
+                                           <h5 class="font-semibold text-white mb-2">${step.step}</h5>
+                                           <p class="text-white/80 mb-3">${step.instruction}</p>
+                                           <div class="bg-white/10 p-2 rounded border border-blue-500/30">
+                                               <span class="text-blue-300 font-mono text-sm">
+                                                   📍 เมนู: ${step.menu}
+                                               </span>
+                                           </div>
+                                       </div>
+                                       <div class="flex-shrink-0 text-3xl">
+                                           ${step.image}
+                                       </div>
+                                   </div>
+                               `).join('')}
+                           </div>
+                       </div>
+
+                       <!-- Interpretation -->
+                       <div class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-6 mb-6">
+                           <h4 class="text-lg font-semibold text-yellow-200 mb-4">
+                               📏 ${guide.interpretation.title}
+                           </h4>
+                           <div class="grid md:grid-cols-2 gap-3">
+                               ${guide.interpretation.criteria.map(criterion => `
+                                   <div class="bg-white/10 p-3 rounded border border-white/20">
+                                       <span class="text-sm text-yellow-100">${criterion}</span>
+                                   </div>
+                               `).join('')}
+                           </div>
+                       </div>
+
+                       <!-- Template การเขียนรายงาน -->
+                       <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-6">
+                           <h4 class="text-lg font-semibold text-green-200 mb-4">📝 Template การเขียนรายงาน</h4>
+                           <div class="bg-white/10 p-4 rounded border border-white/20 font-mono text-sm">
+                               <p class="text-green-100">
+                                   ${guide.template}
+                               </p>
+                           </div>
+                       </div>
+
+                       <!-- ข้อผิดพลาดที่พบบ่อย -->
+                       <div class="mt-6 bg-red-500/20 border border-red-500/30 rounded-lg p-6">
+                           <h4 class="text-lg font-semibold text-red-200 mb-4">⚠️ ข้อผิดพลาดที่พบบ่อย</h4>
+                           <ul class="space-y-2 text-red-100 text-sm">
+                               ${getCommonMistakes(guideKey).map(mistake => `
+                                   <li>• ${mistake}</li>
+                               `).join('')}
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+           `;
+       }
+
+       // Helper function for common mistakes
+       function getCommonMistakes(guideKey) {
+           const mistakes = {
+               'descriptive': [
+                   'ลืมตรวจสอบ Missing Values ก่อนวิเคราะห์',
+                   'ไม่ได้ตรวจสอบ Outliers ที่อาจส่งผลต่อผลลัพธ์',
+                   'ตีความผล Skewness และ Kurtosis ผิด'
+               ],
+               'reliability': [
+                   'รวมข้อคำถามที่วัดคนละตัวแปรในการทดสอบ',
+                   'ไม่ได้ลบข้อคำถามที่มี Item-Total Correlation ต่ำ',
+                   'ไม่ได้ Reverse Score ข้อคำถามที่เป็นลบ'
+               ],
+               'efa': [
+                   'ใช้ข้อมูลที่มีขนาดตัวอย่างน้อยเกินไป (< 100)',
+                   'ไม่ได้ตรวจสอบ Cross-loading ระหว่างองค์ประกอบ',
+                   'เลือกจำนวนองค์ประกอบโดยไม่พิจารณาทฤษฎี'
+               ],
+               'regression': [
+                   'ไม่ได้ตรวจสอบ Multicollinearity (VIF)',
+                   'ไม่ได้ตรวจสอบ Assumptions ของ Regression',
+                   'ตีความ Beta Coefficients ผิดทิศทาง'
+               ],
+               'cfa': [
+                   'วาดโมเดลไม่ตรงกับทฤษฎี',
+                   'ไม่ได้กำหนด Reference Indicator',
+                   'ไม่ได้ตรวจสอบ Modification Indices อย่างระมัดระวัง'
+               ],
+               'sem': [
+                   'ไม่ได้ทดสอบ Measurement Model ก่อน Structural Model',
+                   'วาด Path ที่ไม่มีเหตุผลทางทฤษฎี',
+                   'ไม่ได้รายงาน Model Fit Indices ครบถ้วน'
+               ]
+           };
+           return mistakes[guideKey] || [];
        }
 
        // Functions
@@ -656,11 +1791,186 @@
        }
 
        function selectLevel(level) {
-           console.log('Selected level:', level); // Debug log
            currentState.level = level;
-           currentState.theory = findTheory(currentState.topic);
+           currentState.page = 'theory';
+           render();
+       }
+
+       function goToLevel() {
+           currentState.page = 'level';
+           render();
+       }
+
+       function selectTheory(theoryId) {
+           // Update UI for selected theory
+           document.querySelectorAll('.theory-card').forEach(card => {
+               card.classList.remove('border-amber-500', 'ring-2', 'ring-amber-200');
+               card.classList.add('border-gray-200');
+           });
+           
+           document.querySelectorAll('.select-theory-btn').forEach(btn => {
+               btn.textContent = 'เลือกทฤษฎีนี้';
+               btn.className = 'flex-1 py-2 px-4 rounded-lg font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 select-theory-btn';
+           });
+
+           const selectedCard = document.querySelector(`[data-theory-id="${theoryId}"]`);
+           const selectedBtn = selectedCard.querySelector('.select-theory-btn');
+           
+           selectedCard.classList.remove('border-gray-200');
+           selectedCard.classList.add('border-amber-500', 'ring-2', 'ring-amber-200');
+           
+           selectedBtn.textContent = '✓ เลือกแล้ว';
+           selectedBtn.className = 'flex-1 py-2 px-4 rounded-lg font-medium transition-colors bg-amber-600 text-white select-theory-btn';
+
+           // Add continue button
+           const existingContinueBtn = selectedCard.querySelector('.continue-btn');
+           if (existingContinueBtn) {
+               existingContinueBtn.remove();
+           }
+
+           const continueBtn = document.createElement('button');
+           continueBtn.onclick = () => proceedWithTheory(theoryId);
+           continueBtn.className = 'bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors continue-btn';
+           continueBtn.textContent = 'ดำเนินการต่อ →';
+           
+           selectedCard.querySelector('.flex.gap-3').appendChild(continueBtn);
+       }
+
+       function proceedWithTheory(theoryId) {
+           currentState.theory = researchDatabase.theories[theoryId];
            currentState.page = 'results';
            render();
+       }
+
+       function switchTab(tabName) {
+           // Update tab buttons
+           document.querySelectorAll('.tab-button').forEach(btn => {
+               btn.classList.remove('tab-active');
+               btn.classList.add('tab-inactive');
+           });
+           
+           document.querySelector(`[data-tab="${tabName}"]`).classList.remove('tab-inactive');
+           document.querySelector(`[data-tab="${tabName}"]`).classList.add('tab-active');
+
+           // Update content
+           const contentDiv = document.getElementById('tab-content');
+           let content = '';
+           
+           switch(tabName) {
+               case 'theory':
+                   content = renderTheoryTab();
+                   break;
+               case 'research':
+                   content = renderResearchPlanTab();
+                   break;
+               case 'statistics':
+                   content = renderStatisticsTab();
+                   break;
+               case 'spss':
+                   content = renderSPSSTab();
+                   break;
+           }
+           
+           contentDiv.innerHTML = content;
+       }
+
+       function switchSPSSGuide(guideKey) {
+           // Update guide nav buttons
+           document.querySelectorAll('.spss-guide-btn').forEach(btn => {
+               btn.classList.remove('bg-amber-500', 'text-white');
+               btn.classList.add('bg-white/5', 'text-white/70', 'hover:bg-white/10', 'hover:text-white');
+           });
+           
+           document.querySelector(`[data-guide="${guideKey}"]`).classList.remove('bg-white/5', 'text-white/70', 'hover:bg-white/10', 'hover:text-white');
+           document.querySelector(`[data-guide="${guideKey}"]`).classList.add('bg-amber-500', 'text-white');
+
+           // Update content
+           document.getElementById('spss-guide-content').innerHTML = renderSPSSGuideContent(guideKey);
+       }
+
+       function exportPDF() {
+           try {
+               const element = document.getElementById('export-content');
+               if (!element) {
+                   alert('ไม่พบเนื้อหาที่จะ Export');
+                   return;
+               }
+
+               // Show loading
+               const loadingOverlay = document.createElement('div');
+               loadingOverlay.innerHTML = `
+                   <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; items-center: justify-center; z-index: 9999;">
+                       <div style="color: white; text-align: center;">
+                           <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+                           <div style="font-size: 1.5rem; font-weight: bold;">กำลังสร้าง PDF...</div>
+                           <div style="margin-top: 0.5rem;">กรุณารอสักครู่</div>
+                       </div>
+                   </div>
+               `;
+               document.body.appendChild(loadingOverlay);
+
+               setTimeout(async () => {
+                   try {
+                       const canvas = await html2canvas(element, {
+                           scale: 1.5,
+                           useCORS: true,
+                           allowTaint: true,
+                           backgroundColor: '#ffffff',
+                           width: element.scrollWidth,
+                           height: element.scrollHeight
+                       });
+
+                       const imgData = canvas.toDataURL('image/png');
+                       const { jsPDF } = window.jspdf;
+                       const pdf = new jsPDF('p', 'mm', 'a4');
+                       
+                       const imgWidth = 210;
+                       const pageHeight = 295;
+                       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                       let heightLeft = imgHeight;
+                       let position = 0;
+
+                       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                       heightLeft -= pageHeight;
+
+                       while (heightLeft >= 0) {
+                           position = heightLeft - imgHeight;
+                           pdf.addPage();
+                           pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                           heightLeft -= pageHeight;
+                       }
+
+                       const fileName = `Research_Plan_${currentState.theory.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                       pdf.save(fileName);
+
+                       document.body.removeChild(loadingOverlay);
+                       
+                       // Show success message
+                       const successOverlay = document.createElement('div');
+                       successOverlay.innerHTML = `
+                           <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(34, 197, 94, 0.95); color: white; padding: 2rem; border-radius: 1rem; text-align: center; z-index: 9999;">
+                               <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                               <div style="font-size: 1.2rem; font-weight: bold;">PDF ถูกสร้างเรียบร้อยแล้ว!</div>
+                               <div style="margin-top: 0.5rem;">ไฟล์ได้รับการดาวน์โหลดแล้ว</div>
+                           </div>
+                       `;
+                       document.body.appendChild(successOverlay);
+                       
+                       setTimeout(() => {
+                           document.body.removeChild(successOverlay);
+                       }, 3000);
+
+                   } catch (error) {
+                       document.body.removeChild(loadingOverlay);
+                       console.error('Error generating PDF:', error);
+                       alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
+                   }
+               }, 500);
+
+           } catch (error) {
+               console.error('Error in exportPDF:', error);
+               alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
+           }
        }
 
        function restart() {
@@ -676,13 +1986,15 @@
        function render() {
            const app = document.getElementById('app');
            
-           // Simple render without fade effect
            switch(currentState.page) {
                case 'landing':
                    app.innerHTML = renderLanding();
                    break;
                case 'level':
                    app.innerHTML = renderLevelSelection();
+                   break;
+               case 'theory':
+                   app.innerHTML = renderTheorySelection();
                    break;
                case 'results':
                    app.innerHTML = renderResults();
@@ -701,4 +2013,4 @@
        render();
    </script>
 </body>
-</html>                                            
+</html>

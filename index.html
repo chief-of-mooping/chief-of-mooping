@@ -1,1822 +1,710 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบปรึกษาการวิจัยเชิงปริมาณ - Research Methodology Advisor</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- External Libraries -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
         .custom-brown { background-color: #8B4513; }
         .custom-cream { background-color: #F5F5DC; }
         .custom-brick { background-color: #CD853F; }
         .custom-gold { background-color: #DAA520; }
     </style>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-brown': '#8B4513',
+                        'custom-cream': '#F5F5DC',
+                        'custom-brick': '#CD853F',
+                        'custom-gold': '#DAA520',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <div id="root"></div>
-<script type="text/babel">
-const researchDatabase = {
-  theories: {
-    'tam': {
-      id: 'tam',
-      name: 'Technology Acceptance Model (TAM)',
-      author: 'Davis (1989)',
-      domain: 'digital_marketing',
-      factors: ['Perceived Usefulness (PU)', 'Perceived Ease of Use (PEOU)', 'Attitude Toward Using', 'Behavioral Intention'],
-      relationships: 'PU + PEOU → Attitude → Behavioral Intention → Actual Use',
-      prediction: 'การรับรู้ประโยชน์และความง่ายในการใช้งานจะส่งผลต่อทัศนคติและความตั้งใจในการใช้เทคโนโลยี',
-      keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user'],
-      level: 2,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
-      description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน'
-    },
-    'tpb': {
-      id: 'tpb',
-      name: 'Theory of Planned Behavior (TPB)',
-      author: 'Ajzen (1991)',
-      domain: 'digital_marketing',
-      factors: ['Attitude', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
-      relationships: 'Attitude + Subjective Norm + PBC → Intention → Behavior',
-      prediction: 'ทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมจะส่งผลต่อความตั้งใจและพฤติกรรม',
-      keywords: ['behavior', 'intention', 'attitude', 'norm', 'control'],
-      level: 2,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
-      description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐานสังคม และการควบคุมพฤติกรรม'
-    },
-    'utaut': {
-      id: 'utaut',
-      name: 'Unified Theory of Acceptance and Use of Technology (UTAUT)',
-      author: 'Venkatesh et al. (2003)',
-      domain: 'digital_marketing',
-      factors: ['Performance Expectancy', 'Effort Expectancy', 'Social Influence', 'Facilitating Conditions'],
-      relationships: 'PE + EE + SI → Intention, FC → Use Behavior',
-      prediction: 'ความคาดหวังด้านประสิทธิภาพ ความพยายาม อิทธิพลสังคม และสภาพแวดล้อมจะส่งผลต่อการใช้เทคโนโลยี',
-      keywords: ['technology', 'acceptance', 'performance', 'effort', 'social'],
-      level: 3,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
-      description: 'ทฤษฎีรวมที่อธิบายการยอมรับและใช้เทคโนโลยี รวมจากทฤษฎีต่างๆ เป็นแบบจำลองเดียว'
-    },
-    'social_capital': {
-      id: 'social_capital',
-      name: 'Social Capital Theory',
-      author: 'Coleman (1988), Bourdieu (1986)',
-      domain: 'social_capital',
-      factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
-      relationships: 'Structural + Relational + Cognitive → Social Capital → Performance',
-      prediction: 'ทุนทางสังคมในรูปแบบต่างๆ จะส่งผลต่อประสิทธิภาพและผลลัพธ์ขององค์กร',
-      keywords: ['social', 'capital', 'network', 'relationship', 'trust'],
-      level: 2,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
-      description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์'
-    },
-    'rbv': {
-      id: 'rbv',
-      name: 'Resource-Based View (RBV)',
-      author: 'Barney (1991)',
-      domain: 'management',
-      factors: ['Valuable Resources', 'Rare Resources', 'Inimitable Resources', 'Organized Resources'],
-      relationships: 'VRIO Resources → Competitive Advantage → Superior Performance',
-      prediction: 'ทรัพยากรที่มีคุณค่า หายาก เลียนแบบยาก และจัดการได้ดีจะสร้างความได้เปรียบทางการแข่งขัน',
-      keywords: ['resource', 'competitive', 'advantage', 'valuable', 'rare'],
-      level: 2,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
-      description: 'ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน'
-    },
-    'dynamic_capabilities': {
-      id: 'dynamic_capabilities',
-      name: 'Dynamic Capabilities Theory',
-      author: 'Teece et al. (1997)',
-      domain: 'management',
-      factors: ['Sensing Capabilities', 'Seizing Capabilities', 'Reconfiguring Capabilities', 'Learning Orientation'],
-      relationships: 'Sensing + Seizing + Reconfiguring → Dynamic Capabilities → Adaptation',
-      prediction: 'ความสามารถในการรับรู้ ยึดครอง และปรับเปลี่ยนจะช่วยองค์กรปรับตัวในสภาวะแวดล้อมที่เปลี่ยนแปลง',
-      keywords: ['dynamic', 'capabilities', 'adaptation', 'change', 'learning'],
-      level: 3,
-      statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
-      description: 'ทฤษฎีที่อธิบายความสามารถขององค์กรในการปรับตัวและพัฒนาในสภาวะแวดล้อมที่เปลี่ยนแปลง'
-    }
-    // เพิ่มทฤษฎีอื่นๆ ตามต้องการ...
-  },
 
-  levels: {
-    1: {
-      name: 'ระดับพื้นฐาน',
-      steps: 3-5,
-      description: 'เหมาะสำหรับนักศึกษาใหม่หรือการวิจัยเบื้องต้น',
-      methods: ['Descriptive Statistics', 'Reliability Analysis', 'T-test/ANOVA', 'Correlation']
-    },
-    2: {
-      name: 'ระดับกลาง', 
-      steps: 6-8,
-      description: 'เหมาะสำหรับการวิจัยระดับปริญญาโทหรือมีประสบการณ์บ้าง',
-      methods: ['Data Preparation', 'Descriptive', 'Reliability', 'EFA', 'Multiple Regression']
-    },
-    3: {
-      name: 'ระดับสูง',
-      steps: 10-15, 
-      description: 'เหมาะสำหรับการวิจัยระดับปริญญาเอกหรือมืออาชีพ',
-      methods: ['Data Screening', 'CMB Testing', 'EFA', 'CFA', 'SEM', 'Mediation/Moderation']
-    }
-  }
-};
-
-const LandingPage = ({ onAnalyze }) => {
-  const [researchTopic, setResearchTopic] = React.useState('');
-  
-  const exampleTopics = [
-    'ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา',
-    'วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน',
-    'ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค',
-    'วิเคราะห์ปัจจัยที่ส่งผลต่อความสำเร็จของการบริหารโครงการในองค์กร'
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-amber-900 mb-4">
-            ระบบปรึกษาการวิจัยเชิงปริมาณ
-          </h1>
-          <p className="text-xl text-amber-700 mb-8">
-            Research Methodology Advisor - เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            กรุณาใส่โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา
-          </h2>
-          
-          <textarea
-            value={researchTopic}
-            onChange={(e) => setResearchTopic(e.target.value)}
-            placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
-            className="w-full h-32 p-4 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none resize-none"
-          />
-
-          <button
-            onClick={() => onAnalyze(researchTopic)}
-            disabled={!researchTopic.trim()}
-            className="w-full mt-6 bg-amber-600 hover:bg-amber-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-          >
-            วิเคราะห์โจทย์วิจัย
-          </button>
-
-          <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-700 mb-4">ตัวอย่างโจทย์วิจัย:</h3>
-            <div className="grid gap-3">
-              {exampleTopics.map((topic, index) => (
-                <button
-                  key={index}
-                  onClick={() => setResearchTopic(topic)}
-                  className="text-left p-3 bg-amber-50 hover:bg-amber-100 rounded-lg border border-amber-200 transition-colors"
-                >
-                  <span className="text-amber-800">{index + 1}. </span>
-                  <span className="text-gray-700">{topic}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const LevelSelection = ({ researchTopic, onSelectLevel }) => {
-  const levelCards = [
-    {
-      level: 1,
-      title: 'ระดับพื้นฐาน',
-      steps: '3-5 ขั้นตอน',
-      time: '2-3 เดือน',
-      description: 'เหมาะสำหรับนักศึกษาปริญญาตรีหรือผู้เริ่มต้นทำวิจัย',
-      methods: ['สถิติเชิงพรรณนา', 'การทดสอบความเชื่อมั่น', 'T-test/ANOVA', 'สหสัมพันธ์'],
-      color: 'green',
-      icon: '📊'
-    },
-    {
-      level: 2,
-      title: 'ระดับกลาง',
-      steps: '6-8 ขั้นตอน',
-      time: '4-6 เดือน',
-      description: 'เหมาะสำหรับนักศึกษาปริญญาโทหรือผู้มีประสบการณ์การวิจัยบ้าง',
-      methods: ['การเตรียมข้อมูล', 'EFA', 'การถดถอยพหุคูณ', 'การวิเคราะห์กลุ่ม'],
-      color: 'blue',
-      icon: '📈'
-    },
-    {
-      level: 3,
-      title: 'ระดับสูง',
-      steps: '10-15 ขั้นตอน',
-      time: '8-12 เดือน',
-      description: 'เหมาะสำหรับนักศึกษาปริญญาเอกหรือนักวิจัยมืออาชีพ',
-      methods: ['CMB Testing', 'CFA', 'SEM', 'การวิเคราะห์ตัวแปรคั่นกลาง', 'Multi-group Analysis'],
-      color: 'purple',
-      icon: '🎯'
-    }
-  ];
-
-  const getColorClasses = (color) => {
-    const colors = {
-      green: 'bg-green-50 border-green-200 hover:bg-green-100',
-      blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
-      purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100'
-    };
-    return colors[color];
-  };
-
-  const getButtonColor = (color) => {
-    const colors = {
-      green: 'bg-green-600 hover:bg-green-700',
-      blue: 'bg-blue-600 hover:bg-blue-700',
-      purple: 'bg-purple-600 hover:bg-purple-700'
-    };
-    return colors[color];
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-amber-900 mb-4">
-              เลือกระดับความซับซ้อนของการวิจัย
-            </h1>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <p className="text-gray-600 mb-2">โจทย์วิจัยของคุณ:</p>
-              <p className="text-gray-800 font-medium">{researchTopic}</p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {levelCards.map((card) => (
-              <div
-                key={card.level}
-                className={`${getColorClasses(card.color)} border-2 rounded-lg p-6 transition-all duration-200 hover:shadow-lg`}
-              >
-                <div className="text-center mb-4">
-                  <div className="text-4xl mb-2">{card.icon}</div>
-                  <h3 className="text-2xl font-bold text-gray-800">{card.title}</h3>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">ขั้นตอน:</span>
-                    <span className="font-semibold text-gray-800">{card.steps}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">ระยะเวลา:</span>
-                    <span className="font-semibold text-gray-800">{card.time}</span>
-                  </div>
-                </div>
-
-                <p className="text-gray-700 mb-4 text-sm">
-                  {card.description}
-                </p>
-
-                <div className="mb-6">
-                  <h4 className="font-semibold text-gray-800 mb-2">วิธีการวิเคราะห์:</h4>
-                  <ul className="text-sm text-gray-600 space-y-1">
-                    {card.methods.map((method, index) => (
-                      <li key={index} className="flex items-center">
-                        <span className="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                        {method}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <button
-                  onClick={() => onSelectLevel(card.level)}
-                  className={`w-full ${getButtonColor(card.color)} text-white font-semibold py-3 px-4 rounded-lg transition-colors`}
-                >
-                  เลือกระดับนี้
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 bg-white rounded-lg p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">💡 คำแนะนำการเลือกระดับ</h3>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <h4 className="font-medium text-green-700 mb-2">เลือกระดับพื้นฐาน หาก:</h4>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• เป็นการวิจัยครั้งแรก</li>
-                  <li>• มีเวลาจำกัด</li>
-                  <li>• ต้องการผลเบื้องต้น</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-blue-700 mb-2">เลือกระดับกลาง หาก:</h4>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• มีประสบการณ์บ้าง</li>
-                  <li>• ต้องการความลึก</li>
-                  <li>• วิจัยระดับ ป.โท</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-purple-700 mb-2">เลือกระดับสูง หาก:</h4>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• มีประสบการณ์มาก</li>
-                  <li>• ต้องการความแม่นยำสูง</li>
-                  <li>• วิจัยระดับ ป.เอก</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const TheorySelection = ({ researchTopic, selectedLevel, onSelectTheory }) => {
-  const [selectedTheoryId, setSelectedTheoryId] = React.useState(null);
-
-  // ฟังก์ชันค้นหาทฤษฎีที่เกี่ยวข้อง
-  const findRelevantTheories = (topic) => {
-    const topicLower = topic.toLowerCase();
-    const relevantTheories = [];
-
-    Object.values(researchDatabase.theories).forEach(theory => {
-      let score = 0;
-      
-      // ตรวจสอบ keywords
-      theory.keywords.forEach(keyword => {
-        if (topicLower.includes(keyword)) {
-          score += 2;
-        }
-      });
-
-      // ตรวจสอบชื่อทฤษฎี
-      if (topicLower.includes(theory.name.toLowerCase())) {
-        score += 3;
-      }
-
-      // ตรวจสอบ domain
-      if (topicLower.includes('เทคโนโลยี') || topicLower.includes('ดิจิทัล') || topicLower.includes('ออนไลน์')) {
-        if (theory.domain === 'digital_marketing') score += 2;
-      }
-      
-      if (topicLower.includes('สังคม') || topicLower.includes('เครือข่าย') || topicLower.includes('ความสัมพันธ์')) {
-        if (theory.domain === 'social_capital') score += 2;
-      }
-
-      if (topicLower.includes('บริหาร') || topicLower.includes('องค์กร') || topicLower.includes('จัดการ')) {
-        if (theory.domain === 'management') score += 2;
-      }
-
-      if (score > 0) {
-        relevantTheories.push({ ...theory, score });
-      }
-    });
-
-    // เรียงลำดับตาม score และ level ที่เหมาะสม
-    return relevantTheories
-      .filter(theory => theory.level <= selectedLevel + 1) // อนุญาตให้เลือกทฤษฎีที่ซับซ้อนกว่าเล็กน้อย
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3); // เอาแค่ 3 อันดับแรก
-  };
-
-  const relevantTheories = findRelevantTheories(researchTopic);
-
-  const getLevelBadgeColor = (level) => {
-    const colors = {
-      1: 'bg-green-100 text-green-800',
-      2: 'bg-blue-100 text-blue-800',
-      3: 'bg-purple-100 text-purple-800'
-    };
-    return colors[level] || 'bg-gray-100 text-gray-800';
-  };
-
-  const getLevelName = (level) => {
-    const names = {
-      1: 'พื้นฐาน',
-      2: 'กลาง', 
-      3: 'สูง'
-    };
-    return names[level] || 'ไม่ระบุ';
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-amber-900 mb-4">
-              เลือกทฤษฎีที่เหมาะสมกับการวิจัย
-            </h1>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <p className="text-gray-600 mb-2">โจทย์วิจัย: <span className="font-medium text-gray-800">{researchTopic}</span></p>
-              <p className="text-gray-600">ระดับที่เลือก: <span className="font-medium text-gray-800">ระดับ {selectedLevel}</span></p>
-            </div>
-          </div>
-
-          {relevantTheories.length > 0 ? (
-            <div className="grid gap-6">
-              {relevantTheories.map((theory) => (
-                <div
-                  key={theory.id}
-                  className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 hover:shadow-lg ${
-                    selectedTheoryId === theory.id 
-                      ? 'border-amber-500 ring-2 ring-amber-200' 
-                      : 'border-gray-200 hover:border-amber-300'
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">{theory.name}</h3>
-                      <p className="text-gray-600">ผู้พัฒนา: {theory.author}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelBadgeColor(theory.level)}`}>
-                        ระดับ {getLevelName(theory.level)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <p className="text-gray-700 mb-4">{theory.description}</p>
-
-                  <div className="grid md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-2">ปัจจัยหลัก:</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {theory.factors.map((factor, index) => (
-                          <li key={index} className="flex items-center">
-                            <span className="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
-                            {factor}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-2">วิธีการวิเคราะห์:</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {theory.statistics.map((stat, index) => (
-                          <li key={index} className="flex items-center">
-                            <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                            {stat}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                    <h4 className="font-semibold text-gray-800 mb-2">ความสัมพันธ์ระหว่างตัวแปร:</h4>
-                    <p className="text-sm text-gray-700 font-mono bg-white p-2 rounded border">
-                      {theory.relationships}
-                    </p>
-                  </div>
-
-                  <div className="bg-amber-50 rounded-lg p-4 mb-4">
-                    <h4 className="font-semibold text-amber-800 mb-2">การคาดการณ์:</h4>
-                    <p className="text-sm text-amber-700">{theory.prediction}</p>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setSelectedTheoryId(theory.id)}
-                      className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
-                        selectedTheoryId === theory.id
-                          ? 'bg-amber-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {selectedTheoryId === theory.id ? '✓ เลือกแล้ว' : 'เลือกทฤษฎีนี้'}
-                    </button>
-                    
-                    {selectedTheoryId === theory.id && (
-                      <button
-                        onClick={() => onSelectTheory(theory)}
-                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-                      >
-                        ดำเนินการต่อ →
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg p-8 text-center">
-              <div className="text-6xl mb-4">🤔</div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                ไม่พบทฤษฎีที่ตรงกับโจทย์วิจัยของคุณ
-              </h3>
-              <p className="text-gray-600 mb-6">
-                ลองปรับโจทย์วิจัยให้ชัดเจนมากขึ้น หรือใช้คำศัพท์ที่เฉพาะเจาะจงมากกว่านี้
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-              >
-                กลับไปแก้ไขโจทย์
-              </button>
-            </div>
-          )}
-
-          <div className="mt-8 bg-white rounded-lg p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">💡 เคล็ดลับการเลือกทฤษฎี</h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <h4 className="font-medium text-blue-700 mb-2">ควรพิจารณา:</h4>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• ความเกี่ยวข้องกับโจทย์วิจัย</li>
-                  <li>• ความซับซ้อนที่เหมาะสมกับประสบการณ์</li>
-                  <li>• ความพร้อมของข้อมูลและเครื่องมือ</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-green-700 mb-2">ข้อดีของการเลือกทฤษฎีที่ถูกต้อง:</h4>
-                <ul className="text-gray-600 space-y-1">
-                  <li>• ทำให้การวิจัยมีกรอบแนวคิดที่ชัดเจน</li>
-                  <li>• ช่วยกำหนดตัวแปรและวิธีการวัด</li>
-                  <li>• เพิ่มความน่าเชื่อถือของผลการวิจัย</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ResultsPage = ({ researchTopic, selectedLevel, selectedTheory, onExportPDF }) => {
-  const [activeTab, setActiveTab] = React.useState('theory');
-
-  const tabs = [
-    { id: 'theory', name: 'ข้อมูลทฤษฎี', icon: '📚' },
-    { id: 'research', name: 'แผนการวิจัย', icon: '📋' },
-    { id: 'statistics', name: 'ขั้นตอนสถิติ', icon: '📊' },
-    { id: 'spss', name: 'คู่มือ SPSS', icon: '💻' }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
-            <h1 className="text-3xl font-bold text-amber-900 mb-4">
-              แผนการวิจัยของคุณ
-            </h1>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <span className="text-gray-600">โจทย์วิจัย:</span>
-                <p className="font-medium text-gray-800">{researchTopic}</p>
-              </div>
-              <div>
-                <span className="text-gray-600">ระดับความซับซ้อน:</span>
-                <p className="font-medium text-gray-800">ระดับ {selectedLevel}</p>
-              </div>
-              <div>
-                <span className="text-gray-600">ทฤษฎีที่เลือก:</span>
-                <p className="font-medium text-gray-800">{selectedTheory.name}</p>
-              </div>
-            </div>
-            <div className="mt-4 flex gap-3">
-              <button
-                onClick={onExportPDF}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
-              >
-                📄 Export PDF
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-              >
-                เริ่มใหม่
-              </button>
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="bg-white rounded-lg shadow-sm mb-6">
-            <div className="flex border-b border-gray-200">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? 'bg-amber-500 text-white border-b-2 border-amber-600'
-                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-lg">{tab.icon}</span>
-                    <span>{tab.name}</span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Tab Content */}
-          <div id="export-content" className="bg-white rounded-lg shadow-sm">
-            {activeTab === 'theory' && <TheoryTab theory={selectedTheory} />}
-            {activeTab === 'research' && <ResearchPlanTab theory={selectedTheory} level={selectedLevel} />}
-            {activeTab === 'statistics' && <StatisticsTab theory={selectedTheory} level={selectedLevel} />}
-            {activeTab === 'spss' && <SPSSGuideTab theory={selectedTheory} level={selectedLevel} />}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const TheoryTab = ({ theory }) => {
-  return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-          📚 ข้อมูลทฤษฎี: {theory.name}
-        </h2>
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-8">
-        {/* ข้อมูลพื้นฐาน */}
-        <div className="space-y-6">
-          <div className="bg-blue-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3">ข้อมูลพื้นฐาน</h3>
-            <div className="space-y-3">
-              <div>
-                <span className="font-medium text-blue-800">ผู้พัฒนาทฤษฎี:</span>
-                <p className="text-blue-700">{theory.author}</p>
-              </div>
-              <div>
-                <span className="font-medium text-blue-800">สาขาการใช้งาน:</span>
-                <p className="text-blue-700 capitalize">{theory.domain.replace('_', ' ')}</p>
-              </div>
-              <div>
-                <span className="font-medium text-blue-800">ระดับความซับซ้อน:</span>
-                <p className="text-blue-700">ระดับ {theory.level}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-green-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-green-900 mb-3">วัตถุประสงค์ของทฤษฎี</h3>
-            <p className="text-green-800">{theory.description}</p>
-          </div>
-
-          <div className="bg-purple-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-purple-900 mb-3">การคาดการณ์ผลลัพธ์</h3>
-            <p className="text-purple-800">{theory.prediction}</p>
-          </div>
-        </div>
-
-        {/* ปัจจัยและความสัมพันธ์ */}
-        <div className="space-y-6">
-          <div className="bg-amber-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-amber-900 mb-4">ปัจจัยหลักของทฤษฎี</h3>
-            <div className="space-y-3">
-              {theory.factors.map((factor, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <span className="bg-amber-200 text-amber-800 px-2 py-1 rounded text-sm font-medium min-w-[24px] text-center">
-                    {index + 1}
-                  </span>
-                  <span className="text-amber-800">{factor}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">ความสัมพันธ์ระหว่างตัวแปร</h3>
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <code className="text-gray-800 font-mono text-sm break-all">
-                {theory.relationships}
-              </code>
-            </div>
-            <p className="text-sm text-gray-600 mt-3">
-              💡 สัญลักษณ์: → หมายถึง "ส่งผลต่อ" หรือ "ทำนาย", + หมายถึง "ร่วมกับ"
-            </p>
-          </div>
-
-          <div className="bg-rose-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-rose-900 mb-3">คำศัพท์สำคัญ</h3>
-            <div className="flex flex-wrap gap-2">
-              {theory.keywords.map((keyword, index) => (
-                <span key={index} className="bg-rose-200 text-rose-800 px-3 py-1 rounded-full text-sm">
-                  {keyword}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* งานวิจัยอ้างอิง */}
-      <div className="mt-8 bg-gray-100 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">📖 งานวิจัยอ้างอิงที่สำคัญ</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg">
-            <h4 className="font-medium text-gray-800 mb-2">งานวิจัยต้นฉบับ</h4>
-            <p className="text-sm text-gray-600">{theory.author}</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <h4 className="font-medium text-gray-800 mb-2">การประยุกต์ใช้</h4>
-            <p className="text-sm text-gray-600">
-              ควรค้นหางานวิจัยที่ใช้ทฤษฎีนี้ในบริบทที่คล้ายกับงานวิจัยของคุณ
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ข้อควรระวัง */}
-      <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-yellow-900 mb-3">⚠️ ข้อควรระวังในการใช้ทฤษฎี</h3>
-        <ul className="text-yellow-800 space-y-2 text-sm">
-          <li>• ตรวจสอบความเหมาะสมของทฤษฎีกับบริบทการวิจัยของคุณ</li>
-          <li>• พิจารณาข้อจำกัดและสมมติฐานของทฤษฎี</li>
-          <li>• ศึกษางานวิจัยล่าสุดที่ใช้ทฤษฎีนี้เพื่อความทันสมัย</li>
-          <li>• ปรับปรุงตัวแปรให้เหมาะสมกับบริบทเฉพาะของคุณ</li>
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-const ResearchPlanTab = ({ theory, level }) => {
-  const getResearchPlan = (theory, level) => {
-    const baseplan = {
-      type: level >= 2 ? 'การวิจัยเชิงปริมาณแบบสำรวจ (Quantitative Survey Research)' : 'การวิจัยเชิงพรรณนา (Descriptive Research)',
-      philosophy: 'ปรัชญาการวิจัยเชิงบวกนิยม (Positivism)',
-      approach: 'การวิจัยเชิงนิรนัย (Deductive Research)',
-      strategy: 'การสำรวจโดยใช้แบบสอบถาม (Survey Strategy)',
-      timeHorizon: level >= 3 ? 'การศึกษาข้ามเวลา (Cross-sectional with Longitudinal elements)' : 'การศึกษาข้ามหน้าตัด (Cross-sectional Study)',
-      sampleSize: level === 1 ? '200-300 คน' : level === 2 ? '300-500 คน' : '500+ คน',
-      sampling: level >= 2 ? 'การสุ่มตัวอย่างแบบหลายขั้นตอน (Multi-stage Sampling)' : 'การสุ่มตัวอย่างแบบง่าย (Simple Random Sampling)'
-    };
-
-    return baseplan;
-  };
-
-  const plan = getResearchPlan(theory, level);
-
-  const getDataCollectionTools = (theory) => {
-    return [
-      {
-        name: 'แบบสอบถามออนไลน์',
-        description: 'ใช้ Google Forms หรือ SurveyMonkey สำหรับเก็บข้อมูลจากกลุ่มตัวอย่าง',
-        pros: ['ประหยัดเวลา', 'ครอบคลุมพื้นที่กว้าง', 'วิเคราะห์ได้ทันที'],
-        cons: ['อัตราตอบกลับอาจต่ำ', 'ไม่สามารถชี้แจงข้อสงสัยได้']
-      },
-      {
-        name: 'แบบสอบถามกระดาษ',
-        description: 'แจกแบบสอบถามแบบกระดาษเพื่อเก็บข้อมูลโดยตรง',
-        pros: ['อัตราตอบกลับสูง', 'ควบคุมคุณภาพได้ดี', 'เข้าถึงกลุ่มที่ไม่ใช้อินเทอร์เน็ต'],
-        cons: ['ใช้เวลานาน', 'ค่าใช้จ่ายสูง', 'ต้องป้อนข้อมูลเอง']
-      }
-    ];
-  };
-
-  const tools = getDataCollectionTools(theory);
-
-  const getRecommendedPopulation = (theory) => {
-    const populations = {
-      'digital_marketing': ['นักศึกษาระดับอุดมศึกษา', 'ผู้บริโภคที่ใช้เทคโนโลยี', 'พนักงานบริษัทเทคโนโลยี'],
-      'social_capital': ['พนักงานองค์กร', 'สมาชิกชุมชน', 'ผู้ประกอบการ SME'],
-      'management': ['ผู้บริหารระดับกลาง-สูง', 'พนักงานองค์กร', 'ผู้จัดการโครงการ']
-    };
-    return populations[theory.domain] || ['กลุ่มตัวอย่างที่เกี่ยวข้องกับหัวข้อวิจัย'];
-  };
-
-  const populations = getRecommendedPopulation(theory);
-
-  return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-          📋 แผนการวิจัยที่แนะนำ
-        </h2>
-        <p className="text-gray-600">
-          แผนการวิจัยที่เหมาะสมสำหรับทฤษฎี {theory.name} ในระดับ {level}
-        </p>
-      </div>
-
-      {/* ประเภทการวิจัย */}
-      <div className="grid lg:grid-cols-2 gap-8 mb-8">
-        <div className="bg-blue-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-blue-900 mb-4">🔬 ประเภทและวิธีการวิจัย</h3>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-medium text-blue-800 mb-2">ประเภทการวิจัย:</h4>
-              <p className="text-blue-700 text-sm">{plan.type}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-blue-800 mb-2">ปรัชญาการวิจัย:</h4>
-              <p className="text-blue-700 text-sm">{plan.philosophy}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-blue-800 mb-2">แนวทางการวิจัย:</h4>
-              <p className="text-blue-700 text-sm">{plan.approach}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-blue-800 mb-2">กลยุทธ์การวิจัย:</h4>
-              <p className="text-blue-700 text-sm">{plan.strategy}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-green-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-green-900 mb-4">👥 กลุ่มตัวอย่างและขอบเขต</h3>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-medium text-green-800 mb-2">ขนาดกลุ่มตัวอย่าง:</h4>
-              <p className="text-green-700 text-sm">{plan.sampleSize}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-green-800 mb-2">วิธีการสุ่มตัวอย่าง:</h4>
-              <p className="text-green-700 text-sm">{plan.sampling}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-green-800 mb-2">ช่วงเวลาการศึกษา:</h4>
-              <p className="text-green-700 text-sm">{plan.timeHorizon}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* กลุ่มประชากรที่แนะนำ */}
-      <div className="mb-8 bg-purple-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-purple-900 mb-4">🎯 กลุ่มประชากรที่แนะนำ</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          {populations.map((population, index) => (
-            <div key={index} className="bg-white p-4 rounded-lg border border-purple-200">
-              <h4 className="font-medium text-purple-800 mb-2">ตัวเลือกที่ {index + 1}</h4>
-              <p className="text-purple-700 text-sm">{population}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 p-4 bg-purple-100 rounded-lg">
-          <p className="text-purple-800 text-sm">
-            💡 <strong>คำแนะนำ:</strong> เลือกกลุ่มประชากรที่สามารถเข้าถึงได้ง่าย และมีความรู้หรือประสบการณ์ที่เกี่ยวข้องกับตัวแปรในทฤษฎี
-          </p>
-        </div>
-      </div>
-
-      {/* เครื่องมือเก็บข้อมูล */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">🛠️ เครื่องมือเก็บข้อมูลที่แนะนำ</h3>
-        <div className="grid lg:grid-cols-2 gap-6">
-          {tools.map((tool, index) => (
-            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6">
-              <h4 className="font-semibold text-gray-800 mb-3">{tool.name}</h4>
-              <p className="text-gray-600 text-sm mb-4">{tool.description}</p>
-              
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <h5 className="font-medium text-green-700 mb-2">ข้อดี:</h5>
-                  <ul className="text-sm text-green-600 space-y-1">
-                    {tool.pros.map((pro, idx) => (
-                      <li key={idx}>• {pro}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h5 className="font-medium text-red-700 mb-2">ข้อจำกัด:</h5>
-                  <ul className="text-sm text-red-600 space-y-1">
-                    {tool.cons.map((con, idx) => (
-                      <li key={idx}>• {con}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Timeline */}
-      <div className="bg-amber-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-amber-900 mb-4">⏰ แผนการดำเนินงานแนะนำ</h3>
-        <div className="space-y-4">
-          {[
-            { phase: 'เตรียมการ', duration: '2-3 สัปดาห์', tasks: ['ศึกษาทฤษฎี', 'ออกแบบแบบสอบถาม', 'ทดสอบเครื่องมือ'] },
-            { phase: 'เก็บข้อมูล', duration: '4-6 สัปดาห์', tasks: ['แจกแบบสอบถาม', 'ติดตามการตอบกลับ', 'ตรวจสอบความสมบูรณ์'] },
-            { phase: 'วิเคราะห์ข้อมูล', duration: level >= 3 ? '6-8 สัปดาห์' : '3-4 สัปดาห์', tasks: ['ทำความสะอาดข้อมูล', 'วิเคราะห์ทางสถิติ', 'ตีความผลลัพธ์'] },
-            { phase: 'เขียนรายงาน', duration: '3-4 สัปดาห์', tasks: ['เขียนร่าง', 'ปรับปรุงเนื้อหา', 'จัดทำรูปแบบสุดท้าย'] }
-          ].map((item, index) => (
-            <div key={index} className="flex gap-4 items-start">
-              <div className="bg-amber-200 text-amber-800 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
-                {item.duration}
-              </div>
-              <div className="flex-1">
-                <h4 className="font-medium text-amber-900 mb-1">{item.phase}</h4>
-                <p className="text-amber-700 text-sm">{item.tasks.join(' • ')}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const StatisticsTab = ({ theory, level }) => {
-  const getStatisticalSteps = (level) => {
-    const steps = {
-      1: [
-        {
-          step: 1,
-          name: 'การเตรียมข้อมูล',
-          description: 'ตรวจสอบและทำความสะอาดข้อมูล',
-          details: ['ตรวจสอบข้อมูลสูญหาย (Missing Data)', 'ตรวจสอบค่าผิดปกติ (Outliers)', 'การรหัสข้อมูล (Data Coding)'],
-          tools: ['Frequencies', 'Descriptives', 'Missing Value Analysis'],
-          duration: '1-2 วัน'
-        },
-        {
-          step: 2,
-          name: 'สถิติเชิงพรรณนา',
-          description: 'อธิบายลักษณะของข้อมูลและกลุ่มตัวอย่าง',
-          details: ['ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน', 'ความถี่และร้อยละ', 'การแจกแจงของข้อมูล'],
-          tools: ['Descriptive Statistics', 'Frequencies', 'Charts'],
-          duration: '1 วัน'
-        },
-        {
-          step: 3,
-          name: 'การทดสอบความเชื่อมั่น',
-          description: 'ตรวจสอบความคงที่ของเครื่องมือวัด',
-          details: ['Cronbach\'s Alpha ≥ 0.70', 'Item-Total Correlation ≥ 0.30', 'การปรับปรุงข้อคำถาม'],
-          tools: ['Reliability Analysis', 'Scale Statistics'],
-          duration: '1 วัน'
-        },
-        {
-          step: 4,
-          name: 'การทดสอบสมมติฐาน',
-          description: 'ทดสอบความสัมพันธ์และความแตกต่าง',
-          details: ['T-test สำหรับเปรียบเทียบค่าเฉลี่ย', 'ANOVA สำหรับเปรียบเทียบหลายกลุ่ม', 'Correlation Analysis'],
-          tools: ['Independent T-test', 'One-way ANOVA', 'Pearson Correlation'],
-          duration: '2-3 วัน'
-        }
-      ],
-      2: [
-        {
-          step: 1,
-          name: 'การเตรียมและตรวจสอบข้อมูล',
-          description: 'ทำความสะอาดและตรวจสอบคุณภาพข้อมูล',
-          details: ['Missing Data Analysis', 'Outlier Detection', 'Normality Testing', 'Linearity Assessment'],
-          tools: ['Missing Value Analysis', 'Explore', 'Regression Diagnostics'],
-          duration: '2-3 วัน'
-        },
-        {
-          step: 2,
-          name: 'สถิติเชิงพรรณนา',
-          description: 'วิเคราะห์ลักษณะข้อมูลเชิงลึก',
-          details: ['Descriptive Statistics', 'Correlation Matrix', 'Cross-tabulation'],
-          tools: ['Descriptives', 'Correlations', 'Crosstabs'],
-          duration: '1-2 วัน'
-        },
-        {
-          step: 3,
-          name: 'การทดสอบความเชื่อมั่น',
-          description: 'ประเมินความน่าเชื่อถือของตัวแปร',
-          details: ['Cronbach\'s Alpha ≥ 0.70', 'Item Analysis', 'Scale Purification'],
-          tools: ['Reliability Analysis', 'Item Statistics'],
-          duration: '1-2 วัน'
-        },
-        {
-          step: 4,
-          name: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
-          description: 'ค้นหาโครงสร้างแฝงของตัวแปร',
-          details: ['KMO ≥ 0.60', 'Bartlett\'s Test p < 0.05', 'Factor Loading ≥ 0.50', 'Total Variance Explained ≥ 60%'],
-          tools: ['Factor Analysis', 'Principal Component'],
-          duration: '3-4 วัน'
-        },
-        {
-          step: 5,
-          name: 'การวิเคราะห์การถดถอยพหุคูณ',
-          description: 'ทดสอบความสัมพันธ์เชิงสาเหตุ',
-          details: ['Multiple R ≥ 0.30', 'R² และ Adjusted R²', 'VIF < 5 (ไม่มี Multicollinearity)', 'Residual Analysis'],
-          tools: ['Multiple Regression', 'Stepwise Regression'],
-          duration: '3-4 วัน'
-        },
-        {
-          step: 6,
-          name: 'การทดสอบเพิ่มเติม (ทางเลือก)',
-          description: 'วิเคราะห์เชิงลึกตามความต้องการ',
-          details: ['Cluster Analysis', 'Discriminant Analysis', 'ANOVA with Post-hoc'],
-          tools: ['K-Means Cluster', 'Discriminant Analysis', 'Post Hoc Tests'],
-          duration: '2-3 วัน'
-        }
-      ],
-      3: [
-        {
-          step: 1,
-          name: 'การคัดกรองและเตรียมข้อมูล',
-          description: 'การตรวจสอบข้อมูลอย่างละเอียด',
-          details: ['Missing Data Pattern Analysis', 'Multivariate Outliers (Mahalanobis Distance)', 'Normality (Skewness & Kurtosis)', 'Linearity & Homoscedasticity'],
-          tools: ['Missing Value Analysis', 'Regression', 'Explore'],
-          duration: '3-4 วัน'
-        },
-        {
-          step: 2,
-          name: 'การทดสอบ Common Method Bias (CMB)',
-          description: 'ตรวจสอบอคติจากวิธีการเก็บข้อมูล',
-          details: ['Harman\'s Single Factor Test', 'Variance Explained < 50%', 'Marker Variable Technique'],
-          tools: ['Factor Analysis', 'SPSS Syntax'],
-          duration: '2-3 วัน'
-        },
-        {
-          step: 3,
-          name: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
-          description: 'สำรวจโครงสร้างตัวแปรแฝง',
-          details: ['KMO ≥ 0.60', 'Bartlett\'s Test Significant', 'Factor Loading ≥ 0.50', 'Cross-loading < 0.40'],
-          tools: ['Factor Analysis', 'Promax Rotation'],
-          duration: '3-4 วัน'
-        },
-        {
-          step: 4,
-          name: 'การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)',
-          description: 'ยืนยันโครงสร้างการวัด',
-          details: ['χ²/df < 3', 'CFI, TLI ≥ 0.95', 'RMSEA ≤ 0.08', 'SRMR ≤ 0.08', 'Factor Loading ≥ 0.70'],
-          tools: ['AMOS', 'LISREL', 'Mplus'],
-          duration: '4-5 วัน'
-        },
-        {
-          step: 5,
-          name: 'การทดสอบความเที่ยงและความตรง',
-          description: 'ประเมินคุณภาพการวัด',
-          details: ['Composite Reliability ≥ 0.70', 'AVE ≥ 0.50', 'Discriminant Validity (Fornell-Larcker)', 'HTMT < 0.85'],
-          tools: ['AMOS', 'Excel Calculation'],
-          duration: '2-3 วัน'
-        },
-        {
-          step: 6,
-          name: 'การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)',
-          description: 'ทดสอบโมเดลทฤษฎีแบบเต็ม',
-          details: ['Model Fit Indices', 'Path Coefficients', 'R² Values', 'Effect Sizes'],
-          tools: ['AMOS', 'LISREL', 'Mplus'],
-          duration: '4-5 วัน'
-        },
-        {
-          step: 7,
-          name: 'การวิเคราะห์ตัวแปรคั่นกลางและกำกับ',
-          description: 'ทดสอบกลไกและเงื่อนไขแห่งผล',
-          details: ['Mediation Analysis (Bootstrap)', 'Moderation Analysis', 'Conditional Effects'],
-          tools: ['PROCESS Macro', 'AMOS', 'Hayes Method'],
-          duration: '3-4 วัน'
-        },
-        {
-          step: 8,
-          name: 'การวิเคราะห์หลายกลุ่ม (Multi-group Analysis)',
-          description: 'เปรียบเทียบโมเดลข้ามกลุ่ม',
-          details: ['Measurement Invariance', 'Structural Invariance', 'Critical Ratio Differences'],
-          tools: ['AMOS Multi-group', 'SPSS Syntax'],
-          duration: '3-4 วัน'
-        }
-      ]
-    };
-    return steps[level] || steps[1];
-  };
-
-  const steps = getStatisticalSteps(level);
-  const [activeStep, setActiveStep] = React.useState(1);
-
-  const getCriteriaColor = (criteria) => {
-    if (criteria.includes('≥') || criteria.includes('>')) return 'text-green-700';
-    if (criteria.includes('≤') || criteria.includes('<')) return 'text-blue-700';
-    if (criteria.includes('=')) return 'text-purple-700';
-    return 'text-gray-700';
-  };
-
-  return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-          📊 ขั้นตอนการวิเคราะห์ทางสถิติ (ระดับ {level})
-        </h2>
-        <p className="text-gray-600">
-          ขั้นตอนการวิเคราะห์ข้อมูลแบบละเอียดสำหรับทฤษฎี {theory.name}
-        </p>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="mb-8 bg-white rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">🗺️ แผนที่ขั้นตอนการวิเคราะห์</h3>
-        <div className="flex items-center space-x-2 overflow-x-auto pb-4">
-          {steps.map((step, index) => (
-            <React.Fragment key={step.step}>
-              <button
-                onClick={() => setActiveStep(step.step)}
-                className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeStep === step.step
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                {step.step}. {step.name}
-              </button>
-              {index < steps.length - 1 && (
-                <div className="flex-shrink-0 text-gray-400">→</div>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-
-      {/* Step Details */}
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Step List */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="bg-gray-50 px-6 py-4 border-b">
-              <h3 className="font-semibold text-gray-800">ขั้นตอนทั้งหมด</h3>
-            </div>
-            <div className="space-y-2 p-4">
-              {steps.map((step) => (
-                <button
-                  key={step.step}
-                  onClick={() => setActiveStep(step.step)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    activeStep === step.step
-                      ? 'bg-blue-50 border border-blue-200'
-                      : 'hover:bg-gray-50 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${
-                      activeStep === step.step
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}>
-                      {step.step}
-                    </span>
-                    <div>
-                      <h4 className="font-medium text-gray-800 text-sm">{step.name}</h4>
-                      <p className="text-xs text-gray-600 mt-1">{step.duration}</p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Active Step Detail */}
-        <div className="lg:col-span-2">
-          {steps.filter(step => step.step === activeStep).map((step) => (
-            <div key={step.step} className="bg-white rounded-lg shadow-sm p-6">
-              <div className="mb-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                    {step.step}
-                  </span>
-                  <h3 className="text-xl font-bold text-gray-800">{step.name}</h3>
-                </div>
-                <p className="text-gray-600">{step.description}</p>
-                <div className="mt-2 inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                  ⏱️ ระยะเวลา: {step.duration}
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-3">📝 รายการที่ต้องทำ</h4>
-                  <ul className="space-y-2">
-                    {step.details.map((detail, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full mt-2"></span>
-                        <span className={`text-sm ${getCriteriaColor(detail)}`}>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-3">🛠️ เครื่องมือที่ใช้</h4>
-                  <ul className="space-y-2">
-                    {step.tools.map((tool, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <span className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full"></span>
-                        <span className="text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded">
-                          {tool}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* เกณฑ์การตีความ */}
-              {step.details.some(detail => detail.includes('≥') || detail.includes('≤')) && (
-                <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-yellow-900 mb-2">📏 เกณฑ์การตีความผล</h4>
-                  <div className="grid md:grid-cols-2 gap-3 text-sm">
-                    {step.details
-                      .filter(detail => detail.includes('≥') || detail.includes('≤') || detail.includes('<') || detail.includes('>'))
-                      .map((criteria, index) => (
-                        <div key={index} className="bg-white p-2 rounded border">
-                          <code className="text-yellow-800">{criteria}</code>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Database ทฤษฎีการวิจัย
+        const researchDatabase = {
+            theories: {
+                'tam': {
+                    id: 'tam',
+                    name: 'Technology Acceptance Model (TAM)',
+                    author: 'Davis (1989)',
+                    domain: 'digital_marketing',
+                    factors: ['Perceived Usefulness (PU)', 'Perceived Ease of Use (PEOU)', 'Attitude Toward Using', 'Behavioral Intention'],
+                    relationships: 'PU + PEOU → Attitude → Behavioral Intention → Actual Use',
+                    prediction: 'การรับรู้ประโยชน์และความง่ายในการใช้งานจะส่งผลต่อทัศนคติและความตั้งใจในการใช้เทคโนโลยี',
+                    keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user', 'เทคโนโลยี', 'ยอมรับ', 'ระบบ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน'
+                },
+                'tpb': {
+                    id: 'tpb',
+                    name: 'Theory of Planned Behavior (TPB)',
+                    author: 'Ajzen (1991)',
+                    domain: 'digital_marketing',
+                    factors: ['Attitude', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
+                    relationships: 'Attitude + Subjective Norm + PBC → Intention → Behavior',
+                    prediction: 'ทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมจะส่งผลต่อความตั้งใจและพฤติกรรม',
+                    keywords: ['behavior', 'intention', 'attitude', 'norm', 'control', 'พฤติกรรม', 'ความตั้งใจ', 'ทัศนคติ'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+                    description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐานสังคม และการควบคุมพฤติกรรม'
+                },
+                'social_capital': {
+                    id: 'social_capital',
+                    name: 'Social Capital Theory',
+                    author: 'Coleman (1988), Bourdieu (1986)',
+                    domain: 'social_capital',
+                    factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
+                    relationships: 'Structural + Relational + Cognitive → Social Capital → Performance',
+                    prediction: 'ทุนทางสังคมในรูปแบบต่างๆ จะส่งผลต่อประสิทธิภาพและผลลัพธ์ขององค์กร',
+                    keywords: ['social', 'capital', 'network', 'relationship', 'trust', 'สังคม', 'ทุน', 'เครือข่าย', 'ความสัมพันธ์'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์'
+                },
+                'rbv': {
+                    id: 'rbv',
+                    name: 'Resource-Based View (RBV)',
+                    author: 'Barney (1991)',
+                    domain: 'management',
+                    factors: ['Valuable Resources', 'Rare Resources', 'Inimitable Resources', 'Organized Resources'],
+                    relationships: 'VRIO Resources → Competitive Advantage → Superior Performance',
+                    prediction: 'ทรัพยากรที่มีคุณค่า หายาก เลียนแบบยาก และจัดการได้ดีจะสร้างความได้เปรียบทางการแข่งขัน',
+                    keywords: ['resource', 'competitive', 'advantage', 'valuable', 'rare', 'ทรัพยากร', 'การแข่งขัน', 'ความได้เปรียบ', 'บริหาร'],
+                    level: 2,
+                    statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+                    description: 'ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน'
+                }
+            },
+            levels: {
+                1: {
+                    name: 'ระดับพื้นฐาน',
+                    steps: '3-5',
+                    description: 'เหมาะสำหรับนักศึกษาใหม่หรือการวิจัยเบื้องต้น',
+                    methods: ['Descriptive Statistics', 'Reliability Analysis', 'T-test/ANOVA', 'Correlation']
+                },
+                2: {
+                    name: 'ระดับกลาง',
+                    steps: '6-8',
+                    description: 'เหมาะสำหรับการวิจัยระดับปริญญาโทหรือมีประสบการณ์บ้าง',
+                    methods: ['Data Preparation', 'Descriptive', 'Reliability', 'EFA', 'Multiple Regression']
+                },
+                3: {
+                    name: 'ระดับสูง',
+                    steps: '10-15',
+                    description: 'เหมาะสำหรับการวิจัยระดับปริญญาเอกหรือมืออาชีพ',
+                    methods: ['Data Screening', 'CMB Testing', 'EFA', 'CFA', 'SEM', 'Mediation/Moderation']
+                }
+            }
+        };
+
+        // Landing Page Component
+        const LandingPage = ({ onAnalyze }) => {
+            const [researchTopic, setResearchTopic] = useState('');
+            
+            const exampleTopics = [
+                'ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา',
+                'วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน',
+                'ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค',
+                'วิเคราะห์ปัจจัยที่ส่งผลต่อความสำเร็จของการบริหารโครงการในองค์กร'
+            ];
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
+                    <div className="container mx-auto px-4 py-16">
+                        <div className="text-center mb-12">
+                            <h1 className="text-4xl font-bold text-amber-900 mb-4">
+                                ระบบปรึกษาการวิจัยเชิงปริมาณ
+                            </h1>
+                            <p className="text-xl text-amber-700 mb-8">
+                                Research Methodology Advisor - เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร
+                            </p>
                         </div>
-                      ))}
-                  </div>
+
+                        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                                กรุณาใส่โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา
+                            </h2>
+                            
+                            <textarea
+                                value={researchTopic}
+                                onChange={(e) => setResearchTopic(e.target.value)}
+                                placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
+                                className="w-full h-32 p-4 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:outline-none resize-none"
+                            />
+
+                            <button
+                                onClick={() => onAnalyze(researchTopic)}
+                                disabled={!researchTopic.trim()}
+                                className="w-full mt-6 bg-amber-600 hover:bg-amber-700 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                            >
+                                วิเคราะห์โจทย์วิจัย
+                            </button>
+
+                            <div className="mt-8">
+                                <h3 className="text-lg font-medium text-gray-700 mb-4">ตัวอย่างโจทย์วิจัย:</h3>
+                                <div className="grid gap-3">
+                                    {exampleTopics.map((topic, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setResearchTopic(topic)}
+                                            className="text-left p-3 bg-amber-50 hover:bg-amber-100 rounded-lg border border-amber-200 transition-colors"
+                                        >
+                                            <span className="text-amber-800">{index + 1}. </span>
+                                            <span className="text-gray-700">{topic}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+            );
+        };
 
-      {/* เกณฑ์มาตรฐานทั้งหมด */}
-      <div className="mt-8 bg-gray-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">📊 เกณฑ์มาตรฐานการตีความสถิติ</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-lg">
-            <h4 className="font-medium text-green-700 mb-2">ความเชื่อมั่น (Reliability)</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Cronbach's Alpha ≥ 0.70</li>
-              <li>• Composite Reliability ≥ 0.70</li>
-              <li>• Item-Total Correlation ≥ 0.30</li>
-            </ul>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <h4 className="font-medium text-blue-700 mb-2">ความตรง (Validity)</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• Factor Loading ≥ 0.50 (EFA)</li>
-              <li>• Factor Loading ≥ 0.70 (CFA)</li>
-              <li>• AVE ≥ 0.50</li>
-            </ul>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <h4 className="font-medium text-purple-700 mb-2">ความกลมกลืนของโมเดล</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• CFI, TLI ≥ 0.95</li>
-              <li>• RMSEA ≤ 0.08</li>
-              <li>• χ²/df < 3</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+        // Level Selection Component
+        const LevelSelection = ({ researchTopic, onSelectLevel }) => {
+            const levelCards = [
+                {
+                    level: 1,
+                    title: 'ระดับพื้นฐาน',
+                    steps: '3-5 ขั้นตอน',
+                    time: '2-3 เดือน',
+                    description: 'เหมาะสำหรับนักศึกษาปริญญาตรีหรือผู้เริ่มต้นทำวิจัย',
+                    methods: ['สถิติเชิงพรรณนา', 'การทดสอบความเชื่อมั่น', 'T-test/ANOVA', 'สหสัมพันธ์'],
+                    color: 'green',
+                    icon: '📊'
+                },
+                {
+                    level: 2,
+                    title: 'ระดับกลาง',
+                    steps: '6-8 ขั้นตอน',
+                    time: '4-6 เดือน',
+                    description: 'เหมาะสำหรับนักศึกษาปริญญาโทหรือผู้มีประสบการณ์การวิจัยบ้าง',
+                    methods: ['การเตรียมข้อมูล', 'EFA', 'การถดถอยพหุคูณ', 'การวิเคราะห์กลุ่ม'],
+                    color: 'blue',
+                    icon: '📈'
+                },
+                {
+                    level: 3,
+                    title: 'ระดับสูง',
+                    steps: '10-15 ขั้นตอน',
+                    time: '8-12 เดือน',
+                    description: 'เหมาะสำหรับนักศึกษาปริญญาเอกหรือนักวิจัยมืออาชีพ',
+                    methods: ['CMB Testing', 'CFA', 'SEM', 'การวิเคราะห์ตัวแปรคั่นกลาง', 'Multi-group Analysis'],
+                    color: 'purple',
+                    icon: '🎯'
+                }
+            ];
 
-const SPSSGuideTab = ({ theory, level }) => {
-  const [activeGuide, setActiveGuide] = React.useState('descriptive');
+            const getColorClasses = (color) => {
+                const colors = {
+                    green: 'bg-green-50 border-green-200 hover:bg-green-100',
+                    blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
+                    purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100'
+                };
+                return colors[color];
+            };
 
-  const guides = {
-    descriptive: {
-      title: 'สถิติเชิงพรรณนา',
-      icon: '📈',
-      steps: [
-        {
-          step: 'เปิดโปรแกรม SPSS',
-          instruction: 'File → Open → Data... เลือกไฟล์ข้อมูลของคุณ (.sav, .xlsx, .csv)',
-          menu: 'File > Open > Data',
-          image: '💾'
-        },
-        {
-          step: 'เลือกตัวแปรสำหรับวิเคราะห์',
-          instruction: 'Analyze → Descriptive Statistics → Descriptives',
-          menu: 'Analyze > Descriptive Statistics > Descriptives',
-          image: '📊'
-        },
-        {
-          step: 'ตั้งค่าการวิเคราะห์',
-          instruction: 'ย้ายตัวแปรไปยัง Variable(s) box และเลือก Options สำหรับ Mean, Std. Deviation, Minimum, Maximum',
-          menu: 'Options: Mean, Std. Deviation, Min, Max',
-          image: '⚙️'
-        },
-        {
-          step: 'ดูผลลัพธ์',
-          instruction: 'ตรวจสอบ Output Window สำหรับ Descriptive Statistics Table',
-          menu: 'Output Window',
-          image: '📋'
-        }
-      ],
-      interpretation: {
-        title: 'การตีความผลลัพธ์',
-        criteria: [
-          'Mean: ค่าเฉลี่ยของตัวแปร ใช้อธิบายระดับของตัวแปร',
-          'Std. Deviation: ความแปรปรวนของข้อมูล ยิ่งต่ำยิ่งสม่ำเสมอ',
-          'Skewness: การเบ้ ระหว่าง -2 ถึง +2 ถือว่าปกติ',
-          'Kurtosis: การแหลม ระหว่าง -2 ถึง +2 ถือว่าปกติ'
-        ]
-      }
-    },
-    reliability: {
-      title: 'การทดสอบความเชื่อมั่น',
-      icon: '🔒',
-      steps: [
-        {
-          step: 'เข้าสู่เมนู Reliability',
-          instruction: 'Analyze → Scale → Reliability Analysis',
-          menu: 'Analyze > Scale > Reliability Analysis',
-          image: '🔍'
-        },
-        {
-          step: 'เลือกตัวแปรในมิติเดียวกัน',
-          instruction: 'ย้ายข้อคำถามที่วัดตัวแปรเดียวกันไปยัง Items box',
-          menu: 'Items Selection',
-          image: '📝'
-        },
-        {
-          step: 'ตั้งค่า Statistics',
-          instruction: 'คลิก Statistics → เลือก Scale if item deleted และ Item-total correlations',
-          menu: 'Statistics > Scale if item deleted',
-          image: '📊'
-        },
-        {
-          step: 'ดูผลลัพธ์ Cronbach\'s Alpha',
-          instruction: 'ตรวจสอบค่า Cronbach\'s Alpha ≥ 0.70 และ Corrected Item-Total Correlation ≥ 0.30',
-          menu: 'Reliability Statistics Table',
-          image: '✅'
-        }
-      ],
-      interpretation: {
-        title: 'เกณฑ์การตีความ',
-        criteria: [
-          'Cronbach\'s Alpha ≥ 0.70: ความเชื่อมั่นที่ยอมรับได้',
-          'Cronbach\'s Alpha ≥ 0.80: ความเชื่อมั่นที่ดี',
-          'Cronbach\'s Alpha ≥ 0.90: ความเชื่อมั่นที่ดีมาก',
-          'Corrected Item-Total Correlation ≥ 0.30: ข้อคำถามมีความสัมพันธ์ดีกับมิติ'
-        ]
-      }
-    },
-    efa: {
-      title: 'การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)',
-      icon: '🔍',
-      steps: [
-        {
-          step: 'เข้าสู่เมนู Factor Analysis',
-          instruction: 'Analyze → Dimension Reduction → Factor',
-          menu: 'Analyze > Dimension Reduction > Factor',
-          image: '🎯'
-        },
-        {
-          step: 'เลือกตัวแปรทั้งหมด',
-          instruction: 'ย้ายตัวแปรทั้งหมดที่ต้องการวิเคราะห์ไปยัง Variables box',
-          menu: 'Variables Selection',
-          image: '📋'
-        },
-        {
-          step: 'ตั้งค่า Descriptives',
-          instruction: 'คลิก Descriptives → เลือก KMO and Bartlett\'s test of sphericity',
-          menu: 'Descriptives > KMO and Bartlett test',
-          image: '📊'
-        },
-        {
-          step: 'ตั้งค่า Extraction',
-          instruction: 'คลิก Extraction → เลือก Principal components หรือ Maximum likelihood',
-          menu: 'Extraction > Principal Components',
-          image: '⚙️'
-        },
-        {
-          step: 'ตั้งค่า Rotation',
-          instruction: 'คลิก Rotation → เลือก Varimax (orthogonal) หรือ Promax (oblique)',
-          menu: 'Rotation > Varimax/Promax',
-          image: '🔄'
-        }
-      ],
-      interpretation: {
-        title: 'เกณฑ์การตีความ EFA',
-        criteria: [
-          'KMO ≥ 0.60: ข้อมูลเหมาะสมสำหรับ Factor Analysis',
-          'Bartlett\'s Test p < 0.05: ตัวแปรมีความสัมพันธ์กัน',
-          'Factor Loading ≥ 0.50: ข้อคำถามอยู่ในองค์ประกอบนั้น',
-          'Total Variance Explained ≥ 60%: องค์ประกอบอธิบายความแปรปรวนได้ดี'
-        ]
-      }
-    },
-    regression: {
-      title: 'การวิเคราะห์การถดถอยพหุคูณ',
-      icon: '📈',
-      steps: [
-        {
-          step: 'เข้าสู่เมนู Regression',
-          instruction: 'Analyze → Regression → Linear',
-          menu: 'Analyze > Regression > Linear',
-          image: '📈'
-        },
-        {
-          step: 'กำหนดตัวแปร',
-          instruction: 'ย้าย Dependent Variable (ตัวแปรตาม) และ Independent Variables (ตัวแปรต้น)',
-          menu: 'Dependent/Independent Variables',
-          image: '🎯'
-        },
-        {
-          step: 'ตั้งค่า Statistics',
-          instruction: 'คลิก Statistics → เลือก Estimates, Model fit, Collinearity diagnostics',
-          menu: 'Statistics > Estimates, Model fit',
-          image: '📊'
-        },
-        {
-          step: 'ตั้งค่า Plots',
-          instruction: 'คลิก Plots → เลือก *ZPRED vs *ZRESID สำหรับตรวจสอบ assumptions',
-          menu: 'Plots > ZPRED vs ZRESID',
-          image: '📉'
-        }
-      ],
-      interpretation: {
-        title: 'เกณฑ์การตีความ Regression',
-        criteria: [
-          'R Square: สัดส่วนความแปรปรวนที่อธิบายได้ (ยิ่งสูงยิ่งดี)',
-          'F-statistic p < 0.05: โมเดลมีความหมายทางสถิติ',
-          'Beta Coefficients p < 0.05: ตัวแปรมีอิทธิพลอย่างมีนัยสำคัญ',
-          'VIF < 5: ไม่มีปัญหา Multicollinearity'
-        ]
-      }
-    }
-  };
+            const getButtonColor = (color) => {
+                const colors = {
+                    green: 'bg-green-600 hover:bg-green-700',
+                    blue: 'bg-blue-600 hover:bg-blue-700',
+                    purple: 'bg-purple-600 hover:bg-purple-700'
+                };
+                return colors[color];
+            };
 
-  if (level >= 3) {
-    guides.cfa = {
-      title: 'การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)',
-      icon: '✅',
-      steps: [
-        {
-          step: 'เปิดโปรแกรม AMOS',
-          instruction: 'เปิด AMOS Graphics และสร้าง Path Diagram ใหม่',
-          menu: 'AMOS Graphics > New Path Diagram',
-          image: '🎨'
-        },
-        {
-          step: 'วาดโมเดลการวัด',
-          instruction: 'ใช้เครื่องมือ Draw latent variables และ Draw observed variables',
-          menu: 'Draw Tools > Latent/Observed Variables',
-image: '✏️'
-       },
-       {
-         step: 'เชื่อมโยงข้อมูล',
-         instruction: 'File → Data Files → เลือกไฟล์ข้อมูล SPSS (.sav)',
-         menu: 'File > Data Files > Select SPSS file',
-         image: '🔗'
-       },
-       {
-         step: 'รันการวิเคราะห์',
-         instruction: 'Analyze → Calculate Estimates หรือกด Ctrl+F9',
-         menu: 'Analyze > Calculate Estimates',
-         image: '▶️'
-       },
-       {
-         step: 'ดูผลลัพธ์',
-         instruction: 'View → Text Output หรือ View → Estimates เพื่อดู Fit Indices',
-         menu: 'View > Text Output/Estimates',
-         image: '📊'
-       }
-     ],
-     interpretation: {
-       title: 'เกณฑ์การตีความ CFA',
-       criteria: [
-         'χ²/df < 3: ความกลมกลืนของโมเดลดี',
-         'CFI, TLI ≥ 0.95: ความกลมกลืนเปรียบเทียบดี',
-         'RMSEA ≤ 0.08: ความคลาดเคลื่อนต่ำ',
-         'SRMR ≤ 0.08: ความคลาดเคลื่อนของ residual ต่ำ',
-         'Factor Loading ≥ 0.70: ตัวบ่งชี้วัดตัวแปรแฝงได้ดี'
-       ]
-     }
-   };
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
+                    <div className="container mx-auto px-4 py-8">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="text-center mb-8">
+                                <h1 className="text-3xl font-bold text-amber-900 mb-4">
+                                    เลือกระดับความซับซ้อนของการวิจัย
+                                </h1>
+                                <div className="bg-white rounded-lg p-4 shadow-sm">
+                                    <p className="text-gray-600 mb-2">โจทย์วิจัยของคุณ:</p>
+                                    <p className="text-gray-800 font-medium">{researchTopic}</p>
+                                </div>
+                            </div>
 
-   guides.sem = {
-     title: 'การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)',
-     icon: '🏗️',
-     steps: [
-       {
-         step: 'สร้าง Full Structural Model',
-         instruction: 'ใน AMOS วาดโมเดลเต็มที่รวม Measurement Model + Structural Model',
-         menu: 'AMOS > Draw Full Model',
-         image: '🎨'
-       },
-       {
-         step: 'กำหนด Path Coefficients',
-         instruction: 'วาดเส้นเชื่อมจากตัวแปรต้นไปตัวแปรตาม ตามทฤษฎี',
-         menu: 'Draw Paths > Structural Paths',
-         image: '➡️'
-       },
-       {
-         step: 'ตั้งค่า Model Identification',
-         instruction: 'กำหนดค่าคงที่ (Fix) Factor Loading = 1 สำหรับตัวบ่งชี้อ้างอิง',
-         menu: 'Object Properties > Fix Parameter',
-         image: '🔧'
-       },
-       {
-         step: 'รันและตรวจสอบ Model Fit',
-         instruction: 'Calculate Estimates และตรวจสอบ Fit Indices ทั้งหมด',
-         menu: 'Analyze > Calculate Estimates',
-         image: '📊'
-       },
-       {
-         step: 'ตีความ Path Coefficients',
-         instruction: 'ดู Standardized Estimates สำหรับความแข็งแกร่งของความสัมพันธ์',
-         menu: 'View > Standardized Estimates',
-         image: '📈'
-       }
-     ],
-     interpretation: {
-       title: 'เกณฑ์การตีความ SEM',
-       criteria: [
-         'Model Fit เหมือน CFA: χ²/df < 3, CFI ≥ 0.95, RMSEA ≤ 0.08',
-         'Path Coefficients p < 0.05: ความสัมพันธ์มีนัยสำคัญ',
-         'R² ≥ 0.25: ตัวแปรตามถูกอธิบายได้ดีพอสมควร',
-         'Effect Size: Small (0.10), Medium (0.30), Large (0.50)'
-       ]
-     }
-   };
- }
+                            <div className="grid md:grid-cols-3 gap-6">
+                                {levelCards.map((card) => (
+                                    <div
+                                        key={card.level}
+                                        className={`${getColorClasses(card.color)} border-2 rounded-lg p-6 transition-all duration-200 hover:shadow-lg`}
+                                    >
+                                        <div className="text-center mb-4">
+                                            <div className="text-4xl mb-2">{card.icon}</div>
+                                            <h3 className="text-2xl font-bold text-gray-800">{card.title}</h3>
+                                        </div>
 
- const guideKeys = Object.keys(guides);
+                                        <div className="space-y-3 mb-6">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600">ขั้นตอน:</span>
+                                                <span className="font-semibold text-gray-800">{card.steps}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600">ระยะเวลา:</span>
+                                                <span className="font-semibold text-gray-800">{card.time}</span>
+                                            </div>
+                                        </div>
 
- return (
-   <div className="p-8">
-     <div className="mb-8">
-       <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-         💻 คู่มือการใช้งาน SPSS (ระดับ {level})
-       </h2>
-       <p className="text-gray-600">
-         คำแนะนำการใช้งาน SPSS แบบทีละขั้นตอนสำหรับการวิเคราะห์ข้อมูล
-       </p>
-     </div>
+                                        <p className="text-gray-700 mb-4 text-sm">
+                                            {card.description}
+                                        </p>
 
-     {/* Guide Navigation */}
-     <div className="mb-8 bg-white rounded-lg shadow-sm overflow-hidden">
-       <div className="flex flex-wrap border-b border-gray-200">
-         {guideKeys.map((key) => (
-           <button
-             key={key}
-             onClick={() => setActiveGuide(key)}
-             className={`flex-1 min-w-[200px] py-4 px-6 text-center font-medium transition-colors ${
-               activeGuide === key
-                 ? 'bg-blue-500 text-white border-b-2 border-blue-600'
-                 : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-             }`}
-           >
-             <div className="flex items-center justify-center gap-2">
-               <span className="text-lg">{guides[key].icon}</span>
-               <span className="text-sm">{guides[key].title}</span>
-             </div>
-           </button>
-         ))}
-       </div>
-     </div>
+                                        <div className="mb-6">
+                                            <h4 className="font-semibold text-gray-800 mb-2">วิธีการวิเคราะห์:</h4>
+                                            <ul className="text-sm text-gray-600 space-y-1">
+                                                {card.methods.map((method, index) => (
+                                                    <li key={index} className="flex items-center">
+                                                        <span className="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
+                                                        {method}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
 
-     {/* Guide Content */}
-     <div className="bg-white rounded-lg shadow-sm">
-       {Object.entries(guides).map(([key, guide]) => (
-         activeGuide === key && (
-           <div key={key} className="p-6">
-             <div className="mb-6">
-               <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-                 {guide.icon} {guide.title}
-               </h3>
-             </div>
+                                        <button
+                                            onClick={() => onSelectLevel(card.level)}
+                                            className={`w-full ${getButtonColor(card.color)} text-white font-semibold py-3 px-4 rounded-lg transition-colors`}
+                                        >
+                                            เลือกระดับนี้
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
 
-             {/* Steps */}
-             <div className="mb-8">
-               <h4 className="text-lg font-semibold text-gray-800 mb-4">📋 ขั้นตอนการดำเนินงาน</h4>
-               <div className="space-y-6">
-                 {guide.steps.map((step, index) => (
-                   <div key={index} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
-                     <div className="flex-shrink-0">
-                       <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
-                         {index + 1}
+        // Theory Selection Component
+        const TheorySelection = ({ researchTopic, selectedLevel, onSelectTheory }) => {
+            const [selectedTheoryId, setSelectedTheoryId] = useState(null);
+
+            // ฟังก์ชันค้นหาทฤษฎีที่เกี่ยวข้อง
+            const findRelevantTheories = (topic) => {
+                const topicLower = topic.toLowerCase();
+                const relevantTheories = [];
+
+                Object.values(researchDatabase.theories).forEach(theory => {
+                    let score = 0;
+                    
+                    // ตรวจสอบ keywords
+                    theory.keywords.forEach(keyword => {
+                        if (topicLower.includes(keyword.toLowerCase())) {
+                            score += 2;
+                        }
+                    });
+
+                    // ตรวจสอบชื่อทฤษฎี
+                    if (topicLower.includes(theory.name.toLowerCase())) {
+                        score += 3;
+                    }
+
+                    // ตรวจสอบ domain
+                    if (topicLower.includes('เทคโนโลยี') || topicLower.includes('ดิจิทัล') || topicLower.includes('ออนไลน์')) {
+                        if (theory.domain === 'digital_marketing') score += 2;
+                    }
+                    
+                    if (topicLower.includes('สังคม') || topicLower.includes('เครือข่าย') || topicLower.includes('ความสัมพันธ์')) {
+                        if (theory.domain === 'social_capital') score += 2;
+                    }
+
+                    if (topicLower.includes('บริหาร') || topicLower.includes('องค์กร') || topicLower.includes('จัดการ')) {
+                        if (theory.domain === 'management') score += 2;
+                    }
+
+                    if (score > 0) {
+                        relevantTheories.push({ ...theory, score });
+                    }
+                });
+
+                // ถ้าไม่มีทฤษฎีที่ตรงกัน ให้แสดงทฤษฎียอดนิยม
+                if (relevantTheories.length === 0) {
+                    return [
+                        researchDatabase.theories.tam,
+                        researchDatabase.theories.tpb,
+                        researchDatabase.theories.social_capital
+                    ].map(theory => ({ ...theory, score: 1 }));
+                }
+
+                // เรียงลำดับตาม score และ level ที่เหมาะสม
+                return relevantTheories
+                    .filter(theory => theory.level <= selectedLevel + 1)
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 3);
+            };
+
+            const relevantTheories = findRelevantTheories(researchTopic);
+
+            const getLevelBadgeColor = (level) => {
+                const colors = {
+                    1: 'bg-green-100 text-green-800',
+                    2: 'bg-blue-100 text-blue-800',
+                    3: 'bg-purple-100 text-purple-800'
+                };
+                return colors[level] || 'bg-gray-100 text-gray-800';
+            };
+
+            const getLevelName = (level) => {
+                const names = {
+                    1: 'พื้นฐาน',
+                    2: 'กลาง',
+                    3: 'สูง'
+                };
+                return names[level] || 'ไม่ระบุ';
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
+                    <div className="container mx-auto px-4 py-8">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="text-center mb-8">
+                                <h1 className="text-3xl font-bold text-amber-900 mb-4">
+                                    เลือกทฤษฎีที่เหมาะสมกับการวิจัย
+                                </h1>
+                                <div className="bg-white rounded-lg p-4 shadow-sm">
+                                    <p className="text-gray-600 mb-2">โจทย์วิจัย: <span className="font-medium text-gray-800">{researchTopic}</span></p>
+                                    <p className="text-gray-600">ระดับที่เลือก: <span className="font-medium text-gray-800">ระดับ {selectedLevel}</span></p>
+                                </div>
+                            </div>
+
+                            <div className="grid gap-6">
+                                {relevantTheories.map((theory) => (
+                                    <div
+                                        key={theory.id}
+                                        className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 hover:shadow-lg ${
+                                            selectedTheoryId === theory.id 
+                                                ? 'border-amber-500 ring-2 ring-amber-200' 
+                                                : 'border-gray-200 hover:border-amber-300'
+                                        }`}
+                                    >
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-gray-800 mb-2">{theory.name}</h3>
+                                                <p className="text-gray-600">ผู้พัฒนา: {theory.author}</p>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelBadgeColor(theory.level)}`}>
+                                                    ระดับ {getLevelName(theory.level)}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-gray-700 mb-4">{theory.description}</p>
+
+                                        <div className="grid md:grid-cols-2 gap-4 mb-6">
+                                            <div>
+                                                <h4 className="font-semibold text-gray-800 mb-2">ปัจจัยหลัก:</h4>
+                                                <ul className="text-sm text-gray-600 space-y-1">
+                                                    {theory.factors.map((factor, index) => (
+                                                        <li key={index} className="flex items-center">
+                                                            <span className="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                                                            {factor}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-gray-800 mb-2">วิธีการวิเคราะห์:</h4>
+                                                <ul className="text-sm text-gray-600 space-y-1">
+                                                    {theory.statistics.map((stat, index) => (
+                                                        <li key={index} className="flex items-center">
+                                                            <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                                            {stat}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                                            <h4 className="font-semibold text-gray-800 mb-2">ความสัมพันธ์ระหว่างตัวแปร:</h4>
+                                            <p className="text-sm text-gray-700 font-mono bg-white p-2 rounded border">
+                                                {theory.relationships}
+                                            </p>
+                                        </div>
+
+                                        <div className="bg-amber-50 rounded-lg p-4 mb-4">
+                                            <h4 className="font-semibold text-amber-800 mb-2">การคาดการณ์:</h4>
+                                            <p className="text-sm text-amber-700">{theory.prediction}</p>
+                                        </div>
+
+                                        <div className="flex gap-3">
+                                            <button
+                                                onClick={() => setSelectedTheoryId(theory.id)}
+                                                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                                                    selectedTheoryId === theory.id
+                                                        ? 'bg-amber-600 text-white'
+                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                }`}
+                                            >
+                                                {selectedTheoryId === theory.id ? '✓ เลือกแล้ว' : 'เลือกทฤษฎีนี้'}
+                                            </button>
+                                            
+                                            {selectedTheoryId === theory.id && (
+                                                <button
+                                                    onClick={() => onSelectTheory(theory)}
+                                                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+                                                >
+                                                    ดำเนินการต่อ →
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Simple Results Page
+        const ResultsPage = ({ researchTopic, selectedLevel, selectedTheory }) => {
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
+                    <div className="container mx-auto px-4 py-8">
+                        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                            <h1 className="text-3xl font-bold text-amber-900 mb-6">
+                               แผนการวิจัยของคุณ
+                           </h1>
+                           
+                           <div className="grid gap-6 mb-8">
+                               <div className="bg-blue-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-blue-900 mb-3">📚 ข้อมูลการวิจัย</h2>
+                                   <div className="space-y-2">
+                                       <p><span className="font-medium">โจทย์วิจัย:</span> {researchTopic}</p>
+                                       <p><span className="font-medium">ระดับความซับซ้อน:</span> ระดับ {selectedLevel}</p>
+                                       <p><span className="font-medium">ทฤษฎีที่เลือก:</span> {selectedTheory.name}</p>
+                                       <p><span className="font-medium">ผู้พัฒนาทฤษฎี:</span> {selectedTheory.author}</p>
+                                   </div>
+                               </div>
+
+                               <div className="bg-green-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-green-900 mb-3">🎯 ปัจจัยหลักของทฤษฎี</h2>
+                                   <ul className="space-y-2">
+                                       {selectedTheory.factors.map((factor, index) => (
+                                           <li key={index} className="flex items-center">
+                                               <span className="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                               {factor}
+                                           </li>
+                                       ))}
+                                   </ul>
+                               </div>
+
+                               <div className="bg-amber-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-amber-900 mb-3">🔗 ความสัมพันธ์ระหว่างตัวแปร</h2>
+                                   <div className="bg-white p-4 rounded border font-mono text-sm">
+                                       {selectedTheory.relationships}
+                                   </div>
+                               </div>
+
+                               <div className="bg-purple-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-purple-900 mb-3">📊 วิธีการวิเคราะห์ที่แนะนำ</h2>
+                                   <div className="grid grid-cols-2 gap-3">
+                                       {selectedTheory.statistics.map((stat, index) => (
+                                           <div key={index} className="bg-white p-3 rounded border">
+                                               <span className="text-sm">{stat}</span>
+                                           </div>
+                                       ))}
+                                   </div>
+                               </div>
+
+                               <div className="bg-rose-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-rose-900 mb-3">💡 การคาดการณ์ผลลัพธ์</h2>
+                                   <p className="text-rose-800">{selectedTheory.prediction}</p>
+                               </div>
+
+                               <div className="bg-gray-50 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-gray-900 mb-3">📋 ขั้นตอนการดำเนินงานแนะนำ</h2>
+                                   <div className="space-y-3">
+                                       <div className="flex items-start gap-3">
+                                           <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                                           <div>
+                                               <h4 className="font-medium">การเตรียมข้อมูล</h4>
+                                               <p className="text-sm text-gray-600">ทำความสะอาดข้อมูล ตรวจสอบค่าสูญหายและค่าผิดปกติ</p>
+                                           </div>
+                                       </div>
+                                       <div className="flex items-start gap-3">
+                                           <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                                           <div>
+                                               <h4 className="font-medium">การวิเคราะห์เชิงพรรณนา</h4>
+                                               <p className="text-sm text-gray-600">วิเคราะห์ลักษณะของข้อมูลและกลุ่มตัวอย่าง</p>
+                                           </div>
+                                       </div>
+                                       <div className="flex items-start gap-3">
+                                           <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                                           <div>
+                                               <h4 className="font-medium">การทดสอบความเชื่อมั่น</h4>
+                                               <p className="text-sm text-gray-600">ตรวจสอบ Cronbach's Alpha ของแต่ละตัวแปร</p>
+                                           </div>
+                                       </div>
+                                       {selectedLevel >= 2 && (
+                                           <div className="flex items-start gap-3">
+                                               <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                                               <div>
+                                                   <h4 className="font-medium">การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)</h4>
+                                                   <p className="text-sm text-gray-600">ตรวจสอบโครงสร้างของตัวแปรแฝง</p>
+                                               </div>
+                                           </div>
+                                       )}
+                                       {selectedLevel >= 3 && (
+                                           <>
+                                               <div className="flex items-start gap-3">
+                                                   <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                                                   <div>
+                                                       <h4 className="font-medium">การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)</h4>
+                                                       <p className="text-sm text-gray-600">ยืนยันโครงสร้างการวัด</p>
+                                                   </div>
+                                               </div>
+                                               <div className="flex items-start gap-3">
+                                                   <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">6</span>
+                                                   <div>
+                                                       <h4 className="font-medium">การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)</h4>
+                                                       <p className="text-sm text-gray-600">ทดสอบความสัมพันธ์เชิงสาเหตุ</p>
+                                                   </div>
+                                               </div>
+                                           </>
+                                       )}
+                                   </div>
+                               </div>
+
+                               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-yellow-900 mb-3">⚠️ ข้อควรระวัง</h2>
+                                   <ul className="space-y-2 text-yellow-800 text-sm">
+                                       <li>• ตรวจสอบขนาดกลุ่มตัวอย่างให้เพียงพอต่อการวิเคราะห์</li>
+                                       <li>• ศึกษาข้อจำกัดและสมมติฐานของทฤษฎี</li>
+                                       <li>• ปรับปรุงแบบสอบถามให้เหมาะสมกับบริบทของคุณ</li>
+                                       <li>• ค้นหางานวิจัยล่าสุดที่ใช้ทฤษฎีนี้เพื่อเปรียบเทียบ</li>
+                                   </ul>
+                               </div>
+
+                               <div className="bg-green-100 border border-green-300 rounded-lg p-6">
+                                   <h2 className="text-xl font-semibold text-green-900 mb-3">📖 แนะนำการอ่านเพิ่มเติม</h2>
+                                   <ul className="space-y-2 text-green-800 text-sm">
+                                       <li>• ค้นหางานวิจัยต้นฉบับของ {selectedTheory.author}</li>
+                                       <li>• ศึกษา Meta-analysis ของทฤษฎีนี้</li>
+                                       <li>• ดูตัวอย่างการประยุกต์ใช้ในบริบทที่คล้ายกัน</li>
+                                       <li>• อ่านคู่มือการใช้งาน SPSS หรือ AMOS สำหรับการวิเคราะห์</li>
+                                   </ul>
+                               </div>
+                           </div>
+
+                           <div className="flex gap-4 justify-center">
+                               <button
+                                   onClick={() => window.print()}
+                                   className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                               >
+                                   🖨️ พิมพ์แผนการวิจัย
+                               </button>
+                               <button
+                                   onClick={() => window.location.reload()}
+                                   className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                               >
+                                   🔄 เริ่มใหม่
+                               </button>
+                           </div>
                        </div>
-                     </div>
-                     <div className="flex-1">
-                       <h5 className="font-semibold text-gray-800 mb-2">{step.step}</h5>
-                       <p className="text-gray-700 mb-3">{step.instruction}</p>
-                       <div className="bg-white p-2 rounded border border-blue-200">
-                         <span className="text-blue-700 font-mono text-sm">
-                           📍 เมนู: {step.menu}
-                         </span>
-                       </div>
-                     </div>
-                     <div className="flex-shrink-0 text-3xl">
-                       {step.image}
-                     </div>
                    </div>
-                 ))}
                </div>
-             </div>
+           );
+       };
 
-             {/* Interpretation */}
-             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-               <h4 className="text-lg font-semibold text-yellow-900 mb-4">
-                 📏 {guide.interpretation.title}
-               </h4>
-               <div className="grid md:grid-cols-2 gap-3">
-                 {guide.interpretation.criteria.map((criterion, index) => (
-                   <div key={index} className="bg-white p-3 rounded border">
-                     <span className="text-sm text-yellow-800">{criterion}</span>
-                   </div>
-                 ))}
+       // Main App Component
+       const ResearchMethodologyAdvisor = () => {
+           const [currentPage, setCurrentPage] = useState('landing');
+           const [researchTopic, setResearchTopic] = useState('');
+           const [selectedLevel, setSelectedLevel] = useState(null);
+           const [selectedTheory, setSelectedTheory] = useState(null);
+
+           const handleAnalyze = (topic) => {
+               if (topic.trim()) {
+                   setResearchTopic(topic);
+                   setCurrentPage('level');
+               }
+           };
+
+           const handleSelectLevel = (level) => {
+               setSelectedLevel(level);
+               setCurrentPage('theory');
+           };
+
+           const handleSelectTheory = (theory) => {
+               setSelectedTheory(theory);
+               setCurrentPage('results');
+           };
+
+           return (
+               <div className="min-h-screen">
+                   {currentPage === 'landing' && (
+                       <LandingPage onAnalyze={handleAnalyze} />
+                   )}
+                   
+                   {currentPage === 'level' && (
+                       <LevelSelection 
+                           researchTopic={researchTopic}
+                           onSelectLevel={handleSelectLevel}
+                       />
+                   )}
+                   
+                   {currentPage === 'theory' && (
+                       <TheorySelection 
+                           researchTopic={researchTopic}
+                           selectedLevel={selectedLevel}
+                           onSelectTheory={handleSelectTheory}
+                       />
+                   )}
+                   
+                   {currentPage === 'results' && selectedTheory && (
+                       <ResultsPage 
+                           researchTopic={researchTopic}
+                           selectedLevel={selectedLevel}
+                           selectedTheory={selectedTheory}
+                       />
+                   )}
                </div>
-             </div>
+           );
+       };
 
-             {/* Template การเขียนรายงาน */}
-             <div className="mt-8 bg-green-50 border border-green-200 rounded-lg p-6">
-               <h4 className="text-lg font-semibold text-green-900 mb-4">📝 Template การเขียนรายงาน</h4>
-               
-               {key === 'descriptive' && (
-                 <div className="bg-white p-4 rounded border font-mono text-sm">
-                   <p className="text-green-800">
-                     "จากการวิเคราะห์ข้อมูลเชิงพรรณนา พบว่า ตัวแปร [ชื่อตัวแปร] มีค่าเฉลี่ย X.XX (SD = X.XX) 
-                     ซึ่งอยู่ในระดับ[สูง/กลาง/ต่ำ] การแจกแจงของข้อมูลมีลักษณะ[ปกติ/เบ้ซ้าย/เบ้ขวา] 
-                     (Skewness = X.XX, Kurtosis = X.XX)"
-                   </p>
-                 </div>
-               )}
-
-               {key === 'reliability' && (
-                 <div className="bg-white p-4 rounded border font-mono text-sm">
-                   <p className="text-green-800">
-                     "การทดสอบความเชื่อมั่นของแบบสอบถาม พบว่า ตัวแปร [ชื่อตัวแปร] มีค่า Cronbach's Alpha 
-                     เท่ากับ X.XX ซึ่ง[สูงกว่า/เท่ากับ]เกณฑ์ที่ยอมรับได้ (α ≥ 0.70) แสดงว่าแบบสอบถามมีความเชื่อมั่น[ที่ดี/ที่ยอมรับได้]"
-                   </p>
-                 </div>
-               )}
-
-               {key === 'efa' && (
-                 <div className="bg-white p-4 rounded border font-mono text-sm">
-                   <p className="text-green-800">
-                     "การวิเคราะห์องค์ประกอบเชิงสำรวจ พบว่า ค่า KMO เท่ากับ X.XX (> 0.60) และ Bartlett's Test 
-                     มีนัยสำคัญทางสถิติ (p < 0.05) แสดงว่าข้อมูลเหมาะสมสำหรับการวิเคราะห์องค์ประกอบ 
-                     จากการวิเคราะห์พบองค์ประกอบ X องค์ประกอบ ที่สามารถอธิบายความแปรปรวนได้ XX.XX%"
-                   </p>
-                 </div>
-               )}
-
-               {key === 'regression' && (
-                 <div className="bg-white p-4 rounded border font-mono text-sm">
-                   <p className="text-green-800">
-                     "การวิเคราะห์การถดถอยพหุคูณ พบว่า โมเดลมีความหมายทางสถิติ (F = XX.XX, p < 0.05) 
-                     โดยตัวแปรต้นสามารถอธิบายความแปรปรวนของตัวแปรตามได้ XX.XX% (Adjusted R² = X.XX) 
-                     ตัวแปร[ชื่อตัวแปร]มีอิทธิพลต่อ[ตัวแปรตาม]อย่างมีนัยสำคัญ (β = X.XX, p < 0.05)"
-                   </p>
-                 </div>
-               )}
-             </div>
-
-             {/* ข้อผิดพลาดที่พบบ่อย */}
-             <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-6">
-               <h4 className="text-lg font-semibold text-red-900 mb-4">⚠️ ข้อผิดพลาดที่พบบ่อย</h4>
-               <ul className="space-y-2 text-red-800 text-sm">
-                 {key === 'descriptive' && (
-                   <>
-                     <li>• ลืมตรวจสอบ Missing Values ก่อนวิเคราะห์</li>
-                     <li>• ไม่ได้ตรวจสอบ Outliers ที่อาจส่งผลต่อผลลัพธ์</li>
-                     <li>• ตีความผลลั Skewness และ Kurtosis ผิด</li>
-                   </>
-                 )}
-                 {key === 'reliability' && (
-                   <>
-                     <li>• รวมข้อคำถามที่วัดคนละตัวแปรในการทดสอบ</li>
-                     <li>• ไม่ได้ลบข้อคำถามที่มี Item-Total Correlation ต่ำ</li>
-                     <li>• ไม่ได้ Reverse Score ข้อคำถามที่เป็นลบ</li>
-                   </>
-                 )}
-                 {key === 'efa' && (
-                   <>
-                     <li>• ใช้ข้อมูลที่มีขนาดตัวอย่างน้อยเกินไป (< 100)</li>
-                     <li>• ไม่ได้ตรวจสอบ Cross-loading ระหว่างองค์ประกอบ</li>
-                     <li>• เลือกจำนวนองค์ประกอบโดยไม่พิจารณาทฤษฎี</li>
-                   </>
-                 )}
-                 {key === 'regression' && (
-                   <>
-                     <li>• ไม่ได้ตรวจสอบ Multicollinearity (VIF)</li>
-                     <li>• ไม่ได้ตรวจสอบ Assumptions ของ Regression</li>
-                     <li>• ตีความ Beta Coefficients ผิดทิศทาง</li>
-                   </>
-                 )}
-               </ul>
-             </div>
-           </div>
-         )
-       ))}
-     </div>
-   </div>
- );
-};
-
-const ResearchMethodologyAdvisor = () => {
-  const [currentPage, setCurrentPage] = React.useState('landing');
-  const [researchTopic, setResearchTopic] = React.useState('');
-  const [selectedLevel, setSelectedLevel] = React.useState(null);
-  const [selectedTheory, setSelectedTheory] = React.useState(null);
-
-  const handleAnalyze = (topic) => {
-    setResearchTopic(topic);
-    setCurrentPage('level');
-  };
-
-  const handleSelectLevel = (level) => {
-    setSelectedLevel(level);
-    setCurrentPage('theory');
-  };
-
-  const handleSelectTheory = (theory) => {
-    setSelectedTheory(theory);
-    setCurrentPage('results');
-  };
-
-  const handleExportPDF = async () => {
-    try {
-      const element = document.getElementById('export-content');
-      if (!element) {
-        alert('ไม่พบเนื้อหาที่จะ Export');
-        return;
-      }
-
-      // แสดง Loading
-      const originalContent = element.innerHTML;
-      element.innerHTML = '<div style="padding: 20px; text-align: center;">กำลังสร้าง PDF...</div>';
-
-      // รอสักครู่เพื่อให้ UI update
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // คืนค่าเนื้อหา
-      element.innerHTML = originalContent;
-
-      // สร้าง Canvas จาก HTML
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff'
-      });
-
-      // สร้าง PDF
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      // เพิ่มหน้าแรก
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      // เพิ่มหน้าถัดไปถ้าจำเป็น
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      // Download PDF
-      const fileName = `Research_Plan_${selectedTheory?.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-      pdf.save(fileName);
-
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง');
-    }
-  };
-
-  return (
-    <div className="min-h-screen">
-      {currentPage === 'landing' && (
-        <LandingPage onAnalyze={handleAnalyze} />
-      )}
-      
-      {currentPage === 'level' && (
-        <LevelSelection 
-          researchTopic={researchTopic}
-          onSelectLevel={handleSelectLevel}
-        />
-      )}
-      
-      {currentPage === 'theory' && (
-        <TheorySelection 
-          researchTopic={researchTopic}
-          selectedLevel={selectedLevel}
-          onSelectTheory={handleSelectTheory}
-        />
-      )}
-      
-      {currentPage === 'results' && selectedTheory && (
-        <ResultsPage 
-          researchTopic={researchTopic}
-          selectedLevel={selectedLevel}
-          selectedTheory={selectedTheory}
-          onExportPDF={handleExportPDF}
-        />
-      )}
-    </div>
-  );
-};
-
-// Render the app
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<ResearchMethodologyAdvisor />);
-</script>
+       // Render the app
+       const root = ReactDOM.createRoot(document.getElementById('root'));
+       root.render(<ResearchMethodologyAdvisor />);
+   </script>
 </body>
 </html>

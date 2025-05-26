@@ -11,33 +11,17 @@
         
         body { 
             font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         /* 3D Card Effects */
         .card-3d {
+            transition: all 0.3s ease;
             transform-style: preserve-3d;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card-3d:hover {
             transform: translateY(-8px) rotateX(5deg);
-            box-shadow: 
-                0 20px 40px rgba(0,0,0,0.1),
-                0 0 0 1px rgba(255,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-
-        .card-3d::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-            border-radius: inherit;
-            pointer-events: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         /* Gradient Backgrounds */
@@ -59,29 +43,13 @@
 
         /* Button Effects */
         .btn-3d {
-            position: relative;
-            transform-style: preserve-3d;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.1),
-                0 0 0 1px rgba(255,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .btn-3d:hover {
             transform: translateY(-2px);
-            box-shadow: 
-                0 8px 16px rgba(0,0,0,0.15),
-                0 0 0 1px rgba(255,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.3);
-        }
-
-        .btn-3d:active {
-            transform: translateY(0);
-            box-shadow: 
-                0 2px 4px rgba(0,0,0,0.1),
-                0 0 0 1px rgba(255,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.2);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
 
         /* Animated Background */
@@ -97,21 +65,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Floating Elements */
-        .float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .float-delay {
-            animation: float 6s ease-in-out infinite;
-            animation-delay: 2s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
         /* Glassmorphism Effect */
         .glass {
             background: rgba(255, 255, 255, 0.1);
@@ -119,43 +72,31 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Icon Bounce */
-        .icon-bounce {
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
-            40%, 43% { transform: translate3d(0,-30px,0); }
-            70% { transform: translate3d(0,-15px,0); }
-            90% { transform: translate3d(0,-4px,0); }
-        }
-
         /* Equal Height Cards */
         .equal-height {
-            height: 420px; /* กำหนดความสูงคงที่ */
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Progress Bar Animation */
-        .progress-bar {
-            position: relative;
-            overflow: hidden;
+        .equal-height .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
+        .equal-height .card-button {
+            margin-top: auto;
         }
 
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        /* Fade transition */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -215,17 +156,10 @@
         // Landing Page
         function renderLanding() {
             return `
-                <div class="min-h-screen relative overflow-hidden">
-                    <!-- Floating Elements -->
-                    <div class="absolute top-20 left-10 text-6xl opacity-20 float">🔬</div>
-                    <div class="absolute top-40 right-20 text-4xl opacity-20 float-delay">📊</div>
-                    <div class="absolute bottom-40 left-20 text-5xl opacity-20 float">📈</div>
-                    
+                <div class="min-h-screen relative overflow-hidden fade-in">
                     <div class="container mx-auto px-4 py-16 relative z-10">
                         <div class="text-center mb-16">
-                            <div class="inline-block mb-6">
-                                <div class="text-8xl icon-bounce">🎓</div>
-                            </div>
+                            <div class="text-8xl mb-6">🎓</div>
                             <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
                                 <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                                     ระบบปรึกษาการวิจัย
@@ -254,7 +188,7 @@
                                     <textarea
                                         id="researchTopic"
                                         placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
-                                        class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg glass shadow-inner"
+                                        class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
                                         style="background: rgba(255,255,255,0.9);"
                                     ></textarea>
                                 </div>
@@ -271,24 +205,21 @@
                                         🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
                                     </h3>
                                     <div class="grid gap-4">
-                                        <button onclick="setExample(this.getAttribute('data-text'))" 
-                                                data-text="ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา"
+                                        <button onclick="setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา')" 
                                                 class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
                                             <div class="flex items-center gap-4">
                                                 <span class="text-3xl group-hover:scale-110 transition-transform">💻</span>
                                                 <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
                                             </div>
                                         </button>
-                                        <button onclick="setExample(this.getAttribute('data-text'))" 
-                                                data-text="วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน"
+                                        <button onclick="setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน')" 
                                                 class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
                                             <div class="flex items-center gap-4">
                                                 <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
                                                 <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
                                             </div>
                                         </button>
-                                        <button onclick="setExample(this.getAttribute('data-text'))" 
-                                                data-text="ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค"
+                                        <button onclick="setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค')" 
                                                 class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all btn-3d group">
                                             <div class="flex items-center gap-4">
                                                 <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
@@ -304,10 +235,10 @@
             `;
         }
 
-        // Level Selection Page
+        // Level Selection Page  
         function renderLevelSelection() {
             return `
-                <div class="min-h-screen relative overflow-hidden">
+                <div class="min-h-screen relative overflow-hidden fade-in">
                     <div class="container mx-auto px-4 py-12 relative z-10">
                         <div class="text-center mb-12">
                             <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
@@ -323,9 +254,9 @@
                             <div class="grid md:grid-cols-3 gap-8">
                                 <!-- Level 1 Card -->
                                 <div class="equal-height bg-gradient-green rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="relative z-10">
+                                    <div class="card-content">
                                         <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4 icon-bounce">📊</div>
+                                            <div class="text-6xl mb-4">📊</div>
                                             <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับพื้นฐาน</h3>
                                             <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
                                                 <span class="font-bold text-gray-800">BEGINNER</span>
@@ -369,19 +300,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <button onclick="selectLevel(1)" 
-                                                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                            ✅ เลือกระดับนี้
-                                        </button>
                                     </div>
+                                    
+                                    <button onclick="selectLevel(1)" 
+                                            class="card-button w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
+                                        ✅ เลือกระดับนี้
+                                    </button>
                                 </div>
 
                                 <!-- Level 2 Card -->
                                 <div class="equal-height bg-gradient-blue rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="relative z-10">
+                                    <div class="card-content">
                                         <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4 icon-bounce" style="animation-delay: 0.5s;">📈</div>
+                                            <div class="text-6xl mb-4">📈</div>
                                             <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับกลาง</h3>
                                             <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
                                                 <span class="font-bold text-gray-800">INTERMEDIATE</span>
@@ -425,19 +356,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <button onclick="selectLevel(2)" 
-                                                class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                            ✅ เลือกระดับนี้
-                                        </button>
                                     </div>
+                                    
+                                    <button onclick="selectLevel(2)" 
+                                            class="card-button w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
+                                        ✅ เลือกระดับนี้
+                                    </button>
                                 </div>
 
                                 <!-- Level 3 Card -->
                                 <div class="equal-height bg-gradient-purple rounded-3xl p-8 card-3d relative overflow-hidden">
-                                    <div class="relative z-10">
+                                    <div class="card-content">
                                         <div class="text-center mb-6">
-                                            <div class="text-6xl mb-4 icon-bounce" style="animation-delay: 1s;">🎯</div>
+                                            <div class="text-6xl mb-4">🎯</div>
                                             <h3 class="text-3xl font-bold text-gray-800 mb-2">ระดับสูง</h3>
                                             <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
                                                 <span class="font-bold text-gray-800">ADVANCED</span>
@@ -481,12 +412,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <button onclick="selectLevel(3)" 
-                                                class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
-                                            ✅ เลือกระดับนี้
-                                        </button>
                                     </div>
+                                    
+                                    <button onclick="selectLevel(3)" 
+                                            class="card-button w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl transition-all btn-3d text-lg">
+                                        ✅ เลือกระดับนี้
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -507,7 +438,7 @@
         function renderResults() {
             const theory = currentState.theory;
             return `
-                <div class="min-h-screen relative overflow-hidden">
+                <div class="min-h-screen relative overflow-hidden fade-in">
                     <div class="container mx-auto px-4 py-12 relative z-10">
                         <div class="max-w-5xl mx-auto">
                             <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
@@ -516,62 +447,59 @@
                                     <h1 class="text-4xl font-bold text-white mb-4">
                                         แผนการวิจัยของคุณพร้อมแล้ว!
                                     </h1>
-                                    <div class="progress-bar bg-white/20 rounded-full h-2 mb-4">
-                                        <div class="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full w-full"></div>
-                                    </div>
                                 </div>
                                 
                                 <div class="grid gap-8 mb-10">
                                     <!-- ข้อมูลการวิจัย -->
-                                        <div class="bg-gradient-amber rounded-2xl p-6 card-3d">
-                                       <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                                           📚 ข้อมูลการวิจัยของคุณ
-                                       </h2>
-                                       <div class="grid md:grid-cols-2 gap-4">
-                                           <div class="bg-white/30 rounded-xl p-4">
-                                               <span class="font-semibold text-gray-800">📝 โจทย์วิจัย:</span>
-                                               <p class="text-gray-800 mt-2">${currentState.topic}</p>
-                                           </div>
-                                           <div class="bg-white/30 rounded-xl p-4">
-                                               <span class="font-semibold text-gray-800">🎯 ระดับความซับซ้อน:</span>
-                                               <p class="text-gray-800 mt-2 font-bold">ระดับ ${currentState.level}</p>
-                                           </div>
-                                           <div class="bg-white/30 rounded-xl p-4">
-                                               <span class="font-semibold text-gray-800">🧠 ทฤษฎีที่แนะนำ:</span>
-                                               <p class="text-gray-800 mt-2 font-bold">${theory.name}</p>
-                                           </div>
-                                           <div class="bg-white/30 rounded-xl p-4">
-                                               <span class="font-semibold text-gray-800">👨‍🔬 ผู้พัฒนาทฤษฎี:</span>
-                                               <p class="text-gray-800 mt-2">${theory.author}</p>
-                                           </div>
-                                       </div>
-                                   </div>
+                                    <div class="bg-gradient-amber rounded-2xl p-6 card-3d">
+                                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                                            📚 ข้อมูลการวิจัยของคุณ
+                                        </h2>
+                                        <div class="grid md:grid-cols-2 gap-4">
+                                            <div class="bg-white/30 rounded-xl p-4">
+                                                <span class="font-semibold text-gray-800">📝 โจทย์วิจัย:</span>
+                                                <p class="text-gray-800 mt-2">${currentState.topic}</p>
+                                            </div>
+                                            <div class="bg-white/30 rounded-xl p-4">
+                                                <span class="font-semibold text-gray-800">🎯 ระดับความซับซ้อน:</span>
+                                                <p class="text-gray-800 mt-2 font-bold">ระดับ ${currentState.level}</p>
+                                            </div>
+                                            <div class="bg-white/30 rounded-xl p-4">
+                                                <span class="font-semibold text-gray-800">🧠 ทฤษฎีที่แนะนำ:</span>
+                                                <p class="text-gray-800 mt-2 font-bold">${theory.name}</p>
+                                            </div>
+                                            <div class="bg-white/30 rounded-xl p-4">
+                                                <span class="font-semibold text-gray-800">👨‍🔬 ผู้พัฒนาทฤษฎี:</span>
+                                                <p class="text-gray-800 mt-2">${theory.author}</p>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                   <!-- ปัจจัยหลักของทฤษฎี -->
-                                   <div class="bg-gradient-green rounded-2xl p-6 card-3d">
-                                       <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                                           🎯 ปัจจัยหลักของทฤษฎี
-                                       </h2>
-                                       <div class="grid md:grid-cols-2 gap-4">
-                                           ${theory.factors.map((factor, index) => `
-                                               <div class="bg-white/30 rounded-xl p-4 flex items-center gap-4 group hover:bg-white/40 transition-all">
-                                                   <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">
-                                                       ${index + 1}
-                                                   </div>
-                                                   <span class="text-gray-800 font-medium">${factor}</span>
-                                               </div>
-                                           `).join('')}
-                                       </div>
-                                   </div>
+                                    <!-- ปัจจัยหลักของทฤษฎี -->
+                                    <div class="bg-gradient-green rounded-2xl p-6 card-3d">
+                                        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                                            🎯 ปัจจัยหลักของทฤษฎี
+                                        </h2>
+                                        <div class="grid md:grid-cols-2 gap-4">
+                                            ${theory.factors.map((factor, index) => `
+                                                <div class="bg-white/30 rounded-xl p-4 flex items-center gap-4 group hover:bg-white/40 transition-all">
+                                                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                                        ${index + 1}
+                                                    </div>
+                                                    <span class="text-gray-800 font-medium">${factor}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
 
-                                   <!-- คำอธิบายทฤษฎี -->
-                                   <div class="bg-gradient-blue rounded-2xl p-6 card-3d">
-                                       <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
-                                           💡 คำอธิบายทฤษฎี
-                                       </h2>
-                                       <div class="bg-white/30 rounded-xl p-6">
-                                           <p class="text-gray-800 text-lg leading-relaxed">${theory.description}</p>
-                                       </div>
+                                    <!-- คำอธิบายทฤษฎี -->
+                                    <div class="bg-gradient-blue rounded-2xl p-6 card-3d">
+                                        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                                            💡 คำอธิบายทฤษฎี
+                                        </h2>
+                                        <div class="bg-white/30 rounded-xl p-6">
+                                            <p class="text-gray-800 text-lg leading-relaxed">${theory.description}</p>
+                                            </div>
                                    </div>
 
                                    <!-- ขั้นตอนการดำเนินงาน -->
@@ -580,8 +508,8 @@
                                            📋 ขั้นตอนการดำเนินงานแนะนำ
                                        </h2>
                                        <div class="space-y-4">
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">1</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">1</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">🧹 การเตรียมข้อมูล</h4>
                                                    <p class="text-gray-700 mt-2">ทำความสะอาดข้อมูล ตรวจสอบค่าสูญหายและค่าผิดปกติ รวมถึงการจัดรูปแบบข้อมูลให้พร้อมสำหรับการวิเคราะห์</p>
@@ -591,8 +519,8 @@
                                                </div>
                                            </div>
                                            
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">2</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">2</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">📊 การวิเคราะห์เชิงพรรณนา</h4>
                                                    <p class="text-gray-700 mt-2">วิเคราะห์ลักษณะของข้อมูลและกลุ่มตัวอย่าง หาค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน และการแจกแจงของข้อมูล</p>
@@ -602,8 +530,8 @@
                                                </div>
                                            </div>
 
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">3</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">🔒 การทดสอบความเชื่อมั่น</h4>
                                                    <p class="text-gray-700 mt-2">ตรวจสอบ Cronbach's Alpha ของแต่ละตัวแปร (≥ 0.70) เพื่อให้แน่ใจว่าแบบสอบถามมีความน่าเชื่อถือ</p>
@@ -614,8 +542,8 @@
                                            </div>
 
                                            ${currentState.level >= 2 ? `
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">4</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">4</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">🔍 การวิเคราะห์องค์ประกอบเชิงสำรวจ (EFA)</h4>
                                                    <p class="text-gray-700 mt-2">ตรวจสอบโครงสร้างของตัวแปรแฝง ดูว่าข้อคำถามจับกลุ่มกันอย่างไร (KMO ≥ 0.60, Factor Loading ≥ 0.50)</p>
@@ -627,8 +555,8 @@
                                            ` : ''}
 
                                            ${currentState.level >= 3 ? `
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">5</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">5</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">✅ การวิเคราะห์องค์ประกอบเชิงยืนยัน (CFA)</h4>
                                                    <p class="text-gray-700 mt-2">ยืนยันโครงสร้างการวัดด้วย AMOS/LISREL ตรวจสอบ Model Fit (CFI ≥ 0.95, RMSEA ≤ 0.08)</p>
@@ -638,8 +566,8 @@
                                                </div>
                                            </div>
                                            
-                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4 group hover:bg-white/40 transition-all">
-                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 transition-transform">6</div>
+                                           <div class="bg-white/30 rounded-xl p-4 flex items-start gap-4">
+                                               <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center text-xl font-bold">6</div>
                                                <div>
                                                    <h4 class="font-bold text-gray-800 text-lg">🏗️ การวิเคราะห์โมเดลสมการโครงสร้าง (SEM)</h4>
                                                    <p class="text-gray-700 mt-2">ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปร วิเคราะห์ Path Coefficients และ Effect Sizes</p>
@@ -692,10 +620,6 @@
                                            class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-lg flex items-center gap-3">
                                        🖨️ พิมพ์แผนการวิจัย
                                    </button>
-                                   <button onclick="downloadPDF()" 
-                                           class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-lg flex items-center gap-3">
-                                       📄 ดาวน์โหลด PDF
-                                   </button>
                                    <button onclick="restart()" 
                                            class="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-bold py-4 px-8 rounded-2xl transition-all btn-3d text-lg flex items-center gap-3">
                                        🔄 เริ่มใหม่
@@ -727,34 +651,16 @@
                currentState.page = 'level';
                render();
            } else {
-               // Animated alert
-               const textarea = document.getElementById('researchTopic');
-               textarea.style.border = '3px solid #ff6b6b';
-               textarea.style.transform = 'shake 0.5s';
-               setTimeout(() => {
-                   textarea.style.border = '';
-                   textarea.style.transform = '';
-               }, 1000);
                alert('กรุณาใส่โจทย์วิจัย 📝');
            }
        }
 
        function selectLevel(level) {
+           console.log('Selected level:', level); // Debug log
            currentState.level = level;
            currentState.theory = findTheory(currentState.topic);
            currentState.page = 'results';
            render();
-       }
-
-       function downloadPDF() {
-           // Simulate PDF download
-           const link = document.createElement('a');
-           link.download = `Research_Plan_${new Date().getTime()}.pdf`;
-           link.href = '#';
-           link.click();
-           
-           // Show success message
-           alert('🎉 PDF กำลังสร้าง... จะดาวน์โหลดโดยอัตโนมัติ');
        }
 
        function restart() {
@@ -770,41 +676,29 @@
        function render() {
            const app = document.getElementById('app');
            
-           // Add fade transition
-           app.style.opacity = '0';
-           
-           setTimeout(() => {
-               switch(currentState.page) {
-                   case 'landing':
-                       app.innerHTML = renderLanding();
-                       break;
-                   case 'level':
-                       app.innerHTML = renderLevelSelection();
-                       break;
-                   case 'results':
-                       app.innerHTML = renderResults();
-                       break;
-               }
-               
-               app.style.opacity = '1';
-           }, 150);
+           // Simple render without fade effect
+           switch(currentState.page) {
+               case 'landing':
+                   app.innerHTML = renderLanding();
+                   break;
+               case 'level':
+                   app.innerHTML = renderLevelSelection();
+                   break;
+               case 'results':
+                   app.innerHTML = renderResults();
+                   break;
+               default:
+                   app.innerHTML = renderLanding();
+           }
        }
 
        // Initialize app
-       render();
+       document.addEventListener('DOMContentLoaded', function() {
+           render();
+       });
 
-       // Add CSS shake animation
-       const style = document.createElement('style');
-       style.textContent = `
-           @keyframes shake {
-               0% { transform: translateX(0); }
-               25% { transform: translateX(-5px); }
-               50% { transform: translateX(5px); }
-               75% { transform: translateX(-5px); }
-               100% { transform: translateX(0); }
-           }
-       `;
-       document.head.appendChild(style);
+       // Also render immediately
+       render();
    </script>
 </body>
-</html>                                    
+</html>                                            

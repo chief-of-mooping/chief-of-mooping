@@ -274,15 +274,19 @@ window.DomainData = {
         ]
     },
     'business_analytics': {
-        name: 'วิเคราะห์ธุรกิจ',
-        icon: '📈',
-        description: 'Big Data, BI, Data Science, AI',
-        examples: [
-            'การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจ',
-            'ปัจจัยความสำเร็จของการนำ Big Data มาใช้ในองค์กร',
-            'ผลกระทบของ AI ต่อการวิเคราะห์ลูกค้า'
-        ]
-    }
+    name: 'วิเคราะห์ธุรกิจ',
+    icon: '📈',
+    description: 'Big Data, BI, Data Science, AI, Customer Analytics',
+    examples: [
+        'การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ',
+        'ปัจจัยความสำเร็จของการนำ Big Data มาใช้ในองค์กร',
+        'ผลกระทบของ AI ต่อการวิเคราะห์ลูกค้าและการตัดสินใจซื้อ',
+        'การวิเคราะห์การเดินทางของลูกค้า (Customer Journey) ด้วย Data Analytics',
+        'การแบ่งกลุ่มลูกค้าด้วย Machine Learning เพื่อการตลาดเป็นรายบุคคล',
+        'การพยากรณ์ยอดขายด้วย Time Series Analysis และ AI',
+        'ปัจจัยที่ส่งผลต่อการยอมรับระบบ Business Intelligence ในองค์กร'
+    ]
+}
 };
 
 // Research Level Information
@@ -609,7 +613,98 @@ window.TheoryDatabase = {
         keywords: ['triple', 'bottom', 'line', 'sustainability', 'economic', 'environmental', 'social', 'ยั่งยืน', 'สิ่งแวดล้อม'],
         statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
         description: 'ทฤษฎีผลตอบแทนสามด้านที่เน้นการสร้างคุณค่าอย่างยั่งยืนใน 3 มิติ'
-    }
+    },
+    'business_intelligence': {
+    id: 'business_intelligence',
+    name: 'Business Intelligence Theory',
+    author: 'Watson & Wixom (2007)',
+    domain: 'business_analytics',
+    level: 2,
+    factors: ['Data Integration', 'Data Warehousing', 'OLAP', 'Reporting', 'Decision Support'],
+    relationships: 'Data Integration → Information Processing → Business Insights → Decision Making',
+    prediction: 'ระบบ BI จะช่วยเปลี่ยนข้อมูลเป็นข้อมูลเชิงลึกเพื่อการตัดสินใจที่ดีขึ้น',
+    keywords: ['business', 'intelligence', 'data', 'analytics', 'decision', 'ธุรกิจ', 'ข้อมูล', 'การวิเคราะห์'],
+    statistics: ['Descriptive Statistics', 'Data Mining', 'Trend Analysis', 'Reporting'],
+    description: 'ทฤษฎีระบบสารสนเทศเพื่อการตัดสินใจที่เปลี่ยนข้อมูลเป็นความรู้'
+},
+'big_data_analytics': {
+    id: 'big_data_analytics',
+    name: 'Big Data Analytics Theory',
+    author: 'Chen et al. (2012)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Volume', 'Velocity', 'Variety', 'Veracity', 'Value Creation'],
+    relationships: '5Vs of Big Data → Analytics Capabilities → Business Insights → Competitive Advantage',
+    prediction: 'การวิเคราะห์ข้อมูลขนาดใหญ่จะสร้างความได้เปรียบการแข่งขันและคุณค่าทางธุรกิจ',
+    keywords: ['big', 'data', 'analytics', 'volume', 'velocity', 'variety', 'ข้อมูลขนาดใหญ่', 'การวิเคราะห์'],
+    statistics: ['Machine Learning', 'Predictive Analytics', 'Text Mining', 'Network Analysis'],
+    description: 'ทฤษฎีการวิเคราะห์ข้อมูลขนาดใหญ่ที่มีความหลากหลายและความเร็วสูง'
+},
+'predictive_analytics': {
+    id: 'predictive_analytics',
+    name: 'Predictive Analytics Theory',
+    author: 'Shmueli & Koppius (2011)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Historical Data', 'Statistical Models', 'Machine Learning', 'Predictive Models', 'Forecasting Accuracy'],
+    relationships: 'Historical Data → Model Building → Prediction → Business Decisions → Performance Improvement',
+    prediction: 'การวิเคราะห์เชิงพยากรณ์จะช่วยคาดการณ์แนวโน้มและรูปแบบในอนาคต',
+    keywords: ['predictive', 'analytics', 'forecasting', 'models', 'machine', 'learning', 'พยากรณ์', 'แบบจำลอง'],
+    statistics: ['Time Series Analysis', 'Regression Models', 'Machine Learning', 'Model Validation'],
+    description: 'ทฤษฎีการวิเคราะห์เชิงพยากรณ์เพื่อคาดการณ์เหตุการณ์ในอนาคต'
+},
+'customer_analytics': {
+    id: 'customer_analytics',
+    name: 'Customer Analytics Theory',
+    author: 'Kumar & Reinartz (2016)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Customer Segmentation', 'Customer Lifetime Value', 'Churn Prediction', 'Cross-selling', 'Customer Journey'],
+    relationships: 'Customer Data → Analytics → Customer Insights → Marketing Strategy → Customer Value',
+    prediction: 'การวิเคราะห์ลูกค้าจะช่วยเข้าใจพฤติกรรมและสร้างกลยุทธ์การตลาดที่มีประสิทธิภาพ',
+    keywords: ['customer', 'analytics', 'segmentation', 'lifetime', 'value', 'churn', 'ลูกค้า', 'การแบ่งกลุ่ม', 'คุณค่า'],
+    statistics: ['Cluster Analysis', 'Survival Analysis', 'RFM Analysis', 'Cohort Analysis'],
+    description: 'ทฤษฎีการวิเคราะห์ลูกค้าเพื่อเข้าใจพฤติกรรมและสร้างคุณค่า'
+},
+'digital_transformation': {
+    id: 'digital_transformation',
+    name: 'Digital Transformation Theory',
+    author: 'Westerman et al. (2014)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Digital Strategy', 'Technology Adoption', 'Process Innovation', 'Organizational Change', 'Digital Capabilities'],
+    relationships: 'Digital Strategy → Technology Implementation → Process Transformation → Business Value',
+    prediction: 'การเปลี่ยนผ่านสู่ดิจิทัลจะสร้างความสามารถใหม่และคุณค่าทางธุรกิจ',
+    keywords: ['digital', 'transformation', 'technology', 'innovation', 'capabilities', 'ดิจิทัล', 'เทคโนโลยี', 'นวัตกรรม'],
+    statistics: ['Digital Maturity Assessment', 'Technology Adoption Models', 'Change Management Metrics'],
+    description: 'ทฤษฎีการเปลี่ยนผ่านสู่ดิจิทัลเพื่อสร้างความสามารถในการแข่งขันใหม่'
+},
+'ai_adoption': {
+    id: 'ai_adoption',
+    name: 'Artificial Intelligence Adoption Theory',
+    author: 'Davenport & Ronanki (2018)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['AI Readiness', 'Data Quality', 'Technical Infrastructure', 'Organizational Culture', 'AI Capabilities'],
+    relationships: 'AI Readiness → Implementation → AI Capabilities → Business Performance → Competitive Advantage',
+    prediction: 'การนำ AI มาใช้จะเพิ่มประสิทธิภาพและสร้างความได้เปรียบการแข่งขัน',
+    keywords: ['artificial', 'intelligence', 'AI', 'automation', 'machine', 'learning', 'ปัญญาประดิษฐ์', 'อัตโนมัติ'],
+    statistics: ['AI Maturity Assessment', 'Performance Measurement', 'Impact Analysis', 'ROI Calculation'],
+    description: 'ทฤษฎีการนำปัญญาประดิษฐ์มาใช้ในองค์กรเพื่อเพิ่มประสิทธิภาพ'
+},
+'data_driven_decision': {
+    id: 'data_driven_decision',
+    name: 'Data-Driven Decision Making Theory',
+    author: 'Brynjolfsson et al. (2011)',
+    domain: 'business_analytics',
+    level: 2,
+    factors: ['Data Quality', 'Analytics Capabilities', 'Decision Process', 'Organizational Culture', 'Performance Outcomes'],
+    relationships: 'Data Quality + Analytics Capabilities → Data-Driven Culture → Better Decisions → Superior Performance',
+    prediction: 'องค์กรที่ใช้ข้อมูลในการตัดสินใจจะมีประสิทธิภาพที่ดีกว่าองค์กรที่ใช้สัญชาตญาณ',
+    keywords: ['data', 'driven', 'decision', 'making', 'analytics', 'performance', 'ข้อมูล', 'การตัดสินใจ', 'ประสิทธิภาพ'],
+    statistics: ['Descriptive Statistics', 'Performance Metrics', 'Decision Analysis', 'Impact Assessment'],
+    description: 'ทฤษฎีการตัดสินใจที่อิงข้อมูลเพื่อเพิ่มประสิทธิภาพและความแม่นยำ'
+}    
 };
 
 
@@ -816,70 +911,70 @@ window.EventHandlers = {
 
     // Update examples based on domain
     updateExamples: function(domainId) {
-        const container = document.getElementById('examples-container');
-        if (!container) return;
+    const container = document.getElementById('examples-container');
+    if (!container) return;
 
-        if (domainId && window.DomainData[domainId]) {
-            const domain = window.DomainData[domainId];
-            container.innerHTML = `
-                <h4 class="text-lg font-bold text-white mb-4 text-center">
-                    💡 ตัวอย่างโจทย์วิจัย${domain.name}
-                </h4>
-                <div class="grid gap-3">
-                    ${domain.examples.map(example => `
-                        <button onclick="EventHandlers.setExample('${example}', '${domainId}')" 
-                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group w-full">
-                            <div class="flex items-center gap-4">
-                                <span class="text-3xl group-hover:scale-110 transition-transform">${domain.icon}</span>
-                                <div class="flex-1">
-                                    <span class="text-white font-medium">${example}</span>
-                                    <div class="text-yellow-200 text-sm mt-1">${domain.name}</div>
-                                </div>
-                            </div>
-                        </button>
-                    `).join('')}
-                </div>
-            `;
-        } else {
-            // Show general examples
-            container.innerHTML = `
-                <h4 class="text-lg font-bold text-white mb-4 text-center">
-                    🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
-                </h4>
-                <div class="grid gap-3">
-                    <button onclick="EventHandlers.setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
-                            class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+    if (domainId && window.DomainData[domainId]) {
+        const domain = window.DomainData[domainId];
+        container.innerHTML = `
+            <h4 class="text-lg font-bold text-white mb-4 text-center">
+                💡 ตัวอย่างโจทย์วิจัย${domain.name}
+            </h4>
+            <div class="grid gap-3">
+                ${domain.examples.map(example => `
+                    <button onclick="EventHandlers.setExample('${example.replace(/'/g, "\\'")}', '${domainId}')" 
+                            class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group w-full">
                         <div class="flex items-center gap-4">
-                            <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
-                            <div>
-                                <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
-                                <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                            <span class="text-3xl group-hover:scale-110 transition-transform">${domain.icon}</span>
+                            <div class="flex-1">
+                                <span class="text-white font-medium">${example}</span>
+                                <div class="text-yellow-200 text-sm mt-1">${domain.name}</div>
                             </div>
                         </div>
                     </button>
-                    <button onclick="EventHandlers.setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
-                            class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
-                            <div>
-                                <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
-                                <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
-                            </div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        // Show general examples
+        container.innerHTML = `
+            <h4 class="text-lg font-bold text-white mb-4 text-center">
+                🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
+            </h4>
+            <div class="grid gap-3">
+                <button onclick="EventHandlers.setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
+                        <div>
+                            <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
                         </div>
-                    </button>
-                    <button onclick="EventHandlers.setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค', 'digital_marketing')" 
-                            class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
-                            <div>
-                                <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
-                                <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
-                            </div>
+                    </div>
+                </button>
+                <button onclick="EventHandlers.setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                        <div>
+                            <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                            <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
                         </div>
-                    </button>
-                </div>
-            `;
-        }
+                    </div>
+                </button>
+                <button onclick="EventHandlers.setExample('การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ', 'business_analytics')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">📈</span>
+                        <div>
+                            <span class="text-white font-medium">การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ</span>
+                            <div class="text-yellow-200 text-sm mt-1">วิเคราะห์ธุรกิจ</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        `;
+    }
     },
 
     // Set example text

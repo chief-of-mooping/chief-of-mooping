@@ -287,13 +287,13 @@ window.DomainData = {
 
 // Research Level Information
 window.LevelData = {
-    1: {
+     1: {
         name: 'ระดับพื้นฐาน',
-        steps: 7,
+        steps: 8,
         duration: '2-3 เดือน',
         description: 'เหมาะสำหรับนักศึกษาปริญญาตรีหรือผู้เริ่มต้น',
         target: 'นักศึกษาปริญญาตรี',
-        methods: 'สถิติเบื้องต้น',
+        methods: 'สถิติเบื้องต้น + การวิเคราะห์เชิงอธิบาย',
         steps_detail: [
             'Data Preparation',
             'Descriptive Statistics',
@@ -301,16 +301,17 @@ window.LevelData = {
             'Normality Testing',
             'T-test/ANOVA',
             'Correlation Analysis',
-            'Simple Regression'
+            'Simple Regression',
+            'Cluster Analysis (Basic)'
         ]
     },
     2: {
         name: 'ระดับกลาง',
-        steps: 9,
+        steps: 12,
         duration: '4-6 เดือน',
         description: 'เหมาะสำหรับนักศึกษาปริญญาโทหรือมีประสบการณ์บ้าง',
         target: 'นักศึกษาปริญญาโท',
-        methods: 'EFA + Regression',
+        methods: 'EFA + Multiple Regression + การวิเคราะห์เชิงลึก',
         steps_detail: [
             'Data Screening',
             'Descriptive Statistics',
@@ -318,18 +319,21 @@ window.LevelData = {
             'Validity Testing',
             'Exploratory Factor Analysis (EFA)',
             'Assumption Testing',
-            'Multiple Regression',
+            'Multiple Regression Analysis',
+            'Logistic Regression',
+            'Cluster Analysis (Advanced)',
+            'Discriminant Analysis',
             'Mediation Analysis',
             'Model Interpretation'
         ]
     },
     3: {
         name: 'ระดับสูง',
-        steps: 14,
+        steps: 16,
         duration: '8-12 เดือน',
         description: 'เหมาะสำหรับนักศึกษาปริญญาเอกหรือมืออาชีพ',
         target: 'นักศึกษาปริญญาเอก',
-        methods: 'CFA + SEM',
+        methods: 'CFA + SEM + การวิเคราะห์ขั้นสูง',
         steps_detail: [
             'Data Screening & Cleaning',
             'Missing Data Analysis',
@@ -340,10 +344,12 @@ window.LevelData = {
             'Confirmatory Factor Analysis (CFA)',
             'Measurement Model Evaluation',
             'Structural Equation Modeling (SEM)',
+            'MANOVA/MANCOVA Analysis',
+            'Hierarchical Linear Modeling (HLM)',
+            'Time Series Analysis',
+            'Latent Class Analysis (LCA)',
+            'Conjoint Analysis',
             'Mediation & Moderation Analysis',
-            'Model Comparison & Refinement',
-            'Robustness Testing',
-            'Cross-Validation',
             'Results Interpretation & Reporting'
         ]
     }
@@ -1613,106 +1619,181 @@ window.ResultsRenderers = {
 
    // Helper methods for statistical methods details
    getMethodDescription: function(method) {
-       const descriptions = {
-           'Data Preparation': 'ทำความสะอาดข้อมูล ตรวจสอบค่าผิดปกติ และจัดการข้อมูลสูญหาย',
-           'Descriptive Statistics': 'วิเคราะห์ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด และการแจกแจงของข้อมูล',
-           'Reliability Analysis': 'ทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha และ Item-Total Correlation',
-           'Normality Testing': 'ทดสอบการแจกแจงปกติของข้อมูลเพื่อเลือกสถิติที่เหมาะสม',
-           'T-test/ANOVA': 'เปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
-           'Correlation Analysis': 'วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
-           'Simple Regression': 'วิเคราะห์ความสัมพันธ์เชิงเส้นระหว่างตัวแปร 2 ตัว',
-           'Data Screening': 'ตรวจสอบข้อมูลอย่างละเอียด รวมถึง Multivariate Outliers และ Normality',
-           'Validity Testing': 'ทดสอบความตรงของเครื่องมือวัดในด้านต่างๆ',
-           'Exploratory Factor Analysis (EFA)': 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝงของตัวแปร',
-           'Assumption Testing': 'ทดสอบสมมติฐานสำหรับการวิเคราะห์ขั้นสูง',
-           'Multiple Regression': 'วิเคราะห์ความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรต้นหลายตัวกับตัวแปรตาม',
-           'Mediation Analysis': 'วิเคราะห์ตัวแปรคั่นกลางในความสัมพันธ์เชิงสาเหตุ',
-           'Model Interpretation': 'การตีความและนำเสนอผลการวิเคราะห์อย่างละเอียด',
-           'Data Screening & Cleaning': 'การตรวจสอบและทำความสะอาดข้อมูลอย่างละเอียดและเป็นระบบ',
-           'Missing Data Analysis': 'การวิเคราะห์รูปแบบของข้อมูลที่ขาดหายและการจัดการ',
-           'Common Method Bias Testing': 'การทดสอบอคติจากการใช้แหล่งข้อมูลเดียวกัน',
-           'Confirmatory Factor Analysis (CFA)': 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบโมเดลการวัด',
-           'Structural Equation Modeling (SEM)': 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบสมมติฐาน',
-           'Mediation & Moderation Analysis': 'การวิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับอย่างละเอียด',
-           'Model Comparison & Refinement': 'การเปรียบเทียบและปรับปรุงโมเดลทางเลือก',
-           'Robustness Testing': 'การทดสอบความแข็งแกร่งของผลลัพธ์',
-           'Cross-Validation': 'การตรวจสอบความถูกต้องของโมเดลด้วยข้อมูลชุดใหม่',
-           'Results Interpretation & Reporting': 'การตีความและรายงานผลลัพธ์อย่างครอบคลุมและชัดเจน'
-       };
-       return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
-   },
+    const descriptions = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ทำความสะอาดข้อมูล ตรวจสอบค่าผิดปกติ และจัดการข้อมูลสูญหาย',
+        'Descriptive Statistics': 'วิเคราะห์ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด และการแจกแจงของข้อมูล',
+        'Reliability Analysis': 'ทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha และ Item-Total Correlation',
+        'Normality Testing': 'ทดสอบการแจกแจงปกติของข้อมูลเพื่อเลือกสถิติที่เหมาะสม',
+        'T-test/ANOVA': 'เปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
+        'Correlation Analysis': 'วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
+        'Simple Regression': 'วิเคราะห์ความสัมพันธ์เชิงเส้นระหว่างตัวแปร 2 ตัว',
+        'Data Screening': 'ตรวจสอบข้อมูลอย่างละเอียด รวมถึง Multivariate Outliers และ Normality',
+        'Validity Testing': 'ทดสอบความตรงของเครื่องมือวัดในด้านต่างๆ',
+        'Exploratory Factor Analysis (EFA)': 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝงของตัวแปร',
+        'Assumption Testing': 'ทดสอบสมมติฐานสำหรับการวิเคราะห์ขั้นสูง',
+        'Mediation Analysis': 'วิเคราะห์ตัวแปรคั่นกลางในความสัมพันธ์เชิงสาเหตุ',
+        'Model Interpretation': 'การตีความและนำเสนอผลการวิเคราะห์อย่างละเอียด',
+        'Data Screening & Cleaning': 'การตรวจสอบและทำความสะอาดข้อมูลอย่างละเอียดและเป็นระบบ',
+        'Missing Data Analysis': 'การวิเคราะห์รูปแบบของข้อมูลที่ขาดหายและการจัดการ',
+        'Common Method Bias Testing': 'การทดสอบอคติจากการใช้แหล่งข้อมูลเดียวกัน',
+        'Confirmatory Factor Analysis (CFA)': 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบโมเดลการวัด',
+        'Structural Equation Modeling (SEM)': 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบสมมติฐาน',
+        'Mediation & Moderation Analysis': 'การวิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับอย่างละเอียด',
+        'Results Interpretation & Reporting': 'การตีความและรายงานผลลัพธ์อย่างครอบคลุมและชัดเจน',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'วิเคราะห์ผลกระทบของตัวแปรอิสระหลายตัวที่มีต่อตัวแปรตามแบบต่อเนื่อง',
+        'Logistic Regression': 'วิเคราะห์ความสัมพันธ์เมื่อตัวแปรตามเป็นประเภทหรือไบนารี (ใช่/ไม่ใช่)',
+        'MANOVA/MANCOVA Analysis': 'เปรียบเทียบค่าเฉลี่ยของหลายตัวแปรตามพร้อมกันระหว่างกลุ่ม มีหรือไม่มีตัวแปรควบคุม',
+        'Cluster Analysis (Basic)': 'จัดกลุ่มข้อมูลโดยไม่รู้ล่วงหน้าว่ามีกี่กลุ่ม ใช้วิธีพื้นฐาน เช่น K-means',
+        'Cluster Analysis (Advanced)': 'การจัดกลุ่มข้อมูลขั้นสูงด้วยเทคนิคต่างๆ เช่น Hierarchical clustering, Two-step clustering',
+        'Discriminant Analysis': 'ทำนายการจัดกลุ่มหรือหมวดหมู่ของข้อมูลใหม่โดยใช้ตัวแปรอิสระหลายตัว',
+        'Conjoint Analysis': 'วิเคราะห์การให้น้ำหนักคุณลักษณะต่างๆ ของผลิตภัณฑ์โดยผู้บริโภค',
+        'Time Series Analysis': 'วิเคราะห์ข้อมูลที่เรียงตามลำดับเวลา เพื่อหาแนวโน้มและทำการพยากรณ์',
+        'Hierarchical Linear Modeling (HLM)': 'วิเคราะห์ข้อมูลที่มีโครงสร้างแบบลำดับชั้น เช่น พนักงานในแผนก ในองค์กร',
+        'Latent Class Analysis (LCA)': 'ค้นหากลุ่มซ่อนเร้น (Latent Class) ในข้อมูลเชิงพฤติกรรมหรือทัศนคติ'
+    };
+    return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
+},
 
-   getMethodDuration: function(method, level) {
-       const durations = {
-           'Data Preparation': '1-2 วัน',
-           'Descriptive Statistics': '1 วัน',
-           'Reliability Analysis': level >= 3 ? '2-3 วัน' : '1-2 วัน',
-           'Normality Testing': '0.5 วัน',
-           'T-test/ANOVA': '1 วัน',
-           'Correlation Analysis': '1 วัน',
-           'Simple Regression': '1-2 วัน',
-           'Data Screening': '2-3 วัน',
-           'Validity Testing': '2-3 วัน',
-           'Exploratory Factor Analysis (EFA)': level >= 3 ? '3-4 วัน' : '2-3 วัน',
-           'Assumption Testing': '1-2 วัน',
-           'Multiple Regression': '2-3 วัน',
-           'Mediation Analysis': '2-3 วัน',
-           'Model Interpretation': '2-3 วัน',
-           'Data Screening & Cleaning': '3-4 วัน',
-           'Missing Data Analysis': '2-3 วัน',
-           'Common Method Bias Testing': '1-2 วัน',
-           'Confirmatory Factor Analysis (CFA)': '3-4 วัน',
-           'Structural Equation Modeling (SEM)': '4-5 วัน',
-           'Mediation & Moderation Analysis': '3-4 วัน',
-           'Model Comparison & Refinement': '2-3 วัน',
-           'Robustness Testing': '2-3 วัน',
-           'Cross-Validation': '2-3 วัน',
-           'Results Interpretation & Reporting': '4-5 วัน'
-       };
-       return durations[method] || '1-2 วัน';
-   },
+// เพิ่มในส่วน getMethodDuration
+getMethodDuration: function(method, level) {
+    const durations = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': '1-2 วัน',
+        'Descriptive Statistics': '1 วัน',
+        'Reliability Analysis': level >= 3 ? '2-3 วัน' : '1-2 วัน',
+        'Normality Testing': '0.5 วัน',
+        'T-test/ANOVA': '1 วัน',
+        'Correlation Analysis': '1 วัน',
+        'Simple Regression': '1-2 วัน',
+        'Data Screening': '2-3 วัน',
+        'Validity Testing': '2-3 วัน',
+        'Exploratory Factor Analysis (EFA)': level >= 3 ? '3-4 วัน' : '2-3 วัน',
+        'Assumption Testing': '1-2 วัน',
+        'Mediation Analysis': '2-3 วัน',
+        'Model Interpretation': '2-3 วัน',
+        'Data Screening & Cleaning': '3-4 วัน',
+        'Missing Data Analysis': '2-3 วัน',
+        'Common Method Bias Testing': '1-2 วัน',
+        'Confirmatory Factor Analysis (CFA)': '3-4 วัน',
+        'Structural Equation Modeling (SEM)': '4-5 วัน',
+        'Mediation & Moderation Analysis': '3-4 วัน',
+        'Results Interpretation & Reporting': '4-5 วัน',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': '2-3 วัน',
+        'Logistic Regression': '2-3 วัน',
+        'MANOVA/MANCOVA Analysis': '3-4 วัน',
+        'Cluster Analysis (Basic)': '1-2 วัน',
+        'Cluster Analysis (Advanced)': '3-4 วัน',
+        'Discriminant Analysis': '2-3 วัน',
+        'Conjoint Analysis': '4-5 วัน',
+        'Time Series Analysis': '3-5 วัน',
+        'Hierarchical Linear Modeling (HLM)': '5-7 วัน',
+        'Latent Class Analysis (LCA)': '4-6 วัน'
+    };
+    return durations[method] || '1-2 วัน';
+},
 
-   getMethodPurpose: function(method) {
-       const purposes = {
-           'Data Preparation': 'ตรวจสอบความถูกต้องและครบถ้วนของข้อมูล จัดการข้อมูลที่ขาดหายหรือผิดปกติ',
-           'Descriptive Statistics': 'อธิบายลักษณะทั่วไปของตัวอย่าง เช่น อายุ เพศ การศึกษา และตัวแปรสำคัญ',
-           'Reliability Analysis': 'ตรวจสอบความสอดคล้องภายในของข้อคำถามในแต่ละมิติ',
-           'Confirmatory Factor Analysis (CFA)': 'ยืนยันโครงสร้างที่ได้จาก EFA และทดสอบความตรงเชิงโครงสร้าง',
-           'Structural Equation Modeling (SEM)': 'ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรตามทฤษฎีที่กำหนด'
-       };
-       return purposes[method] || 'วิเคราะห์ข้อมูลเพื่อตอบคำถามวิจัย';
-   },
+// เพิ่มในส่วน getMethodPurpose
+getMethodPurpose: function(method) {
+    const purposes = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ตรวจสอบความถูกต้องและครบถ้วนของข้อมูล จัดการข้อมูลที่ขาดหายหรือผิดปกติ',
+        'Descriptive Statistics': 'อธิบายลักษณะทั่วไปของตัวอย่าง เช่น อายุ เพศ การศึกษา และตัวแปรสำคัญ',
+        'Reliability Analysis': 'ตรวจสอบความสอดคล้องภายในของข้อคำถามในแต่ละมิติ',
+        'Confirmatory Factor Analysis (CFA)': 'ยืนยันโครงสร้างที่ได้จาก EFA และทดสอบความตรงเชิงโครงสร้าง',
+        'Structural Equation Modeling (SEM)': 'ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรตามทฤษฎีที่กำหนด',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'ศึกษาอิทธิพลของตัวแปรอิสระหลายตัวต่อตัวแปรตาม และหาปัจจัยที่สำคัญที่สุด',
+        'Logistic Regression': 'ทำนายความน่าจะเป็นของเหตุการณ์ หรือการจัดประเภทข้อมูล เช่น การซื้อ/ไม่ซื้อ',
+        'MANOVA/MANCOVA Analysis': 'เปรียบเทียบกลุ่มในหลายตัวแปรพร้อมกัน เพื่อควบคุม Type I Error',
+        'Cluster Analysis (Basic)': 'แบ่งกลุ่มลูกค้าหรือตลาดตามลักษณะที่คล้ายกัน เพื่อการแบ่งส่วนตลาด',
+        'Cluster Analysis (Advanced)': 'การจัดกลุ่มขั้นสูงด้วยอัลกอริทึมที่ซับซ้อน เหมาะกับข้อมูลขนาดใหญ่',
+        'Discriminant Analysis': 'สร้างแบบจำลองเพื่อจำแนกหรือทำนายการจัดกลุ่มของข้อมูลใหม่',
+        'Conjoint Analysis': 'วัดความสำคัญของคุณลักษณะสินค้า เพื่อการออกแบบผลิตภัณฑ์และการตั้งราคา',
+        'Time Series Analysis': 'วิเคราะห์แนวโน้มและรูปแบบการเปลี่ยนแปลงตามเวลา เพื่อการวางแผนและพยากรณ์',
+        'Hierarchical Linear Modeling (HLM)': 'วิเคราะห์ข้อมูลที่มีโครงสร้างซ้อนกัน โดยควบคุมผลกระทบของระดับต่างๆ',
+        'Latent Class Analysis (LCA)': 'ค้นหาประเภทผู้บริโภคที่ซ่อนอยู่ตามพฤติกรรมหรือทัศนคติ'
+    };
+    return purposes[method] || 'วิเคราะห์ข้อมูลเพื่อตอบคำถามวิจัย';
+},
 
-   getMethodResults: function(method) {
-       const results = {
-           'Data Preparation': 'ข้อมูลที่สะอาดและพร้อมสำหรับการวิเคราะห์ รายงานคุณภาพข้อมูล',
-           'Descriptive Statistics': 'ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด ความถี่ เปอร์เซ็นต์',
-           'Reliability Analysis': 'ค่า Cronbach\'s Alpha สำหรับแต่ละมิติ รายการข้อคำถามที่ควรปรับปรุง',
-           'Confirmatory Factor Analysis (CFA)': 'Model Fit Indices, Factor Loadings, Modification Indices',
-           'Structural Equation Modeling (SEM)': 'Path Coefficients, R², Model Fit, Direct และ Indirect Effects'
-       };
-       return results[method] || 'ผลการวิเคราะห์ตามวิธีการที่เลือก';
-   },
+// เพิ่มในส่วน getMethodResults
+getMethodResults: function(method) {
+    const results = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ข้อมูลที่สะอาดและพร้อมสำหรับการวิเคราะห์ รายงานคุณภาพข้อมูล',
+        'Descriptive Statistics': 'ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด ความถี่ เปอร์เซ็นต์',
+        'Reliability Analysis': 'ค่า Cronbach\'s Alpha สำหรับแต่ละมิติ รายการข้อคำถามที่ควรปรับปรุง',
+        'Confirmatory Factor Analysis (CFA)': 'Model Fit Indices, Factor Loadings, Modification Indices',
+        'Structural Equation Modeling (SEM)': 'Path Coefficients, R², Model Fit, Direct และ Indirect Effects',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'สมการถดถอย, R², Beta coefficients, p-values, ความสำคัญของตัวแปร',
+        'Logistic Regression': 'Odds Ratios, Classification Table, ROC Curve, Model Chi-square',
+        'MANOVA/MANCOVA Analysis': 'Wilks\' Lambda, Pillai\'s Trace, F-statistics, Effect Sizes',
+        'Cluster Analysis (Basic)': 'จำนวนกลุ่มที่เหมาะสม, Cluster Centers, กลุ่มสมาชิกในแต่ละกลุ่ม',
+        'Cluster Analysis (Advanced)': 'Dendrogram, Silhouette Analysis, กลุ่มที่มีความหมาย, Cluster Profiles',
+        'Discriminant Analysis': 'Classification Functions, Hit Ratio, Canonical Discriminant Functions',
+        'Conjoint Analysis': 'Part-worth Utilities, Relative Importance, Market Simulation',
+        'Time Series Analysis': 'Trend Analysis, Seasonal Patterns, Forecasting Models, Accuracy Measures',
+        'Hierarchical Linear Modeling (HLM)': 'Fixed Effects, Random Effects, ICC, Cross-level Interactions',
+        'Latent Class Analysis (LCA)': 'Class Probabilities, Item Response Probabilities, Model Fit Statistics'
+    };
+    return results[method] || 'ผลการวิเคราะห์ตามวิธีการที่เลือก';
+},
 
-   getMethodCriteria: function(method) {
-       const criteria = {
-           'Data Preparation': 'ข้อมูลสูญหาย < 5%, ไม่มีค่าผิดปกติที่รุนแรง, รูปแบบข้อมูลสอดคล้อง',
-           'Reliability Analysis': 'Alpha ≥ 0.70 ยอมรับได้, ≥ 0.80 ดี, ≥ 0.90 ดีมาก',
-           'Confirmatory Factor Analysis (CFA)': 'χ²/df < 3, CFI/TLI ≥ 0.95, RMSEA ≤ 0.08, SRMR ≤ 0.08',
-           'Structural Equation Modeling (SEM)': 'Model Fit ตามเกณฑ์, Path Coefficients มีนัยสำคัญ, R² > 0.25=อธิบายได้ดี'
-       };
-       return criteria[method] || 'ตามเกณฑ์มาตรฐานทางสถิติ';
-   },
+// เพิ่มในส่วน getMethodCriteria
+getMethodCriteria: function(method) {
+    const criteria = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ข้อมูลสูญหาย < 5%, ไม่มีค่าผิดปกติที่รุนแรง, รูปแบบข้อมูลสอดคล้อง',
+        'Reliability Analysis': 'Alpha ≥ 0.70 ยอมรับได้, ≥ 0.80 ดี, ≥ 0.90 ดีมาก',
+        'Confirmatory Factor Analysis (CFA)': 'χ²/df < 3, CFI/TLI ≥ 0.95, RMSEA ≤ 0.08, SRMR ≤ 0.08',
+        'Structural Equation Modeling (SEM)': 'Model Fit ตามเกณฑ์, Path Coefficients มีนัยสำคัญ, R² > 0.25=อธิบายได้ดี',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'R² > 0.13=อธิบายได้, p < 0.05, VIF < 5 (ไม่มี Multicollinearity)',
+        'Logistic Regression': 'Model Chi-square มีนัยสำคัญ, Classification Accuracy > 70%, Hosmer-Lemeshow p > 0.05',
+        'MANOVA/MANCOVA Analysis': 'Wilks\' Lambda มีนัยสำคัญ, Box\'s M p > 0.001, Homogeneity of variance',
+        'Cluster Analysis (Basic)': 'Elbow Method, ความแตกต่างระหว่างกลุ่มชัดเจน, ขนาดกลุ่มสมเหตุสมผล',
+        'Cluster Analysis (Advanced)': 'Silhouette Coefficient > 0.5, Calinski-Harabasz Index สูง',
+        'Discriminant Analysis': 'Box\'s M p > 0.001, Classification Accuracy > 75%, Eigenvalue > 0.4',
+        'Conjoint Analysis': 'Kendall\'s tau > 0.7, R² > 0.8, Logical part-worth utilities',
+        'Time Series Analysis': 'MAPE < 10%=ดีมาก, 10-20%=ดี, 20-50%=พอใช้, Ljung-Box p > 0.05',
+        'Hierarchical Linear Modeling (HLM)': 'ICC > 0.05, Model fit better than null model, Random effects มีนัยสำคัญ',
+        'Latent Class Analysis (LCA)': 'BIC ต่ำที่สุด, Entropy > 0.8, Class sizes > 5% ของตัวอย่าง'
+    };
+    return criteria[method] || 'ตามเกณฑ์มาตรฐานทางสถิติ';
+},
 
-   getMethodCaution: function(method) {
-       const cautions = {
-           'Data Preparation': 'ระวังการลบข้อมูลมากเกินไป อาจส่งผลต่อความเป็นตัวแทนของกลุ่มตัวอย่าง',
-           'Reliability Analysis': 'หาก Alpha ต่ำเกินไป ต้องทบทวนข้อคำถามหรือลบข้อคำถามที่ไม่เหมาะสม',
-           'Confirmatory Factor Analysis (CFA)': 'การปรับแก้โมเดลต้องมีเหตุผลทางทฤษฎี ไม่ใช่เพียงเพื่อปรับปรุงค่าสถิติ',
-           'Structural Equation Modeling (SEM)': 'SEM ต้องการขนาดตัวอย่างใหญ่และโมเดลทฤษฎีที่แข็งแกร่ง'
-       };
-       return cautions[method] || 'ปฏิบัติตามหลักการทางสถิติอย่างเคร่งครัด';
-   }
+// เพิ่มในส่วน getMethodCaution
+getMethodCaution: function(method) {
+    const cautions = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ระวังการลบข้อมูลมากเกินไป อาจส่งผลต่อความเป็นตัวแทนของกลุ่มตัวอย่าง',
+        'Reliability Analysis': 'หาก Alpha ต่ำเกินไป ต้องทบทวนข้อคำถามหรือลบข้อคำถามที่ไม่เหมาะสม',
+        'Confirmatory Factor Analysis (CFA)': 'การปรับแก้โมเดลต้องมีเหตุผลทางทฤษฎี ไม่ใช่เพียงเพื่อปรับปรุงค่าสถิติ',
+        'Structural Equation Modeling (SEM)': 'SEM ต้องการขนาดตัวอย่างใหญ่และโมเดลทฤษฎีที่แข็งแกร่ง',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'ระวัง Multicollinearity, ตรวจสอบ Residuals และ Outliers',
+        'Logistic Regression': 'ต้องการขนาดตัวอย่างใหญ่, ระวัง Complete Separation ของข้อมูล',
+        'MANOVA/MANCOVA Analysis': 'ตัวแปรตามต้องมีความสัมพันธ์กัน แต่ไม่สูงเกินไป, ข้อมูลต้องเป็น Multivariate Normal',
+        'Cluster Analysis (Basic)': 'ผลลัพธ์ขึ้นกับการเลือกจำนวนกลุ่มและวิธีการวัดระยะห่าง',
+        'Cluster Analysis (Advanced)': 'ระวังการตีความกลุ่มที่ได้ ต้องมีความหมายในเชิงธุรกิจ',
+        'Discriminant Analysis': 'ข้อมูลต้องเป็น Multivariate Normal, กลุ่มต้องมี Covariance Matrix เท่ากัน',
+        'Conjoint Analysis': 'การออกแบบ Stimuli ต้องครอบคลุมและสมจริง, ระวังความซับซ้อนเกินไป',
+        'Time Series Analysis': 'ข้อมูลต้องมีความต่อเนื่อง, ระวัง Structural Breaks และ Seasonality',
+        'Hierarchical Linear Modeling (HLM)': 'ต้องมีข้อมูลเพียงพอในแต่ละระดับ, ระวัง Convergence Problems',
+        'Latent Class Analysis (LCA)': 'การตีความ Class ต้องสมเหตุสมผล, ระวัง Local Maxima ในการประมาณค่า'
+    };
+    return cautions[method] || 'ปฏิบัติตามหลักการทางสถิติอย่างเคร่งครัด';
+}
 };
 
 

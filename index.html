@@ -392,6 +392,125 @@ window.TheoryDatabase = {
         statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
         description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐาน และการควบคุมที่รับรู้ เหมาะสำหรับศึกษาพฤติกรรมผู้บริโภคออนไลน์'
     },
+    'customer_journey': {
+        id: 'customer_journey',
+        name: 'Customer Journey Theory',
+        author: 'Lemon & Verhoef (2016)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Awareness Stage', 'Consideration Stage', 'Purchase Stage', 'Retention Stage', 'Advocacy Stage'],
+        relationships: 'Awareness → Consideration → Purchase → Retention → Advocacy → Customer Lifetime Value',
+        prediction: 'การเข้าใจและปรับปรุงจุดสัมผัสในแต่ละขั้นตอนของการเดินทางของลูกค้าจะเพิ่มประสบการณ์และความพึงพอใจ',
+        keywords: ['customer', 'journey', 'touchpoint', 'experience', 'awareness', 'consideration', 'ลูกค้า', 'การเดินทาง', 'ประสบการณ์', 'จุดสัมผัส'],
+        statistics: ['Descriptive Statistics', 'Path Analysis', 'Customer Journey Mapping', 'Touchpoint Analysis'],
+        description: 'ทฤษฎีที่อธิบายกระบวนการและขั้นตอนต่างๆ ที่ลูกค้าผ่านตั้งแต่รู้จักแบรนด์จนกลายเป็นลูกค้าที่ภักดี รวมถึงจุดสัมผัสและประสบการณ์ในแต่ละขั้นตอน'
+    },
+    'marketing_mix_4p': {
+        id: 'marketing_mix_4p',
+        name: 'Marketing Mix 4P Theory',
+        author: 'McCarthy (1960)',
+        domain: 'digital_marketing',
+        level: 1,
+        factors: ['Product', 'Price', 'Place', 'Promotion'],
+        relationships: 'Product + Price + Place + Promotion → Marketing Strategy → Customer Satisfaction → Sales Performance',
+        prediction: 'การผสมผสานส่วนประกอบการตลาด 4 องค์ประกอบอย่างเหมาะสมจะส่งผลต่อความสำเร็จทางการตลาด',
+        keywords: ['marketing', 'mix', '4P', 'product', 'price', 'place', 'promotion', 'การตลาด', 'ผลิตภัณฑ์', 'ราคา', 'การส่งเสริม'],
+        statistics: ['Descriptive Statistics', 'Factor Analysis', 'Multiple Regression', 'ANOVA'],
+        description: 'ทฤษฎีการตลาดพื้นฐานที่อธิบายการใช้เครื่องมือการตลาด 4 องค์ประกอบหลัก เป็นรากฐานสำคัญของการวางแผนกลยุทธ์การตลาด'
+    },
+    'marketing_mix_7p': {
+        id: 'marketing_mix_7p',
+        name: 'Marketing Mix 7P Theory (Services Marketing)',
+        author: 'Booms & Bitner (1981)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Product', 'Price', 'Place', 'Promotion', 'People', 'Process', 'Physical Evidence'],
+        relationships: '4P + People + Process + Physical Evidence → Service Quality → Customer Experience → Loyalty',
+        prediction: 'การเพิ่ม 3P สำหรับธุรกิจบริการจะช่วยเพิ่มคุณภาพการบริการและประสบการณ์ลูกค้า',
+        keywords: ['marketing', 'mix', '7P', 'service', 'people', 'process', 'physical', 'evidence', 'การตลาด', 'บริการ', 'บุคลากร', 'กระบวนการ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Service Quality Analysis'],
+        description: 'ทฤษฎีการตลาดบริการที่ขยายจาก 4P โดยเพิ่มองค์ประกอบ People, Process และ Physical Evidence เพื่อให้เหมาะสมกับลักษณะของธุรกิจบริการ'
+    },
+    'brand_management': {
+        id: 'brand_management',
+        name: 'Brand Management Theory',
+        author: 'Keller (2013)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Brand Awareness', 'Brand Image', 'Brand Equity', 'Brand Loyalty', 'Brand Performance'],
+        relationships: 'Brand Awareness + Brand Image → Brand Equity → Brand Loyalty → Brand Performance → Financial Performance',
+        prediction: 'การสร้างและจัดการแบรนด์อย่างเป็นระบบจะส่งผลต่อคุณค่าแบรนด์และความภักดีของลูกค้า',
+        keywords: ['brand', 'management', 'awareness', 'image', 'equity', 'loyalty', 'แบรนด์', 'การจัดการ', 'ความรู้จัก', 'ภาพลักษณ์', 'ความภักดี'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Brand Equity Analysis', 'SEM'],
+        description: 'ทฤษฎีการจัดการแบรนด์ที่อธิบายการสร้างคุณค่าแบรนด์ผ่านการพัฒนาความรู้จัก ภาพลักษณ์ และความภักดีของลูกค้า'
+    },
+    'stp': {
+        id: 'stp',
+        name: 'STP Theory (Segmentation, Targeting, Positioning)',
+        author: 'Kotler & Keller (2016)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Market Segmentation', 'Target Market Selection', 'Market Positioning', 'Differentiation Strategy'],
+        relationships: 'Segmentation → Targeting → Positioning → Competitive Advantage → Market Performance',
+        prediction: 'การแบ่งกลุ่มตลาด เลือกกลุ่มเป้าหมาย และกำหนดตำแหน่งทางการตลาดที่ชัดเจนจะสร้างความได้เปรียบการแข่งขัน',
+        keywords: ['STP', 'segmentation', 'targeting', 'positioning', 'market', 'competitive', 'การแบ่งกลุ่ม', 'กลุ่มเป้าหมาย', 'ตำแหน่ง', 'ตลาด'],
+        statistics: ['Cluster Analysis', 'Discriminant Analysis', 'Perceptual Mapping', 'Market Segmentation Analysis'],
+        description: 'ทฤษฎีกลยุทธ์การตลาดที่อธิบายกระบวนการแบ่งกลุ่มตลาด การเลือกกลุ่มเป้าหมาย และการสร้างตำแหน่งทางการตลาดที่แตกต่าง'
+    },
+    'diffusion_innovation': {
+        id: 'diffusion_innovation',
+        name: 'Diffusion of Innovation Theory',
+        author: 'Rogers (2003)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Relative Advantage', 'Compatibility', 'Complexity', 'Trialability', 'Observability'],
+        relationships: 'Innovation Attributes → Adoption Decision → Implementation → Diffusion Process',
+        prediction: 'คุณลักษณะของนวัตกรรมจะส่งผลต่อความเร็วและระดับการยอมรับในสังคม',
+        keywords: ['innovation', 'diffusion', 'adoption', 'technology', 'spread', 'นวัตกรรม', 'การแพร่กระจาย', 'การยอมรับ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression', 'Adoption Analysis'],
+        description: 'ทฤษฎีที่อธิบายกระบวนการแพร่กระจายของนวัตกรรมในสังคม เหมาะสำหรับศึกษาการยอมรับเทคโนโลยีใหม่และผลิตภัณฑ์ดิจิทัล'
+    },
+    'trust_digital': {
+        id: 'trust_digital',
+        name: 'Trust Theory in Digital Environment',
+        author: 'McKnight et al. (2002)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Trust Propensity', 'Institution-Based Trust', 'Trusting Beliefs', 'Trusting Intentions'],
+        relationships: 'Trust Propensity + Institution Trust → Trusting Beliefs → Trusting Intentions → Risk-Taking Behavior',
+        prediction: 'ความไว้วางใจในสภาพแวดล้อมดิจิทัลจะส่งผลต่อพฤติกรรมการเสี่ยงและการตัดสินใจซื้อออนไลน์',
+        keywords: ['trust', 'digital', 'online', 'security', 'confidence', 'ความไว้วางใจ', 'ออนไลน์', 'ความปลอดภัย'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีที่อธิบายความไว้วางใจในสภาพแวดล้อมดิจิทัล เหมาะสำหรับศึกษาการซื้อขายออนไลน์และบริการดิจิทัล'
+    },
+    'ecommerce_adoption': {
+        id: 'ecommerce_adoption',
+        name: 'E-commerce Adoption Model',
+        author: 'Gefen & Straub (2000)',
+        domain: 'digital_marketing',
+        level: 3,
+        factors: ['Perceived Risk', 'Trust', 'Perceived Usefulness', 'Perceived Ease of Use', 'Purchase Intention'],
+        relationships: 'Trust + PU + PEOU - Perceived Risk → Purchase Intention → Purchase Behavior',
+        prediction: 'ความไว้วางใจ ประโยชน์ที่รับรู้ ความง่าย และความเสี่ยงที่รับรู้จะส่งผลต่อการซื้อขายออนไลน์',
+        keywords: ['ecommerce', 'adoption', 'online', 'purchase', 'trust', 'อีคอมเมิร์ซ', 'การซื้อขาย', 'ออนไลน์'],
+        statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+        description: 'ทฤษฎีที่อธิบายการยอมรับและการใช้งานระบบอีคอมเมิร์ซ โดยเน้นความไว้วางใจและความเสี่ยงที่รับรู้'
+    },
+    'social_commerce': {
+        id: 'social_commerce',
+        name: 'Social Commerce Theory',
+        author: 'Liang & Turban (2011)',
+        domain: 'digital_marketing',
+        level: 3,
+        factors: ['Social Support', 'Social Presence', 'Trust', 'Relationship Quality', 'Purchase Intention'],
+        relationships: 'Social Support + Social Presence → Trust + Relationship Quality → Purchase Intention',
+        prediction: 'การสนับสนุนทางสังคมและการรับรู้การมีอยู่ทางสังคมจะส่งผลต่อความไว้วางใจและความตั้งใจซื้อ',
+        keywords: ['social', 'commerce', 'media', 'community', 'relationship', 'สังคม', 'การค้า', 'ชุมชน', 'ความสัมพันธ์'],
+        statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM', 'Mediation Analysis'],
+        description: 'ทฤษฎีที่อธิบายการซื้อขายผ่านสื่อสังคมออนไลน์ โดยเน้นอิทธิพลของเครือข่ายสังคมต่อพฤติกรรมการซื้อ'
+    },
+
+    // ทุนทางสังคม (เก็บเดิม)
     'social_capital': {
         id: 'social_capital',
         name: 'Social Capital Theory',
@@ -405,6 +524,8 @@ window.TheoryDatabase = {
         statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
         description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ'
     },
+
+    // สาขาอื่นๆ (เก็บเดิม)
     'rbv': {
         id: 'rbv',
         name: 'Resource-Based View (RBV)',

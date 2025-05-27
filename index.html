@@ -264,14 +264,19 @@ window.DomainData = {
         ]
     },
     'project_management': {
-        name: 'บริหารโครงการ',
-        icon: '📊',
-        description: 'การจัดการโครงการ, Agile, Scrum',
-        examples: [
-            'วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการในองค์กร',
-            'ผลกระทบของ Agile Methodology ต่อประสิทธิภาพโครงการ',
-            'การจัดการความเสี่ยงในโครงการพัฒนาซอฟต์แวร์'
-        ]
+    name: 'บริหารโครงการ',
+    icon: '📊',
+    description: 'การจัดการโครงการ, Agile, Scrum, Risk Management, Quality Management',
+    examples: [
+        'วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการตามมาตรฐาน PMBOK',
+        'ผลกระทบของ Agile Methodology ต่อประสิทธิภาพและความพึงพอใจของทีมโครงการ',
+        'การจัดการความเสี่ยงในโครงการพัฒนาซอฟต์แวร์ด้วยหลัก Risk Management',
+        'การจัดการความเสี่ยงในโครงการพัฒนาซอฟต์แวร์ด้วยหลัก Risk Management',
+       'ศึกษาผลกระทบของภาวะผู้นำแบบ Transformational ต่อประสิทธิภาพทีมโครงการ',
+       'การประยุกต์ใช้ Earned Value Management (EVM) ในการควบคุมโครงการก่อสร้าง',
+       'ปัจจัยที่ส่งผลต่อการยอมรับการเปลี่ยนแปลงในโครงการดิจิทัลทรานส์ฟอร์เมชัน',
+       'การจัดการความรู้และการเรียนรู้จากบทเรียนในโครงการขนาดใหญ่' 
+    ]
     },
     'business_analytics': {
     name: 'วิเคราะห์ธุรกิจ',
@@ -362,6 +367,314 @@ window.LevelData = {
 
         // Theory Database (ตัวอย่าง 10 ทฤษฎีแรก - จะขยายเพิ่มเติม)
 window.TheoryDatabase = {
+    // บริหารโครงการ (ขยายเป็น 25 ทฤษฎี)
+
+// กลุ่มทฤษฎีบริหารจัดการและโครงการ (8 ทฤษฎี)
+'pmbok_theory': {
+    id: 'pmbok_theory',
+    name: 'Project Management Body of Knowledge (PMBOK)',
+    author: 'PMI (2021)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Scope Management', 'Time Management', 'Cost Management', 'Quality Management', 'Resource Management', 'Communication Management', 'Risk Management', 'Procurement Management', 'Stakeholder Management', 'Integration Management'],
+    relationships: '10 Knowledge Areas → Project Processes → Project Success → Stakeholder Satisfaction',
+    prediction: 'การปฏิบัติตามมาตรฐาน PMBOK จะเพิ่มโอกาสความสำเร็จของโครงการ',
+    keywords: ['PMBOK', 'project', 'management', 'scope', 'time', 'cost', 'quality', 'โครงการ', 'การจัดการ', 'ขอบเขต'],
+    statistics: ['Descriptive Statistics', 'Performance Measurement', 'Success Factor Analysis', 'Maturity Assessment'],
+    description: 'มาตรฐานการบริหารโครงการสากลที่ครอบคลุม 10 สาขาความรู้และ 5 กลุ่มกระบวนการ'
+},
+'agile_theory': {
+    id: 'agile_theory',
+    name: 'Agile Project Management Theory',
+    author: 'Beck et al. (2001)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Iterative Development', 'Customer Collaboration', 'Responding to Change', 'Working Product', 'Team Empowerment'],
+    relationships: 'Agile Principles → Iterative Delivery → Customer Feedback → Continuous Improvement → Project Success',
+    prediction: 'การพัฒนาแบบ Agile จะเพิ่มความยืดหยุ่นและการตอบสนองต่อการเปลี่ยนแปลง',
+    keywords: ['agile', 'iterative', 'collaboration', 'change', 'flexibility', 'คล่องตัว', 'ทำซ้ำ', 'ความร่วมมือ'],
+    statistics: ['Descriptive Statistics', 'Performance Metrics', 'Velocity Analysis', 'Sprint Retrospective Analysis'],
+    description: 'วิธีการบริหารโครงการที่เน้นความยืดหยุ่น การทำงานแบบวนซ้ำ และการตอบสนองการเปลี่ยนแปลง'
+},
+'scrum_theory': {
+    id: 'scrum_theory',
+    name: 'Scrum Theory',
+    author: 'Schwaber & Sutherland (2020)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Sprint Planning', 'Daily Scrum', 'Sprint Review', 'Sprint Retrospective', 'Product Backlog', 'Scrum Team'],
+    relationships: 'Scrum Events + Artifacts + Roles → Empirical Process → Transparency → Adaptation → Value Delivery',
+    prediction: 'การใช้ Scrum Framework จะเพิ่มประสิทธิภาพการทำงานเป็นทีมและการส่งมอบคุณค่า',
+    keywords: ['scrum', 'sprint', 'backlog', 'team', 'empirical', 'สกรัม', 'สปรินต์', 'ทีม'],
+    statistics: ['Sprint Metrics', 'Velocity Tracking', 'Burndown Analysis', 'Team Performance Analysis'],
+    description: 'กรอบการทำงานแบบ Agile ที่เน้นการทำงานเป็นทีม การตรวจสอบ และการปรับตัว'
+},
+'theory_of_constraints': {
+    id: 'theory_of_constraints',
+    name: 'Theory of Constraints (TOC)',
+    author: 'Goldratt (1984)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Constraint Identification', 'Constraint Exploitation', 'Subordination', 'Constraint Elevation', 'Process Iteration'],
+    relationships: 'Constraint Identification → Optimization → System Improvement → Performance Enhancement',
+    prediction: 'การจัดการข้อจำกัดอย่างเป็นระบบจะเพิ่มประสิทธิภาพโดยรวมของโครงการ',
+    keywords: ['constraints', 'bottleneck', 'optimization', 'throughput', 'ข้อจำกัด', 'คอขวด', 'การเพิ่มประสิทธิภาพ'],
+    statistics: ['Bottleneck Analysis', 'Throughput Measurement', 'Performance Optimization'],
+    description: 'ทฤษฎีที่มุ่งเน้นการระบุและจัดการข้อจำกัดที่สำคัญที่สุดในระบบ'
+},
+'critical_chain_theory': {
+    id: 'critical_chain_theory',
+    name: 'Critical Chain Theory',
+    author: 'Goldratt (1997)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Critical Chain', 'Resource Constraints', 'Project Buffer', 'Feeding Buffer', 'Multitasking Elimination'],
+    relationships: 'Resource Constraints → Critical Chain → Buffer Management → Project Completion → Time Optimization',
+    prediction: 'การจัดการ Critical Chain และ Buffer จะช่วยลดเวลาโครงการและเพิ่มความน่าเชื่อถือ',
+    keywords: ['critical', 'chain', 'buffer', 'resource', 'constraints', 'มิติวิกฤต', 'ทรัพยากร', 'ข้อจำกัด'],
+    statistics: ['Critical Path Analysis', 'Resource Utilization', 'Buffer Management Analysis'],
+    description: 'การบริหารโครงการที่เน้นการจัดการทรัพยากรและเวลาผ่าน Critical Chain และ Buffer'
+},
+'earned_value_management': {
+    id: 'earned_value_management',
+    name: 'Earned Value Management Theory (EVM)',
+    author: 'Fleming & Koppelman (2010)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Planned Value (PV)', 'Earned Value (EV)', 'Actual Cost (AC)', 'Schedule Performance Index (SPI)', 'Cost Performance Index (CPI)'],
+    relationships: 'PV + EV + AC → Performance Indices → Variance Analysis → Corrective Actions → Project Control',
+    prediction: 'การใช้ EVM จะช่วยติดตามและควบคุมประสิทธิภาพโครงการด้านเวลาและต้นทุนได้แม่นยำ',
+    keywords: ['earned', 'value', 'performance', 'cost', 'schedule', 'control', 'ค่าที่ได้รับ', 'ประสิทธิภาพ'],
+    statistics: ['Performance Measurement', 'Variance Analysis', 'Forecasting Models', 'Trend Analysis'],
+    description: 'วิธีการวัดและควบคุมประสิทธิภาพโครงการด้านเวลา ต้นทุน และขอบเขตงาน'
+},
+'systems_theory_pm': {
+    id: 'systems_theory_pm',
+    name: 'Systems Theory in Project Management',
+    author: 'Bertalanffy (1968)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['System Components', 'Interactions', 'Environment', 'Feedback Loops', 'Emergent Properties'],
+    relationships: 'System Components → Interactions → Emergent Behavior → Project Outcomes → System Optimization',
+    prediction: 'การมองโครงการเป็นระบบจะช่วยเข้าใจความซับซ้อนและปฏิสัมพันธ์ต่างๆ',
+    keywords: ['systems', 'theory', 'components', 'interactions', 'holistic', 'ระบบ', 'องค์ประกอบ', 'ปฏิสัมพันธ์'],
+    statistics: ['Systems Analysis', 'Network Analysis', 'Complexity Measurement'],
+    description: 'การมองโครงการเป็นระบบที่ประกอบด้วยองค์ประกอบที่เชื่อมโยงและมีปฏิสัมพันธ์กัน'
+},
+'contingency_theory_pm': {
+    id: 'contingency_theory_pm',
+    name: 'Contingency Theory in Project Management',
+    author: 'Fiedler (1967)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Project Context', 'Environmental Factors', 'Management Approach', 'Situational Variables', 'Adaptive Strategy'],
+    relationships: 'Project Context → Situational Analysis → Management Approach → Performance Outcomes',
+    prediction: 'การเลือกวิธีการบริหารโครงการต้องเหมาะสมกับสถานการณ์และบริบทเฉพาะ',
+    keywords: ['contingency', 'situational', 'context', 'adaptive', 'environment', 'สถานการณ์', 'บริบท', 'การปรับตัว'],
+    statistics: ['Situational Analysis', 'Context Assessment', 'Adaptive Management Metrics'],
+    description: 'ทฤษฎีที่เน้นการปรับวิธีการบริหารโครงการให้เหมาะสมกับสถานการณ์และบริบท'
+},
+
+// กลุ่มทฤษฎีด้านพฤติกรรมองค์การและภาวะผู้นำ (6 ทฤษฎี)
+'transformational_leadership_pm': {
+    id: 'transformational_leadership_pm',
+    name: 'Transformational Leadership in Projects',
+    author: 'Bass (1985)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Idealized Influence', 'Inspirational Motivation', 'Intellectual Stimulation', 'Individual Consideration'],
+    relationships: 'Transformational Leadership → Team Motivation → Innovation → Project Performance → Success',
+    prediction: 'ภาวะผู้นำการเปลี่ยนแปลงจะเพิ่มแรงจูงใจและประสิทธิภาพของทีมโครงการ',
+    keywords: ['transformational', 'leadership', 'motivation', 'innovation', 'influence', 'ภาวะผู้นำ', 'แรงจูงใจ'],
+    statistics: ['Leadership Assessment', 'Team Performance Metrics', 'Motivation Analysis'],
+    description: 'การประยุกต์ภาวะผู้นำการเปลี่ยนแปลงในการบริหารทีมโครงการ'
+},
+'transactional_leadership_pm': {
+    id: 'transactional_leadership_pm',
+    name: 'Transactional Leadership in Projects',
+    author: 'Burns (1978)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Contingent Reward', 'Management by Exception', 'Corrective Actions', 'Performance Monitoring'],
+    relationships: 'Clear Expectations → Performance Monitoring → Rewards/Corrections → Goal Achievement',
+    prediction: 'ภาวะผู้นำแบบแลกเปลี่ยนจะช่วยควบคุมและรักษามาตรฐานการปฏิบัติงานในโครงการ',
+    keywords: ['transactional', 'leadership', 'reward', 'monitoring', 'control', 'การแลกเปลี่ยน', 'รางวัล', 'การควบคุม'],
+    statistics: ['Performance Monitoring', 'Reward System Analysis', 'Control Metrics'],
+    description: 'การนำภาวะผู้นำแบบแลกเปลี่ยนมาใช้ในการควบคุมและจูงใจทีมโครงการ'
+},
+'situational_leadership_pm': {
+    id: 'situational_leadership_pm',
+    name: 'Situational Leadership in Projects',
+    author: 'Hersey & Blanchard (1969)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Task Behavior', 'Relationship Behavior', 'Follower Readiness', 'Leadership Style Adaptation'],
+    relationships: 'Follower Readiness → Leadership Style Selection → Appropriate Guidance → Performance Improvement',
+    prediction: 'การปรับรูปแบบภาวะผู้นำตามความพร้อมของทีมจะเพิ่มประสิทธิภาพการทำงาน',
+    keywords: ['situational', 'leadership', 'readiness', 'adaptation', 'style', 'สถานการณ์', 'ความพร้อม', 'การปรับตัว'],
+    statistics: ['Readiness Assessment', 'Leadership Style Analysis', 'Performance Correlation'],
+    description: 'การปรับรูปแบบภาวะผู้นำให้เหมาะสมกับระดับความพร้อมของสมาชิกทีม'
+},
+'team_development_model': {
+    id: 'team_development_model',
+    name: "Tuckman's Team Development Model",
+    author: 'Tuckman (1965)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Forming', 'Storming', 'Norming', 'Performing', 'Adjourning'],
+    relationships: 'Forming → Storming → Norming → Performing → Team Effectiveness → Project Success',
+    prediction: 'การเข้าใจและจัดการขั้นตอนการพัฒนาทีมจะเพิ่มประสิทธิภาพการทำงานร่วมกัน',
+    keywords: ['team', 'development', 'forming', 'storming', 'norming', 'performing', 'ทีม', 'การพัฒนา'],
+    statistics: ['Team Development Assessment', 'Stage Analysis', 'Performance Tracking'],
+    description: 'แบบจำลองการพัฒนาทีมงาน 5 ขั้นตอนที่อธิบายวิวัฒนาการของทีมโครงการ'
+},
+'stakeholder_theory_pm': {
+    id: 'stakeholder_theory_pm',
+    name: 'Stakeholder Theory in Projects',
+    author: 'Freeman (1984)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Stakeholder Identification', 'Power Analysis', 'Interest Assessment', 'Engagement Strategy', 'Relationship Management'],
+    relationships: 'Stakeholder Analysis → Engagement Strategy → Relationship Building → Support → Project Success',
+    prediction: 'การจัดการผู้มีส่วนได้ส่วนเสียอย่างมีประสิทธิภาพจะเพิ่มโอกาสความสำเร็จของโครงการ',
+    keywords: ['stakeholder', 'engagement', 'power', 'interest', 'relationship', 'ผู้มีส่วนได้ส่วนเสีย', 'การมีส่วนร่วม'],
+    statistics: ['Stakeholder Analysis', 'Engagement Metrics', 'Influence Network Analysis'],
+    description: 'การระบุ วิเคราะห์ และจัดการความสัมพันธ์กับผู้มีส่วนได้ส่วนเสียในโครงการ'
+},
+'emotional_intelligence_pm': {
+    id: 'emotional_intelligence_pm',
+    name: 'Emotional Intelligence in Project Management',
+    author: 'Goleman (1995)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Self-Awareness', 'Self-Regulation', 'Motivation', 'Empathy', 'Social Skills'],
+    relationships: 'EI Components → Better Communication → Team Relationships → Conflict Resolution → Project Success',
+    prediction: 'ผู้บริหารโครงการที่มี EQ สูงจะสามารถจัดการทีมและความขัดแย้งได้ดีขึ้น',
+    keywords: ['emotional', 'intelligence', 'EQ', 'communication', 'relationship', 'ปัญญาอารมณ์', 'การสื่อสาร'],
+    statistics: ['EQ Assessment', 'Communication Effectiveness', 'Team Relationship Analysis'],
+    description: 'การประยุกต์ใช้ปัญญาอารมณ์ในการบริหารโครงการและจัดการทีมงาน'
+},
+
+// กลุ่มทฤษฎีการจัดการความเสี่ยง การเปลี่ยนแปลง และคุณภาพ (5 ทฤษฎี)
+'risk_management_theory_pm': {
+    id: 'risk_management_theory_pm',
+    name: 'Risk Management Theory in Projects',
+    author: 'PMI (2019)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Risk Identification', 'Risk Analysis', 'Risk Response', 'Risk Monitoring', 'Risk Culture'],
+    relationships: 'Risk Identification → Analysis → Response Planning → Implementation → Monitoring → Control',
+    prediction: 'การบริหารความเสี่ยงอย่างเป็นระบบจะลดผลกระทบและเพิ่มโอกาสความสำเร็จ',
+    keywords: ['risk', 'management', 'identification', 'analysis', 'response', 'ความเสี่ยง', 'การจัดการ'],
+    statistics: ['Risk Assessment', 'Probability Analysis', 'Impact Assessment', 'Monte Carlo Simulation'],
+    description: 'กระบวนการระบุ วิเคราะห์ ตอบสนอง และควบคุมความเสี่ยงในโครงการ'
+},
+'kotter_8_step': {
+    id: 'kotter_8_step',
+    name: "Kotter's 8-Step Change Theory",
+    author: 'Kotter (1995)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Urgency', 'Coalition', 'Vision', 'Communication', 'Empowerment', 'Quick Wins', 'Sustaining', 'Anchoring'],
+    relationships: '8 Steps → Change Implementation → Organizational Transformation → Sustainable Change',
+    prediction: 'การปฏิบัติตาม 8 ขั้นตอนจะเพิ่มโอกาสความสำเร็จของการเปลี่ยนแปลง',
+    keywords: ['change', 'management', 'transformation', 'kotter', '8step', 'การเปลี่ยนแปลง', 'การจัดการ'],
+    statistics: ['Change Readiness Assessment', 'Implementation Tracking', 'Success Metrics'],
+    description: 'แบบจำลอง 8 ขั้นตอนสำหรับการบริหารการเปลี่ยนแปลงในองค์กร'
+},
+'lewin_change_theory': {
+    id: 'lewin_change_theory',
+    name: "Lewin's Change Management Theory",
+    author: 'Lewin (1951)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Unfreezing', 'Moving', 'Refreezing', 'Force Field Analysis', 'Change Resistance'],
+    relationships: 'Unfreezing → Moving (Change) → Refreezing → Sustainable New State',
+    prediction: 'การจัดการการเปลี่ยนแปลงใน 3 ขั้นตอนจะช่วยลดความต้านทานและสร้างความยั่งยืน',
+    keywords: ['lewin', 'change', 'unfreezing', 'moving', 'refreezing', 'การละลาย', 'การเคลื่อนไหว'],
+    statistics: ['Force Field Analysis', 'Resistance Measurement', 'Change Effectiveness'],
+    description: 'แบบจำลองการเปลี่ยนแปลง 3 ขั้นตอน: การละลาย การเคลื่อนไหว และการแข็งตัวใหม่'
+},
+'tqm_theory': {
+    id: 'tqm_theory',
+    name: 'Total Quality Management (TQM) Theory',
+    author: 'Deming (1986)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Customer Focus', 'Continuous Improvement', 'Employee Involvement', 'Process Approach', 'Strategic Approach'],
+    relationships: 'TQM Principles → Quality Culture → Process Improvement → Customer Satisfaction → Business Excellence',
+    prediction: 'การประยุกต์หลัก TQM จะเพิ่มคุณภาพผลผลิตและประสิทธิภาพโครงการ',
+    keywords: ['TQM', 'quality', 'continuous', 'improvement', 'customer', 'คุณภาพ', 'การปรับปรุง', 'ลูกค้า'],
+    statistics: ['Quality Metrics', 'Customer Satisfaction', 'Process Performance', 'Improvement Tracking'],
+    description: 'แนวทางการจัดการคุณภาพแบบองค์รวมที่เน้นการปรับปรุงอย่างต่อเนื่อง'
+},
+'six_sigma_theory': {
+    id: 'six_sigma_theory',
+    name: 'Six Sigma Theory',
+    author: 'Motorola (1986)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['DMAIC Process', 'Statistical Methods', 'Defect Reduction', 'Process Variation', 'Data-Driven Decisions'],
+    relationships: 'DMAIC → Statistical Analysis → Process Improvement → Defect Reduction → Quality Excellence',
+    prediction: 'การใช้วิธีการ Six Sigma จะลดข้อบกพร่องและเพิ่มคุณภาพกระบวนการ',
+    keywords: ['six', 'sigma', 'DMAIC', 'quality', 'defect', 'statistical', 'สิกซ์ซิกม่า', 'คุณภาพ'],
+    statistics: ['Statistical Process Control', 'Defect Analysis', 'Process Capability', 'DMAIC Metrics'],
+    description: 'วิธีการปรับปรุงคุณภาพที่ใช้เครื่องมือทางสถิติเพื่อลดความผันแปรและข้อบกพร่อง'
+},
+
+// กลุ่มทฤษฎีองค์ความรู้และการเรียนรู้ในองค์กร (4 ทฤษฎี)
+'knowledge_management_pm': {
+    id: 'knowledge_management_pm',
+    name: 'Knowledge Management Theory in Projects',
+    author: 'Nonaka & Takeuchi (1995)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Knowledge Creation', 'Knowledge Capture', 'Knowledge Sharing', 'Knowledge Application', 'Lessons Learned'],
+    relationships: 'Knowledge Creation → Capture → Sharing → Application → Organizational Learning → Project Improvement',
+    prediction: 'การจัดการความรู้จะช่วยเพิ่มประสิทธิภาพและลดความผิดพลาดในโครงการ',
+    keywords: ['knowledge', 'management', 'sharing', 'learning', 'lessons', 'ความรู้', 'การจัดการ', 'การแบ่งปัน'],
+    statistics: ['Knowledge Audit', 'Sharing Effectiveness', 'Learning Metrics', 'Knowledge Application'],
+    description: 'การจัดการความรู้ในโครงการเพื่อการเรียนรู้และปรับปรุงอย่างต่อเนื่อง'
+},
+'organizational_learning_pm': {
+    id: 'organizational_learning_pm',
+    name: 'Organizational Learning Theory in Projects',
+    author: 'Argyris & Schön (1978)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Single-loop Learning', 'Double-loop Learning', 'Deutero Learning', 'Mental Models', 'Shared Vision'],
+    relationships: 'Experience → Reflection → Learning → Knowledge → Improved Performance → Capability Building',
+    prediction: 'การเรียนรู้ระดับองค์กรจะเพิ่มขีดความสามารถในการบริหารโครงการ',
+    keywords: ['organizational', 'learning', 'reflection', 'mental', 'models', 'องค์กร', 'การเรียนรู้', 'การสะท้อน'],
+    statistics: ['Learning Assessment', 'Capability Measurement', 'Knowledge Transfer Analysis'],
+    description: 'การเรียนรู้ระดับองค์กรผ่านประสบการณ์และการสะท้อนผลจากโครงการ'
+},
+'dynamic_capabilities_pm': {
+    id: 'dynamic_capabilities_pm',
+    name: 'Dynamic Capabilities Theory in Projects',
+    author: 'Teece et al. (1997)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Sensing Capabilities', 'Seizing Capabilities', 'Transforming Capabilities', 'Learning Orientation', 'Innovation Capability'],
+    relationships: 'Dynamic Capabilities → Adaptation → Innovation → Competitive Advantage → Superior Performance',
+    prediction: 'ความสามารถพลวัตรจะช่วยให้องค์กรปรับตัวและจัดการโครงการในสภาพแวดล้อมที่เปลี่ยนแปลง',
+    keywords: ['dynamic', 'capabilities', 'adaptation', 'innovation', 'transformation', 'ความสามารถพลวัตร'],
+    statistics: ['Capability Assessment', 'Adaptation Metrics', 'Innovation Measurement'],
+    description: 'ความสามารถในการรับรู้ จับโอกาส และปรับเปลี่ยนเพื่อรักษาความได้เปรียบ'
+},
+'absorptive_capacity_pm': {
+    id: 'absorptive_capacity_pm',
+    name: 'Absorptive Capacity Theory in Projects',
+    author: 'Cohen & Levinthal (1990)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Prior Knowledge', 'Acquisition', 'Assimilation', 'Transformation', 'Exploitation'],
+    relationships: 'Prior Knowledge → Knowledge Acquisition → Assimilation → Transformation → Innovation → Performance',
+    prediction: 'ความสามารถในการดูดซับความรู้จะเพิ่มนวัตกรรมและประสิทธิภาพโครงการ',
+    keywords: ['absorptive', 'capacity', 'knowledge', 'acquisition', 'innovation', 'การดูดซับ', 'ความรู้', 'นวัตกรรม'],
+    statistics: ['Knowledge Absorption Metrics', 'Innovation Output', 'Learning Efficiency'],
+    description: 'ความสามารถในการรับรู้ ดูดซับ และประยุกต์ความรู้ภายนอกเพื่อสร้างนวัตกรรม'
+},      
     // การตลาดดิจิทัล
     'tam': {
         id: 'tam',
@@ -1747,8 +2060,20 @@ window.ResultsRenderers = {
         'Conjoint Analysis': 'วิเคราะห์การให้น้ำหนักคุณลักษณะต่างๆ ของผลิตภัณฑ์โดยผู้บริโภค',
         'Time Series Analysis': 'วิเคราะห์ข้อมูลที่เรียงตามลำดับเวลา เพื่อหาแนวโน้มและทำการพยากรณ์',
         'Hierarchical Linear Modeling (HLM)': 'วิเคราะห์ข้อมูลที่มีโครงสร้างแบบลำดับชั้น เช่น พนักงานในแผนก ในองค์กร',
-        'Latent Class Analysis (LCA)': 'ค้นหากลุ่มซ่อนเร้น (Latent Class) ในข้อมูลเชิงพฤติกรรมหรือทัศนคติ'
-    };
+        'Latent Class Analysis (LCA)': 'ค้นหากลุ่มซ่อนเร้น (Latent Class) ในข้อมูลเชิงพฤติกรรมหรือทัศนคติ',
+       
+        // เพิ่มสถิติเฉพาะทางบริหารโครงการ
+        'Project Performance Measurement': 'วัดและประเมินประสิทธิภาพของโครงการด้วยตัวชี้วัดที่หลากหลาย',
+        'Earned Value Analysis': 'วิเคราะห์ค่าที่ได้รับจากการลงทุนในโครงการเปรียบเทียบกับแผน',
+        'Critical Path Analysis': 'วิเคราะห์เส้นทางวิกฤตเพื่อจัดการเวลาและทรัพยากรในโครงการ',
+        'Risk Assessment Models': 'แบบจำลองการประเมินความเสี่ยงเฉพาะสำหรับโครงการ',
+        'Stakeholder Analysis': 'วิเคราะห์ผู้มีส่วนได้ส่วนเสียและระดับอิทธิพลในโครงการ',
+        'Team Performance Analysis': 'วิเคราะห์ประสิทธิภาพการทำงานของทีมโครงการ',
+        'Quality Metrics Analysis': 'วิเคราะห์ตัวชี้วัดคุณภาพของผลผลิตและกระบวนการ',
+        'Change Management Metrics': 'วัดผลการจัดการการเปลี่ยนแปลงในโครงการ',
+        'Knowledge Transfer Assessment': 'ประเมินประสิทธิภาพการถ่ายทอดความรู้ในโครงการ',
+        'Agile Metrics Analysis': 'วิเคราะห์ตัวชี้วัดเฉพาะสำหรับโครงการแบบ Agile เช่น Velocity, Burndown'
+};
     return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
 },
 

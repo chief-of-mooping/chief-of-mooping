@@ -1017,9 +1017,82 @@ window.TheoryDatabase = {
     keywords: ['data', 'driven', 'decision', 'making', 'analytics', 'performance', 'ข้อมูล', 'การตัดสินใจ', 'ประสิทธิภาพ'],
     statistics: ['Descriptive Statistics', 'Performance Metrics', 'Decision Analysis', 'Impact Assessment'],
     description: 'ทฤษฎีการตัดสินใจที่อิงข้อมูลเพื่อเพิ่มประสิทธิภาพและความแม่นยำ'
-}    
-};
+},
+    // 1. Comparative Advantage Theory
+'comparative_advantage': {
+    id: 'comparative_advantage',
+    name: 'Comparative Advantage Theory',
+    author: 'David Ricardo (1817)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Opportunity Cost', 'Production Efficiency', 'Resource Allocation', 'Trade Specialization', 'Economic Gains'],
+    relationships: 'Opportunity Cost Differences → Specialization → Trade → Mutual Economic Gains → Increased Welfare',
+    prediction: 'ประเทศที่มีต้นทุนเสียโอกาสต่ำกว่าในการผลิตสินค้าใดสินค้าหนึ่งควรเชี่ยวชาญผลิตสินค้านั้นเพื่อการค้าที่มีประสิทธิภาพ',
+    keywords: ['comparative', 'advantage', 'trade', 'specialization', 'opportunity', 'cost', 'ความได้เปรียบ', 'การค้า', 'การเชี่ยวชาญ', 'ต้นทุนเสียโอกาส'],
+    statistics: ['Descriptive Statistics', 'Comparative Analysis', 'Trade Performance Metrics', 'Export-Import Ratio Analysis'],
+    description: 'ทฤษฎีพื้นฐานการค้าระหว่างประเทศที่อธิบายว่าประเทศควรเชี่ยวชาญผลิตสินค้าที่มีความได้เปรียบเชิงเปรียบเทียบ แม้จะไม่มีความได้เปรียบสัมบูรณ์'
+},
 
+// 2. Heckscher-Ohlin Theory (H-O Model)
+'heckscher_ohlin': {
+    id: 'heckscher_ohlin',
+    name: 'Heckscher-Ohlin Theory (H-O Model)',
+    author: 'Eli Heckscher & Bertil Ohlin (1919-1933)',
+    domain: 'international_trade',
+    level: 3,
+    factors: ['Factor Endowments', 'Capital Intensity', 'Labor Intensity', 'Technology Level', 'Factor Price Equalization'],
+    relationships: 'Factor Endowments → Production Patterns → Trade Patterns → Factor Price Convergence → Economic Efficiency',
+    prediction: 'ประเทศจะส่งออกสินค้าที่ใช้ปัจจัยการผลิตที่ตนมีในปริมาณมากและมีราคาถูก และนำเข้าสินค้าที่ใช้ปัจจัยการผลิตที่ตนมีน้อย',
+    keywords: ['heckscher', 'ohlin', 'factor', 'endowments', 'capital', 'labor', 'intensive', 'ปัจจัยการผลิต', 'เงินทุน', 'แรงงาน'],
+    statistics: ['Factor Analysis', 'Correlation Analysis', 'Multiple Regression', 'Comparative Economics Analysis', 'Trade Pattern Analysis'],
+    description: 'ทฤษฎีที่อธิบายรูปแบบการค้าระหว่างประเทศโดยอิงจากความแตกต่างของปัจจัยการผลิต (เงินทุน แรงงาน ทรัพยากรธรรมชาติ) ที่แต่ละประเทศมี'
+},
+
+// 3. Eclectic Paradigm (OLI Framework)
+'eclectic_paradigm': {
+    id: 'eclectic_paradigm',
+    name: 'Eclectic Paradigm (OLI Framework)',
+    author: 'John Dunning (1977)',
+    domain: 'international_trade',
+    level: 3,
+    factors: ['Ownership Advantages', 'Location Advantages', 'Internalization Advantages', 'FDI Decision', 'Market Entry Mode'],
+    relationships: 'O + L + I Advantages → FDI Decision → Entry Mode Selection → International Business Performance',
+    prediction: 'บริษัทจะลงทุนโดยตรงในต่างประเทศเมื่อมีความได้เปรียบด้านเจ้าของ สถานที่ และการควบคุมภายในพร้อมกัน',
+    keywords: ['eclectic', 'OLI', 'ownership', 'location', 'internalization', 'FDI', 'multinational', 'การลงทุนโดยตรง', 'บริษัทข้ามชาติ'],
+    statistics: ['Multiple Regression Analysis', 'Logistic Regression', 'Factor Analysis', 'Decision Tree Analysis', 'Performance Measurement'],
+    description: 'กรอบแนวคิดที่อธิบายการตัดสินใจลงทุนโดยตรงในต่างประเทศ (FDI) ของบริษัทข้ามชาติโดยใช้ 3 ปัจจัยหลัก: Ownership, Location, และ Internalization'
+},
+
+// 4. Uppsala Internationalization Model
+'uppsala_model': {
+    id: 'uppsala_model',
+    name: 'Uppsala Internationalization Model',
+    author: 'Johanson & Vahlne (1977)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Market Knowledge', 'Market Commitment', 'Psychic Distance', 'Experiential Learning', 'Incremental Steps'],
+    relationships: 'Market Knowledge → Commitment Decisions → Market Operations → Experience → Increased Knowledge → Further Commitment',
+    prediction: 'บริษัทจะขยายธุรกิจไปต่างประเทศแบบค่อยเป็นค่อยไป โดยเริ่มจากประเทศที่มีความใกล้เคียงทางวัฒนธรรมและภาษา',
+    keywords: ['uppsala', 'internationalization', 'psychic', 'distance', 'incremental', 'learning', 'การขยายตัวต่างประเทศ', 'การเรียนรู้', 'ระยะห่างทางจิตใจ'],
+    statistics: ['Stage Analysis', 'Longitudinal Analysis', 'Path Analysis', 'Learning Curve Analysis', 'Market Entry Sequence Analysis'],
+    description: 'แบบจำลองที่อธิบายกระบวนการขยายธุรกิจไปต่างประเทศแบบค่อยเป็นค่อยไป โดยเน้นการเรียนรู้จากประสบการณ์และการลดความเสี่ยง'
+},
+
+// 5. Porter's Diamond Model
+'porters_diamond': {
+    id: 'porters_diamond',
+    name: "Porter's Diamond Model (National Competitive Advantage)",
+    author: 'Michael Porter (1990)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Factor Conditions', 'Demand Conditions', 'Related Supporting Industries', 'Firm Strategy & Rivalry', 'Government Role', 'Chance Events'],
+    relationships: 'Factor Conditions + Demand Conditions + Supporting Industries + Strategy/Rivalry → National Competitive Advantage → International Success',
+    prediction: 'ความสามารถในการแข่งขันของอุตสาหกรรมในระดับประเทศขึ้นอยู่กับปฏิสัมพันธ์ของปัจจัย 4 ด้านหลักในรูปแบบเพชร',
+    keywords: ['porter', 'diamond', 'competitive', 'advantage', 'national', 'competitiveness', 'industry', 'cluster', 'ความได้เปรียบการแข่งขัน', 'ระดับประเทศ', 'อุตสาหกรรม'],
+    statistics: ['Competitive Analysis', 'Industry Analysis', 'Factor Analysis', 'Cluster Analysis', 'Performance Benchmarking'],
+    description: 'แบบจำลองเพชรที่อธิบายปัจจัยที่ทำให้ประเทศหรืออุตสาหกรรมมีความสามารถในการแข่งขันในตลาดโลก ผ่าน 4 ปัจจัยหลักที่เชื่อมโยงกัน'
+}
+};
 
         // Utility Functions
 window.AppUtils = {

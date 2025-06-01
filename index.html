@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการฟาร์มสุกร - เวอร์ชันเต็ม</title>
+    <title>ระบบจัดการฟาร์มสุกร - พร้อมระบบสต็อก</title>
     <style>
         * {
             margin: 0;
@@ -38,11 +38,6 @@
             margin-bottom: 10px;
         }
 
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
         .nav-tabs {
             display: flex;
             background: white;
@@ -54,12 +49,12 @@
 
         .nav-tab {
             flex: 1;
-            padding: 18px 20px;
+            padding: 18px 15px;
             text-align: center;
             cursor: pointer;
             border: none;
             background: white;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             transition: all 0.3s;
         }
@@ -133,11 +128,6 @@
             border-color: #3498db;
         }
 
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
         .btn {
             padding: 12px 25px;
             border: none;
@@ -155,17 +145,9 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #2980b9;
-        }
-
         .btn-success {
             background: #27ae60;
             color: white;
-        }
-
-        .btn-success:hover {
-            background: #229954;
         }
 
         .btn-danger {
@@ -173,8 +155,9 @@
             color: white;
         }
 
-        .btn-danger:hover {
-            background: #c0392b;
+        .btn-warning {
+            background: #f39c12;
+            color: white;
         }
 
         .btn-secondary {
@@ -182,8 +165,136 @@
             color: white;
         }
 
-        .btn-secondary:hover {
-            background: #7f8c8d;
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .stock-item.low-stock {
+            border-color: #f39c12;
+            background: #fef9e7;
+        }
+
+        .stock-item.out-of-stock {
+            border-color: #e74c3c;
+            background: #fdedec;
+        }
+
+        .stock-info {
+            flex: 1;
+        }
+
+        .stock-name {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .stock-details {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .stock-status {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .stock-status.normal {
+            color: #27ae60;
+        }
+
+        .stock-status.low {
+            color: #f39c12;
+        }
+
+        .stock-status.empty {
+            color: #e74c3c;
+        }
+
+        .stock-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .usage-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .usage-history {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
         }
 
         .stats-grid {
@@ -213,85 +324,6 @@
             color: #7f8c8d;
         }
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .table th {
-            background: #34495e;
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .supply-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
-
-        .supply-info {
-            flex: 1;
-        }
-
-        .supply-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .supply-details {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .supply-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 14px;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -305,18 +337,16 @@
                 grid-template-columns: 1fr;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .table {
-                font-size: 14px;
-            }
-
-            .supply-item {
+            .stock-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 15px;
+            }
+
+            .stock-actions {
+                width: 100%;
+                flex-direction: row;
+                min-width: auto;
             }
         }
     </style>
@@ -325,20 +355,23 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>ระบบจัดการฟาร์มสุกรแบบเต็มรูปแบบ</h1>
-            <p>ระบบครบวงจรสำหรับการจัดการฟาร์มสุกรอย่างเป็นระบบและมีประสิทธิภาพ</p>
+            <h1>ระบบจัดการฟาร์มสุกร - พร้อมระบบสต็อก</h1>
+            <p>ระบบครบวงจรสำหรับการจัดการฟาร์มสุกร รวมระบบจัดการสต็อกอาหารและยา</p>
         </div>
 
-        <!-- Alert Message -->
+        <!-- Alert Messages -->
         <div id="alertMessage" class="alert hidden"></div>
+
+        <!-- Low Stock Warnings -->
+        <div id="stockWarnings"></div>
 
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showSection('overview')">ภาพรวมฟาร์ม</button>
             <button class="nav-tab" onclick="showSection('pigs')">จัดการสุกร</button>
-            <button class="nav-tab" onclick="showSection('feeds')">จัดการอาหาร</button>
-            <button class="nav-tab" onclick="showSection('medical')">ยาและวัคซีน</button>
-            <button class="nav-tab" onclick="showSection('supplies')">อุปกรณ์การแพทย์</button>
+            <button class="nav-tab" onclick="showSection('feeds')">อาหาร + สต็อก</button>
+            <button class="nav-tab" onclick="showSection('medical')">ยา + สต็อก</button>
+            <button class="nav-tab" onclick="showSection('usage')">การใช้งานประจำวัน</button>
             <button class="nav-tab" onclick="showSection('sales')">การขาย</button>
             <button class="nav-tab" onclick="showSection('reports')">รายงาน</button>
         </div>
@@ -351,22 +384,22 @@
                     <div class="stat-label">สุกรทั้งหมด</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalSows">-</div>
-                    <div class="stat-label">แม่พันธุ์</div>
+                    <div class="stat-number" id="feedItems">-</div>
+                    <div class="stat-label">รายการอาหาร</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalPiglets">-</div>
-                    <div class="stat-label">ลูกสุกร</div>
+                    <div class="stat-number" id="medicalItems">-</div>
+                    <div class="stat-label">รายการยา</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalFinishers">-</div>
-                    <div class="stat-label">สุกรขุน</div>
+                    <div class="stat-number" id="lowStockItems">-</div>
+                    <div class="stat-label">สินค้าใกล้หมด</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">ข้อมูลสรุปประจำวัน</div>
-                <div id="dailySummary">
+                <div class="card-title">สรุปสถานะสต็อกวันนี้</div>
+                <div id="stockSummary">
                     <p>ระบบพร้อมใช้งาน กรุณาเริ่มบันทึกข้อมูล</p>
                 </div>
             </div>
@@ -387,18 +420,6 @@
                                 <option value="piglet">ลูกสุกร</option>
                                 <option value="grower">สุกรรุ่น</option>
                                 <option value="finisher">สุกรขุน</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">สายพันธุ์</label>
-                            <select class="form-select" id="pigBreed">
-                                <option value="">เลือกสายพันธุ์</option>
-                                <option value="landrace">แลนด์เรซ</option>
-                                <option value="largwhite">ลาร์จไวท์</option>
-                                <option value="duroc">ดูรอค</option>
-                                <option value="yorkshire">ยอร์คเชียร์</option>
-                                <option value="hybrid">ลูกผสม</option>
                             </select>
                         </div>
 
@@ -425,13 +446,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">คอก/โรงเรือน</label>
-                            <input type="text" class="form-input" id="pigPen" placeholder="เช่น คอกที่ 1, โรงเรือน A">
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label">หมายเหตุ</label>
-                            <textarea class="form-textarea" id="pigNotes" placeholder="บันทึกข้อมูลเพิ่มเติม"></textarea>
+                            <input type="text" class="form-input" id="pigNotes">
                         </div>
                     </div>
                 </div>
@@ -450,16 +466,16 @@
             </div>
         </div>
 
-        <!-- Feeds Management Section -->
+        <!-- Feeds Section with Stock Management -->
         <div id="feeds" class="content-section">
             <div class="card">
-                <div class="card-title">จัดการอาหารสุกร</div>
+                <div class="card-title">เพิ่มอาหารเข้าสต็อก</div>
                 <div class="form-grid">
                     <div>
                         <div class="form-group">
                             <label class="form-label required">ประเภทอาหาร</label>
                             <select class="form-select" id="feedType">
-                                <option value="">เลือกประเภทอาหาร</option>
+                                <option value="">เลือกประเภท</option>
                                 <option value="prestarter">Pre-Starter (ลูกสุกรแรกเกิด)</option>
                                 <option value="starter">Starter (ลูกสุกร 1-2 เดือน)</option>
                                 <option value="grower">Grower (สุกรรุ่น 2-4 เดือน)</option>
@@ -471,7 +487,7 @@
 
                         <div class="form-group">
                             <label class="form-label required">ชื่อยี่ห้อ/ผลิตภัณฑ์</label>
-                            <input type="text" class="form-input" id="feedBrand" placeholder="เช่น เบทาโกร, ซีพี">
+                            <input type="text" class="form-input" id="feedBrand">
                         </div>
 
                         <div class="form-group">
@@ -499,7 +515,7 @@
                 </div>
 
                 <div style="margin-top: 20px;">
-                    <button class="btn btn-success" onclick="addFeed()">เพิ่มอาหาร</button>
+                    <button class="btn btn-success" onclick="addFeed()">เพิ่มอาหารเข้าสต็อก</button>
                     <button class="btn btn-secondary" onclick="clearFeedForm()">ล้างฟอร์ม</button>
                 </div>
             </div>
@@ -512,10 +528,10 @@
             </div>
         </div>
 
-        <!-- Medical Management Section -->
+        <!-- Medical Section with Stock Management -->
         <div id="medical" class="content-section">
             <div class="card">
-                <div class="card-title">จัดการยาและวัคซีน</div>
+                <div class="card-title">เพิ่มยาและวัคซีนเข้าสต็อก</div>
                 <div class="form-grid">
                     <div>
                         <div class="form-group">
@@ -534,12 +550,12 @@
 
                         <div class="form-group">
                             <label class="form-label required">ชื่อยา/วัคซีน</label>
-                            <input type="text" class="form-input" id="medicalName" placeholder="ชื่อยาหรือวัคซีน">
+                            <input type="text" class="form-input" id="medicalName">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">ยี่ห้อ/บริษัทผผลิต</label>
-                            <input type="text" class="form-input" id="medicalBrand" placeholder="เช่น โซลูเฟียร์ม, ไฟเซอร์">
+                            <label class="form-label">ยี่ห้อ/บริษัทผลิต</label>
+                            <input type="text" class="form-input" id="medicalBrand">
                         </div>
 
                         <div class="form-group">
@@ -580,92 +596,64 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">วิธีการใช้/ข้อมูลเพิ่มเติม</label>
-                    <textarea class="form-textarea" id="medicalInstructions" placeholder="วิธีการใช้, ข้อควรระวัง, หรือข้อมูลเพิ่มเติม"></textarea>
-                </div>
-
                 <div style="margin-top: 20px;">
-                    <button class="btn btn-success" onclick="addMedical()">เพิ่มยา/วัคซีน</button>
+                    <button class="btn btn-success" onclick="addMedical()">เพิ่มยา/วัคซีนเข้าสต็อก</button>
                     <button class="btn btn-secondary" onclick="clearMedicalForm()">ล้างฟอร์ม</button>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">คลังยาและวัคซีน</div>
+                <div class="card-title">สต็อกยาและวัคซีน</div>
                 <div id="medicalStock">
                     <p>ยังไม่มีข้อมูลยาและวัคซีน</p>
                 </div>
             </div>
         </div>
 
-        <!-- Medical Supplies Section -->
-        <div id="supplies" class="content-section">
+        <!-- Daily Usage Section -->
+        <div id="usage" class="content-section">
             <div class="card">
-                <div class="card-title">จัดการอุปกรณ์การแพทย์</div>
-                <div class="form-grid">
-                    <div>
+                <div class="card-title">บันทึกการใช้งานประจำวัน</div>
+                
+                <div class="usage-form">
+                    <h3>ใช้อาหาร</h3>
+                    <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label required">ประเภทอุปกรณ์</label>
-                            <select class="form-select" id="supplyType">
-                                <option value="">เลือกประเภทอุปกรณ์</option>
-                                <option value="syringe">เข็มฉีดยา</option>
-                                <option value="needle">เข็มฉีด</option>
-                                <option value="clipper">คีมตัดฟัน</option>
-                                <option value="tail_cutter">คีมตัดหาง</option>
-                                <option value="ear_tag">ต่างหู</option>
-                                <option value="thermometer">เทอร์โมมิเตอร์</option>
-                                <option value="weighing_scale">เครื่องชั่งน้ำหนัก</option>
-                                <option value="feeding_equipment">อุปกรณ์ให้อาหาร</option>
-                                <option value="cleaning_tools">อุปกรณ์ทำความสะอาด</option>
-                                <option value="safety_equipment">อุปกรณ์ความปลอดภัย</option>
+                            <label class="form-label required">เลือกอาหาร</label>
+                            <select class="form-select" id="useFeedSelect">
+                                <option value="">เลือกอาหารที่ต้องการใช้</option>
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label required">ชื่ออุปกรณ์</label>
-                            <input type="text" class="form-input" id="supplyName" placeholder="ชื่ออุปกรณ์">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">ยี่ห้อ/รุ่น</label>
-                            <input type="text" class="form-input" id="supplyBrand" placeholder="ยี่ห้อหรือรุ่น">
+                            <label class="form-label required">จำนวนที่ใช้ (กิโลกรัม)</label>
+                            <input type="number" class="form-input" id="useFeedAmount" step="0.1">
                         </div>
                     </div>
+                    <button class="btn btn-warning" onclick="useFeed()">บันทึกการใช้อาหาร</button>
+                </div>
 
-                    <div>
+                <div class="usage-form">
+                    <h3>ใช้ยา/วัคซีน</h3>
+                    <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label required">จำนวน</label>
-                            <input type="number" class="form-input" id="supplyQuantity" min="1">
+                            <label class="form-label required">เลือกยา/วัคซีน</label>
+                            <select class="form-select" id="useMedicalSelect">
+                                <option value="">เลือกยา/วัคซีนที่ต้องการใช้</option>
+                            </select>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label required">ราคาต่อชิ้น (บาท)</label>
-                            <input type="number" class="form-input" id="supplyPrice" step="0.01">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">วันที่ซื้อ</label>
-                            <input type="date" class="form-input" id="supplyPurchaseDate">
+                            <label class="form-label required">จำนวนที่ใช้</label>
+                            <input type="number" class="form-input" id="useMedicalAmount" step="0.1">
                         </div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">รายละเอียดเพิ่มเติม</label>
-                    <textarea class="form-textarea" id="supplyNotes" placeholder="ข้อมูลเพิ่มเติมเกี่ยวกับอุปกรณ์"></textarea>
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-success" onclick="addSupply()">เพิ่มอุปกรณ์</button>
-                    <button class="btn btn-secondary" onclick="clearSupplyForm()">ล้างฟอร์ม</button>
+                    <button class="btn btn-warning" onclick="useMedical()">บันทึกการใช้ยา/วัคซีน</button>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-title">คลังอุปกรณ์การแพทย์</div>
-                <div id="suppliesStock">
-                    <p>ยังไม่มีข้อมูลอุปกรณ์</p>
+            <div class="usage-history">
+                <h3>ประวัติการใช้งานวันนี้</h3>
+                <div id="todayUsage">
+                    <p>ยังไม่มีการใช้งานวันนี้</p>
                 </div>
             </div>
         </div>
@@ -717,80 +705,54 @@
 
                         <div class="form-group">
                             <label class="form-label">ผู้ซื้อ</label>
-                            <input type="text" class="form-input" id="saleBuyer" placeholder="ชื่อผู้ซื้อหรือบริษัท">
+                            <input type="text" class="form-input" id="saleBuyer">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">หมายเหตุ</label>
+                            <input type="text" class="form-input" id="saleNotes">
+                        </div>
+                    </div>
+                </div>
 
-<textarea class="form-textarea" id="saleNotes" placeholder="บันทึกข้อมูลเพิ่มเติมเกี่ยวกับการขาย"></textarea>
-                       </div>
-                   </div>
-               </div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="addSale()">บันทึกการขาย</button>
+                    <button class="btn btn-secondary" onclick="clearSaleForm()">ล้างฟอร์ม</button>
+                </div>
+            </div>
 
-               <div style="margin-top: 20px;">
-                   <button class="btn btn-success" onclick="addSale()">บันทึกการขาย</button>
-                   <button class="btn btn-secondary" onclick="clearSaleForm()">ล้างฟอร์ม</button>
-               </div>
-           </div>
+            <div class="card">
+                <div class="card-title">ประวัติการขาย</div>
+                <div id="salesHistory">
+                    <p>ยังไม่มีข้อมูลการขาย</p>
+                </div>
+            </div>
+        </div>
 
-           <div class="card">
-               <div class="card-title">ประวัติการขาย</div>
-               <div id="salesHistory">
-                   <p>ยังไม่มีข้อมูลการขาย</p>
-               </div>
-           </div>
-       </div>
+        <!-- Reports Section -->
+        <div id="reports" class="content-section">
+            <div class="card">
+                <div class="card-title">รายงานสรุป</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">ประเภทรายงาน</label>
+                            <select class="form-select" id="reportType">
+                                <option value="overview">ภาพรวมฟาร์ม</option>
+                                <option value="stock">รายงานสต็อก</option>
+                                <option value="usage">รายงานการใช้งาน</option>
+                                <option value="financial">รายงานการเงิน</option>
+                                <option value="livestock">รายงานสุกร</option>
+                                <option value="sales">รายงานการขาย</option>
+                            </select>
+                        </div>
 
-       <!-- Reports Section -->
-       <div id="reports" class="content-section">
-           <div class="card">
-               <div class="card-title">รายงานสรุป</div>
-               <div class="form-grid">
-                   <div>
-                       <div class="form-group">
-                           <label class="form-label">เลือกช่วงเวลา</label>
-                           <select class="form-select" id="reportPeriod">
-                               <option value="today">วันนี้</option>
-                               <option value="week">สัปดาห์นี้</option>
-                               <option value="month">เดือนนี้</option>
-                               <option value="quarter">ไตรมาสนี้</option>
-                               <option value="year">ปีนี้</option>
-                               <option value="custom">กำหนดเอง</option>
-                           </select>
-                       </div>
-
-                       <div class="form-group">
-                           <label class="form-label">วันที่เริ่มต้น</label>
-                           <input type="date" class="form-input" id="reportStartDate">
-                       </div>
-
-                       <div class="form-group">
-                           <label class="form-label">วันที่สิ้นสุด</label>
-                           <input type="date" class="form-input" id="reportEndDate">
-                       </div>
-                   </div>
-
-                   <div>
-                       <div class="form-group">
-                           <label class="form-label">ประเภทรายงาน</label>
-                           <select class="form-select" id="reportType">
-                               <option value="overview">ภาพรวมฟาร์ม</option>
-                               <option value="financial">รายงานการเงิน</option>
-                               <option value="livestock">รายงานสุกร</option>
-                               <option value="feed">รายงานอาหาร</option>
-                               <option value="medical">รายงานยาและวัคซีน</option>
-                               <option value="sales">รายงานการขาย</option>
-                           </select>
-                       </div>
-
-                       <button class="btn btn-primary" onclick="generateReport()" style="margin-top: 30px;">สร้างรายงาน</button>
-                       <button class="btn btn-secondary" onclick="exportReport()">ส่งออกรายงาน</button>
-                   </div>
-               </div>
-
-               <div id="reportResults" style="margin-top: 30px;">
-                   <p>เลือกประเภทรายงานและช่วงเวลาเพื่อสร้างรายงาน</p>
+                        <button class="btn btn-primary" onclick="generateReport()" style="margin-top: 30px;">สร้างรายงาน</button>
+                        <button class="btn btn-secondary" onclick="exportReport()">ส่งออกรายงาน</button>
+                    </div>
+                </div>
+                <div id="reportResults" style="margin-top: 30px;">
+                   <p>เลือกประเภทรายงานเพื่อสร้างรายงาน</p>
                </div>
            </div>
        </div>
@@ -802,49 +764,49 @@
            pigs: [],
            feeds: [],
            medical: [],
-           supplies: [],
-           sales: []
+           sales: [],
+           usage: []
+       };
+
+       // ค่าแจ้งเตือนสต็อกต่ำ
+       const LOW_STOCK_THRESHOLD = {
+           feeds: 50, // กิโลกรัม
+           medical: 5 // หน่วย
        };
 
        // เริ่มต้นระบบ
        document.addEventListener('DOMContentLoaded', function() {
            loadAllData();
            updateOverview();
+           updateUsageSelects();
+           checkStockLevels();
            setDefaultDates();
        });
 
-       // ตั้งค่าวันที่เริ่มต้น
        function setDefaultDates() {
            const today = new Date().toISOString().split('T')[0];
            document.getElementById('pigEntryDate').value = today;
            document.getElementById('feedPurchaseDate').value = today;
            document.getElementById('medicalPurchaseDate').value = today;
-           document.getElementById('supplyPurchaseDate').value = today;
            document.getElementById('saleDate').value = today;
-           document.getElementById('reportStartDate').value = today;
-           document.getElementById('reportEndDate').value = today;
        }
 
-       // แสดงส่วนต่างๆ
        function showSection(sectionName) {
-           // ซ่อนทุกส่วน
            document.querySelectorAll('.content-section').forEach(section => {
                section.classList.remove('active');
            });
 
-           // ลบ active จากปุ่มทั้งหมด
            document.querySelectorAll('.nav-tab').forEach(tab => {
                tab.classList.remove('active');
            });
 
-           // แสดงส่วนที่เลือก
            document.getElementById(sectionName).classList.add('active');
            event.target.classList.add('active');
 
-           // อัพเดทข้อมูลตามส่วนที่เลือก
            switch(sectionName) {
                case 'overview':
                    updateOverview();
+                   checkStockLevels();
                    break;
                case 'pigs':
                    displayPigs();
@@ -855,8 +817,9 @@
                case 'medical':
                    displayMedical();
                    break;
-               case 'supplies':
-                   displaySupplies();
+               case 'usage':
+                   updateUsageSelects();
+                   displayTodayUsage();
                    break;
                case 'sales':
                    displaySales();
@@ -864,7 +827,6 @@
            }
        }
 
-       // แสดงข้อความแจ้งเตือน
        function showAlert(message, type = 'success') {
            const alertEl = document.getElementById('alertMessage');
            alertEl.textContent = message;
@@ -879,15 +841,13 @@
        // === การจัดการสุกร ===
        function addPig() {
            const pigType = document.getElementById('pigType').value;
-           const pigBreed = document.getElementById('pigBreed').value;
            const quantity = parseInt(document.getElementById('pigQuantity').value);
            const entryDate = document.getElementById('pigEntryDate').value;
            const weight = parseFloat(document.getElementById('pigWeight').value) || 0;
            const age = parseInt(document.getElementById('pigAge').value) || 0;
-           const pen = document.getElementById('pigPen').value;
            const notes = document.getElementById('pigNotes').value;
 
-           if (!pigType || !pigBreed || !quantity || !entryDate) {
+           if (!pigType || !quantity || !entryDate) {
                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
                return;
            }
@@ -895,12 +855,10 @@
            const newPig = {
                id: Date.now(),
                type: pigType,
-               breed: pigBreed,
                quantity: quantity,
                entryDate: entryDate,
                weight: weight,
                age: age,
-               pen: pen,
                notes: notes,
                createdDate: new Date().toISOString()
            };
@@ -915,11 +873,9 @@
 
        function clearPigForm() {
            document.getElementById('pigType').value = '';
-           document.getElementById('pigBreed').value = '';
            document.getElementById('pigQuantity').value = '';
            document.getElementById('pigWeight').value = '';
            document.getElementById('pigAge').value = '';
-           document.getElementById('pigPen').value = '';
            document.getElementById('pigNotes').value = '';
            document.getElementById('pigEntryDate').value = new Date().toISOString().split('T')[0];
        }
@@ -940,19 +896,17 @@
                'finisher': 'สุกรขุน'
            };
 
-           let html = '<table class="table"><thead><tr><th>ประเภท</th><th>สายพันธุ์</th><th>จำนวน</th><th>น้ำหนัก</th><th>อายุ</th><th>คอก</th><th>การจัดการ</th></tr></thead><tbody>';
+           let html = '<table class="table"><thead><tr><th>ประเภท</th><th>จำนวน</th><th>น้ำหนัก</th><th>อายุ</th><th>วันที่เข้าฟาร์ม</th><th>การจัดการ</th></tr></thead><tbody>';
 
            farmData.pigs.forEach(pig => {
                html += `
                    <tr>
                        <td>${typeNames[pig.type]}</td>
-                       <td>${pig.breed}</td>
                        <td>${pig.quantity} ตัว</td>
                        <td>${pig.weight > 0 ? pig.weight + ' กก.' : '-'}</td>
                        <td>${pig.age > 0 ? pig.age + ' วัน' : '-'}</td>
-                       <td>${pig.pen || '-'}</td>
+                       <td>${new Date(pig.entryDate).toLocaleDateString('th-TH')}</td>
                        <td>
-                           <button class="btn btn-small btn-secondary" onclick="editPig(${pig.id})">แก้ไข</button>
                            <button class="btn btn-small btn-danger" onclick="deletePig(${pig.id})">ลบ</button>
                        </td>
                    </tr>
@@ -992,6 +946,7 @@
                type: feedType,
                brand: brand,
                quantity: quantity,
+               originalQuantity: quantity,
                price: price,
                purchaseDate: purchaseDate,
                expiryDate: expiryDate,
@@ -1001,8 +956,10 @@
            farmData.feeds.push(newFeed);
            saveAllData();
            displayFeeds();
+           updateUsageSelects();
+           checkStockLevels();
            clearFeedForm();
-           showAlert('เพิ่มข้อมูลอาหารเรียบร้อยแล้ว');
+           showAlert('เพิ่มอาหารเข้าสต็อกเรียบร้อยแล้ว');
        }
 
        function clearFeedForm() {
@@ -1034,14 +991,20 @@
            let html = '';
            farmData.feeds.forEach(feed => {
                const totalValue = feed.quantity * feed.price;
+               const stockStatus = getStockStatus(feed.quantity, 'feed');
+               const daysRemaining = calculateDaysRemaining(feed.quantity, 'feed');
+               
                html += `
-                   <div class="supply-item">
-                       <div class="supply-info">
-                           <div class="supply-name">${feedTypes[feed.type]} - ${feed.brand}</div>
-                           <div class="supply-details">จำนวน: ${feed.quantity} กก. | ราคา: ${feed.price} บาท/กก. | มูลค่ารวม: ${totalValue.toLocaleString()} บาท</div>
-                           <div class="supply-details">วันที่ซื้อ: ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')} ${feed.expiryDate ? '| หมดอายุ: ' + new Date(feed.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                   <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
+                       <div class="stock-info">
+                           <div class="stock-name">${feedTypes[feed.type]} - ${feed.brand}</div>
+                           <div class="stock-details">คงเหลือ: ${feed.quantity} กก. จาก ${feed.originalQuantity} กก.</div>
+                           <div class="stock-details">ราคา: ${feed.price} บาท/กก. | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
+                           <div class="stock-details">วันที่ซื้อ: ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')} ${feed.expiryDate ? '| หมดอายุ: ' + new Date(feed.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                           <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
                        </div>
-                       <div class="supply-actions">
+                       <div class="stock-actions">
+                           <button class="btn btn-small btn-warning" onclick="restockFeed(${feed.id})">เติมสต็อก</button>
                            <button class="btn btn-small btn-danger" onclick="deleteFeed(${feed.id})">ลบ</button>
                        </div>
                    </div>
@@ -1051,11 +1014,28 @@
            container.innerHTML = html;
        }
 
+       function restockFeed(id) {
+           const feed = farmData.feeds.find(f => f.id === id);
+           if (feed) {
+               const additionalStock = prompt('เพิ่มสต็อกเท่าไหร่ (กิโลกรัม)?');
+               if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
+                   feed.quantity += parseFloat(additionalStock);
+                   feed.originalQuantity += parseFloat(additionalStock);
+                   saveAllData();
+                   displayFeeds();
+                   checkStockLevels();
+                   showAlert('เติมสต็อกอาหารเรียบร้อยแล้ว');
+               }
+           }
+       }
+
        function deleteFeed(id) {
-           if (confirm('ต้องการลบข้อมูลอาหารนี้หรือไม่?')) {
+           if (confirm('ต้องการลบอาหารนี้หรือไม่?')) {
                farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
                saveAllData();
                displayFeeds();
+               updateUsageSelects();
+               checkStockLevels();
                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
            }
        }
@@ -1070,7 +1050,6 @@
            const price = parseFloat(document.getElementById('medicalPrice').value);
            const purchaseDate = document.getElementById('medicalPurchaseDate').value;
            const expiryDate = document.getElementById('medicalExpiryDate').value;
-           const instructions = document.getElementById('medicalInstructions').value;
 
            if (!type || !name || !quantity || !unit || !price || !purchaseDate) {
                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
@@ -1083,19 +1062,21 @@
                name: name,
                brand: brand,
                quantity: quantity,
+               originalQuantity: quantity,
                unit: unit,
                price: price,
                purchaseDate: purchaseDate,
                expiryDate: expiryDate,
-               instructions: instructions,
                createdDate: new Date().toISOString()
            };
 
            farmData.medical.push(newMedical);
            saveAllData();
            displayMedical();
+           updateUsageSelects();
+           checkStockLevels();
            clearMedicalForm();
-           showAlert('เพิ่มข้อมูลยา/วัคซีนเรียบร้อยแล้ว');
+           showAlert('เพิ่มยา/วัคซีนเข้าสต็อกเรียบร้อยแล้ว');
        }
 
        function clearMedicalForm() {
@@ -1106,7 +1087,6 @@
            document.getElementById('medicalUnit').value = '';
            document.getElementById('medicalPrice').value = '';
            document.getElementById('medicalExpiryDate').value = '';
-           document.getElementById('medicalInstructions').value = '';
            document.getElementById('medicalPurchaseDate').value = new Date().toISOString().split('T')[0];
        }
 
@@ -1131,16 +1111,20 @@
            let html = '';
            farmData.medical.forEach(med => {
                const totalValue = med.quantity * med.price;
+               const stockStatus = getStockStatus(med.quantity, 'medical');
+               const daysRemaining = calculateDaysRemaining(med.quantity, 'medical');
+               
                html += `
-                   <div class="supply-item">
-                       <div class="supply-info">
-                           <div class="supply-name">${medicalTypes[med.type]} - ${med.name}</div>
-                           <div class="supply-details">${med.brand ? 'ยี่ห้อ: ' + med.brand + ' | ' : ''}จำนวน: ${med.quantity} ${med.unit} | ราคา: ${med.price} บาท/${med.unit}</div>
-                           <div class="supply-details">มูลค่ารวม: ${totalValue.toLocaleString()} บาท | วันที่ซื้อ: ${new Date(med.purchaseDate).toLocaleDateString('th-TH')}</div>
-                           ${med.expiryDate ? '<div class="supply-details">หมดอายุ: ' + new Date(med.expiryDate).toLocaleDateString('th-TH') + '</div>' : ''}
-                           ${med.instructions ? '<div class="supply-details">วิธีใช้: ' + med.instructions + '</div>' : ''}
+                   <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
+                       <div class="stock-info">
+                           <div class="stock-name">${medicalTypes[med.type]} - ${med.name}</div>
+                           <div class="stock-details">${med.brand ? 'ยี่ห้อ: ' + med.brand + ' | ' : ''}คงเหลือ: ${med.quantity} ${med.unit} จาก ${med.originalQuantity} ${med.unit}</div>
+                           <div class="stock-details">ราคา: ${med.price} บาท/${med.unit} | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
+                           <div class="stock-details">วันที่ซื้อ: ${new Date(med.purchaseDate).toLocaleDateString('th-TH')} ${med.expiryDate ? '| หมดอายุ: ' + new Date(med.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                           <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
                        </div>
-                       <div class="supply-actions">
+                       <div class="stock-actions">
+                           <button class="btn btn-small btn-warning" onclick="restockMedical(${med.id})">เติมสต็อก</button>
                            <button class="btn btn-small btn-danger" onclick="deleteMedical(${med.id})">ลบ</button>
                        </div>
                    </div>
@@ -1150,111 +1134,298 @@
            container.innerHTML = html;
        }
 
+       function restockMedical(id) {
+           const medical = farmData.medical.find(m => m.id === id);
+           if (medical) {
+               const additionalStock = prompt(`เพิ่มสต็อกเท่าไหร่ (${medical.unit})?`);
+               if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
+                   medical.quantity += parseFloat(additionalStock);
+                   medical.originalQuantity += parseFloat(additionalStock);
+                   saveAllData();
+                   displayMedical();
+                   checkStockLevels();
+                   showAlert('เติมสต็อกยา/วัคซีนเรียบร้อยแล้ว');
+               }
+           }
+       }
+
        function deleteMedical(id) {
-           if (confirm('ต้องการลบข้อมูลยา/วัคซีนนี้หรือไม่?')) {
+           if (confirm('ต้องการลบยา/วัคซีนนี้หรือไม่?')) {
                farmData.medical = farmData.medical.filter(med => med.id !== id);
                saveAllData();
                displayMedical();
+               updateUsageSelects();
+               checkStockLevels();
                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
            }
        }
 
-       // === การจัดการอุปกรณ์ ===
-       function addSupply() {
-           const type = document.getElementById('supplyType').value;
-           const name = document.getElementById('supplyName').value;
-           const brand = document.getElementById('supplyBrand').value;
-           const quantity = parseInt(document.getElementById('supplyQuantity').value);
-           const price = parseFloat(document.getElementById('supplyPrice').value);
-           const purchaseDate = document.getElementById('supplyPurchaseDate').value;
-           const notes = document.getElementById('supplyNotes').value;
-
-           if (!type || !name || !quantity || !price || !purchaseDate) {
-               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
-               return;
-           }
-
-           const newSupply = {
-               id: Date.now(),
-               type: type,
-               name: name,
-               brand: brand,
-               quantity: quantity,
-               price: price,
-               purchaseDate: purchaseDate,
-               notes: notes,
-               createdDate: new Date().toISOString()
-           };
-
-           farmData.supplies.push(newSupply);
-           saveAllData();
-           displaySupplies();
-           clearSupplyForm();
-           showAlert('เพิ่มข้อมูลอุปกรณ์เรียบร้อยแล้ว');
-       }
-
-       function clearSupplyForm() {
-           document.getElementById('supplyType').value = '';
-           document.getElementById('supplyName').value = '';
-           document.getElementById('supplyBrand').value = '';
-           document.getElementById('supplyQuantity').value = '';
-           document.getElementById('supplyPrice').value = '';
-           document.getElementById('supplyNotes').value = '';
-           document.getElementById('supplyPurchaseDate').value = new Date().toISOString().split('T')[0];
-       }
-
-       function displaySupplies() {
-           const container = document.getElementById('suppliesStock');
+       // === การจัดการการใช้งานประจำวัน ===
+       function updateUsageSelects() {
+           // อัพเดท select สำหรับอาหาร
+           const feedSelect = document.getElementById('useFeedSelect');
+           feedSelect.innerHTML = '<option value="">เลือกอาหารที่ต้องการใช้</option>';
            
-           if (farmData.supplies.length === 0) {
-               container.innerHTML = '<p>ยังไม่มีข้อมูลอุปกรณ์</p>';
+           farmData.feeds.forEach(feed => {
+               if (feed.quantity > 0) {
+                   const feedTypes = {
+                       'prestarter': 'Pre-Starter',
+                       'starter': 'Starter',
+                       'grower': 'Grower',
+                       'finisher': 'Finisher',
+                       'sow': 'อาหารแม่พันธุ์',
+                       'boar': 'อาหารพ่อพันธุ์'
+                   };
+                   feedSelect.innerHTML += `<option value="${feed.id}">${feedTypes[feed.type]} - ${feed.brand} (คงเหลือ: ${feed.quantity} กก.)</option>`;
+               }
+           });
+
+           // อัพเดท select สำหรับยา
+           const medicalSelect = document.getElementById('useMedicalSelect');
+           medicalSelect.innerHTML = '<option value="">เลือกยา/วัคซีนที่ต้องการใช้</option>';
+           
+           farmData.medical.forEach(med => {
+               if (med.quantity > 0) {
+                   const medicalTypes = {
+                       'vaccine': 'วัคซีน',
+                       'antibiotic': 'ยาปฏิชีวนะ',
+                       'vitamin': 'วิตามิน',
+                       'deworming': 'ยาถ่ายพยาธิ',
+                       'hormone': 'ฮอร์โมน',
+                       'supplement': 'อาหารเสริม',
+                       'disinfectant': 'ยาฆ่าเชื้อ'
+                   };
+                   medicalSelect.innerHTML += `<option value="${med.id}">${medicalTypes[med.type]} - ${med.name} (คงเหลือ: ${med.quantity} ${med.unit})</option>`;
+               }
+           });
+       }
+
+       function useFeed() {
+           const feedId = document.getElementById('useFeedSelect').value;
+           const amount = parseFloat(document.getElementById('useFeedAmount').value);
+
+           if (!feedId || !amount || amount <= 0) {
+               showAlert('กรุณาเลือกอาหารและระบุจำนวนที่ถูกต้อง', 'error');
                return;
            }
 
-           const supplyTypes = {
-               'syringe': 'เข็มฉีดยา',
-               'needle': 'เข็มฉีด',
-               'clipper': 'คีมตัดฟัน',
-               'tail_cutter': 'คีมตัดหาง',
-               'ear_tag': 'ต่างหู',
-               'thermometer': 'เทอร์โมมิเตอร์',
-               'weighing_scale': 'เครื่องชั่งน้ำหนัก',
-               'feeding_equipment': 'อุปกรณ์ให้อาหาร',
-               'cleaning_tools': 'อุปกรณ์ทำความสะอาด',
-               'safety_equipment': 'อุปกรณ์ความปลอดภัย'
+           const feed = farmData.feeds.find(f => f.id == feedId);
+           if (!feed) {
+               showAlert('ไม่พบอาหารที่เลือก', 'error');
+               return;
+           }
+
+           if (amount > feed.quantity) {
+               showAlert(`อาหารคงเหลือไม่เพียงพอ (คงเหลือ: ${feed.quantity} กก.)`, 'error');
+               return;
+           }
+
+           // บันทึกการใช้งาน
+           const usage = {
+               id: Date.now(),
+               type: 'feed',
+               itemId: feedId,
+               itemName: `${feed.type} - ${feed.brand}`,
+               amount: amount,
+               unit: 'กก.',
+               date: new Date().toISOString().split('T')[0],
+               time: new Date().toISOString()
            };
 
-           let html = '';
-           farmData.supplies.forEach(supply => {
-               const totalValue = supply.quantity * supply.price;
+           farmData.usage.push(usage);
+           
+           // ลดสต็อก
+           feed.quantity -= amount;
+           
+           saveAllData();
+           updateUsageSelects();
+           displayFeeds();
+           displayTodayUsage();
+           checkStockLevels();
+           
+           // ล้างฟอร์ม
+           document.getElementById('useFeedSelect').value = '';
+           document.getElementById('useFeedAmount').value = '';
+           
+           showAlert(`ใช้อาหาร ${amount} กก. เรียบร้อยแล้ว`);
+       }
+
+       function useMedical() {
+           const medicalId = document.getElementById('useMedicalSelect').value;
+           const amount = parseFloat(document.getElementById('useMedicalAmount').value);
+
+           if (!medicalId || !amount || amount <= 0) {
+               showAlert('กรุณาเลือกยา/วัคซีนและระบุจำนวนที่ถูกต้อง', 'error');
+               return;
+           }
+
+           const medical = farmData.medical.find(m => m.id == medicalId);
+           if (!medical) {
+               showAlert('ไม่พบยา/วัคซีนที่เลือก', 'error');
+               return;
+           }
+
+           if (amount > medical.quantity) {
+               showAlert(`ยา/วัคซีนคงเหลือไม่เพียงพอ (คงเหลือ: ${medical.quantity} ${medical.unit})`, 'error');
+               return;
+           }
+
+           // บันทึกการใช้งาน
+           const usage = {
+               id: Date.now(),
+               type: 'medical',
+               itemId: medicalId,
+               itemName: `${medical.type} - ${medical.name}`,
+               amount: amount,
+               unit: medical.unit,
+               date: new Date().toISOString().split('T')[0],
+               time: new Date().toISOString()
+           };
+
+           farmData.usage.push(usage);
+           
+           // ลดสต็อก
+           medical.quantity -= amount;
+           
+           saveAllData();
+           updateUsageSelects();
+           displayMedical();
+           displayTodayUsage();
+           checkStockLevels();
+           
+           // ล้างฟอร์ม
+           document.getElementById('useMedicalSelect').value = '';
+           document.getElementById('useMedicalAmount').value = '';
+           
+           showAlert(`ใช้ยา/วัคซีน ${amount} ${medical.unit} เรียบร้อยแล้ว`);
+       }
+
+       function displayTodayUsage() {
+           const container = document.getElementById('todayUsage');
+           const today = new Date().toISOString().split('T')[0];
+           const todayUsage = farmData.usage.filter(usage => usage.date === today);
+
+           if (todayUsage.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีการใช้งานวันนี้</p>';
+               return;
+           }
+
+           let html = '<table class="table"><thead><tr><th>เวลา</th><th>ประเภท</th><th>รายการ</th><th>จำนวน</th></tr></thead><tbody>';
+
+           todayUsage.forEach(usage => {
+               const time = new Date(usage.time).toLocaleTimeString('th-TH');
+               const typeText = usage.type === 'feed' ? 'อาหาร' : 'ยา/วัคซีน';
+               
                html += `
-                   <div class="supply-item">
-                       <div class="supply-info">
-                           <div class="supply-name">${supplyTypes[supply.type]} - ${supply.name}</div>
-                           <div class="supply-details">${supply.brand ? 'ยี่ห้อ: ' + supply.brand + ' | ' : ''}จำนวน: ${supply.quantity} ชิ้น | ราคา: ${supply.price} บาท/ชิ้น</div>
-                           <div class="supply-details">มูลค่ารวม: ${totalValue.toLocaleString()} บาท | วันที่ซื้อ: ${new Date(supply.purchaseDate).toLocaleDateString('th-TH')}</div>
-                           ${supply.notes ? '<div class="supply-details">หมายเหตุ: ' + supply.notes + '</div>' : ''}
-                       </div>
-                       <div class="supply-actions">
-                           <button class="btn btn-small btn-danger" onclick="deleteSupply(${supply.id})">ลบ</button>
-                       </div>
-                   </div>
+                   <tr>
+                       <td>${time}</td>
+                       <td>${typeText}</td>
+                       <td>${usage.itemName}</td>
+                       <td>${usage.amount} ${usage.unit}</td>
+                   </tr>
                `;
            });
 
+           html += '</tbody></table>';
            container.innerHTML = html;
        }
 
-       function deleteSupply(id) {
-           if (confirm('ต้องการลบข้อมูลอุปกรณ์นี้หรือไม่?')) {
-               farmData.supplies = farmData.supplies.filter(supply => supply.id !== id);
-               saveAllData();
-               displaySupplies();
-               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+       // === ระบบแจ้งเตือนสต็อก ===
+       function getStockStatus(quantity, type) {
+           const threshold = LOW_STOCK_THRESHOLD[type === 'feed' ? 'feeds' : 'medical'];
+           
+           if (quantity <= 0) return 'empty';
+           if (quantity <= threshold) return 'low';
+           return 'normal';
+       }
+
+       function getStockStatusText(status, daysRemaining) {
+           switch(status) {
+               case 'empty':
+                   return 'สินค้าหมด';
+               case 'low':
+                   return `สต็อกต่ำ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
+               case 'normal':
+                   return `สต็อกปกติ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
+               default:
+                   return 'ไม่ทราบสถานะ';
            }
        }
 
-       // === การจัดการการขาย ===
+       function calculateDaysRemaining(quantity, type) {
+           // คำนวณการใช้งานเฉลี่ยต่อวันจาก 7 วันที่ผ่านมา
+           const sevenDaysAgo = new Date();
+           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+           const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
+           
+           const recentUsage = farmData.usage.filter(usage => 
+               usage.type === type && usage.date >= sevenDaysAgoStr
+           );
+           
+           const totalUsed = recentUsage.reduce((sum, usage) => sum + usage.amount, 0);
+           const dailyAverage = totalUsed / 7;
+           
+           if (dailyAverage <= 0) return null;
+           return Math.floor(quantity / dailyAverage);
+       }
+
+       function checkStockLevels() {
+           const warnings = [];
+           
+           // ตรวจสอบอาหาร
+           farmData.feeds.forEach(feed => {
+               const status = getStockStatus(feed.quantity, 'feed');
+               if (status === 'low' || status === 'empty') {
+                   const feedTypes = {
+                       'prestarter': 'Pre-Starter',
+                       'starter': 'Starter',
+                       'grower': 'Grower',
+                       'finisher': 'Finisher',
+                       'sow': 'อาหารแม่พันธุ์',
+                       'boar': 'อาหารพ่อพันธุ์'
+                   };
+                   warnings.push({
+                       type: 'warning',
+                       message: `${feedTypes[feed.type]} - ${feed.brand} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${feed.quantity} กก.)`
+                   });
+               }
+           });
+           
+           // ตรวจสอบยา
+           farmData.medical.forEach(med => {
+               const status = getStockStatus(med.quantity, 'medical');
+               if (status === 'low' || status === 'empty') {
+                   const medicalTypes = {
+                       'vaccine': 'วัคซีน',
+                       'antibiotic': 'ยาปฏิชีวนะ',
+                       'vitamin': 'วิตามิน',
+                       'deworming': 'ยาถ่ายพยาธิ',
+                       'hormone': 'ฮอร์โมน',
+                       'supplement': 'อาหารเสริม',
+                       'disinfectant': 'ยาฆ่าเชื้อ'
+                   };
+                   warnings.push({
+                       type: 'warning',
+                       message: `${medicalTypes[med.type]} - ${med.name} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${med.quantity} ${med.unit})`
+                   });
+               }
+           });
+
+           // แสดงการแจ้งเตือน
+           const warningsContainer = document.getElementById('stockWarnings');
+           if (warnings.length > 0) {
+               let html = '<div class="alert alert-warning"><strong>แจ้งเตือนสต็อก:</strong><ul style="margin: 10px 0; padding-left: 20px;">';
+               warnings.forEach(warning => {
+                   html += `<li>${warning.message}</li>`;
+               });
+               html += '</ul></div>';
+               warningsContainer.innerHTML = html;
+           } else {
+               warningsContainer.innerHTML = '';
+           }
+       }
+
+       // === การขาย ===
        function addSale() {
            const date = document.getElementById('saleDate').value;
            const type = document.getElementById('saleType').value;
@@ -1291,6 +1462,7 @@
            farmData.sales.push(newSale);
            saveAllData();
            displaySales();
+           updateOverview();
            clearSaleForm();
            showAlert('บันทึกการขายเรียบร้อยแล้ว');
        }
@@ -1349,62 +1521,59 @@
                farmData.sales = farmData.sales.filter(sale => sale.id !== id);
                saveAllData();
                displaySales();
+               updateOverview();
                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
            }
        }
 
        // === อัพเดทภาพรวม ===
        function updateOverview() {
-           const stats = {
-               totalPigs: 0,
-               sows: 0,
-               piglets: 0,
-               finishers: 0
-           };
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+           const feedItems = farmData.feeds.length;
+           const medicalItems = farmData.medical.length;
+           
+           // นับสินค้าที่สต็อกต่ำ
+           const lowStockFeeds = farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal');
+           const lowStockMedical = farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal');
+           const lowStockTotal = lowStockFeeds.length + lowStockMedical.length;
 
-           farmData.pigs.forEach(pig => {
-               stats.totalPigs += pig.quantity;
-               switch(pig.type) {
-                   case 'sow':
-                       stats.sows += pig.quantity;
-                       break;
-                   case 'piglet':
-                       stats.piglets += pig.quantity;
-                       break;
-                   case 'finisher':
-                       stats.finishers += pig.quantity;
-                       break;
-               }
-           });
+           document.getElementById('totalPigs').textContent = totalPigs || '-';
+           document.getElementById('feedItems').textContent = feedItems || '-';
+           document.getElementById('medicalItems').textContent = medicalItems || '-';
+           document.getElementById('lowStockItems').textContent = lowStockTotal || '-';
 
-           document.getElementById('totalPigs').textContent = stats.totalPigs || '-';
-           document.getElementById('totalSows').textContent = stats.sows || '-';
-           document.getElementById('totalPiglets').textContent = stats.piglets || '-';
-           document.getElementById('totalFinishers').textContent = stats.finishers || '-';
+           // สรุปสถานะสต็อก
+           const summaryContainer = document.getElementById('stockSummary');
+           if (farmData.feeds.length > 0 || farmData.medical.length > 0 || farmData.usage.length > 0) {
+               const totalFeedValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
+               const totalMedicalValue = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+               const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+               
+               const today = new Date().toISOString().split('T')[0];
+               const todayUsage = farmData.usage.filter(usage => usage.date === today);
+               const todayFeedUsage = todayUsage.filter(u => u.type === 'feed').reduce((sum, u) => sum + u.amount, 0);
+               const todayMedicalUsage = todayUsage.filter(u => u.type === 'medical').reduce((sum, u) => sum + u.amount, 0);
 
-           // อัพเดทสรุปประจำวัน
-           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
-           const totalFeeds = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
-           const totalMedical = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
-           const totalSupplies = farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
-           const summaryContainer = document.getElementById('dailySummary');
-           if (farmData.pigs.length > 0 || farmData.sales.length > 0) {
                summaryContainer.innerHTML = `
                    <div class="form-grid">
                        <div>
-                           <h4>สถิติการเงิน</h4>
-                           <p><strong>รายได้จากการขาย:</strong> ${totalSales.toLocaleString()} บาท</p>
-                           <p><strong>ค่าอาหาร:</strong> ${totalFeeds.toLocaleString()} บาท</p>
-                           <p><strong>ค่ายาและวัคซีน:</strong> ${totalMedical.toLocaleString()} บาท</p>
-                           <p><strong>ค่าอุปกรณ์:</strong> ${totalSupplies.toLocaleString()} บาท</p>
+                           <h4>มูลค่าสต็อกคงเหลือ</h4>
+                           <p><strong>อาหาร:</strong> ${totalFeedValue.toLocaleString()} บาท</p>
+                           <p><strong>ยาและวัคซีน:</strong> ${totalMedicalValue.toLocaleString()} บาท</p>
+                           <p><strong>รวมทั้งหมด:</strong> ${(totalFeedValue + totalMedicalValue).toLocaleString()} บาท</p>
                        </div>
                        <div>
-                           <h4>สรุปต้นทุน</h4>
-                           <p><strong>ต้นทุนรวม:</strong> ${(totalFeeds + totalMedical + totalSupplies).toLocaleString()} บาท</p>
-                           <p><strong>กำไร/ขาดทุน:</strong> ${(totalSales - totalFeeds - totalMedical - totalSupplies).toLocaleString()} บาท</p>
-                           <p><strong>จำนวนรายการ:</strong> ${farmData.pigs.length + farmData.sales.length} รายการ</p>
-                           <p><strong>อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
+                           <h4>การใช้งานวันนี้</h4>
+                           <p><strong>อาหารที่ใช้:</strong> ${todayFeedUsage.toLocaleString()} กก.</p>
+                           <p><strong>ยาที่ใช้:</strong> ${todayMedicalUsage} หน่วย</p>
+                           <p><strong>รายได้รวม:</strong> ${totalSales.toLocaleString()} บาท</p>
                        </div>
+                   </div>
+                   <div style="margin-top: 20px;">
+                       <h4>สถิติการใช้งาน</h4>
+                       <p><strong>จำนวนรายการใช้งาน:</strong> ${farmData.usage.length} รายการ</p>
+                       <p><strong>รายการที่ต้องเติมสต็อก:</strong> ${lowStockTotal} รายการ</p>
+                       <p><strong>อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
                    </div>
                `;
            } else {
@@ -1414,86 +1583,159 @@
 
        // === การสร้างรายงาน ===
        function generateReport() {
-           const period = document.getElementById('reportPeriod').value;
-           const startDate = document.getElementById('reportStartDate').value;
-           const endDate = document.getElementById('reportEndDate').value;
            const type = document.getElementById('reportType').value;
-
-           if (!type) {
-               showAlert('กรุณาเลือกประเภทรายงาน', 'error');
-               return;
-           }
-
            const container = document.getElementById('reportResults');
            
            switch(type) {
                case 'overview':
                    generateOverviewReport(container);
                    break;
+               case 'stock':
+                   generateStockReport(container);
+                   break;
+               case 'usage':
+                   generateUsageReport(container);
+                   break;
                case 'financial':
-                   generateFinancialReport(container, startDate, endDate);
+                   generateFinancialReport(container);
                    break;
                case 'livestock':
                    generateLivestockReport(container);
                    break;
-               case 'feed':
-                   generateFeedReport(container);
-                   break;
-               case 'medical':
-                   generateMedicalReport(container);
-                   break;
                case 'sales':
-                   generateSalesReport(container, startDate, endDate);
+                   generateSalesReport(container);
                    break;
            }
        }
 
-       function generateOverviewReport(container) {
-           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
-           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
-           const totalCosts = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
-                             farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0) +
-                             farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
+       function generateStockReport(container) {
+           const totalFeedValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
+           const totalMedicalValue = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+           const lowStockItems = [
+               ...farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal'),
+               ...farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal')
+           ];
+
+           let html = `
+               <div class="card">
+                   <div class="card-title">รายงานสต็อกและคลัง</div>
+                   <div class="form-grid">
+                       <div>
+                           <h4>สรุปมูลค่าสต็อก</h4>
+                           <p>อาหาร: ${totalFeedValue.toLocaleString()} บาท</p>
+                           <p>ยาและวัคซีน: ${totalMedicalValue.toLocaleString()} บาท</p>
+                           <p><strong>รวมทั้งหมด: ${(totalFeedValue + totalMedicalValue).toLocaleString()} บาท</strong></p>
+                       </div>
+                       <div>
+                           <h4>สถานะสต็อก</h4>
+                           <p>รายการอาหาร: ${farmData.feeds.length} รายการ</p>
+                           <p>รายการยา: ${farmData.medical.length} รายการ</p>
+                           <p>รายการที่ต้องเติม: ${lowStockItems.length} รายการ</p>
+                       </div>
+                   </div>
+           `;
+
+           if (lowStockItems.length > 0) {
+               html += `
+                   <div style="margin-top: 20px;">
+                       <h4>รายการที่ต้องเติมสต็อก</h4>
+                       <table class="table">
+                           <thead>
+                               <tr><th>ประเภท</th><th>ชื่อ</th><th>คงเหลือ</th><th>สถานะ</th></tr>
+                           </thead>
+                           <tbody>
+               `;
+
+               lowStockItems.forEach(item => {
+                   const isFood = item.hasOwnProperty('brand');
+                   const status = getStockStatus(item.quantity, isFood ? 'feed' : 'medical');
+                   const statusText = status === 'empty' ? 'หมด' : 'ต่ำ';
+                   
+                   html += `
+                       <tr>
+                           <td>${isFood ? 'อาหาร' : 'ยา/วัคซีน'}</td>
+                           <td>${isFood ? item.brand : item.name}</td>
+                           <td>${item.quantity} ${isFood ? 'กก.' : item.unit}</td>
+                           <td>${statusText}</td>
+                       </tr>
+                   `;
+               });
+
+               html += '</tbody></table>';
+           }
+
+           html += '</div>';
+           container.innerHTML = html;
+       }
+
+       function generateUsageReport(container) {
+           const last30Days = new Date();
+           last30Days.setDate(last30Days.getDate() - 30);
+           const last30DaysStr = last30Days.toISOString().split('T')[0];
+           
+           const recentUsage = farmData.usage.filter(usage => usage.date >= last30DaysStr);
+           const feedUsage = recentUsage.filter(u => u.type === 'feed');
+           const medicalUsage = recentUsage.filter(u => u.type === 'medical');
+           
+           const totalFeedUsed = feedUsage.reduce((sum, u) => sum + u.amount, 0);
+           const totalMedicalUsed = medicalUsage.reduce((sum, u) => sum + u.amount, 0);
+           const avgFeedPerDay = totalFeedUsed / 30;
+           const avgMedicalPerDay = totalMedicalUsed / 30;
 
            container.innerHTML = `
                <div class="card">
-                   <div class="card-title">รายงานภาพรวมฟาร์ม</div>
+                   <div class="card-title">รายงานการใช้งาน (30 วันล่าสุด)</div>
                    <div class="form-grid">
                        <div>
-                           <h4>สถิติสุกร</h4>
-                           <p>จำนวนสุกรทั้งหมด: ${totalPigs} ตัว</p>
-                           <p>จำนวนประเภท: ${farmData.pigs.length} กลุ่ม</p>
-                           <p>รายการบันทึก: ${farmData.pigs.length} รายการ</p>
+                           <h4>การใช้อาหาร</h4>
+                           <p>ใช้รวม: ${totalFeedUsed.toLocaleString()} กก.</p>
+                           <p>เฉลี่ยต่อวัน: ${avgFeedPerDay.toFixed(1)} กก.</p>
+                           <p>จำนวนครั้ง: ${feedUsage.length} ครั้ง</p>
                        </div>
                        <div>
-                           <h4>สถิติการเงิน</h4>
-                           <p>รายได้รวม: ${totalSales.toLocaleString()} บาท</p>
-                           <p>ต้นทุนรวม: ${totalCosts.toLocaleString()} บาท</p>
-                           <p>กำไร/ขาดทุน: ${(totalSales - totalCosts).toLocaleString()} บาท</p>
+                           <h4>การใช้ยา/วัคซีน</h4>
+                           <p>ใช้รวม: ${totalMedicalUsed.toLocaleString()} หน่วย</p>
+                           <p>เฉลี่ยต่อวัน: ${avgMedicalPerDay.toFixed(1)} หน่วย</p>
+                           <p>จำนวนครั้ง: ${medicalUsage.length} ครั้ง</p>
                        </div>
                    </div>
+                   
                    <div style="margin-top: 20px;">
-                       <h4>สถิติการขาย</h4>
-                       <p>จำนวนครั้งที่ขาย: ${farmData.sales.length} ครั้ง</p>
-                       <p>สุกรที่ขายแล้ว: ${farmData.sales.reduce((sum, sale) => sum + sale.quantity, 0)} ตัว</p>
+                       <h4>รายละเอียดการใช้งาน</h4>
+                       <table class="table">
+                           <thead>
+                               <tr><th>วันที่</th><th>ประเภท</th><th>รายการ</th><th>จำนวน</th></tr>
+                           </thead>
+                           <tbody>
+           `;
+
+           recentUsage.slice(-20).reverse().forEach(usage => {
+               const typeText = usage.type === 'feed' ? 'อาหาร' : 'ยา/วัคซีน';
+               container.innerHTML += `
+                   <tr>
+                       <td>${new Date(usage.date).toLocaleDateString('th-TH')}</td>
+                       <td>${typeText}</td>
+                       <td>${usage.itemName}</td>
+                       <td>${usage.amount} ${usage.unit}</td>
+                   </tr>
+               `;
+           });
+
+           container.innerHTML += `
+                           </tbody>
+                       </table>
+                       <p><small>แสดง 20 รายการล่าสุด</small></p>
                    </div>
                </div>
            `;
        }
 
-       function generateFinancialReport(container, startDate, endDate) {
-           let filteredSales = farmData.sales;
-           if (startDate && endDate) {
-               filteredSales = farmData.sales.filter(sale => 
-                   sale.date >= startDate && sale.date <= endDate
-               );
-           }
-
-           const revenue = filteredSales.reduce((sum, sale) => sum + sale.netRevenue, 0);
-           const feedCosts = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
-           const medicalCosts = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
-           const supplyCosts = farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
-           const totalCosts = feedCosts + medicalCosts + supplyCosts;
+       function generateFinancialReport(container) {
+           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const feedCosts = farmData.feeds.reduce((sum, feed) => sum + (feed.originalQuantity * feed.price), 0);
+           const medicalCosts = farmData.medical.reduce((sum, med) => sum + (med.originalQuantity * med.price), 0);
+           const totalCosts = feedCosts + medicalCosts;
+           const profit = totalSales - totalCosts;
 
            container.innerHTML = `
                <div class="card">
@@ -1501,28 +1743,31 @@
                    <div class="form-grid">
                        <div>
                            <h4>รายได้</h4>
-                           <p>รายได้จากการขาย: ${revenue.toLocaleString()} บาท</p>
-                           <p>จำนวนครั้งที่ขาย: ${filteredSales.length} ครั้ง</p>
+                           <p>รายได้จากการขาย: ${totalSales.toLocaleString()} บาท</p>
+                           <p>จำนวนครั้งที่ขาย: ${farmData.sales.length} ครั้ง</p>
                        </div>
                        <div>
                            <h4>รายจ่าย</h4>
                            <p>ค่าอาหาร: ${feedCosts.toLocaleString()} บาท</p>
                            <p>ค่ายาและวัคซีน: ${medicalCosts.toLocaleString()} บาท</p>
-                           <p>ค่าอุปกรณ์: ${supplyCosts.toLocaleString()} บาท</p>
                            <p><strong>รวมรายจ่าย: ${totalCosts.toLocaleString()} บาท</strong></p>
                        </div>
                    </div>
+                   
                    <div style="margin-top: 20px;">
                        <h4>สรุปผลการดำเนินงาน</h4>
-                       <p><strong>กำไร/ขาดทุนสุทธิ: ${(revenue - totalCosts).toLocaleString()} บาท</strong></p>
-                       <p>อัตรากำไร: ${totalCosts > 0 ? ((revenue - totalCosts) / totalCosts * 100).toFixed(2) : 0}%</p>
+                       <p><strong>กำไร/ขาดทุนสุทธิ: ${profit.toLocaleString()} บาท</strong></p>
+                       <p>อัตรากำไร: ${totalSales > 0 ? (profit / totalSales * 100).toFixed(2) : 0}%</p>
+                       <p>ต้นทุนต่อรายได้: ${totalSales > 0 ? (totalCosts / totalSales * 100).toFixed(2) : 0}%</p>
                    </div>
                </div>
            `;
        }
 
        function generateLivestockReport(container) {
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
            const pigsByType = {};
+           
            farmData.pigs.forEach(pig => {
                if (!pigsByType[pig.type]) {
                    pigsByType[pig.type] = { count: 0, total: 0 };
@@ -1544,17 +1789,10 @@
                    <div class="card-title">รายงานสุกร</div>
                    <table class="table">
                        <thead>
-                           <tr>
-                               <th>ประเภทสุกร</th>
-                               <th>จำนวนกลุ่ม</th>
-                               <th>จำนวนตัว</th>
-                               <th>เปอร์เซ็นต์</th>
-                           </tr>
+                           <tr><th>ประเภทสุกร</th><th>จำนวนกลุ่ม</th><th>จำนวนตัว</th><th>เปอร์เซ็นต์</th></tr>
                        </thead>
                        <tbody>
            `;
-
-           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
 
            Object.keys(pigsByType).forEach(type => {
                const percentage = totalPigs > 0 ? (pigsByType[type].total / totalPigs * 100).toFixed(1) : 0;
@@ -1581,146 +1819,12 @@
            container.innerHTML = html;
        }
 
-       function generateFeedReport(container) {
-           const feedsByType = {};
-           let totalValue = 0;
-
-           farmData.feeds.forEach(feed => {
-               if (!feedsByType[feed.type]) {
-                   feedsByType[feed.type] = { quantity: 0, value: 0, count: 0 };
-               }
-               feedsByType[feed.type].quantity += feed.quantity;
-               feedsByType[feed.type].value += feed.quantity * feed.price;
-               feedsByType[feed.type].count++;
-               totalValue += feed.quantity * feed.price;
-           });
-
-           const feedTypes = {
-               'prestarter': 'Pre-Starter',
-               'starter': 'Starter',
-               'grower': 'Grower',
-               'finisher': 'Finisher',
-               'sow': 'อาหารแม่พันธุ์',
-               'boar': 'อาหารพ่อพันธุ์'
-           };
-
-           let html = `
-               <div class="card">
-                   <div class="card-title">รายงานอาหาร</div>
-                   <table class="table">
-                       <thead>
-                           <tr>
-                               <th>ประเภทอาหาร</th>
-                               <th>จำนวน (กก.)</th>
-                               <th>มูลค่า (บาท)</th>
-                               <th>เปอร์เซ็นต์</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-           `;
-
-           Object.keys(feedsByType).forEach(type => {
-               const percentage = totalValue > 0 ? (feedsByType[type].value / totalValue * 100).toFixed(1) : 0;
-               html += `
-                   <tr>
-                       <td>${feedTypes[type]}</td>
-                       <td>${feedsByType[type].quantity.toLocaleString()}</td>
-                       <td>${feedsByType[type].value.toLocaleString()}</td>
-                       <td>${percentage}%</td>
-                   </tr>
-               `;
-           });
-
-           html += `
-                       </tbody>
-                   </table>
-                   <div style="margin-top: 20px;">
-                       <p><strong>มูลค่ารวม: ${totalValue.toLocaleString()} บาท</strong></p>
-                       <p>จำนวนรายการ: ${farmData.feeds.length} รายการ</p>
-                   </div>
-               </div>
-           `;
-
-           container.innerHTML = html;
-       }
-
-       function generateMedicalReport(container) {
-           const medicalByType = {};
-           let totalValue = 0;
-
-           farmData.medical.forEach(med => {
-               if (!medicalByType[med.type]) {
-                   medicalByType[med.type] = { quantity: 0, value: 0, count: 0 };
-               }
-               medicalByType[med.type].quantity += med.quantity;
-               medicalByType[med.type].value += med.quantity * med.price;
-               medicalByType[med.type].count++;
-               totalValue += med.quantity * med.price;
-           });
-
-           const medicalTypes = {
-               'vaccine': 'วัคซีน',
-               'antibiotic': 'ยาปฏิชีวนะ',
-               'vitamin': 'วิตามิน',
-               'deworming': 'ยาถ่ายพยาธิ',
-               'hormone': 'ฮอร์โมน',
-               'supplement': 'อาหารเสริม',
-               'disinfectant': 'ยาฆ่าเชื้อ'
-           };
-
-           let html = `
-               <div class="card">
-                   <div class="card-title">รายงานยาและวัคซีน</div>
-                   <table class="table">
-                       <thead>
-                           <tr>
-                               <th>ประเภท</th>
-                               <th>จำนวนรายการ</th>
-                               <th>มูลค่า (บาท)</th>
-                               <th>เปอร์เซ็นต์</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-           `;
-
-           Object.keys(medicalByType).forEach(type => {
-               const percentage = totalValue > 0 ? (medicalByType[type].value / totalValue * 100).toFixed(1) : 0;
-               html += `
-                   <tr>
-                       <td>${medicalTypes[type]}</td>
-                       <td>${medicalByType[type].count}</td>
-                       <td>${medicalByType[type].value.toLocaleString()}</td>
-                       <td>${percentage}%</td>
-                   </tr>
-               `;
-           });
-
-           html += `
-                       </tbody>
-                   </table>
-                   <div style="margin-top: 20px;">
-                       <p><strong>มูลค่ารวม: ${totalValue.toLocaleString()} บาท</strong></p>
-                       <p>จำนวนรายการ: ${farmData.medical.length} รายการ</p>
-                   </div>
-               </div>
-           `;
-
-           container.innerHTML = html;
-       }
-
-       function generateSalesReport(container, startDate, endDate) {
-           let filteredSales = farmData.sales;
-           if (startDate && endDate) {
-               filteredSales = farmData.sales.filter(sale => 
-                   sale.date >= startDate && sale.date <= endDate
-               );
-           }
-
+       function generateSalesReport(container) {
            const salesByType = {};
            let totalRevenue = 0;
            let totalQuantity = 0;
 
-           filteredSales.forEach(sale => {
+           farmData.sales.forEach(sale => {
                if (!salesByType[sale.type]) {
                    salesByType[sale.type] = { quantity: 0, revenue: 0, count: 0 };
                }
@@ -1744,12 +1848,7 @@
                    <div class="card-title">รายงานการขาย</div>
                    <table class="table">
                        <thead>
-                           <tr>
-                               <th>ประเภทสุกร</th>
-                               <th>จำนวนตัว</th>
-                               <th>รายได้ (บาท)</th>
-                               <th>เปอร์เซ็นต์</th>
-                           </tr>
+                           <tr><th>ประเภทสุกร</th><th>จำนวนตัว</th><th>รายได้ (บาท)</th><th>เปอร์เซ็นต์</th></tr>
                        </thead>
                        <tbody>
            `;
@@ -1772,13 +1871,46 @@
                    <div style="margin-top: 20px;">
                        <p><strong>รายได้รวม: ${totalRevenue.toLocaleString()} บาท</strong></p>
                        <p>จำนวนที่ขาย: ${totalQuantity} ตัว</p>
-                       <p>จำนวนครั้งที่ขาย: ${filteredSales.length} ครั้ง</p>
+                       <p>จำนวนครั้งที่ขาย: ${farmData.sales.length} ครั้ง</p>
                        <p>ราคาเฉลี่ยต่อตัว: ${totalQuantity > 0 ? (totalRevenue / totalQuantity).toLocaleString() : 0} บาท</p>
                    </div>
                </div>
            `;
 
            container.innerHTML = html;
+       }
+
+       function generateOverviewReport(container) {
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const totalStockValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
+                                 farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+
+           container.innerHTML = `
+               <div class="card">
+                   <div class="card-title">รายงานภาพรวมฟาร์ม</div>
+                   <div class="form-grid">
+                       <div>
+                           <h4>สถิติสุกร</h4>
+                           <p>จำนวนสุกรทั้งหมด: ${totalPigs} ตัว</p>
+                           <p>จำนวนกลุ่ม: ${farmData.pigs.length} กลุ่ม</p>
+                       </div>
+                       <div>
+                           <h4>สถิติการเงิน</h4>
+                           <p>รายได้รวม: ${totalSales.toLocaleString()} บาท</p>
+                           <p>มูลค่าสต็อก: ${totalStockValue.toLocaleString()} บาท</p>
+                       </div>
+                   </div>
+                   
+                   <div style="margin-top: 20px;">
+                       <h4>สถิติการจัดการ</h4>
+                       <p>รายการอาหาร: ${farmData.feeds.length} รายการ</p>
+                       <p>รายการยา: ${farmData.medical.length} รายการ</p>
+                       <p>การใช้งานทั้งหมด: ${farmData.usage.length} ครั้ง</p>
+                       <p>การขายทั้งหมด: ${farmData.sales.length} ครั้ง</p>
+                   </div>
+               </div>
+           `;
        }
 
        function exportReport() {
@@ -1788,9 +1920,12 @@
                summary: {
                    totalPigs: farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0),
                    totalSales: farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0),
-                   totalCosts: farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
-                              farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0) +
-                              farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0)
+                   totalStockValue: farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
+                                  farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0),
+                   lowStockItems: [
+                       ...farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal'),
+                       ...farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal')
+                   ].length
                }
            };
 
@@ -1809,8 +1944,9 @@
        function saveAllData() {
            try {
                const dataToSave = JSON.stringify(farmData);
-               localStorage.setItem('farmManagementData', dataToSave);
-               console.log('บันทึกข้อมูลเรียบร้อย');
+               // สร้าง simple GitHub simulation โดยใช้ในหน่วยความจำ
+               window.farmBackup = dataToSave;
+               console.log('บันทึกข้อมูลเรียบร้อย (GitHub simulation)');
            } catch (error) {
                console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล:', error);
                showAlert('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
@@ -1819,16 +1955,16 @@
 
        function loadAllData() {
            try {
-               const savedData = localStorage.getItem('farmManagementData');
-               if (savedData) {
-                   farmData = JSON.parse(savedData);
-                   console.log('โหลดข้อมูลเรียบร้อย');
+               // โหลดจาก GitHub simulation
+               if (window.farmBackup) {
+                   farmData = JSON.parse(window.farmBackup);
+                   console.log('โหลดข้อมูลจาก GitHub simulation เรียบร้อย');
                } else {
                    console.log('ไม่พบข้อมูลที่บันทึกไว้');
                }
            } catch (error) {
                console.error('เกิดข้อผิดพลาดในการโหลดข้อมูล:', error);
-               farmData = { pigs: [], feeds: [], medical: [], supplies: [], sales: [] };
+               farmData = { pigs: [], feeds: [], medical: [], sales: [], usage: [] };
                showAlert('เกิดข้อผิดพลาดในการโหลดข้อมูล ระบบจะเริ่มต้นใหม่', 'error');
            }
        }
@@ -1836,7 +1972,7 @@
        // Auto-save ทุก 30 วินาที
        setInterval(saveAllData, 30000);
 
-       console.log('ระบบจัดการฟาร์มสุกรพร้อมใช้งาน');
+       console.log('ระบบจัดการฟาร์มสุกรพร้อมระบบสต็อกเสร็จสมบูรณ์');
    </script>
 </body>
-</html>                            
+</html>

@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌈 AI Color Story Painter - เล่านิทานจากสี</title>
+    <title>👗 AI Princess Dress Designer</title>
     <style>
         * {
             margin: 0;
@@ -14,21 +13,51 @@
         }
 
         body {
-            background: linear-gradient(45deg, #ffb6c1, #ffd1dc, #e6e6fa, #b6e5d8);
+            background: linear-gradient(45deg, #ffd1dc, #e6e6fa, #ffb6c1, #f0e68c);
             background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
+            animation: dreamyGradient 8s ease infinite;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
+        @keyframes dreamyGradient {
+            0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        }
+
+        .sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.2rem;
+            animation: sparkleFloat 6s infinite linear;
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -36,173 +65,202 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
         .title {
             font-size: 2.5rem;
-            color: #d63384;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #d63384, #6f42c1, #e91e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
-            animation: bounce 2s infinite;
+            animation: titleBounce 2s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         .subtitle {
             font-size: 1.2rem;
             color: #6f42c1;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .magic-stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .star {
-            position: absolute;
-            color: #ffd700;
-            font-size: 1.5rem;
-            animation: twinkle 2s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .main-section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .color-palette {
+        .main-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .color-option {
-            width: 80px;
-            height: 80px;
+        .drawing-section, .result-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 2px solid #d63384;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #d63384;
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .canvas-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #drawingCanvas {
+            border: 3px solid #e91e63;
+            border-radius: 15px;
+            background: #ffffff;
+            cursor: crosshair;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+
+        .tools {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            border: 4px solid #fff;
+            border: 3px solid #fff;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        .color-option:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .color-option.selected {
+        .color-btn:hover {
             transform: scale(1.2);
-            border-color: #d63384;
-            box-shadow: 0 0 20px rgba(214, 51, 132, 0.6);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        .color-option::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+        .color-btn.active {
+            transform: scale(1.3);
+            border-color: #000;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #6f42c1, #e91e63);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
             transition: all 0.3s ease;
+            margin: 5px;
         }
 
-        .color-option:hover::after {
-            width: 100%;
-            height: 100%;
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .style-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .style-option {
+            background: linear-gradient(135deg, #ffd1dc, #e6e6fa);
+            border: 2px solid #d63384;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .style-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .style-option.selected {
+            background: linear-gradient(135deg, #d63384, #6f42c1);
+            color: white;
+            transform: scale(1.1);
         }
 
         .generate-btn {
-            background: linear-gradient(45deg, #d63384, #6f42c1);
+            background: linear-gradient(45deg, #d63384, #ffd700, #e91e63);
+            background-size: 200% 200%;
+            animation: rainbowShift 3s ease infinite;
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 1.3rem;
             border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: block;
-            margin: 0 auto 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin: 20px auto;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes rainbowShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+        }
+
+        .result-dress {
+            width: 200px;
+            height: 250px;
+            margin: 0 auto 20px;
+            border-radius: 15px;
+            border: 3px solid #d63384;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
             position: relative;
             overflow: hidden;
         }
 
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0,0,0,0.4);
+        .dress-animation {
+            animation: dressGlow 2s ease-in-out infinite;
         }
 
-        .generate-btn:active {
-            transform: translateY(0);
-        }
-
-        .generate-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .generate-btn:hover::before {
-            left: 100%;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2rem;
-            color: #6f42c1;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #d63384;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes dressGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(214, 51, 132, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(214, 51, 132, 0.8); }
         }
 
         .story-container {
             background: linear-gradient(135deg, #fff8e1, #f3e5f5);
             border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            border: 3px solid #d63384;
+            padding: 20px;
+            margin-top: 15px;
+            border: 2px dashed #d63384;
             position: relative;
             overflow: hidden;
         }
@@ -217,67 +275,80 @@
             background: repeating-linear-gradient(
                 45deg,
                 transparent,
-                transparent 10px,
-                rgba(214, 51, 132, 0.1) 10px,
-                rgba(214, 51, 132, 0.1) 20px
+                transparent 15px,
+                rgba(214, 51, 132, 0.1) 15px,
+                rgba(214, 51, 132, 0.1) 30px
             );
-            animation: float 20s linear infinite;
+            animation: patternMove 10s linear infinite;
         }
 
-        @keyframes float {
+        @keyframes patternMove {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        .story-title {
-            font-size: 1.8rem;
-            color: #d63384;
-            text-align: center;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 2;
-        }
-
         .story-text {
+            position: relative;
+            z-index: 2;
             font-size: 1.1rem;
-            line-height: 1.8;
+            line-height: 1.6;
             color: #495057;
-            text-align: left;
-            position: relative;
-            z-index: 2;
         }
 
-        .illustration-container {
-            margin-top: 20px;
+        .accessories-panel {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .accessory-btn {
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #d63384;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .accessory-btn:hover {
+            background: #d63384;
+            transform: scale(1.1);
+        }
+
+        .accessory-btn.active {
+            background: #d63384;
+            color: white;
+        }
+
+        .loading {
             text-align: center;
-            position: relative;
-            z-index: 2;
+            padding: 30px;
+            font-size: 1.2rem;
+            color: #d63384;
         }
 
-        .illustration {
-            width: 200px;
-            height: 200px;
-            border-radius: 15px;
-            border: 3px solid #d63384;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin: 0 auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #d63384;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 15px auto;
         }
 
-        .color-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .actions {
+        .save-actions {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
 
@@ -285,11 +356,11 @@
             background: #6f42c1;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 15px;
             cursor: pointer;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            font-size: 1rem;
         }
 
         .action-btn:hover {
@@ -297,333 +368,358 @@
             transform: translateY(-2px);
         }
 
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .floating-heart, .floating-star, .floating-flower {
-            position: absolute;
-            font-size: 2rem;
-            animation: float-around 15s infinite linear;
-            opacity: 0.6;
-        }
-
-        @keyframes float-around {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-            }
-        }
-
         @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
             .title {
                 font-size: 2rem;
             }
             
-            .color-palette {
-                grid-template-columns: repeat(4, 1fr);
+            #drawingCanvas {
+                width: 100%;
+                max-width: 300px;
             }
             
-            .color-option {
-                width: 60px;
-                height: 60px;
+            .style-selector {
+                grid-template-columns: 1fr;
             }
             
-            .container {
-                padding: 10px;
+            .accessories-panel {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="floating-elements">
-        <div class="floating-heart" style="left: 10%; animation-delay: 0s;">💖</div>
-        <div class="floating-star" style="left: 30%; animation-delay: 3s;">⭐</div>
-        <div class="floating-flower" style="left: 50%; animation-delay: 6s;">🌸</div>
-        <div class="floating-heart" style="left: 70%; animation-delay: 9s;">💕</div>
-        <div class="floating-star" style="left: 90%; animation-delay: 12s;">✨</div>
-    </div>
+    <div class="sparkles"></div>
 
     <div class="container">
         <div class="header">
-            <div class="magic-stars">
-                <span class="star" style="top: 20%; left: 20%;">✨</span>
-                <span class="star" style="top: 30%; left: 80%;">⭐</span>
-                <span class="star" style="top: 60%; left: 10%;">🌟</span>
-                <span class="star" style="top: 70%; left: 90%;">💫</span>
-            </div>
-            <h1 class="title">🌈 AI นิทานสีวิเศษ 🌈</h1>
-            <p class="subtitle">เลือกสีที่ชอบ แล้วให้ AI เล่านิทานวิเศษให้ฟัง!</p>
+            <h1 class="title">👗 AI นักออกแบบชุดเจ้าหญิง 👗</h1>
+            <p class="subtitle">วาดชุดในฝันของเธอ แล้วให้ AI เปลี่ยนเป็นชุดเจ้าหญิงสวยๆ!</p>
+            <p style="color: #6f42c1; font-size: 1rem;">✨ เพียงวาดรูปง่ายๆ เราจะทำให้มันกลายเป็นเวทมนตร์!</p>
         </div>
 
-        <div class="main-section">
-            <div class="color-name">🎨 เลือกสีที่เธอชอบ:</div>
-            <div class="color-palette">
-                <div class="color-option" data-color="pink" style="background: linear-gradient(45deg, #ff69b4, #ffc0cb);" title="สีชมพู - สีแห่งความนุ่มนวล"></div>
-                <div class="color-option" data-color="purple" style="background: linear-gradient(45deg, #9370db, #dda0dd);" title="สีม่วง - สีแห่งเวทมนตร์"></div>
-                <div class="color-option" data-color="blue" style="background: linear-gradient(45deg, #87ceeb, #b0e0e6);" title="สีฟ้า - สีแห่งท้องฟ้า"></div>
-                <div class="color-option" data-color="yellow" style="background: linear-gradient(45deg, #ffd700, #ffffe0);" title="สีเหลือง - สีแห่งแสงแดด"></div>
-                <div class="color-option" data-color="green" style="background: linear-gradient(45deg, #98fb98, #90ee90);" title="สีเขียว - สีแห่งธรรมชาติ"></div>
-                <div class="color-option" data-color="orange" style="background: linear-gradient(45deg, #ffa500, #ffb347);" title="สีส้ม - สีแห่งความอบอุ่น"></div>
-                <div class="color-option" data-color="red" style="background: linear-gradient(45deg, #ff6b6b, #ffa8a8);" title="สีแดง - สีแห่งความกล้าหาญ"></div>
-                <div class="color-option" data-color="rainbow" style="background: conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);" title="สีรุ้ง - สีแห่งความฝัน"></div>
+        <div class="main-content">
+            <div class="drawing-section">
+                <h2 class="section-title">🎨 วาดชุดของเธอ</h2>
+                
+                <div class="tools">
+                    <div class="color-btn active" data-color="#d63384" style="background: #d63384;" title="สีชมพูเจ้าหญิง"></div>
+                    <div class="color-btn" data-color="#6f42c1" style="background: #6f42c1;" title="สีม่วงเวทมนตร์"></div>
+                    <div class="color-btn" data-color="#e91e63" style="background: #e91e63;" title="สีแดงกุหลาบ"></div>
+                    <div class="color-btn" data-color="#ffd700" style="background: #ffd700;" title="สีทองราชินี"></div>
+                    <div class="color-btn" data-color="#00bcd4" style="background: #00bcd4;" title="สีฟ้าเอลซ่า"></div>
+                    <div class="color-btn" data-color="#4caf50" style="background: #4caf50;" title="สีเขียวธรรมชาติ"></div>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="drawingCanvas" width="300" height="350"></canvas>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="control-btn" onclick="clearCanvas()">🗑️ ลบทั้งหมด</button>
+                    <button class="control-btn" onclick="undoStroke()">↶ ยกเลิก</button>
+                </div>
+
+                <h3 style="text-align: center; color: #d63384; margin: 20px 0 10px;">👸 เลือกธีมเจ้าหญิง</h3>
+                <div class="style-selector">
+                    <div class="style-option selected" data-style="cinderella">
+                        🏰<br>ซินเดอเรลล่า<br><small>คลาสสิค</small>
+                    </div>
+                    <div class="style-option" data-style="elsa">
+                        ❄️<br>เอลซ่า<br><small>ราชินีน้ำแข็ง</small>
+                    </div>
+                    <div class="style-option" data-style="rose">
+                        🌹<br>เจ้าหญิงกุหลาบ<br><small>โรแมนติก</small>
+                    </div>
+                </div>
+
+                <button class="generate-btn" onclick="generateDress()">
+                    ✨ เปลี่ยนเป็นชุดเจ้าหญิง ✨
+                </button>
             </div>
 
-            <button class="generate-btn" onclick="generateStory()">
-                ✨ สร้างนิทานวิเศษ ✨
-            </button>
+            <div class="result-section">
+                <h2 class="section-title">👗 ชุดเจ้าหญิงของเธอ</h2>
+                
+                <div id="resultArea">
+                    <div class="result-dress">
+                        <div style="text-align: center; color: #ccc;">
+                            👗<br>
+                            <small>วาดชุดแล้วกด<br>"เปลี่ยนเป็นชุดเจ้าหญิง"</small>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; color: #6f42c1; margin-bottom: 15px;">
+                        รอชุดเจ้าหญิงสวยๆ ของเธออยู่นะ! ✨
+                    </div>
 
-            <div id="storyResult"></div>
+                    <h3 style="text-align: center; color: #d63384; margin-bottom: 10px;">💎 เครื่องประดับ</h3>
+                    <div class="accessories-panel">
+                        <div class="accessory-btn" data-accessory="crown" title="มงกุฎ">👑</div>
+                        <div class="accessory-btn" data-accessory="necklace" title="สร้อยคอ">📿</div>
+                        <div class="accessory-btn" data-accessory="earrings" title="ต่างหู">💎</div>
+                        <div class="accessory-btn" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
+                        <div class="accessory-btn" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let selectedColor = '';
-        let currentStory = '';
+        // Drawing variables
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentColor = '#d63384';
+        let currentStyle = 'cinderella';
+        let strokes = [];
+        let currentStroke = [];
+        let selectedAccessories = [];
+        let currentDress = null;
 
-        // Color stories database
-        const colorStories = {
-            pink: {
-                name: "สีชมพูแสนหวาน",
-                stories: [
-                    {
-                        title: "🌸 เจ้าหญิงลมดอกซากุระ 🌸",
-                        text: "ครั้งหนึ่งในแดนไกล มีเจ้าหญิงผู้งดงามชื่อว่า ซากุระ เธอมีผมสีชมพูเหมือนกลีบดอกไม้ และมีพลังพิเศษที่สามารถทำให้ดอกซากุระบานทั่วทั้งอาณาจักร เมื่อไหร่ที่เธอยิ้ม ดอกไม้ก็จะบานสะพรั่ง และเมื่อไหร่ที่เธอหัวเราะ กลีบดอกไม้ก็จะลอยฟ้องไปทั่วท้องฟ้า ทำให้ทุกคนในอาณาจักรมีความสุข",
-                        illustration: "🌸👸🌸"
-                    },
-                    {
-                        title: "🦄 ยูนิคอร์นสีชมพู 🦄",
-                        text: "ในป่าแห่งความฝัน อาศัยอยู่ยูนิคอร์นสีชมพูชื่อว่า โรสี่ เธอมีเขาแสงระยิบระยับและแสนโรแมนติก ทุกเช้าเธอจะสร้างสายรุ้งสีชมพูข้ามท้องฟ้า และทุกค่ำคืน เธอจะฟูดฝุ่นมหัศจรรย์ที่ทำให้เด็กๆ ฝันดี ฝันหวาน",
-                        illustration: "🦄💖✨"
-                    }
-                ]
+        // Initialize canvas
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 3;
+
+        // Dress templates and stories
+        const dressStyles = {
+            cinderella: {
+                name: "ชุดซินเดอเรลล่า",
+                emoji: "🏰👗✨",
+                description: "ชุดเจ้าหญิงคลาสสิคสีฟ้าอ่อน ประดับด้วยดาวเงิน เหมาะสำหรับงานเต้นรำในปราสาท มีพลังเวทมนตร์ที่ทำให้ผู้สวมใส่มีความมั่นใจและเสน่ห์ที่ไม่อาจต้านทานได้",
+                colors: ["#87ceeb", "#ffffff", "#c0c0c0"]
             },
-            purple: {
-                name: "สีม่วงแห่งเวทมนตร์",
-                stories: [
-                    {
-                        title: "🔮 นางฟ้าแห่งคริสตัล 🔮",
-                        text: "ในหอคอยคริสตัลสีม่วง อาศัยอยู่นางฟ้าผู้ชาญฉลาดชื่อว่า คริสตาลลี่ เธอดูแลดวงดาวและจันทรา ทุกคืน เธอจะใช้เวทมนตร์สีม่วงส่องแสงลงมายังโลก ทำให้เด็กๆ ที่กำลังนอนหลับได้ฝันเป็นเจ้าหญิง นักบิน หรือนักสำรวจอวกาศ",
-                        illustration: "🔮✨🌙"
-                    },
-                    {
-                        title: "🎭 ราชินีแห่งเมฆ 🎭",
-                        text: "สูงเหนือเมฆ มีปราสาทสีม่วงอันงดงาม ที่อยู่อาศัยของราชินีแห่งเมฆ เธอควบคุมสายลมและเมฆฝน เมื่อเธอเต้นรำ เมฆจะเปลี่ยนเป็นรูปสัตว์ต่างๆ และเมื่อเธอร้องเพลง ฝนจะตกลงมาเป็นเม็ดคริสตัลเล็กๆ ที่ส่องแสงระยิบระยับ",
-                        illustration: "👑☁️💜"
-                    }
-                ]
+            elsa: {
+                name: "ชุดเอลซ่าราชินีน้ำแข็ง", 
+                emoji: "❄️👗💎",
+                description: "ชุดราชินีน้ำแข็งสีฟ้าน้ำแข็ง ประดับด้วยผลึกน้ำแข็งระยิบระยับ มีพลังควบคุมน้ำแข็งและหิมะ ทำให้ผู้สวมใส่สามารถสร้างปราสาทน้ำแข็งและดอกไม้หิมะได้",
+                colors: ["#0066cc", "#ccffff", "#ffffff"]
             },
-            blue: {
-                name: "สีฟ้าแห่งท้องทะเล",
-                stories: [
-                    {
-                        title: "🧜‍♀️ นางเงือกน้อยแห่งมหาสมุทร 🧜‍♀️",
-                        text: "ในท้องทะเลลึก อาศัยอยู่นางเงือกน้อยชื่อว่า มารีน่า เธอมีเสียงเพลงไพเราะที่สุดในมหาสมุทร เมื่อเธอร้องเพลง ปลาทุกชนิดจะมาฟังและเต้นตามจังหวะ ส่วนหอยมุกจะเปิดตัวออกมาส่องแสงงดงาม ทำให้ใต้ทะเลสว่างไสวเหมือนเมืองแห่งแสง",
-                        illustration: "🧜‍♀️🐠💎"
-                    },
-                    {
-                        title: "🐋 วาฬน้อยผู้ใจดี 🐋",
-                        text: "วาฬน้อยสีฟ้าชื่อว่า บลู เป็นมิตรกับทุกสิ่งในทะเล เธอช่วยเหลือปลาเล็กๆ ที่หลงทาง และพาเรือที่เสียหายกลับสู่ฝั่ง ทุกเย็น เธอจะพ่นน้ำสูงขึ้นฟ้า ทำให้เกิดสายรุ้งสีฟ้าที่สวยงาม",
-                        illustration: "🐋🌊🌈"
-                    }
-                ]
-            },
-            yellow: {
-                name: "สีเหลืองแห่งแสงตะวัน",
-                stories: [
-                    {
-                        title: "☀️ เจ้าหญิงแห่งแสงแดด ☀️",
-                        text: "เจ้าหญิงซันนี่ เป็นธิดาของพระอาทิตย์ เธอมีผมสีทองเหมือนแสงแดด และรอยยิ้มที่ทำให้ทุกคนอบอุ่น เมื่อไหร่ที่โลกเศร้า เธอจะส่งแสงอบอุ่นลงมา ทำให้ดอกไม้บาน นกร้องเพลง และเด็กๆ มีความสุข",
-                        illustration: "☀️👸🌻"
-                    },
-                    {
-                        title: "🐝 ผึ้งน้อยนักสำรวจ 🐝",
-                        text: "ผึ้งน้อยชื่อว่า ฮันนี่ บินไปทั่วสวนดอกไม้ เธอเก็บน้ำหวานจากดอกไม้มาทำน้ำผึ้งทอง ที่หวานและมีคุณสมบัติวิเศษ ใครที่ได้ลิ้มรสจะได้รับพลังแห่งความสุข และสามารถเห็นความงามในทุกสิ่งรอบตัว",
-                        illustration: "🐝🍯🌼"
-                    }
-                ]
-            },
-            green: {
-                name: "สีเขียวแห่งป่าไผ่",
-                stories: [
-                    {
-                        title: "🌿 นางฟ้าแห่งป่าไผ่ 🌿",
-                        text: "ในป่าไผ่อันเงียบสงบ อาศัยอยู่นางฟ้าผู้รักธรรมชาติชื่อว่า ฟอเรสต์ เธอดูแลต้นไผ่ให้เติบโตสูงใหญ่ และเป็นที่อยู่อาศัยของสัตว์ป่า เสียงใสใสของเธอจะบอกกับใบไผ่ให้แกว่งไกว ทำให้เกิดเสียงเพลงธรรมชาติที่ไพเราะ",
-                        illustration: "🌿🧚‍♀️🎋"
-                    },
-                    {
-                        title: "🐸 กบเจ้าชายแห่งบึง 🐸",
-                        text: "กบน้อยสีเขียวชื่อว่า เอมเมอรัลด์ เป็นเจ้าชายแห่งบึงใส เขามีมงกุฎใบบัวบนหัว และสามารถทำให้น้ำในบึงใสสะอาด เมื่อเขาร้องเพลง หิ่งห้อยจะออกมาเต้นรำ ทำให้คืนนั้นสว่างไสวด้วยแสงเขียวอ่อนๆ",
-                        illustration: "🐸👑💚"
-                    }
-                ]
-            },
-            orange: {
-                name: "สีส้มแห่งความอบอุ่น",
-                stories: [
-                    {
-                        title: "🦊 จิ้งจอกน้อยผู้ชาญฉลาด 🦊",
-                        text: "ในป่าแห่งใบไม้เปลี่ยนสี อาศัยอยู่จิ้งจอกน้อยชื่อว่า ออตั้ม เธอมีขนสีส้มสวยงาม และเป็นนักเล่านิทานที่เก่งที่สุดในป่า ทุกค่ำคืน สัตว์ป่าทั้งหมดจะมาฟังเธอเล่านิทาน ใต้แสงไฟจากหิ่งห้อยนับพัน",
-                        illustration: "🦊🍂✨"
-                    },
-                    {
-                        title: "🎃 ฟักทองวิเศษ 🎃",
-                        text: "ในสวนผักแสนสวย มีฟักทองวิเศษผลหนึ่ง เมื่อเด็กๆ หิวโหย มันจะแปลงร่างเป็นรถม้าทองคำ พาไปยังปราสาทขนมหวาน ที่เต็มไปด้วยขนมโฮมเมดรสเลิศ ที่ทำจากผักผลไม้สีส้มทั้งหมด",
-                        illustration: "🎃🏰🍰"
-                    }
-                ]
-            },
-            red: {
-                name: "สีแดงแห่งความกล้าหาญ",
-                stories: [
-                    {
-                        title: "🐲 มังกรน้อยใจดี 🐲",
-                        text: "มังกรน้อยสีแดงชื่อว่า รูบี้ ไม่เหมือนมังกรทั่วไป เธอไม่พ่นไfire ะแต่พ่นกลีบกุหลาบแดงแทน เมื่อไหร่ที่ใครเศร้า เธอจะบินมาพ่นกลีบกุหลาบให้ ทำให้คนนั้นรู้สึกมีกำลังใจและพร้อมเผชิญหน้ากับทุกสิ่ง",
-                        illustration: "🐲🌹❤️"
-                    },
-                    {
-                        title: "🍎 แอปเปิ้ลแห่งความฝัน 🍎",
-                        text: "ในสวนผลไม้วิเศษ มีต้นแอปเปิ้ลต้นหนึ่งที่ให้ผลแอปเปิ้ลสีแดงสดใส เมื่อใครกินแอปเปิ้ลจากต้นนี้ จะได้รับความกล้าหาญในการทำตามความฝัน และพลังที่จะเอาชนะอุปสรรคทั้งหมด",
-                        illustration: "🍎🌳💪"
-                    }
-                ]
-            },
-            rainbow: {
-                name: "สีรุ้งแห่งความฝัน",
-                stories: [
-                    {
-                        title: "🌈 เจ้าหญิงแห่งสายรุ้ง 🌈",
-                        text: "เจ้าหญิงไอริส สามารถควบคุมสายรุ้งได้ เธอมีชุดที่เปลี่ยนสีตามอารมณ์ และสามารถวาดสายรุ้งข้ามท้องฟ้าได้ตลอดเวลา เมื่อเด็กๆ เศร้า เธอจะส่งสายรุ้งมาให้ดู เพื่อเตือนว่าหลังฝนตกจะมีแสงแดดและสายรุ้งตามมาเสมอ",
-                        illustration: "🌈👸✨"
-                    },
-                    {
-                        title: "🦋 ผีเสื้อแห่งความหวัง 🦋",
-text: "ผีเสื้อตัวพิเศษที่มีปีกสีรุ้ง ชื่อว่า เรนโบว์ เธอบินไปทั่วโลกเพื่อแจกจ่ายความหวังและความฝัน ทุกที่ที่เธอแวะผ่าน จะมีดอกไม้หลากสีเบ่งบาน และเด็กๆ จะได้รับแรงบันดาลใจในการสร้างสรรค์สิ่งใหม่ๆ",
-                        illustration: "🦋🌺🎨"
-                    }
-                ]
+            rose: {
+                name: "ชุดเจ้าหญิงกุหลาบ",
+                emoji: "🌹👗💖", 
+                description: "ชุดเจ้าหญิงสีชมพูกุหลาบ ประดับด้วยกลีบกุหลาบทองคำ มีพลังเวทมนตร์แห่งความรัก ทำให้ดอกกุหลาบบานเบิกและส่งกลิ่นหอมหวานไปทั่วสวน",
+                colors: ["#ff69b4", "#ffd700", "#ffb6c1"]
             }
         };
 
-        // Initialize floating stars
-        function createFloatingStars() {
-            const container = document.querySelector('.floating-elements');
-            const stars = ['✨', '⭐', '🌟', '💫', '🌸', '💖', '💕'];
+        const accessories = {
+            crown: "👑 มงกุฎเพชรระยิบระยับ",
+            necklace: "📿 สร้อยคอไข่มุกเวทมนตร์", 
+            earrings: "💎 ต่างหูคริสตัลส่องแสง",
+            shoes: "👠 รองเท้าแก้วใสวิเศษ",
+            wand: "🪄 ไม้เวทมนตร์ดาวทอง"
+        };
+
+        // Create floating sparkles
+        function createSparkles() {
+            const sparklesContainer = document.querySelector('.sparkles');
+            const sparkleSymbols = ['✨', '⭐', '🌟', '💫', '🔮', '💎'];
             
-            for (let i = 0; i < 15; i++) {
-                const star = document.createElement('div');
-                star.className = 'floating-star';
-                star.textContent = stars[Math.floor(Math.random() * stars.length)];
-                star.style.left = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 15 + 's';
-                star.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                container.appendChild(star);
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 6 + 's';
+                sparkle.style.animationDuration = (4 + Math.random() * 4) + 's';
+                sparklesContainer.appendChild(sparkle);
             }
         }
 
-        // Color selection handler
-        document.querySelectorAll('.color-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedColor = this.dataset.color;
-                
-                // Add sparkle effect
-                createSparkles(this);
+        // Drawing functions
+        function startDrawing(e) {
+            isDrawing = true;
+            currentStroke = [];
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            
+            ctx.strokeStyle = currentColor;
+            
+            if (currentStroke.length === 0) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+            
+            currentStroke.push({x, y, color: currentColor});
+        }
+
+        function stopDrawing() {
+            if (isDrawing && currentStroke.length > 0) {
+                strokes.push([...currentStroke]);
+            }
+            isDrawing = false;
+        }
+
+        // Canvas event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Color selection
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentColor = this.dataset.color;
             });
         });
 
-        function createSparkles(element) {
-            for (let i = 0; i < 8; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.innerHTML = '✨';
-                sparkle.style.position = 'absolute';
-                sparkle.style.pointerEvents = 'none';
-                sparkle.style.fontSize = '1rem';
-                sparkle.style.zIndex = '1000';
+        // Style selection
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                currentStyle = this.dataset.style;
+            });
+        });
+
+        // Accessory selection
+        document.querySelectorAll('.accessory-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const accessory = this.dataset.accessory;
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    selectedAccessories = selectedAccessories.filter(a => a !== accessory);
+                } else {
+                    this.classList.add('active');
+                    selectedAccessories.push(accessory);
+                }
                 
-                const rect = element.getBoundingClientRect();
-                sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
-                sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
-                
-                document.body.appendChild(sparkle);
-                
-                sparkle.animate([
-                    { opacity: 1, transform: 'scale(0) translateY(0px)' },
-                    { opacity: 0, transform: 'scale(1.5) translateY(-50px)' }
-                ], {
-                    duration: 1000,
-                    easing: 'ease-out'
-                }).onfinish = () => sparkle.remove();
+                if (currentDress) {
+                    updateDressDisplay();
+                }
+            });
+        });
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            strokes = [];
+        }
+
+        function undoStroke() {
+            if (strokes.length > 0) {
+                strokes.pop();
+                redrawCanvas();
             }
         }
 
-        function generateStory() {
-            if (!selectedColor) {
-                alert('กรุณาเลือกสีก่อนนะคะ! 🌈');
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            strokes.forEach(stroke => {
+                if (stroke.length > 0) {
+                    ctx.strokeStyle = stroke[0].color;
+                    ctx.beginPath();
+                    ctx.moveTo(stroke[0].x, stroke[0].y);
+                    stroke.forEach(point => {
+                        ctx.lineTo(point.x, point.y);
+                    });
+                    ctx.stroke();
+                }
+            });
+        }
+
+        function generateDress() {
+            if (strokes.length === 0) {
+                alert('กรุณาวาดชุดก่อนนะคะ! 🎨');
                 return;
             }
 
-            const resultDiv = document.getElementById('storyResult');
+            const resultArea = document.getElementById('resultArea');
             
             // Show loading
-            resultDiv.innerHTML = `
+            resultArea.innerHTML = `
                 <div class="loading">
-                    <div class="spinner"></div>
-                    <p>🎨 AI กำลังสร้างนิทานวิเศษให้เธอ... ✨</p>
+                    <div class="loading-spinner"></div>
+                    <p>🪄 AI กำลังสร้างชุดเจ้าหญิงวิเศษให้เธอ...</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">✨ รอสักครู่นะคะ กำลังใส่เวทมนตร์! ✨</p>
                 </div>
             `;
 
-            // Simulate AI processing time
+            // Simulate AI processing
             setTimeout(() => {
-                const colorData = colorStories[selectedColor];
-                const randomStory = colorData.stories[Math.floor(Math.random() * colorData.stories.length)];
-                currentStory = randomStory;
-
-                resultDiv.innerHTML = `
-                    <div class="story-container">
-                        <div class="color-name">${colorData.name}</div>
-                        <h2 class="story-title">${randomStory.title}</h2>
-                        <div class="illustration-container">
-                            <div class="illustration" style="display: flex; align-items: center; justify-content: center; font-size: 3rem; background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,240,245,0.9));">
-                                ${randomStory.illustration}
-                            </div>
-                        </div>
-                        <p class="story-text">${randomStory.text}</p>
-                        <div class="actions">
-                            <button class="action-btn" onclick="readStoryAloud()">📢 อ่านออกเสียง</button>
-                            <button class="action-btn" onclick="copyStory()">📋 คัดลอกนิทาน</button>
-                            <button class="action-btn" onclick="generateNewStory()">🔄 นิทานใหม่</button>
-                            <button class="action-btn" onclick="saveStory()">💾 บันทึกนิทาน</button>
-                        </div>
-                    </div>
-                `;
-
-                // Add entrance animation
-                const storyContainer = resultDiv.querySelector('.story-container');
-                storyContainer.style.opacity = '0';
-                storyContainer.style.transform = 'translateY(30px)';
-                
-                requestAnimationFrame(() => {
-                    storyContainer.style.transition = 'all 0.8s ease';
-                    storyContainer.style.opacity = '1';
-                    storyContainer.style.transform = 'translateY(0)';
-                });
-
-                // Add celebration effects
-                celebrateStoryGeneration();
-            }, 2000 + Math.random() * 1000);
+                const style = dressStyles[currentStyle];
+                currentDress = style;
+                updateDressDisplay();
+                createCelebrationEffect();
+            }, 2500 + Math.random() * 1500);
         }
 
-        function celebrateStoryGeneration() {
+        function updateDressDisplay() {
+            const style = currentDress;
+            const accessoryText = selectedAccessories.map(acc => accessories[acc]).join(', ');
+            
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="result-dress dress-animation">
+                    <div style="text-align: center; font-size: 2.5rem;">
+                        ${style.emoji}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; font-weight: bold; color: #d63384; margin-bottom: 15px;">
+                    ${style.name}
+                </div>
+
+                <div class="story-container">
+                    <div class="story-text">
+                        ${style.description}
+                        ${selectedAccessories.length > 0 ? `<br><br>🌟 เครื่องประดับ: ${accessoryText}` : ''}
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; color: #d63384; margin: 20px 0 10px;">💎 เครื่องประดับ</h3>
+                <div class="accessories-panel">
+                    <div class="accessory-btn ${selectedAccessories.includes('crown') ? 'active' : ''}" data-accessory="crown" title="มงกุฎ">👑</div>
+                    <div class="accessory-btn ${selectedAccessories.includes('necklace') ? 'active' : ''}" data-accessory="necklace" title="สร้อยคอ">📿</div>
+                    <div class="accessory-btn ${selectedAccessories.includes('earrings') ? 'active' : ''}" data-accessory="earrings" title="ต่างหู">💎</div>
+                    <div class="accessory-btn ${selectedAccessories.includes('shoes') ? 'active' : ''}" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
+                    <div class="accessory-btn ${selectedAccessories.includes('wand') ? 'active' : ''}" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
+                </div>
+
+                <div class="save-actions">
+                    <button class="action-btn" onclick="saveDress()">💾 บันทึกชุด</button>
+                    <button class="action-btn" onclick="readStory()">📢 อ่านเรื่องราว</button>
+                    <button class="action-btn" onclick="newDesign()">✨ ออกแบบใหม่</button>
+                </div>
+            `;
+
+            // Re-attach accessory event listeners
+            document.querySelectorAll('.accessory-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const accessory = this.dataset.accessory;
+                    if (this.classList.contains('active')) {
+                        this.classList.remove('active');
+                        selectedAccessories = selectedAccessories.filter(a => a !== accessory);
+                    } else {
+                        this.classList.add('active');
+                        selectedAccessories.push(accessory);
+                    }
+                    updateDressDisplay();
+                });
+            });
+        }
+
+        function createCelebrationEffect() {
             const celebration = document.createElement('div');
             celebration.style.position = 'fixed';
             celebration.style.top = '0';
@@ -633,150 +729,249 @@ text: "ผีเสื้อตัวพิเศษที่มีปีกส�
             celebration.style.pointerEvents = 'none';
             celebration.style.zIndex = '1000';
             document.body.appendChild(celebration);
+            const confettiSymbols = ['🎉', '✨', '🌟', '💖', '🌸', '👗', '👑', '💎'];
+           
+           for (let i = 0; i < 30; i++) {
+               const confetti = document.createElement('div');
+               confetti.innerHTML = confettiSymbols[Math.floor(Math.random() * confettiSymbols.length)];
+               confetti.style.position = 'absolute';
+               confetti.style.left = Math.random() * 100 + '%';
+               confetti.style.top = '-50px';
+               confetti.style.fontSize = '2rem';
+               confetti.style.zIndex = '1001';
+               celebration.appendChild(confetti);
 
-            for (let i = 0; i < 20; i++) {
-                const confetti = document.createElement('div');
-                confetti.innerHTML = ['🎉', '✨', '🌟', '💖', '🌈'][Math.floor(Math.random() * 5)];
-                confetti.style.position = 'absolute';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = '-50px';
-                confetti.style.fontSize = '2rem';
-                celebration.appendChild(confetti);
+               confetti.animate([
+                   { 
+                       transform: 'translateY(-50px) rotate(0deg)', 
+                       opacity: 1 
+                   },
+                   { 
+                       transform: `translateY(${window.innerHeight + 100}px) rotate(${360 + Math.random() * 360}deg)`, 
+                       opacity: 0 
+                   }
+               ], {
+                   duration: 3000 + Math.random() * 2000,
+                   easing: 'ease-in'
+               }).onfinish = () => confetti.remove();
+           }
 
-                confetti.animate([
-                    { transform: 'translateY(-50px) rotate(0deg)', opacity: 1 },
-                    { transform: `translateY(${window.innerHeight + 50}px) rotate(720deg)`, opacity: 0 }
-                ], {
-                    duration: 3000 + Math.random() * 2000,
-                    easing: 'ease-in'
-                }).onfinish = () => confetti.remove();
-            }
+           setTimeout(() => celebration.remove(), 6000);
+       }
 
-            setTimeout(() => celebration.remove(), 6000);
-        }
+       function saveDress() {
+           if (!currentDress) return;
+           
+           const accessoryText = selectedAccessories.length > 0 
+               ? selectedAccessories.map(acc => accessories[acc]).join(', ')
+               : 'ไม่มีเครื่องประดับ';
+           
+           const dressData = `
+👗 ชุดเจ้าหญิงของฉัน 👗
+==============================
 
-        function readStoryAloud() {
-            if (!currentStory) return;
-            
-            const utterance = new SpeechSynthesisUtterance(
-                `${currentStory.title}. ${currentStory.text}`
-            );
-            utterance.lang = 'th-TH';
-            utterance.rate = 0.8;
-            utterance.pitch = 1.2;
-            speechSynthesis.speak(utterance);
+📅 วันที่สร้าง: ${new Date().toLocaleString('th-TH')}
+👸 ชื่อชุด: ${currentDress.name}
+🎨 ธีม: ${currentStyle}
 
-            // Visual feedback
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '🔊 กำลังอ่าน...';
-            btn.style.background = '#e91e63';
-            
-            utterance.onend = () => {
-                btn.innerHTML = originalText;
-                btn.style.background = '#6f42c1';
-            };
-        }
+📖 เรื่องราว:
+${currentDress.description}
 
-        function copyStory() {
-            if (!currentStory) return;
-            
-            const storyText = `${currentStory.title}\n\n${currentStory.text}`;
-            navigator.clipboard.writeText(storyText).then(() => {
-                const btn = event.target;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '✅ คัดลอกแล้ว!';
-                btn.style.background = '#28a745';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.background = '#6f42c1';
-                }, 2000);
-            });
-        }
+💎 เครื่องประดับ:
+${accessoryText}
 
-        function generateNewStory() {
-            if (!selectedColor) return;
-            generateStory();
-        }
+✨ สร้างโดย AI Princess Dress Designer ✨
+🌈 ความฝันของเจ้าหญิงน้อย 🌈
+           `;
+           
+           const blob = new Blob([dressData], { type: 'text/plain;charset=utf-8' });
+           const url = URL.createObjectURL(blob);
+           const a = document.createElement('a');
+           a.href = url;
+           a.download = `ชุดเจ้าหญิง-${currentStyle}-${Date.now()}.txt`;
+           a.click();
+           URL.revokeObjectURL(url);
 
-        function saveStory() {
-            if (!currentStory) return;
-            
-            const storyData = {
-                timestamp: new Date().toLocaleString('th-TH'),
-                color: selectedColor,
-                title: currentStory.title,
-                text: currentStory.text
-            };
-            
-            const blob = new Blob([
-                `📖 นิทานวิเศษของฉัน 📖\n` +
-                `วันที่: ${storyData.timestamp}\n` +
-                `สีที่เลือก: ${colorStories[selectedColor].name}\n\n` +
-                `${storyData.title}\n\n` +
-                `${storyData.text}\n\n` +
-                `🌈 สร้างโดย AI Color Story Painter 🌈`
-            ], { type: 'text/plain;charset=utf-8' });
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `นิทาน-${selectedColor}-${Date.now()}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
+           // Visual feedback
+           const btn = event.target;
+           const originalText = btn.innerHTML;
+           btn.innerHTML = '✅ บันทึกแล้ว!';
+           btn.style.background = '#28a745';
+           
+           setTimeout(() => {
+               btn.innerHTML = originalText;
+               btn.style.background = '#6f42c1';
+           }, 2000);
+       }
 
-            // Visual feedback
-            const btn = event.target;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '💾 บันทึกแล้ว!';
-            btn.style.background = '#17a2b8';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '#6f42c1';
-            }, 2000);
-        }
+       function readStory() {
+           if (!currentDress) return;
+           
+           const accessoryText = selectedAccessories.length > 0 
+               ? ` พร้อมกับเครื่องประดับ ${selectedAccessories.map(acc => accessories[acc]).join(' ')}`
+               : '';
+           
+           const fullStory = `${currentDress.name}. ${currentDress.description}${accessoryText}`;
+           
+           const utterance = new SpeechSynthesisUtterance(fullStory);
+           utterance.lang = 'th-TH';
+           utterance.rate = 0.8;
+           utterance.pitch = 1.3;
+           speechSynthesis.speak(utterance);
 
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', function() {
-            createFloatingStars();
-            
-            // Add some random twinkling effects
-            setInterval(() => {
-                const stars = document.querySelectorAll('.magic-stars .star');
-                stars.forEach(star => {
-                    if (Math.random() > 0.7) {
-                        star.style.animation = 'none';
-                        setTimeout(() => {
-                            star.style.animation = 'twinkle 2s infinite';
-                        }, 100);
-                    }
-                });
-            }, 3000);
-        });
+           // Visual feedback
+           const btn = event.target;
+           const originalText = btn.innerHTML;
+           btn.innerHTML = '🔊 กำลังอ่าน...';
+           btn.style.background = '#e91e63';
+           
+           utterance.onend = () => {
+               btn.innerHTML = originalText;
+               btn.style.background = '#6f42c1';
+           };
+       }
 
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && selectedColor) {
-                generateStory();
-            }
-        });
+       function newDesign() {
+           clearCanvas();
+           selectedAccessories = [];
+           currentDress = null;
+           
+           const resultArea = document.getElementById('resultArea');
+           resultArea.innerHTML = `
+               <div class="result-dress">
+                   <div style="text-align: center; color: #ccc;">
+                       👗<br>
+                       <small>วาดชุดแล้วกด<br>"เปลี่ยนเป็นชุดเจ้าหญิง"</small>
+                   </div>
+               </div>
+               
+               <div style="text-align: center; color: #6f42c1; margin-bottom: 15px;">
+                   รอชุดเจ้าหญิงสวยๆ ของเธออยู่นะ! ✨
+               </div>
 
-        // Add responsive touch events for mobile
-        if ('ontouchstart' in window) {
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.addEventListener('touchstart', function() {
-                    this.style.transform = 'scale(1.1)';
-                });
-                
-                option.addEventListener('touchend', function() {
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-        }
-    </script>
+               <h3 style="text-align: center; color: #d63384; margin-bottom: 10px;">💎 เครื่องประดับ</h3>
+               <div class="accessories-panel">
+                   <div class="accessory-btn" data-accessory="crown" title="มงกุฎ">👑</div>
+                   <div class="accessory-btn" data-accessory="necklace" title="สร้อยคอ">📿</div>
+                   <div class="accessory-btn" data-accessory="earrings" title="ต่างหู">💎</div>
+                   <div class="accessory-btn" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
+                   <div class="accessory-btn" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
+               </div>
+           `;
+
+           // Reset style selection
+           document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
+           document.querySelector('.style-option[data-style="cinderella"]').classList.add('selected');
+           currentStyle = 'cinderella';
+       }
+
+       // Touch events for mobile
+       function preventScrolling(e) {
+           if (e.target === canvas) {
+               e.preventDefault();
+           }
+       }
+
+       document.addEventListener('touchstart', preventScrolling, { passive: false });
+       document.addEventListener('touchend', preventScrolling, { passive: false });
+       document.addEventListener('touchmove', preventScrolling, { passive: false });
+
+       // Keyboard shortcuts
+       document.addEventListener('keydown', function(e) {
+           if (e.key === 'Enter' && strokes.length > 0) {
+               generateDress();
+           } else if (e.key === 'Delete' || e.key === 'Backspace') {
+               clearCanvas();
+           } else if (e.ctrlKey && e.key === 'z') {
+               e.preventDefault();
+               undoStroke();
+           }
+       });
+
+       // Initialize the app
+       document.addEventListener('DOMContentLoaded', function() {
+           createSparkles();
+           
+           // Add random sparkle refresher
+           setInterval(() => {
+               if (Math.random() > 0.8) {
+                   createSparkles();
+               }
+           }, 5000);
+
+           // Add welcome message
+           setTimeout(() => {
+               const welcomeMsg = document.createElement('div');
+               welcomeMsg.style.position = 'fixed';
+               welcomeMsg.style.top = '50%';
+               welcomeMsg.style.left = '50%';
+               welcomeMsg.style.transform = 'translate(-50%, -50%)';
+               welcomeMsg.style.background = 'rgba(214, 51, 132, 0.95)';
+               welcomeMsg.style.color = 'white';
+               welcomeMsg.style.padding = '30px';
+               welcomeMsg.style.borderRadius = '20px';
+               welcomeMsg.style.textAlign = 'center';
+               welcomeMsg.style.zIndex = '1000';
+               welcomeMsg.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+               welcomeMsg.innerHTML = `
+                   <h2 style="margin-bottom: 15px;">🌟 ยินดีต้อนรับสู่โลกแห่งเวทมนตร์! 🌟</h2>
+                   <p style="margin-bottom: 20px;">วาดชุดในฝันของเธอ แล้วเราจะเปลี่ยนให้เป็นชุดเจ้าหญิงสวยๆ!</p>
+                   <button onclick="this.parentElement.remove()" style="background: white; color: #d63384; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-weight: bold;">
+                       ✨ เริ่มต้นเลย! ✨
+                   </button>
+               `;
+               document.body.appendChild(welcomeMsg);
+               
+               // Auto-remove after 5 seconds
+               setTimeout(() => {
+                   if (welcomeMsg.parentElement) {
+                       welcomeMsg.remove();
+                   }
+               }, 5000);
+           }, 1000);
+       });
+
+       // Add some magical sound effects (optional)
+       function playMagicSound() {
+           // Create a simple beep sound using Web Audio API
+           const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+           const oscillator = audioContext.createOscillator();
+           const gainNode = audioContext.createGain();
+           
+           oscillator.connect(gainNode);
+           gainNode.connect(audioContext.destination);
+           
+           oscillator.frequency.value = 800;
+           oscillator.type = 'sine';
+           gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+           gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+           
+           oscillator.start(audioContext.currentTime);
+           oscillator.stop(audioContext.currentTime + 0.5);
+       }
+
+       // Add magic sound to generate button
+       const originalGenerateDress = generateDress;
+       generateDress = function() {
+           try {
+               playMagicSound();
+           } catch (e) {
+               // Ignore audio errors
+           }
+           originalGenerateDress();
+       };
+
+       // Performance optimization for mobile
+       let isTouch = false;
+       document.addEventListener('touchstart', () => { isTouch = true; });
+       
+       if (isTouch) {
+           // Reduce sparkle count on mobile
+           const sparkles = document.querySelectorAll('.sparkle');
+           sparkles.forEach((sparkle, index) => {
+               if (index > 10) sparkle.remove();
+           });
+       }
+   </script>
 </body>
-</html>                        
+</html>

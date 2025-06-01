@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -15,11 +16,13 @@
             font-family: 'Arial', 'Helvetica', sans-serif;
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: #e2e8f0;
-            padding-bottom: 90px;
+            padding-bottom: 100px;
             min-height: 100vh;
             font-size: 18px;
+            overflow-x: hidden;
         }
 
+        /* Header */
         .mobile-header {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
@@ -43,7 +46,8 @@
             color: #94a3b8;
         }
 
-        .quick-stats {
+        /* Main Stats Card */
+        .main-stats {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
             backdrop-filter: blur(20px);
             border: 2px solid rgba(148, 163, 184, 0.3);
@@ -125,6 +129,7 @@
             color: #94a3b8;
         }
 
+        /* Cards */
         .card {
             background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(20px);
@@ -163,10 +168,21 @@
             text-align: center;
         }
 
+        .card-badge.success { 
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .card-badge.warning { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
         .card-content {
             padding: 28px;
         }
 
+        /* Alert Items */
         .alert-item {
             background: rgba(15, 23, 42, 0.7);
             border-left: 6px solid #475569;
@@ -198,13 +214,14 @@
             border-color: rgba(245, 158, 11, 0.3);
         }
 
-        .time {
+        .alert-time {
             font-size: 14px;
             color: #94a3b8;
             margin-top: 8px;
             font-weight: normal;
         }
 
+        /* Money Section */
         .money-card {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
             backdrop-filter: blur(20px);
@@ -274,6 +291,90 @@
             font-weight: bold;
         }
 
+        /* Livestock Grid */
+        .livestock-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .livestock-item {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 20px 16px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid rgba(71, 85, 105, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .livestock-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .livestock-number {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 6px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .livestock-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: bold;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .action-btn {
+            padding: 20px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .action-btn.add {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .action-btn.remove {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .action-btn.sell {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .action-btn.move {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -314,9 +415,10 @@
             font-weight: bold;
         }
 
+        /* Floating Action Button */
         .fab {
             position: fixed;
-            bottom: 100px;
+            bottom: 110px;
             right: 24px;
             width: 72px;
             height: 72px;
@@ -340,6 +442,7 @@
             transform: scale(0.9);
         }
 
+        /* Sections */
         .section {
             display: none;
         }
@@ -348,15 +451,7 @@
             display: block;
         }
 
-        .developing {
-            text-align: center;
-            padding: 48px 24px;
-            color: #64748b;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-
-        /* Modal สำหรับแก้ไขตัวเลข */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -439,6 +534,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
+        /* Notification */
         .notification {
             position: fixed;
             top: 90px;
@@ -459,6 +555,26 @@
         .notification.show {
             transform: translateX(0);
         }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .main-number {
+                font-size: 60px;
+            }
+            
+            .livestock-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .money-summary {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -474,6 +590,7 @@
         </div>
     </div>
 
+    <!-- Header -->
     <div class="mobile-header">
         <h1>ระบบจัดการฟาร์ม</h1>
         <div class="date" id="currentDate"></div>
@@ -481,7 +598,7 @@
 
     <!-- หน้าหลัก -->
     <div id="dashboard" class="section active">
-        <div class="quick-stats">
+        <div class="main-stats">
             <div class="main-number" onclick="openEditModal('totalPigs', 'จำนวนสุกรทั้งหมด')" id="totalPigs">105</div>
             <div class="main-label">สุกรทั้งหมด</div>
             <div class="sub-stats">
@@ -505,18 +622,18 @@
                 <div class="card-title">แจ้งเตือนด่วน</div>
                 <div class="card-badge" id="alertCount">3</div>
             </div>
-            <div class="card-content">
+            <div class="card-content" id="alertContainer">
                 <div class="alert-item critical" onclick="handleAlert(this)">
                     <div>ฉีดวัคซีน 10 ตัว</div>
-                    <div class="time">กำหนด: วันนี้</div>
+                    <div class="alert-time">กำหนด: วันนี้</div>
                 </div>
                 <div class="alert-item critical" onclick="handleAlert(this)">
                     <div>ตรวจครรภ์ แม่พันธุ์ #03</div>
-                    <div class="time">เลยกำหนด: 2 วัน</div>
+                    <div class="alert-time">เลยกำหนด: 2 วัน</div>
                 </div>
                 <div class="alert-item warning" onclick="handleAlert(this)">
                     <div>หมูพร้อมขาย 12 ตัว</div>
-                    <div class="time">น้ำหนักถึงเป้าแล้ว</div>
+                    <div class="alert-time">น้ำหนักถึงเป้าแล้ว</div>
                 </div>
             </div>
         </div>
@@ -544,25 +661,108 @@
         </div>
     </div>
 
-    <!-- หน้าอื่นๆ -->
+    <!-- หน้าจัดการสุกร -->
     <div id="livestock" class="section">
-        <div class="developing">
-            หน้าจัดการสุกร<br>
-            กำลังพัฒนา...
+        <div class="main-stats">
+            <div class="main-number" id="livestockTotal">105</div>
+            <div class="main-label">สุกรทั้งหมด</div>
+            <div class="sub-stats">
+                <div class="sub-item" onclick="openEditModal('breedingSows', 'แม่พันธุ์')">
+                    <div class="sub-number" id="breedingSows2">15</div>
+                    <div class="sub-label">แม่พันธุ์</div>
+                </div>
+                <div class="sub-item" onclick="openEditModal('piglets', 'ลูกหมู')">
+                    <div class="sub-number" id="piglets2">32</div>
+                    <div class="sub-label">ลูกหมู</div>
+                </div>
+                <div class="sub-item" onclick="openEditModal('finishers', 'หมูขุน')">
+                    <div class="sub-number" id="finishers2">58</div>
+                    <div class="sub-label">หมูขุน</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">สถานะสุกร</div>
+                <div class="card-badge success">ปกติ</div>
+            </div>
+            <div class="card-content">
+                <div class="livestock-grid">
+                    <div class="livestock-item" onclick="openEditModal('pregnant', 'แม่ท้อง')">
+                        <div class="livestock-number" id="pregnant">3</div>
+                        <div class="livestock-label">แม่ท้อง</div>
+                    </div>
+                    <div class="livestock-item" onclick="openEditModal('sick', 'ป่วย')">
+                        <div class="livestock-number" id="sick">2</div>
+                        <div class="livestock-label">ป่วย</div>
+                    </div>
+                    <div class="livestock-item" onclick="openEditModal('readyToSell', 'พร้อมขาย')">
+                        <div class="livestock-number" id="readyToSell">12</div>
+                        <div class="livestock-label">พร้อมขาย</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">การจัดการสุกร</div>
+            </div>
+            <div class="card-content">
+                <div class="action-buttons">
+                    <button class="action-btn add" onclick="handleLivestockAction('add')">
+                        ➕ เพิ่มสุกร
+                    </button>
+                    <button class="action-btn remove" onclick="handleLivestockAction('remove')">
+                        ➖ ลดสุกร
+                    </button>
+                    <button class="action-btn sell" onclick="handleLivestockAction('sell')">
+                        💰 ขายสุกร
+                    </button>
+                    <button class="action-btn move" onclick="handleLivestockAction('move')">
+                        🔄 ย้ายกลุ่ม
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- หน้าสุขภาพ -->
     <div id="health" class="section">
-        <div class="developing">
-            หน้าสุขภาพสุกร<br>
-            กำลังพัฒนา...
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">สุขภาพสุกร</div>
+                <div class="card-badge warning">2</div>
+            </div>
+            <div class="card-content">
+                <div style="text-align: center; padding: 48px 24px; color: #64748b; font-size: 18px; line-height: 1.6;">
+                    ระบบติดตามสุขภาพ<br>
+                    การฉีดวัคซีน<br>
+                    การรักษาพยาบาล<br>
+                    สถิติการป่วย<br><br>
+                    กำลังพัฒนา...
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- หน้าการเงิน -->
     <div id="finance" class="section">
-        <div class="developing">
-            หน้าการเงินรายละเอียด<br>
-            กำลังพัฒนา...
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">การเงินรายละเอียด</div>
+                <div class="card-badge success">+17K</div>
+            </div>
+            <div class="card-content">
+                <div style="text-align: center; padding: 48px 24px; color: #64748b; font-size: 18px; line-height: 1.6;">
+                    รายงานการเงินแบบละเอียด<br>
+                    วิเคราะห์กำไร-ขาดทุน<br>
+                    ต้นทุนต่อหน่วย<br>
+                    คาดการณ์รายได้<br><br>
+                    กำลังพัฒนา...
+                </div>
+            </div>
         </div>
     </div>
 
@@ -586,205 +786,537 @@
     </div>
 
     <script>
+        // ===============================
         // ข้อมูลฟาร์ม
+        // ===============================
         let farmData = {
             totalPigs: 105,
             breedingSows: 15,
             piglets: 32,
             finishers: 58,
-            revenue: 48700,
-            expenses: 31700
-        };
+            pregnant: 3,
+            sick: 2,
+           readyToSell: 12,
+           revenue: 48700,
+           expenses: 31700
+       };
 
-        let currentEditField = '';
-        let currentEditTitle = '';
+       let currentEditField = '';
+       let currentEditTitle = '';
 
-        function updateDate() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('th-TH', {
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-            document.getElementById('currentDate').textContent = dateStr;
-        }
+       // ===============================
+       // ระบบบันทึกและโหลดข้อมูล
+       // ===============================
+       function loadData() {
+           try {
+               const savedData = localStorage.getItem('farmData');
+               if (savedData) {
+                   const parsedData = JSON.parse(savedData);
+                   farmData = { ...farmData, ...parsedData };
+                   console.log('โหลดข้อมูลสำเร็จ:', farmData);
+               }
+           } catch (e) {
+               console.log('ไม่สามารถโหลดข้อมูลได้:', e);
+           }
+       }
 
-        function showSection(sectionName) {
-            // ซ่อนทุกหน้า
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // ลบ active จากเมนู
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // แสดงหน้าที่เลือก
-            document.getElementById(sectionName).classList.add('active');
-            
-            // เพิ่ม active ให้เมนู
-            event.target.closest('.nav-item').classList.add('active');
-        }
+       function saveData() {
+           try {
+               localStorage.setItem('farmData', JSON.stringify(farmData));
+               console.log('บันทึกข้อมูลสำเร็จ:', farmData);
+           } catch (e) {
+               console.log('ไม่สามารถบันทึกข้อมูลได้:', e);
+           }
+       }
 
-        function openEditModal(fieldName, title) {
-            currentEditField = fieldName;
-            currentEditTitle = title;
-            
-            document.getElementById('modalTitle').textContent = `แก้ไข${title}`;
-            document.getElementById('modalInput').value = farmData[fieldName] || 0;
-            document.getElementById('editModal').style.display = 'block';
-            
-            // Focus ที่ input
-            setTimeout(() => {
-                document.getElementById('modalInput').focus();
-                document.getElementById('modalInput').select();
-            }, 100);
-        }
+       // ===============================
+       // การอัปเดตหน้าจอ
+       // ===============================
+       function updateDate() {
+           const now = new Date();
+           const dateStr = now.toLocaleDateString('th-TH', {
+               weekday: 'long',
+               day: '2-digit',
+               month: 'long',
+               year: 'numeric'
+           });
+           document.getElementById('currentDate').textContent = dateStr;
+       }
 
-        function closeModal() {
-            document.getElementById('editModal').style.display = 'none';
-            currentEditField = '';
-            currentEditTitle = '';
-        }
+       function updateDisplay() {
+           // คำนวณยอดรวมสุกร
+           const totalPigs = farmData.breedingSows + farmData.piglets + farmData.finishers;
+           farmData.totalPigs = totalPigs;
 
-        function saveEdit() {
-            const newValue = parseInt(document.getElementById('modalInput').value);
-            
-            if (isNaN(newValue) || newValue < 0) {
-                showNotification('กรุณาใส่ตัวเลขที่ถูกต้อง');
-                return;
-            }
-            
-            // บันทึกข้อมูล
-            farmData[currentEditField] = newValue;
-            
-            // อัปเดตหน้าจอ
-            updateDisplay();
-            
-            // แสดงการแจ้งเตือน
-            showNotification(`แก้ไข${currentEditTitle}: ${newValue.toLocaleString()} สำเร็จ`);
-            
-            // ปิด Modal
-            closeModal();
-        }
+           // อัปเดตหน้าหลัก
+           document.getElementById('totalPigs').textContent = totalPigs.toLocaleString();
+           document.getElementById('breedingSows').textContent = farmData.breedingSows.toLocaleString();
+           document.getElementById('piglets').textContent = farmData.piglets.toLocaleString();
+           document.getElementById('finishers').textContent = farmData.finishers.toLocaleString();
+           document.getElementById('revenue').textContent = farmData.revenue.toLocaleString();
+           document.getElementById('expenses').textContent = farmData.expenses.toLocaleString();
 
-        function updateDisplay() {
-            // อัปเดตตัวเลขทั้งหมด
-            Object.keys(farmData).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.textContent = farmData[key].toLocaleString();
-                }
-            });
+           // อัปเดตหน้าสุกร
+           document.getElementById('livestockTotal').textContent = totalPigs.toLocaleString();
+           document.getElementById('breedingSows2').textContent = farmData.breedingSows.toLocaleString();
+           document.getElementById('piglets2').textContent = farmData.piglets.toLocaleString();
+           document.getElementById('finishers2').textContent = farmData.finishers.toLocaleString();
+           document.getElementById('pregnant').textContent = farmData.pregnant.toLocaleString();
+           document.getElementById('sick').textContent = farmData.sick.toLocaleString();
+           document.getElementById('readyToSell').textContent = farmData.readyToSell.toLocaleString();
 
-            // คำนวณกำไร
-            const profit = farmData.revenue - farmData.expenses;
-            const profitPercent = farmData.revenue > 0 ? ((profit / farmData.revenue) * 100).toFixed(1) : 0;
-            
-            document.getElementById('profit').textContent = profit >= 0 ? `+${profit.toLocaleString()}` : profit.toLocaleString();
-            document.getElementById('profitPercent').textContent = profitPercent;
+           // คำนวณกำไร
+           const profit = farmData.revenue - farmData.expenses;
+           const profitPercent = farmData.revenue > 0 ? ((profit / farmData.revenue) * 100).toFixed(1) : 0;
+           
+           document.getElementById('profit').textContent = profit >= 0 ? `+${profit.toLocaleString()}` : profit.toLocaleString();
+           document.getElementById('profitPercent').textContent = profitPercent;
 
-            // อัปเดตยอดรวมสุกร
-            const totalPigs = farmData.breedingSows + farmData.piglets + farmData.finishers;
-            farmData.totalPigs = totalPigs;
-            document.getElementById('totalPigs').textContent = totalPigs.toLocaleString();
-        }
+           // เปลี่ยนสีกำไร
+           const profitElement = document.getElementById('profit');
+           if (profit >= 0) {
+               profitElement.style.color = '#10b981';
+               profitElement.textContent = `+${profit.toLocaleString()}`;
+           } else {
+               profitElement.style.color = '#ef4444';
+               profitElement.textContent = profit.toLocaleString();
+           }
+       }
 
-        function handleAlert(alertElement) {
-            if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
-                alertElement.style.opacity = '0.3';
-                alertElement.style.transform = 'translateX(100%)';
-                
-                setTimeout(() => {
-                    alertElement.remove();
-                    updateAlertCount();
-                }, 300);
-                
-                showNotification('ทำงานเสร็จแล้ว');
-            }
-        }
+       // ===============================
+       // การนำทาง
+       // ===============================
+       function showSection(sectionName) {
+           // ซ่อนทุกหน้า
+           document.querySelectorAll('.section').forEach(section => {
+               section.classList.remove('active');
+           });
+           
+           // ลบ active จากเมนู
+           document.querySelectorAll('.nav-item').forEach(item => {
+               item.classList.remove('active');
+           });
+           
+           // แสดงหน้าที่เลือก
+           document.getElementById(sectionName).classList.add('active');
+           
+           // เพิ่ม active ให้เมนู
+           event.target.closest('.nav-item').classList.add('active');
+       }
 
-        function updateAlertCount() {
-            const alertItems = document.querySelectorAll('.alert-item');
-            const count = alertItems.length;
-            document.getElementById('alertCount').textContent = count;
-        }
+       // ===============================
+       // Modal แก้ไขตัวเลข
+       // ===============================
+       function openEditModal(fieldName, title) {
+           currentEditField = fieldName;
+           currentEditTitle = title;
+           
+           document.getElementById('modalTitle').textContent = `แก้ไข${title}`;
+           document.getElementById('modalInput').value = farmData[fieldName] || 0;
+           document.getElementById('editModal').style.display = 'block';
+           
+           // Focus ที่ input และเลือกข้อความทั้งหมด
+           setTimeout(() => {
+               const input = document.getElementById('modalInput');
+               input.focus();
+               input.select();
+           }, 100);
+       }
 
-        function quickAction() {
-            const actions = [
-                'เพิ่มสุกรใหม่',
-                'บันทึกการตาย',
-                'บันทึกการขาย',
-                'ฉีดวัคซีน',
-                'ตรวจครรภ์'
-            ];
-            
-            let message = 'เลือกการทำงาน:\n\n';
-            actions.forEach((action, i) => {
-                message += `${i + 1}. ${action}\n`;
-            });
-            
-            const choice = prompt(message);
-            const choiceNum = parseInt(choice);
-            
-            if (choiceNum >= 1 && choiceNum <= actions.length) {
-                showNotification(`${actions[choiceNum - 1]} - กำลังพัฒนา...`);
-            }
-        }
+       function closeModal() {
+           document.getElementById('editModal').style.display = 'none';
+           currentEditField = '';
+           currentEditTitle = '';
+       }
 
-        function showNotification(message) {
-            // ลบ notification เก่า
-            const oldNotification = document.querySelector('.notification');
-            if (oldNotification) {
-                oldNotification.remove();
-            }
+       function saveEdit() {
+           const newValue = parseInt(document.getElementById('modalInput').value);
+           
+           if (isNaN(newValue) || newValue < 0) {
+               showNotification('กรุณาใส่ตัวเลขที่ถูกต้อง', 'error');
+               return;
+           }
+           
+           // บันทึกข้อมูล
+           farmData[currentEditField] = newValue;
+           
+           // บันทึกลง localStorage ทันที
+           saveData();
+           
+           // อัปเดตหน้าจอ
+           updateDisplay();
+           
+           // แสดงการแจ้งเตือน
+           showNotification(`แก้ไข${currentEditTitle}: ${newValue.toLocaleString()} สำเร็จ`, 'success');
+           
+           // ปิด Modal
+           closeModal();
+       }
 
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            // แสดง notification
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            // ซ่อน notification
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
+       // ===============================
+       // การจัดการแจ้งเตือน
+       // ===============================
+       function handleAlert(alertElement) {
+           if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
+               alertElement.style.opacity = '0.3';
+               alertElement.style.transform = 'translateX(100%)';
+               
+               setTimeout(() => {
+                   alertElement.remove();
+                   updateAlertCount();
+               }, 300);
+               
+               showNotification('ทำงานเสร็จแล้ว', 'success');
+           }
+       }
 
-        // เมื่อกด Enter ใน Modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.getElementById('editModal').style.display === 'block') {
-                saveEdit();
-            } else if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
+       function updateAlertCount() {
+           const alertItems = document.querySelectorAll('.alert-item');
+           const count = alertItems.length;
+           const alertCountElement = document.getElementById('alertCount');
+           
+           if (alertCountElement) {
+               alertCountElement.textContent = count;
+           }
+           
+           // ถ้าไม่มีการแจ้งเตือนแล้ว
+           if (count === 0) {
+               const alertContainer = document.getElementById('alertContainer');
+               if (alertContainer) {
+                   alertContainer.innerHTML = `
+                       <div style="text-align: center; padding: 40px; color: #10b981; font-size: 18px;">
+                           ✓ ไม่มีการแจ้งเตือน<br>
+                           <span style="font-size: 16px; color: #94a3b8;">ทุกอย่างเรียบร้อยดี</span>
+                       </div>
+                   `;
+               }
+           }
+       }
 
-        // เริ่มต้นระบบ
-        window.addEventListener('load', function() {
-            updateDate();
-            updateDisplay();
-            setInterval(updateDate, 60000);
-            
-            setTimeout(() => {
-                showNotification('ระบบพร้อมใช้งาน - คลิกตัวเลขเพื่อแก้ไข');
-            }, 1000);
-        });
+       // ===============================
+       // การจัดการสุกร
+       // ===============================
+       function handleLivestockAction(action) {
+           switch(action) {
+               case 'add':
+                   const type = prompt('เพิ่มสุกรประเภทไหน?\n\n1. ลูกหมู\n2. หมูขุน\n3. แม่พันธุ์', '1');
+                   if (!type || !['1', '2', '3'].includes(type)) return;
+                   
+                   const count = prompt('เพิ่มกี่ตัว?', '1');
+                   if (!count || isNaN(count) || parseInt(count) <= 0) {
+                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
+                       return;
+                   }
+                   
+                   const num = parseInt(count);
+                   switch(type) {
+                       case '1':
+                           farmData.piglets += num;
+                           showNotification(`เพิ่มลูกหมู ${num} ตัว สำเร็จ`, 'success');
+                           break;
+                       case '2':
+                           farmData.finishers += num;
+                           showNotification(`เพิ่มหมูขุน ${num} ตัว สำเร็จ`, 'success');
+                           break;
+                       case '3':
+                           farmData.breedingSows += num;
+                           showNotification(`เพิ่มแม่พันธุ์ ${num} ตัว สำเร็จ`, 'success');
+                           break;
+                   }
+                   break;
+                   
+               case 'remove':
+                   const removeType = prompt('ลดสุกรประเภทไหน?\n\n1. ลูกหมู\n2. หมูขุน\n3. แม่พันธุ์', '1');
+                   if (!removeType || !['1', '2', '3'].includes(removeType)) return;
+                   
+                   const removeCount = prompt('ลดกี่ตัว?', '1');
+                   if (!removeCount || isNaN(removeCount) || parseInt(removeCount) <= 0) {
+                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
+                       return;
+                   }
+                   
+                   const removeNum = parseInt(removeCount);
+                   switch(removeType) {
+                       case '1':
+                           if (farmData.piglets >= removeNum) {
+                               farmData.piglets -= removeNum;
+                               showNotification(`ลดลูกหมู ${removeNum} ตัว สำเร็จ`, 'success');
+                           } else {
+                               showNotification('ลูกหมูไม่เพียงพอ', 'error');
+                               return;
+                           }
+                           break;
+                       case '2':
+                           if (farmData.finishers >= removeNum) {
+                               farmData.finishers -= removeNum;
+                               showNotification(`ลดหมูขุน ${removeNum} ตัว สำเร็จ`, 'success');
+                           } else {
+                               showNotification('หมูขุนไม่เพียงพอ', 'error');
+                               return;
+                           }
+                           break;
+                       case '3':
+                           if (farmData.breedingSows >= removeNum) {
+                               farmData.breedingSows -= removeNum;
+                               showNotification(`ลดแม่พันธุ์ ${removeNum} ตัว สำเร็จ`, 'success');
+                           } else {
+                               showNotification('แม่พันธุ์ไม่เพียงพอ', 'error');
+                               return;
+                           }
+                           break;
+                   }
+                   break;
+                   
+               case 'sell':
+                   const sellCount = prompt('ขายหมูขุนกี่ตัว?', '1');
+                   if (!sellCount || isNaN(sellCount) || parseInt(sellCount) <= 0) {
+                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
+                       return;
+                   }
+                   
+                   const sellPrice = prompt('ราคาต่อตัว (บาท)?', '4000');
+                   if (!sellPrice || isNaN(sellPrice) || parseInt(sellPrice) <= 0) {
+                       showNotification('กรุณาใส่ราคาที่ถูกต้อง', 'error');
+                       return;
+                   }
+                   
+                   const sellNum = parseInt(sellCount);
+                   const price = parseInt(sellPrice);
+                   
+                   if (farmData.finishers >= sellNum) {
+                       farmData.finishers -= sellNum;
+                       farmData.revenue += (sellNum * price);
+                       showNotification(`ขายหมูขุน ${sellNum} ตัว ได้ ${(sellNum * price).toLocaleString()} บาท`, 'success');
+                   } else {
+                       showNotification('หมูขุนไม่เพียงพอ', 'error');
+                       return;
+                   }
+                   break;
+                   
+               case 'move':
+                   const moveFrom = prompt('ย้ายจากกลุ่มไหน?\n\n1. ลูกหมู → หมูขุน\n2. หมูขุน → แม่พันธุ์', '1');
+                   if (!moveFrom || !['1', '2'].includes(moveFrom)) return;
+                   
+                   const moveCount = prompt('ย้ายกี่ตัว?', '1');
+                   if (!moveCount || isNaN(moveCount) || parseInt(moveCount) <= 0) {
+                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
+                       return;
+                   }
+                   
+                   const moveNum = parseInt(moveCount);
+                   switch(moveFrom) {
+                       case '1':
+                           if (farmData.piglets >= moveNum) {
+                               farmData.piglets -= moveNum;
+                               farmData.finishers += moveNum;
+                               showNotification(`ย้ายลูกหมู ${moveNum} ตัว เป็นหมูขุน`, 'success');
+                           } else {
+                               showNotification('ลูกหมูไม่เพียงพอ', 'error');
+                               return;
+                           }
+                           break;
+                       case '2':
+                           if (farmData.finishers >= moveNum) {
+                               farmData.finishers -= moveNum;
+                               farmData.breedingSows += moveNum;
+                               showNotification(`ย้ายหมูขุน ${moveNum} ตัว เป็นแม่พันธุ์`, 'success');
+                           } else {
+                               showNotification('หมูขุนไม่เพียงพอ', 'error');
+                               return;
+                           }
+                           break;
+                   }
+                   break;
+           }
+           
+           // บันทึกและอัปเดตหน้าจอ
+           saveData();
+           updateDisplay();
+       }
 
-        // คลิกนอก Modal เพื่อปิด
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('editModal');
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-    </script>
+       // ===============================
+       // Quick Action
+       // ===============================
+       function quickAction() {
+           const actions = [
+               'เพิ่มสุกรใหม่',
+               'บันทึกการตาย',
+               'บันทึกการขาย',
+               'ฉีดวัคซีน',
+               'ตรวจครรภ์',
+               'เพิ่มค่าใช้จ่าย',
+               'บันทึกรายได้'
+           ];
+           
+           let message = 'เลือกการทำงาน:\n\n';
+           actions.forEach((action, i) => {
+               message += `${i + 1}. ${action}\n`;
+           });
+           
+           const choice = prompt(message);
+           const choiceNum = parseInt(choice);
+           
+           if (choiceNum >= 1 && choiceNum <= actions.length) {
+               handleQuickActions(choiceNum, actions[choiceNum - 1]);
+           }
+       }
+
+       function handleQuickActions(choice, actionName) {
+           switch(choice) {
+               case 1: // เพิ่มสุกร
+                   handleLivestockAction('add');
+                   break;
+                   
+               case 2: // บันทึกการตาย
+                   handleLivestockAction('remove');
+                   break;
+                   
+               case 3: // บันทึกการขาย
+                   handleLivestockAction('sell');
+                   break;
+                   
+               case 6: // เพิ่มค่าใช้จ่าย
+                   const expense = prompt('ค่าใช้จ่าย (บาท)?', '1000');
+                   const expenseNote = prompt('หมายเหตุ:', 'ค่าอาหาร');
+                   if (expense && !isNaN(expense) && parseInt(expense) > 0) {
+                       farmData.expenses += parseInt(expense);
+                       saveData();
+                       updateDisplay();
+                       showNotification(`เพิ่มค่าใช้จ่าย ${parseInt(expense).toLocaleString()} บาท (${expenseNote})`, 'success');
+                   } else {
+                       showNotification('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
+                   }
+                   break;
+                   
+               case 7: // บันทึกรายได้
+                   const income = prompt('รายได้เพิ่มเติม (บาท)?', '1000');
+                   const incomeNote = prompt('หมายเหตุ:', 'ขายผลพลอยได้');
+                   if (income && !isNaN(income) && parseInt(income) > 0) {
+                       farmData.revenue += parseInt(income);
+                       saveData();
+                       updateDisplay();
+                       showNotification(`เพิ่มรายได้ ${parseInt(income).toLocaleString()} บาท (${incomeNote})`, 'success');
+                   } else {
+                       showNotification('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
+                   }
+                   break;
+                   
+               default:
+                   showNotification(`${actionName} - กำลังพัฒนา...`, 'info');
+           }
+       }
+
+       // ===============================
+       // ระบบแจ้งเตือน
+       // ===============================
+       function showNotification(message, type = 'success') {
+           // ลบ notification เก่า
+           const oldNotification = document.querySelector('.notification');
+           if (oldNotification) {
+               oldNotification.remove();
+           }
+
+           const notification = document.createElement('div');
+           notification.className = 'notification';
+           notification.textContent = message;
+           
+           // เปลี่ยนสีตามประเภท
+           switch(type) {
+               case 'success':
+                   notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                   break;
+               case 'error':
+                   notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                   break;
+               case 'warning':
+                   notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                   break;
+               case 'info':
+                   notification.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
+                   break;
+           }
+           
+           document.body.appendChild(notification);
+           
+           // แสดง notification
+           setTimeout(() => {
+               notification.classList.add('show');
+           }, 100);
+           
+           // ซ่อน notification
+           setTimeout(() => {
+               notification.classList.remove('show');
+               setTimeout(() => {
+                   if (notification.parentNode) {
+                       notification.remove();
+                   }
+               }, 300);
+           }, 3000);
+       }
+
+       // ===============================
+       // Event Listeners
+       // ===============================
+       
+       // เมื่อกด Enter ใน Modal
+       document.addEventListener('keydown', function(e) {
+           if (e.key === 'Enter' && document.getElementById('editModal').style.display === 'block') {
+               e.preventDefault();
+               saveEdit();
+           } else if (e.key === 'Escape') {
+               closeModal();
+           }
+       });
+
+       // คลิกนอก Modal เพื่อปิด
+       window.addEventListener('click', function(e) {
+           const modal = document.getElementById('editModal');
+           if (e.target === modal) {
+               closeModal();
+           }
+       });
+
+       // บันทึกข้อมูลเมื่อปิดแอป
+       window.addEventListener('beforeunload', function() {
+           saveData();
+       });
+
+       // ป้องกันการ zoom บนมือถือ
+       document.addEventListener('gesturestart', function (e) {
+           e.preventDefault();
+       });
+
+       // ===============================
+       // เริ่มต้นระบบ
+       // ===============================
+       window.addEventListener('load', function() {
+           console.log('🚀 เริ่มต้นระบบจัดการฟาร์ม');
+           
+           // โหลดข้อมูลที่บันทึกไว้
+           loadData();
+           
+           // อัปเดตวันที่
+           updateDate();
+           
+           // อัปเดตหน้าจอ
+           updateDisplay();
+           
+           // ตั้งเวลาอัปเดตวันที่ทุกนาที
+           setInterval(updateDate, 60000);
+           
+           // Auto-save ทุก 30 วินาที
+           setInterval(() => {
+               saveData();
+               console.log('💾 Auto-save:', new Date().toLocaleTimeString('th-TH'));
+           }, 30000);
+           
+           // แสดงข้อความต้อนรับ
+           setTimeout(() => {
+               showNotification('ระบบพร้อมใช้งาน - คลิกตัวเลขเพื่อแก้ไข', 'info');
+           }, 1000);
+           
+           console.log('✅ ระบบพร้อมใช้งาน');
+       });
+   </script>
 </body>
 </html>

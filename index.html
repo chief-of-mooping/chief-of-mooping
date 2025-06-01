@@ -4,8 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการฟาร์ม</title>
+    <title>Enterprise Farm Management System</title>
     <style>
+        /* Enterprise ERP Color Scheme */
+        :root {
+            --primary-blue: #0078d4;
+            --steel-gray: #605e5c;
+            --forest-green: #107c10;
+            --amber-warning: #ffa500;
+            --error-red: #d13438;
+            --light-gray: #f3f2f1;
+            --pure-white: #ffffff;
+            --border-color: #e1dfdd;
+            --hover-color: #f8f8f8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,1310 +26,835 @@
         }
 
         body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: #e2e8f0;
-            padding-bottom: 100px;
-            min-height: 100vh;
-            font-size: 18px;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        .mobile-header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            color: #f1f5f9;
-            padding: 24px 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .mobile-header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .mobile-header .date {
-            font-size: 16px;
-            color: #94a3b8;
-        }
-
-        /* Main Stats Card */
-        .main-stats {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(148, 163, 184, 0.3);
-            color: #f1f5f9;
-            padding: 32px 24px;
-            margin: 20px 16px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .main-number {
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 72px;
-            font-weight: 900;
-            margin-bottom: 12px;
-            color: #ffffff;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            padding: 16px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            border: 3px dashed transparent;
-        }
-
-        .main-number:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: scale(1.05);
-        }
-
-        .main-label {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 24px;
-            color: #cbd5e1;
-        }
-
-        .sub-stats {
-            display: flex;
-            justify-content: space-around;
-            padding-top: 24px;
-            border-top: 2px solid rgba(148, 163, 184, 0.3);
-            gap: 8px;
-        }
-
-        .sub-item {
-            text-align: center;
-            cursor: pointer;
-            padding: 16px 8px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            flex: 1;
-            border: 2px dashed transparent;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .sub-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .sub-number {
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 32px;
-            font-weight: 900;
-            margin-bottom: 8px;
-            color: #ffffff;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .sub-label {
+            font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 14px;
-            font-weight: bold;
-            color: #94a3b8;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(20px);
-            margin: 16px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(71, 85, 105, 0.3);
+            background-color: var(--light-gray);
+            color: #323130;
+            height: 100vh;
             overflow: hidden;
         }
 
-        .card-header {
-            padding: 24px 28px 20px;
-            border-bottom: 2px solid rgba(71, 85, 105, 0.3);
+        /* Menu Bar */
+        .menu-bar {
+            background: var(--pure-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 0;
+            height: 40px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background: rgba(15, 23, 42, 0.5);
         }
 
-        .card-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #f1f5f9;
-        }
-
-        .card-badge {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-            min-width: 45px;
-            text-align: center;
-        }
-
-        .card-badge.success { 
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-
-        .card-badge.warning { 
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-
-        .card-content {
-            padding: 28px;
-        }
-
-        /* Alert Items */
-        .alert-item {
-            background: rgba(15, 23, 42, 0.7);
-            border-left: 6px solid #475569;
-            padding: 24px;
-            margin-bottom: 16px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
+        .menu-item {
+            padding: 8px 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(71, 85, 105, 0.2);
+            transition: background-color 0.2s;
+            font-weight: 400;
         }
 
-        .alert-item:hover {
-            background: rgba(15, 23, 42, 0.9);
-            transform: translateX(8px);
-            border-left-width: 8px;
+        .menu-item:hover {
+            background-color: var(--hover-color);
         }
 
-        .alert-item.critical {
-            background: rgba(127, 29, 29, 0.4);
-            border-left-color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
+        .menu-separator {
+            width: 1px;
+            height: 20px;
+            background-color: var(--border-color);
+            margin: 0 8px;
         }
 
-        .alert-item.warning {
-            background: rgba(120, 53, 15, 0.4);
-            border-left-color: #f59e0b;
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .alert-time {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-top: 8px;
-            font-weight: normal;
-        }
-
-        /* Money Section */
-        .money-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .money-summary {
+        /* Module Tabs */
+        .module-tabs {
+            background: var(--pure-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            height: 48px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            gap: 16px;
+            align-items: stretch;
         }
 
-        .money-item {
-            text-align: center;
-            flex: 1;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
-            border: 2px solid rgba(71, 85, 105, 0.2);
+        .tab {
+            padding: 12px 24px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border-right: 1px solid var(--border-color);
+            background: var(--light-gray);
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .money-item:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateY(-4px);
-            border-color: rgba(16, 185, 129, 0.5);
+        .tab.active {
+            background: var(--pure-white);
+            border-bottom: 3px solid var(--primary-blue);
+            color: var(--primary-blue);
         }
 
-        .money-value {
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #ffffff;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        .tab:hover:not(.active) {
+            background: var(--hover-color);
         }
 
-        .money-label {
-            font-size: 14px;
-            color: #94a3b8;
-            font-weight: bold;
-        }
-
-        .profit-section {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 28px;
-            border-radius: 16px;
-            text-align: center;
-            border: 2px solid rgba(16, 185, 129, 0.4);
-        }
-
-        .profit-amount {
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 40px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #10b981;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        .profit-label {
-            font-size: 16px;
-            color: #94a3b8;
-            font-weight: bold;
-        }
-
-        /* Livestock Grid */
-        .livestock-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .livestock-item {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 20px 16px;
-            border-radius: 16px;
-            text-align: center;
-            border: 2px solid rgba(71, 85, 105, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .livestock-item:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateY(-2px);
-            border-color: rgba(59, 130, 246, 0.5);
-        }
-
-        .livestock-number {
-            font-family: 'Arial Black', Arial, sans-serif;
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 6px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .livestock-label {
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--pure-white);
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border-color);
             font-size: 12px;
-            color: #94a3b8;
-            font-weight: bold;
+            color: var(--steel-gray);
         }
 
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .action-btn {
-            padding: 20px 16px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .action-btn.add {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .action-btn.remove {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .action-btn.sell {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .action-btn.move {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 2px solid rgba(71, 85, 105, 0.3);
+        /* Main Layout */
+        .main-layout {
             display: flex;
-            z-index: 100;
-            padding: 12px 0;
+            height: calc(100vh - 136px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--pure-white);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--steel-gray);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
         }
 
         .nav-item {
-            flex: 1;
-            text-align: center;
-            padding: 20px 12px;
+            padding: 8px 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            margin: 0 4px;
-            border-radius: 12px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-color);
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(79, 70, 229, 0.3));
-            color: #60a5fa;
-            border-color: rgba(59, 130, 246, 0.5);
+            background-color: var(--primary-blue);
+            color: var(--pure-white);
         }
 
-        .nav-item:not(.active):hover {
-            background: rgba(71, 85, 105, 0.3);
-            border-color: rgba(148, 163, 184, 0.3);
-        }
-
-        .nav-label {
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 110px;
-            right: 24px;
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
-            z-index: 99;
-            transition: all 0.3s ease;
-        }
-
-        .fab:hover {
-            transform: scale(1.1);
-        }
-
-        .fab:active {
-            transform: scale(0.9);
-        }
-
-        /* Sections */
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            margin: 50% auto;
-            padding: 32px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-            transform: translateY(-50%);
-            border: 2px solid rgba(148, 163, 184, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #f1f5f9;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 16px;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            border-radius: 12px;
-            background: rgba(15, 23, 42, 0.8);
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        .modal-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .modal-btn {
+        /* Content Area */
+        .content-area {
             flex: 1;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            background: var(--pure-white);
+        }
+
+        /* Action Toolbar */
+        .action-toolbar {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: var(--light-gray);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--pure-white);
             cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .modal-btn.save {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+        .btn:hover {
+            background: var(--hover-color);
+            border-color: var(--steel-gray);
         }
 
-        .modal-btn.cancel {
-            background: linear-gradient(135deg, #6b7280, #4b5563);
-            color: white;
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--pure-white);
+            border-color: var(--primary-blue);
         }
 
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        .btn-primary:hover {
+            background: #106ebe;
         }
 
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 90px;
-            right: 20px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 20px 24px;
-            border-radius: 12px;
+        .btn-success {
+            background: var(--forest-green);
+            color: var(--pure-white);
+            border-color: var(--forest-green);
+        }
+
+        .btn-danger {
+            background: var(--error-red);
+            color: var(--pure-white);
+            border-color: var(--error-red);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--pure-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
             font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            z-index: 1001;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            max-width: 320px;
+            font-weight: 600;
+            color: var(--steel-gray);
         }
 
-        .notification.show {
-            transform: translateX(0);
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: var(--steel-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Form Styles */
+        .form-section {
+            background: var(--pure-white);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--light-gray);
+            font-weight: 600;
+        }
+
+        .form-body {
+            padding: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--steel-gray);
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: var(--error-red);
+        }
+
+        .form-input {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 32px;
+            background: var(--steel-gray);
+            color: var(--pure-white);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .status-left, .status-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Icons */
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
         }
 
         /* Responsive */
-        @media (max-width: 360px) {
-            .main-number {
-                font-size: 60px;
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 240px;
             }
             
-            .livestock-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .action-buttons {
+            .dashboard-grid {
                 grid-template-columns: 1fr;
             }
             
-            .money-summary {
-                flex-direction: column;
-                gap: 12px;
+            .form-row {
+                grid-template-columns: 1fr;
             }
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <!-- Modal แก้ไขตัวเลข -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-title" id="modalTitle">แก้ไขจำนวน</div>
-            <input type="number" id="modalInput" class="modal-input" placeholder="0">
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeModal()">ยกเลิก</button>
-                <button class="modal-btn save" onclick="saveEdit()">บันทึก</button>
-            </div>
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <div class="menu-item">ไฟล์</div>
+        <div class="menu-item">แก้ไข</div>
+        <div class="menu-item">มุมมอง</div>
+        <div class="menu-item">รายงาน</div>
+        <div class="menu-separator"></div>
+        <div class="menu-item">เครื่องมือ</div>
+        <div class="menu-item">ช่วยเหลือ</div>
+    </div>
+
+    <!-- Module Tabs -->
+    <div class="module-tabs">
+        <div class="tab active" data-module="dashboard">
+            <span class="icon">📊</span>
+            แดชบอร์ด
+        </div>
+        <div class="tab" data-module="production">
+            <span class="icon">🐷</span>
+            การผลิต
+        </div>
+        <div class="tab" data-module="finance">
+            <span class="icon">💰</span>
+            การเงิน
+        </div>
+        <div class="tab" data-module="reports">
+            <span class="icon">📋</span>
+            รายงาน
         </div>
     </div>
 
-    <!-- Header -->
-    <div class="mobile-header">
-        <h1>ระบบจัดการฟาร์ม</h1>
-        <div class="date" id="currentDate"></div>
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <span>หน้าหลัก</span> > <span>แดชบอร์ด</span> > <span>ภาพรวมระบบ</span>
     </div>
 
-    <!-- หน้าหลัก -->
-    <div id="dashboard" class="section active">
-        <div class="main-stats">
-            <div class="main-number" onclick="openEditModal('totalPigs', 'จำนวนสุกรทั้งหมด')" id="totalPigs">105</div>
-            <div class="main-label">สุกรทั้งหมด</div>
-            <div class="sub-stats">
-                <div class="sub-item" onclick="openEditModal('breedingSows', 'แม่พันธุ์')">
-                    <div class="sub-number" id="breedingSows">15</div>
-                    <div class="sub-label">แม่พันธุ์</div>
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">การผลิต</div>
+                <div class="nav-item active">
+                    <span class="icon">📊</span>
+                    ภาพรวมฟาร์ม
                 </div>
-                <div class="sub-item" onclick="openEditModal('piglets', 'ลูกหมู')">
-                    <div class="sub-number" id="piglets">32</div>
-                    <div class="sub-label">ลูกหมู</div>
+                <div class="nav-item">
+                    <span class="icon">🐷</span>
+                    จัดการสุกร
                 </div>
-                <div class="sub-item" onclick="openEditModal('finishers', 'หมูขุน')">
-                    <div class="sub-number" id="finishers">58</div>
-                    <div class="sub-label">หมูขุน</div>
+                <div class="nav-item">
+                    <span class="icon">🍼</span>
+                    การผสมพันธุ์
+                </div>
+                <div class="nav-item">
+                    <span class="icon">🏥</span>
+                    การรักษา
+                </div>
+                <div class="nav-item">
+                    <span class="icon">🌾</span>
+                    อาหารสัตว์
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">การเงิน</div>
+                <div class="nav-item">
+                    <span class="icon">💰</span>
+                    รายได้-รายจ่าย
+                </div>
+                <div class="nav-item">
+                    <span class="icon">📈</span>
+                    ต้นทุนการผลิต
+                </div>
+                <div class="nav-item">
+                    <span class="icon">💳</span>
+                    กำไร-ขาดทุน
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">รายงาน</div>
+                <div class="nav-item">
+                    <span class="icon">📊</span>
+                    สรุปการผลิต
+                </div>
+                <div class="nav-item">
+                    <span class="icon">📋</span>
+                    รายงานการเงิน
+                </div>
+                <div class="nav-item">
+                    <span class="icon">📈</span>
+                    วิเคราะห์ประสิทธิภาพ
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">แจ้งเตือนด่วน</div>
-                <div class="card-badge" id="alertCount">3</div>
-            </div>
-            <div class="card-content" id="alertContainer">
-                <div class="alert-item critical" onclick="handleAlert(this)">
-                    <div>ฉีดวัคซีน 10 ตัว</div>
-                    <div class="alert-time">กำหนด: วันนี้</div>
-                </div>
-                <div class="alert-item critical" onclick="handleAlert(this)">
-                    <div>ตรวจครรภ์ แม่พันธุ์ #03</div>
-                    <div class="alert-time">เลยกำหนด: 2 วัน</div>
-                </div>
-                <div class="alert-item warning" onclick="handleAlert(this)">
-                    <div>หมูพร้อมขาย 12 ตัว</div>
-                    <div class="alert-time">น้ำหนักถึงเป้าแล้ว</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card money-card">
-            <div class="card-header">
-                <div class="card-title">การเงินเดือนนี้</div>
-            </div>
-            <div class="card-content">
-                <div class="money-summary">
-                    <div class="money-item" onclick="openEditModal('revenue', 'รายได้')">
-                        <div class="money-value" id="revenue">48,700</div>
-                        <div class="money-label">รายได้ (บาท)</div>
-                    </div>
-                    <div class="money-item" onclick="openEditModal('expenses', 'รายจ่าย')">
-                        <div class="money-value" id="expenses">31,700</div>
-                        <div class="money-label">รายจ่าย (บาท)</div>
-                    </div>
-                </div>
-                <div class="profit-section">
-                    <div class="profit-amount" id="profit">+17,000</div>
-                    <div class="profit-label">กำไรสุทธิ (<span id="profitPercent">34.9</span>%)</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- หน้าจัดการสุกร -->
-    <div id="livestock" class="section">
-        <div class="main-stats">
-            <div class="main-number" id="livestockTotal">105</div>
-            <div class="main-label">สุกรทั้งหมด</div>
-            <div class="sub-stats">
-                <div class="sub-item" onclick="openEditModal('breedingSows', 'แม่พันธุ์')">
-                    <div class="sub-number" id="breedingSows2">15</div>
-                    <div class="sub-label">แม่พันธุ์</div>
-                </div>
-                <div class="sub-item" onclick="openEditModal('piglets', 'ลูกหมู')">
-                    <div class="sub-number" id="piglets2">32</div>
-                    <div class="sub-label">ลูกหมู</div>
-                </div>
-                <div class="sub-item" onclick="openEditModal('finishers', 'หมูขุน')">
-                    <div class="sub-number" id="finishers2">58</div>
-                    <div class="sub-label">หมูขุน</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">สถานะสุกร</div>
-                <div class="card-badge success">ปกติ</div>
-            </div>
-            <div class="card-content">
-                <div class="livestock-grid">
-                    <div class="livestock-item" onclick="openEditModal('pregnant', 'แม่ท้อง')">
-                        <div class="livestock-number" id="pregnant">3</div>
-                        <div class="livestock-label">แม่ท้อง</div>
-                    </div>
-                    <div class="livestock-item" onclick="openEditModal('sick', 'ป่วย')">
-                        <div class="livestock-number" id="sick">2</div>
-                        <div class="livestock-label">ป่วย</div>
-                    </div>
-                    <div class="livestock-item" onclick="openEditModal('readyToSell', 'พร้อมขาย')">
-                        <div class="livestock-number" id="readyToSell">12</div>
-                        <div class="livestock-label">พร้อมขาย</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">การจัดการสุกร</div>
-            </div>
-            <div class="card-content">
-                <div class="action-buttons">
-                    <button class="action-btn add" onclick="handleLivestockAction('add')">
-                        ➕ เพิ่มสุกร
-                    </button>
-                    <button class="action-btn remove" onclick="handleLivestockAction('remove')">
-                        ➖ ลดสุกร
-                    </button>
-                    <button class="action-btn sell" onclick="handleLivestockAction('sell')">
-                        💰 ขายสุกร
-                    </button>
-                    <button class="action-btn move" onclick="handleLivestockAction('move')">
-                        🔄 ย้ายกลุ่ม
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Action Toolbar -->
+            <div class="action-toolbar">
+                <button class="btn btn-primary">
+                    <span class="icon">➕</span>
+                    เพิ่มข้อมูลใหม่
+                </button>
+                <button class="btn">
+                    <span class="icon">✏️</span>
+                    แก้ไข
+                </button>
+                <button class="btn btn-success">
+                    <span class="icon">💾</span>
+                    บันทึก
+                </button>
+                <button class="btn">
+                    <span class="icon">❌</span>
+                    ยกเลิก
+                </button>
+                <button class="btn btn-danger">
+                    <span class="icon">🗑️</span>
+                    ลบ
+                </button>
+                <div style="margin-left: auto;">
+                    <button class="btn">
+                        <span class="icon">🔄</span>
+                        รีเฟรช
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- หน้าสุขภาพ -->
-    <div id="health" class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">สุขภาพสุกร</div>
-                <div class="card-badge warning">2</div>
-            </div>
-            <div class="card-content">
-                <div style="text-align: center; padding: 48px 24px; color: #64748b; font-size: 18px; line-height: 1.6;">
-                    ระบบติดตามสุขภาพ<br>
-                    การฉีดวัคซีน<br>
-                    การรักษาพยาบาล<br>
-                    สถิติการป่วย<br><br>
-                    กำลังพัฒนา...
+            <!-- Main Content -->
+            <div class="main-content" id="mainContent">
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" class="fade-in">
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">สุกรพ่อแม่พันธุ์</div>
+                                <span class="icon" style="color: var(--primary-blue)">🐷</span>
+                            </div>
+                            <div class="card-value" id="breedingSows">0</div>
+                            <div class="card-label">ตัว</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">ลูกสุกร</div>
+                                <span class="icon" style="color: var(--forest-green)">🐽</span>
+                            </div>
+                            <div class="card-value" id="piglets">0</div>
+                            <div class="card-label">ตัว</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">สุกรขุน</div>
+                                <span class="icon" style="color: var(--amber-warning)">🐖</span>
+                            </div>
+                            <div class="card-value" id="finishers">0</div>
+                            <div class="card-label">ตัว</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">พร้อมขาย</div>
+                                <span class="icon" style="color: var(--forest-green)">💰</span>
+                            </div>
+                            <div class="card-value" id="readyToSell">0</div>
+                            <div class="card-label">ตัว</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">รายได้รวม</div>
+                                <span class="icon" style="color: var(--forest-green)">📈</span>
+                            </div>
+                            <div class="card-value" id="totalRevenue">0</div>
+                            <div class="card-label">บาท</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">ค่าใช้จ่าย</div>
+                                <span class="icon" style="color: var(--error-red)">📉</span>
+                            </div>
+                            <div class="card-value" id="totalExpenses">0</div>
+                            <div class="card-label">บาท</div>
+                        </div>
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="form-section">
+                        <div class="form-header">
+                            <span class="icon">📝</span>
+                            เพิ่มข้อมูลสุกรใหม่
+                        </div>
+                        <div class="form-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label required">หมายเลขสุกร</label>
+                                    <input type="text" class="form-input" id="pigNumber" placeholder="กรอกหมายเลขสุกร">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label required">ประเภท</label>
+                                    <select class="form-input" id="pigType">
+                                        <option value="">เลือกประเภท</option>
+                                        <option value="breeding">พ่อแม่พันธุ์</option>
+                                        <option value="piglet">ลูกสุกร</option>
+                                        <option value="finisher">สุกรขุน</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label required">น้ำหนัก (กก.)</label>
+                                    <input type="number" class="form-input" id="pigWeight" placeholder="0.00">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">วันที่เกิด</label>
+                                    <input type="date" class="form-input" id="birthDate">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">สถานะสุขภาพ</label>
+                                    <select class="form-input" id="healthStatus">
+                                        <option value="healthy">แข็งแรง</option>
+                                        <option value="sick">ป่วย</option>
+                                        <option value="treatment">กำลังรักษา</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">หมายเหตุ</label>
+                                    <input type="text" class="form-input" id="remarks" placeholder="หมายเหตุเพิ่มเติม">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- หน้าการเงิน -->
-    <div id="finance" class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">การเงินรายละเอียด</div>
-                <div class="card-badge success">+17K</div>
-            </div>
-            <div class="card-content">
-                <div style="text-align: center; padding: 48px 24px; color: #64748b; font-size: 18px; line-height: 1.6;">
-                    รายงานการเงินแบบละเอียด<br>
-                    วิเคราะห์กำไร-ขาดทุน<br>
-                    ต้นทุนต่อหน่วย<br>
-                    คาดการณ์รายได้<br><br>
-                    กำลังพัฒนา...
-                </div>
-            </div>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span>ข้อมูล: <span id="recordCount">0</span> รายการ</span>
+            <span>ผู้ใช้: Admin</span>
         </div>
-    </div>
-
-    <!-- ปุ่มลอย -->
-    <button class="fab" onclick="quickAction()">+</button>
-
-    <!-- เมนูด้านล่าง -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="showSection('dashboard')">
-            <div class="nav-label">หน้าหลัก</div>
-        </div>
-        <div class="nav-item" onclick="showSection('livestock')">
-            <div class="nav-label">สุกร</div>
-        </div>
-        <div class="nav-item" onclick="showSection('health')">
-            <div class="nav-label">สุขภาพ</div>
-        </div>
-        <div class="nav-item" onclick="showSection('finance')">
-            <div class="nav-label">การเงิน</div>
+        <div class="status-right">
+            <span id="currentTime"></span>
+            <span>พร้อมใช้งาน</span>
         </div>
     </div>
 
     <script>
-        // ===============================
-        // ข้อมูลฟาร์ม
-        // ===============================
+        // Farm Data Structure
         let farmData = {
-            totalPigs: 105,
-            breedingSows: 15,
-            piglets: 32,
-            finishers: 58,
-            pregnant: 3,
-            sick: 2,
-           readyToSell: 12,
-           revenue: 48700,
-           expenses: 31700
-       };
+            livestock: {
+                breedingSows: 0,
+                piglets: 0,
+                finishers: 0,
+                pregnant: 0,
+                sick: 0,
+                readyToSell: 0
+            },
+            finance: {
+                revenue: 0,
+                expenses: 0,
+                profit: 0,
+                monthlyBudget: 0
+            },
+            animals: [],
+            metadata: {
+                lastUpdated: null,
+                createdBy: "admin",
+                recordCount: 0
+            }
+        };
 
-       let currentEditField = '';
-       let currentEditTitle = '';
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // Add event listeners
+            document.getElementById('pigNumber').addEventListener('input', validateForm);
+            document.getElementById('pigType').addEventListener('change', validateForm);
+            document.getElementById('pigWeight').addEventListener('input', validateForm);
+            
+            // Toolbar buttons
+            document.querySelector('.btn-primary').addEventListener('click', addNewAnimal);
+            document.querySelector('.btn-success').addEventListener('click', saveData);
+        });
 
-       // ===============================
-       // ระบบบันทึกและโหลดข้อมูล
-       // ===============================
-       function loadData() {
-           try {
-               const savedData = localStorage.getItem('farmData');
-               if (savedData) {
-                   const parsedData = JSON.parse(savedData);
-                   farmData = { ...farmData, ...parsedData };
-                   console.log('โหลดข้อมูลสำเร็จ:', farmData);
-               }
-           } catch (e) {
-               console.log('ไม่สามารถโหลดข้อมูลได้:', e);
-           }
-       }
+        // Update Dashboard
+        function updateDashboard() {
+            document.getElementById('breedingSows').textContent = farmData.livestock.breedingSows.toLocaleString();
+            document.getElementById('piglets').textContent = farmData.livestock.piglets.toLocaleString();
+            document.getElementById('finishers').textContent = farmData.livestock.finishers.toLocaleString();
+            document.getElementById('readyToSell').textContent = farmData.livestock.readyToSell.toLocaleString();
+            document.getElementById('totalRevenue').textContent = farmData.finance.revenue.toLocaleString();
+            document.getElementById('totalExpenses').textContent = farmData.finance.expenses.toLocaleString();
+            document.getElementById('recordCount').textContent = farmData.metadata.recordCount.toLocaleString();
+        }
 
-       function saveData() {
-           try {
-               localStorage.setItem('farmData', JSON.stringify(farmData));
-               console.log('บันทึกข้อมูลสำเร็จ:', farmData);
-           } catch (e) {
-               console.log('ไม่สามารถบันทึกข้อมูลได้:', e);
-           }
-       }
+        // Update Clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleString('th-TH', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
 
-       // ===============================
-       // การอัปเดตหน้าจอ
-       // ===============================
-       function updateDate() {
-           const now = new Date();
-           const dateStr = now.toLocaleDateString('th-TH', {
-               weekday: 'long',
-               day: '2-digit',
-               month: 'long',
-               year: 'numeric'
-           });
-           document.getElementById('currentDate').textContent = dateStr;
-       }
+        // Validate Form
+        function validateForm() {
+            const pigNumber = document.getElementById('pigNumber').value;
+            const pigType = document.getElementById('pigType').value;
+            const pigWeight = document.getElementById('pigWeight').value;
+            
+            const saveBtn = document.querySelector('.btn-success');
+            if (pigNumber && pigType && pigWeight) {
+                saveBtn.style.opacity = '1';
+                saveBtn.disabled = false;
+            } else {
+                saveBtn.style.opacity = '0.5';
+                saveBtn.disabled = true;
+            }
+        }
 
-       function updateDisplay() {
-           // คำนวณยอดรวมสุกร
-           const totalPigs = farmData.breedingSows + farmData.piglets + farmData.finishers;
-           farmData.totalPigs = totalPigs;
+        // Add New Animal
+        function addNewAnimal() {
+            const pigNumber = document.getElementById('pigNumber').value;
+            const pigType = document.getElementById('pigType').value;
+            const pigWeight = parseFloat(document.getElementById('pigWeight').value) || 0;
+            const birthDate = document.getElementById('birthDate').value;
+            const healthStatus = document.getElementById('healthStatus').value;
+            const remarks = document.getElementById('remarks').value;
 
-           // อัปเดตหน้าหลัก
-           document.getElementById('totalPigs').textContent = totalPigs.toLocaleString();
-           document.getElementById('breedingSows').textContent = farmData.breedingSows.toLocaleString();
-           document.getElementById('piglets').textContent = farmData.piglets.toLocaleString();
-           document.getElementById('finishers').textContent = farmData.finishers.toLocaleString();
-           document.getElementById('revenue').textContent = farmData.revenue.toLocaleString();
-           document.getElementById('expenses').textContent = farmData.expenses.toLocaleString();
+            if (!pigNumber || !pigType || !pigWeight) {
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
 
-           // อัปเดตหน้าสุกร
-           document.getElementById('livestockTotal').textContent = totalPigs.toLocaleString();
-           document.getElementById('breedingSows2').textContent = farmData.breedingSows.toLocaleString();
-           document.getElementById('piglets2').textContent = farmData.piglets.toLocaleString();
-           document.getElementById('finishers2').textContent = farmData.finishers.toLocaleString();
-           document.getElementById('pregnant').textContent = farmData.pregnant.toLocaleString();
-           document.getElementById('sick').textContent = farmData.sick.toLocaleString();
-           document.getElementById('readyToSell').textContent = farmData.readyToSell.toLocaleString();
+            // Check if pig number already exists
+            if (farmData.animals.some(animal => animal.pigNumber === pigNumber)) {
+                alert('หมายเลขสุกรนี้มีอยู่แล้วในระบบ');
+                return;
+            }
 
-           // คำนวณกำไร
-           const profit = farmData.revenue - farmData.expenses;
-           const profitPercent = farmData.revenue > 0 ? ((profit / farmData.revenue) * 100).toFixed(1) : 0;
-           
-           document.getElementById('profit').textContent = profit >= 0 ? `+${profit.toLocaleString()}` : profit.toLocaleString();
-           document.getElementById('profitPercent').textContent = profitPercent;
+            const newAnimal = {
+                id: Date.now(),
+                pigNumber,
+                pigType,
+                pigWeight,
+                birthDate,
+                healthStatus,
+                remarks,
+                createdDate: new Date().toISOString(),
+                updatedDate: new Date().toISOString()
+            };
 
-           // เปลี่ยนสีกำไร
-           const profitElement = document.getElementById('profit');
-           if (profit >= 0) {
-               profitElement.style.color = '#10b981';
-               profitElement.textContent = `+${profit.toLocaleString()}`;
-           } else {
-               profitElement.style.color = '#ef4444';
-               profitElement.textContent = profit.toLocaleString();
-           }
-       }
+            // Add to animals array
+            farmData.animals.push(newAnimal);
 
-       // ===============================
-       // การนำทาง
-       // ===============================
-       function showSection(sectionName) {
-           // ซ่อนทุกหน้า
-           document.querySelectorAll('.section').forEach(section => {
-               section.classList.remove('active');
-           });
-           
-           // ลบ active จากเมนู
-           document.querySelectorAll('.nav-item').forEach(item => {
-               item.classList.remove('active');
-           });
-           
-           // แสดงหน้าที่เลือก
-           document.getElementById(sectionName).classList.add('active');
-           
-           // เพิ่ม active ให้เมนู
-           event.target.closest('.nav-item').classList.add('active');
-       }
+            // Update livestock counts
+            switch(pigType) {
+                case 'breeding':
+                    farmData.livestock.breedingSows++;
+                    break;
+                case 'piglet':
+                    farmData.livestock.piglets++;
+                    break;
+                case 'finisher':
+                    farmData.livestock.finishers++;
+                    if (pigWeight >= 100) {
+                        farmData.livestock.readyToSell++;
+                    }
+                    break;
+            }
 
-       // ===============================
-       // Modal แก้ไขตัวเลข
-       // ===============================
-       function openEditModal(fieldName, title) {
-           currentEditField = fieldName;
-           currentEditTitle = title;
-           
-           document.getElementById('modalTitle').textContent = `แก้ไข${title}`;
-           document.getElementById('modalInput').value = farmData[fieldName] || 0;
-           document.getElementById('editModal').style.display = 'block';
-           
-           // Focus ที่ input และเลือกข้อความทั้งหมด
-           setTimeout(() => {
-               const input = document.getElementById('modalInput');
-               input.focus();
-               input.select();
-           }, 100);
-       }
+            // Update metadata
+            farmData.metadata.recordCount++;
+            farmData.metadata.lastUpdated = new Date().toISOString();
 
-       function closeModal() {
-           document.getElementById('editModal').style.display = 'none';
-           currentEditField = '';
-           currentEditTitle = '';
-       }
+            // Clear form
+            clearForm();
+            
+            // Update dashboard
+            updateDashboard();
+            
+            // Show success message
+            showMessage('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว', 'success');
+        }
 
-       function saveEdit() {
-           const newValue = parseInt(document.getElementById('modalInput').value);
-           
-           if (isNaN(newValue) || newValue < 0) {
-               showNotification('กรุณาใส่ตัวเลขที่ถูกต้อง', 'error');
-               return;
-           }
-           
-           // บันทึกข้อมูล
-           farmData[currentEditField] = newValue;
-           
-           // บันทึกลง localStorage ทันที
-           saveData();
-           
-           // อัปเดตหน้าจอ
-           updateDisplay();
-           
-           // แสดงการแจ้งเตือน
-           showNotification(`แก้ไข${currentEditTitle}: ${newValue.toLocaleString()} สำเร็จ`, 'success');
-           
-           // ปิด Modal
-           closeModal();
-       }
+        // Save Data
+        function saveData() {
+            addNewAnimal();
+        }
 
-       // ===============================
-       // การจัดการแจ้งเตือน
-       // ===============================
-       function handleAlert(alertElement) {
-           if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
-               alertElement.style.opacity = '0.3';
-               alertElement.style.transform = 'translateX(100%)';
-               
-               setTimeout(() => {
-                   alertElement.remove();
-                   updateAlertCount();
-               }, 300);
-               
-               showNotification('ทำงานเสร็จแล้ว', 'success');
-           }
-       }
+        // Clear Form
+        function clearForm() {
+            document.getElementById('pigNumber').value = '';
+            document.getElementById('pigType').value = '';
+            document.getElementById('pigWeight').value = '';
+            document.getElementById('birthDate').value = '';
+            document.getElementById('healthStatus').value = 'healthy';
+            document.getElementById('remarks').value = '';
+            validateForm();
+        }
 
-       function updateAlertCount() {
-           const alertItems = document.querySelectorAll('.alert-item');
-           const count = alertItems.length;
-           const alertCountElement = document.getElementById('alertCount');
-           
-           if (alertCountElement) {
-               alertCountElement.textContent = count;
-           }
-           
-           // ถ้าไม่มีการแจ้งเตือนแล้ว
-           if (count === 0) {
-               const alertContainer = document.getElementById('alertContainer');
-               if (alertContainer) {
-                   alertContainer.innerHTML = `
-                       <div style="text-align: center; padding: 40px; color: #10b981; font-size: 18px;">
-                           ✓ ไม่มีการแจ้งเตือน<br>
-                           <span style="font-size: 16px; color: #94a3b8;">ทุกอย่างเรียบร้อยดี</span>
-                       </div>
-                   `;
-               }
-           }
-       }
+        // Show Message
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `alert alert-${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.position = 'fixed';
+            messageDiv.style.top = '20px';
+            messageDiv.style.right = '20px';
+            messageDiv.style.padding = '12px 20px';
+            messageDiv.style.borderRadius = '4px';
+            messageDiv.style.zIndex = '9999';
+            messageDiv.style.animation = 'fadeIn 0.3s ease-in-out';
+            
+            if (type === 'success') {
+                messageDiv.style.background = var(--forest-green);
+                messageDiv.style.color = 'white';
+            } else if (type === 'error') {
+                messageDiv.style.background = var(--error-red);
+                messageDiv.style.color = 'white';
+            } else {
+                messageDiv.style.background = var(--primary-blue);
+                messageDiv.style.color = 'white';
+            }
 
-       // ===============================
-       // การจัดการสุกร
-       // ===============================
-       function handleLivestockAction(action) {
-           switch(action) {
-               case 'add':
-                   const type = prompt('เพิ่มสุกรประเภทไหน?\n\n1. ลูกหมู\n2. หมูขุน\n3. แม่พันธุ์', '1');
-                   if (!type || !['1', '2', '3'].includes(type)) return;
-                   
-                   const count = prompt('เพิ่มกี่ตัว?', '1');
-                   if (!count || isNaN(count) || parseInt(count) <= 0) {
-                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
-                       return;
-                   }
-                   
-                   const num = parseInt(count);
-                   switch(type) {
-                       case '1':
-                           farmData.piglets += num;
-                           showNotification(`เพิ่มลูกหมู ${num} ตัว สำเร็จ`, 'success');
-                           break;
-                       case '2':
-                           farmData.finishers += num;
-                           showNotification(`เพิ่มหมูขุน ${num} ตัว สำเร็จ`, 'success');
-                           break;
-                       case '3':
-                           farmData.breedingSows += num;
-                           showNotification(`เพิ่มแม่พันธุ์ ${num} ตัว สำเร็จ`, 'success');
-                           break;
-                   }
-                   break;
-                   
-               case 'remove':
-                   const removeType = prompt('ลดสุกรประเภทไหน?\n\n1. ลูกหมู\n2. หมูขุน\n3. แม่พันธุ์', '1');
-                   if (!removeType || !['1', '2', '3'].includes(removeType)) return;
-                   
-                   const removeCount = prompt('ลดกี่ตัว?', '1');
-                   if (!removeCount || isNaN(removeCount) || parseInt(removeCount) <= 0) {
-                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
-                       return;
-                   }
-                   
-                   const removeNum = parseInt(removeCount);
-                   switch(removeType) {
-                       case '1':
-                           if (farmData.piglets >= removeNum) {
-                               farmData.piglets -= removeNum;
-                               showNotification(`ลดลูกหมู ${removeNum} ตัว สำเร็จ`, 'success');
-                           } else {
-                               showNotification('ลูกหมูไม่เพียงพอ', 'error');
-                               return;
-                           }
-                           break;
-                       case '2':
-                           if (farmData.finishers >= removeNum) {
-                               farmData.finishers -= removeNum;
-                               showNotification(`ลดหมูขุน ${removeNum} ตัว สำเร็จ`, 'success');
-                           } else {
-                               showNotification('หมูขุนไม่เพียงพอ', 'error');
-                               return;
-                           }
-                           break;
-                       case '3':
-                           if (farmData.breedingSows >= removeNum) {
-                               farmData.breedingSows -= removeNum;
-                               showNotification(`ลดแม่พันธุ์ ${removeNum} ตัว สำเร็จ`, 'success');
-                           } else {
-                               showNotification('แม่พันธุ์ไม่เพียงพอ', 'error');
-                               return;
-                           }
-                           break;
-                   }
-                   break;
-                   
-               case 'sell':
-                   const sellCount = prompt('ขายหมูขุนกี่ตัว?', '1');
-                   if (!sellCount || isNaN(sellCount) || parseInt(sellCount) <= 0) {
-                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
-                       return;
-                   }
-                   
-                   const sellPrice = prompt('ราคาต่อตัว (บาท)?', '4000');
-                   if (!sellPrice || isNaN(sellPrice) || parseInt(sellPrice) <= 0) {
-                       showNotification('กรุณาใส่ราคาที่ถูกต้อง', 'error');
-                       return;
-                   }
-                   
-                   const sellNum = parseInt(sellCount);
-                   const price = parseInt(sellPrice);
-                   
-                   if (farmData.finishers >= sellNum) {
-                       farmData.finishers -= sellNum;
-                       farmData.revenue += (sellNum * price);
-                       showNotification(`ขายหมูขุน ${sellNum} ตัว ได้ ${(sellNum * price).toLocaleString()} บาท`, 'success');
-                   } else {
-                       showNotification('หมูขุนไม่เพียงพอ', 'error');
-                       return;
-                   }
-                   break;
-                   
-               case 'move':
-                   const moveFrom = prompt('ย้ายจากกลุ่มไหน?\n\n1. ลูกหมู → หมูขุน\n2. หมูขุน → แม่พันธุ์', '1');
-                   if (!moveFrom || !['1', '2'].includes(moveFrom)) return;
-                   
-                   const moveCount = prompt('ย้ายกี่ตัว?', '1');
-                   if (!moveCount || isNaN(moveCount) || parseInt(moveCount) <= 0) {
-                       showNotification('กรุณาใส่จำนวนที่ถูกต้อง', 'error');
-                       return;
-                   }
-                   
-                   const moveNum = parseInt(moveCount);
-                   switch(moveFrom) {
-                       case '1':
-                           if (farmData.piglets >= moveNum) {
-                               farmData.piglets -= moveNum;
-                               farmData.finishers += moveNum;
-                               showNotification(`ย้ายลูกหมู ${moveNum} ตัว เป็นหมูขุน`, 'success');
-                           } else {
-                               showNotification('ลูกหมูไม่เพียงพอ', 'error');
-                               return;
-                           }
-                           break;
-                       case '2':
-                           if (farmData.finishers >= moveNum) {
-                               farmData.finishers -= moveNum;
-                               farmData.breedingSows += moveNum;
-                               showNotification(`ย้ายหมูขุน ${moveNum} ตัว เป็นแม่พันธุ์`, 'success');
-                           } else {
-                               showNotification('หมูขุนไม่เพียงพอ', 'error');
-                               return;
-                           }
-                           break;
-                   }
-                   break;
-           }
-           
-           // บันทึกและอัปเดตหน้าจอ
-           saveData();
-           updateDisplay();
-       }
+            document.body.appendChild(messageDiv);
 
-       // ===============================
-       // Quick Action
-       // ===============================
-       function quickAction() {
-           const actions = [
-               'เพิ่มสุกรใหม่',
-               'บันทึกการตาย',
-               'บันทึกการขาย',
-               'ฉีดวัคซีน',
-               'ตรวจครรภ์',
-               'เพิ่มค่าใช้จ่าย',
-               'บันทึกรายได้'
-           ];
-           
-           let message = 'เลือกการทำงาน:\n\n';
-           actions.forEach((action, i) => {
-               message += `${i + 1}. ${action}\n`;
-           });
-           
-           const choice = prompt(message);
-           const choiceNum = parseInt(choice);
-           
-           if (choiceNum >= 1 && choiceNum <= actions.length) {
-               handleQuickActions(choiceNum, actions[choiceNum - 1]);
-           }
-       }
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
 
-       function handleQuickActions(choice, actionName) {
-           switch(choice) {
-               case 1: // เพิ่มสุกร
-                   handleLivestockAction('add');
-                   break;
-                   
-               case 2: // บันทึกการตาย
-                   handleLivestockAction('remove');
-                   break;
-                   
-               case 3: // บันทึกการขาย
-                   handleLivestockAction('sell');
-                   break;
-                   
-               case 6: // เพิ่มค่าใช้จ่าย
-                   const expense = prompt('ค่าใช้จ่าย (บาท)?', '1000');
-                   const expenseNote = prompt('หมายเหตุ:', 'ค่าอาหาร');
-                   if (expense && !isNaN(expense) && parseInt(expense) > 0) {
-                       farmData.expenses += parseInt(expense);
-                       saveData();
-                       updateDisplay();
-                       showNotification(`เพิ่มค่าใช้จ่าย ${parseInt(expense).toLocaleString()} บาท (${expenseNote})`, 'success');
-                   } else {
-                       showNotification('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
-                   }
-                   break;
-                   
-               case 7: // บันทึกรายได้
-                   const income = prompt('รายได้เพิ่มเติม (บาท)?', '1000');
-                   const incomeNote = prompt('หมายเหตุ:', 'ขายผลพลอยได้');
-                   if (income && !isNaN(income) && parseInt(income) > 0) {
-                       farmData.revenue += parseInt(income);
-                       saveData();
-                       updateDisplay();
-                       showNotification(`เพิ่มรายได้ ${parseInt(income).toLocaleString()} บาท (${incomeNote})`, 'success');
-                   } else {
-                       showNotification('กรุณาใส่จำนวนเงินที่ถูกต้อง', 'error');
-                   }
-                   break;
-                   
-               default:
-                   showNotification(`${actionName} - กำลังพัฒนา...`, 'info');
-           }
-       }
+        // Tab Navigation
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.tab')) {
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => tab.classList.remove('active'));
+                e.target.closest('.tab').classList.add('active');
+                
+                const module = e.target.closest('.tab').dataset.module;
+                updateBreadcrumb(module);
+            }
+        });
 
-       // ===============================
-       // ระบบแจ้งเตือน
-       // ===============================
-       function showNotification(message, type = 'success') {
-           // ลบ notification เก่า
-           const oldNotification = document.querySelector('.notification');
-           if (oldNotification) {
-               oldNotification.remove();
-           }
+        // Update Breadcrumb
+        function updateBreadcrumb(module) {
+            const breadcrumb = document.querySelector('.breadcrumb');
+            const moduleNames = {
+                dashboard: 'แดชบอร์ด',
+                production: 'การผลิต',
+                finance: 'การเงิน',
+                reports: 'รายงาน'
+            };
+            
+            breadcrumb.innerHTML = `<span>หน้าหลัก</span> > <span>${moduleNames[module]}</span> > <span>ภาพรวมระบบ</span>`;
+        }
 
-           const notification = document.createElement('div');
-           notification.className = 'notification';
-           notification.textContent = message;
-           
-           // เปลี่ยนสีตามประเภท
-           switch(type) {
-               case 'success':
-                   notification.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                   break;
-               case 'error':
-                   notification.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                   break;
-               case 'warning':
-                   notification.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-                   break;
-               case 'info':
-                   notification.style.background = 'linear-gradient(135deg, #3b82f6, #1d4ed8)';
-                   break;
-           }
-           
-           document.body.appendChild(notification);
-           
-           // แสดง notification
-           setTimeout(() => {
-               notification.classList.add('show');
-           }, 100);
-           
-           // ซ่อน notification
-           setTimeout(() => {
-               notification.classList.remove('show');
-               setTimeout(() => {
-                   if (notification.parentNode) {
-                       notification.remove();
-                   }
-               }, 300);
-           }, 3000);
-       }
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F2') {
+                e.preventDefault();
+                document.querySelector('.btn:nth-child(2)').click(); // Edit
+            } else if (e.key === 'F9') {
+                e.preventDefault();
+                document.querySelector('.btn-success').click(); // Save
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                clearForm();
+            }
+        });
 
-       // ===============================
-       // Event Listeners
-       // ===============================
-       
-       // เมื่อกด Enter ใน Modal
-       document.addEventListener('keydown', function(e) {
-           if (e.key === 'Enter' && document.getElementById('editModal').style.display === 'block') {
-               e.preventDefault();
-               saveEdit();
-           } else if (e.key === 'Escape') {
-               closeModal();
-           }
-       });
-
-       // คลิกนอก Modal เพื่อปิด
-       window.addEventListener('click', function(e) {
-           const modal = document.getElementById('editModal');
-           if (e.target === modal) {
-               closeModal();
-           }
-       });
-
-       // บันทึกข้อมูลเมื่อปิดแอป
-       window.addEventListener('beforeunload', function() {
-           saveData();
-       });
-
-       // ป้องกันการ zoom บนมือถือ
-       document.addEventListener('gesturestart', function (e) {
-           e.preventDefault();
-       });
-
-       // ===============================
-       // เริ่มต้นระบบ
-       // ===============================
-       window.addEventListener('load', function() {
-           console.log('🚀 เริ่มต้นระบบจัดการฟาร์ม');
-           
-           // โหลดข้อมูลที่บันทึกไว้
-           loadData();
-           
-           // อัปเดตวันที่
-           updateDate();
-           
-           // อัปเดตหน้าจอ
-           updateDisplay();
-           
-           // ตั้งเวลาอัปเดตวันที่ทุกนาที
-           setInterval(updateDate, 60000);
-           
-           // Auto-save ทุก 30 วินาที
-           setInterval(() => {
-               saveData();
-               console.log('💾 Auto-save:', new Date().toLocaleTimeString('th-TH'));
-           }, 30000);
-           
-           // แสดงข้อความต้อนรับ
-           setTimeout(() => {
-               showNotification('ระบบพร้อมใช้งาน - คลิกตัวเลขเพื่อแก้ไข', 'info');
-           }, 1000);
-           
-           console.log('✅ ระบบพร้อมใช้งาน');
-       });
-   </script>
+        // Initialize form validation state
+        validateForm();
+    </script>
 </body>
 </html>

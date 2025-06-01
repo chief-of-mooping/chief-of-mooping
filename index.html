@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการฟาร์มสุกร</title>
+    <title>ระบบจัดการฟาร์มสุกร - เวอร์ชันเต็ม</title>
     <style>
         * {
             margin: 0;
@@ -12,696 +12,1831 @@
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
             color: #333;
+            line-height: 1.6;
         }
 
-        /* หน้าจอมือถือ */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 18px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: white;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: #f8f9fa;
+        }
+
+        .nav-tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .supply-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .supply-info {
+            flex: 1;
+        }
+
+        .supply-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .supply-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .supply-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 0;
+                padding: 10px;
             }
 
-            .header {
-                background: linear-gradient(135deg, #4CAF50, #2196F3);
-                color: white;
-                padding: 20px;
-                text-align: center;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            .nav-tabs {
+                flex-direction: column;
             }
 
-            .header h1 {
-                font-size: 24px;
-                margin-bottom: 5px;
+            .form-grid {
+                grid-template-columns: 1fr;
             }
 
-            .header p {
-                opacity: 0.9;
-            }
-
-            .main-content {
-                padding: 20px;
-            }
-
-            /* การ์ดสถิติ */
             .stats-grid {
-                display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                margin-bottom: 25px;
             }
 
-            .stat-card {
-                background: white;
-                padding: 20px;
-                border-radius: 15px;
-                text-align: center;
-                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            }
-
-            .stat-number {
-                font-size: 28px;
-                font-weight: bold;
-                color: #4CAF50;
-                margin-bottom: 5px;
-            }
-
-            .stat-label {
+            .table {
                 font-size: 14px;
-                color: #666;
             }
 
-            /* ฟอร์มเพิ่มข้อมูล */
-            .add-form {
-                background: white;
-                border-radius: 15px;
-                padding: 25px;
-                margin-bottom: 25px;
-                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            }
-
-            .form-title {
-                font-size: 20px;
-                margin-bottom: 20px;
-                color: #333;
-                text-align: center;
-            }
-
-            .form-group {
-                margin-bottom: 20px;
-            }
-
-            .form-label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: 500;
-                color: #555;
-            }
-
-            .form-input {
-                width: 100%;
-                padding: 15px;
-                border: 2px solid #e0e0e0;
-                border-radius: 10px;
-                font-size: 16px;
-                transition: border-color 0.3s;
-            }
-
-            .form-input:focus {
-                outline: none;
-                border-color: #4CAF50;
-            }
-
-            .form-select {
-                width: 100%;
-                padding: 15px;
-                border: 2px solid #e0e0e0;
-                border-radius: 10px;
-                font-size: 16px;
-                background: white;
-            }
-
-            /* ปุ่มใหญ่ */
-            .btn {
-                width: 100%;
-                padding: 15px;
-                border: none;
-                border-radius: 10px;
-                font-size: 18px;
-                font-weight: 600;
-                cursor: pointer;
-                margin-bottom: 10px;
-                transition: transform 0.2s;
-            }
-
-            .btn:active {
-                transform: scale(0.98);
-            }
-
-            .btn-primary {
-                background: #4CAF50;
-                color: white;
-            }
-
-            .btn-secondary {
-                background: #2196F3;
-                color: white;
-            }
-
-            .btn-danger {
-                background: #f44336;
-                color: white;
-            }
-
-            /* รายการสุกร */
-            .pig-list {
-                background: white;
-                border-radius: 15px;
-                padding: 25px;
-                margin-bottom: 25px;
-                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            }
-
-            .pig-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 15px 0;
-                border-bottom: 1px solid #f0f0f0;
-            }
-
-            .pig-item:last-child {
-                border-bottom: none;
-            }
-
-            .pig-info {
-                flex: 1;
-            }
-
-            .pig-type {
-                font-weight: 600;
-                margin-bottom: 5px;
-            }
-
-            .pig-details {
-                font-size: 14px;
-                color: #666;
-            }
-
-            .pig-actions {
-                display: flex;
+            .supply-item {
+                flex-direction: column;
+                align-items: flex-start;
                 gap: 10px;
-            }
-
-            .btn-small {
-                padding: 8px 15px;
-                border: none;
-                border-radius: 8px;
-                font-size: 14px;
-                cursor: pointer;
-            }
-
-            .btn-edit {
-                background: #FF9800;
-                color: white;
-            }
-
-            .btn-delete {
-                background: #f44336;
-                color: white;
-            }
-
-            /* เมนูล่าง */
-            .bottom-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: white;
-                display: flex;
-                border-top: 1px solid #e0e0e0;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            }
-
-            .nav-item {
-                flex: 1;
-                text-align: center;
-                padding: 15px 10px;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-
-            .nav-item.active {
-                background: #e8f5e8;
-                color: #4CAF50;
-            }
-
-            .nav-icon {
-                font-size: 24px;
-                margin-bottom: 5px;
-            }
-
-            .nav-text {
-                font-size: 12px;
-            }
-
-            /* ข้อความแจ้งเตือน */
-            .message {
-                padding: 15px;
-                border-radius: 10px;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-
-            .message-success {
-                background: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-
-            .message-error {
-                background: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            /* เว้นพื้นที่สำหรับเมนูล่าง */
-            .main-content {
-                padding-bottom: 80px;
-            }
-        }
-
-        /* หน้าจอใหญ่ */
-        @media (min-width: 769px) {
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-
-            .header {
-                background: #0078d4;
-                color: white;
-                padding: 30px;
-                text-align: center;
-                border-radius: 10px;
-                margin-bottom: 30px;
-            }
-
-            .main-content {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-            }
-
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-                margin-bottom: 30px;
-                grid-column: 1 / -1;
-            }
-
-            .add-form {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            .pig-list {
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            .bottom-nav {
-                display: none;
-            }
-
-            .form-group {
-                display: grid;
-                grid-template-columns: 150px 1fr;
-                gap: 15px;
-                align-items: center;
-                margin-bottom: 20px;
-            }
-
-            .form-label {
-                margin-bottom: 0;
-                text-align: right;
-            }
-
-            .btn {
-                width: auto;
-                padding: 12px 25px;
-                display: inline-block;
-                margin-right: 10px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- หัวเรื่อง -->
+        <!-- Header -->
         <div class="header">
-            <h1>ระบบจัดการฟาร์มสุกร</h1>
-            <p>จัดการข้อมูลสุกรของคุณได้ง่ายๆ</p>
+            <h1>ระบบจัดการฟาร์มสุกรแบบเต็มรูปแบบ</h1>
+            <p>ระบบครบวงจรสำหรับการจัดการฟาร์มสุกรอย่างเป็นระบบและมีประสิทธิภาพ</p>
         </div>
 
-        <!-- ข้อความแจ้งเตือน -->
-        <div id="message" class="message hidden"></div>
+        <!-- Alert Message -->
+        <div id="alertMessage" class="alert hidden"></div>
 
-        <!-- สถิติรวม -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="totalPigs">0</div>
-                <div class="stat-label">สุกรทั้งหมด</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalSows">0</div>
-                <div class="stat-label">แม่พันธุ์</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalPiglets">0</div>
-                <div class="stat-label">ลูกสุกร</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalFinishers">0</div>
-                <div class="stat-label">สุกรขุน</div>
-            </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">ภาพรวมฟาร์ม</button>
+            <button class="nav-tab" onclick="showSection('pigs')">จัดการสุกร</button>
+            <button class="nav-tab" onclick="showSection('feeds')">จัดการอาหาร</button>
+            <button class="nav-tab" onclick="showSection('medical')">ยาและวัคซีน</button>
+            <button class="nav-tab" onclick="showSection('supplies')">อุปกรณ์การแพทย์</button>
+            <button class="nav-tab" onclick="showSection('sales')">การขาย</button>
+            <button class="nav-tab" onclick="showSection('reports')">รายงาน</button>
         </div>
 
-        <div class="main-content">
-            <!-- ฟอร์มเพิ่มข้อมูล -->
-            <div class="add-form">
-                <h2 class="form-title">เพิ่มข้อมูลสุกร</h2>
-                
-                <div class="form-group">
-                    <label class="form-label">ประเภทสุกร:</label>
-                    <select class="form-select" id="pigType">
-                        <option value="">เลือกประเภท</option>
-                        <option value="sow">แม่พันธุ์</option>
-                        <option value="piglet">ลูกสุกร</option>
-                        <option value="finisher">สุกรขุน</option>
-                    </select>
+        <!-- Overview Section -->
+        <div id="overview" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPigs">-</div>
+                    <div class="stat-label">สุกรทั้งหมด</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">จำนวน:</label>
-                    <input type="number" class="form-input" id="quantity" min="1" placeholder="กรอกจำนวน">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalSows">-</div>
+                    <div class="stat-label">แม่พันธุ์</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">วันที่เข้าฟาร์ม:</label>
-                    <input type="date" class="form-input" id="entryDate">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPiglets">-</div>
+                    <div class="stat-label">ลูกสุกร</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">น้ำหนักเฉลี่ย (กก.):</label>
-                    <input type="number" class="form-input" id="weight" step="0.1" placeholder="กรอกน้ำหนัก">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalFinishers">-</div>
+                    <div class="stat-label">สุกรขุน</div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">หมายเหตุ:</label>
-                    <input type="text" class="form-input" id="notes" placeholder="หมายเหตุเพิ่มเติม">
-                </div>
-
-                <button class="btn btn-primary" onclick="addPig()">เพิ่มข้อมูล</button>
-                <button class="btn btn-secondary" onclick="clearForm()">ล้างฟอร์ม</button>
             </div>
 
-            <!-- รายการสุกร -->
-            <div class="pig-list">
-                <h2 class="form-title">รายการสุกรในฟาร์ม</h2>
-                <div id="pigListContainer">
-                    <p style="text-align: center; color: #666; padding: 20px;">
-                        ยังไม่มีข้อมูลสุกร<br>
-                        เริ่มเพิ่มข้อมูลแรกของคุณ
-                    </p>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-secondary" onclick="exportData()">ส่งออกข้อมูล</button>
-                    <button class="btn btn-danger" onclick="clearAllData()">ล้างข้อมูลทั้งหมด</button>
+            <div class="card">
+                <div class="card-title">ข้อมูลสรุปประจำวัน</div>
+                <div id="dailySummary">
+                    <p>ระบบพร้อมใช้งาน กรุณาเริ่มบันทึกข้อมูล</p>
                 </div>
             </div>
         </div>
 
-        <!-- เมนูล่าง (มือถือ) -->
-        <div class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">🏠</div>
-                <div class="nav-text">หน้าหลัก</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">🐷</div>
-                <div class="nav-text">สุกร</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📊</div>
-                <div class="nav-text">รายงาน</div>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">⚙️</div>
-                <div class="nav-text">ตั้งค่า</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ข้อมูลสุกร
-        let pigs = [];
-        
-        // โหลดข้อมูลเมื่อเริ่มต้น
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            updateStats();
-            document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
-        });
-
-        // เพิ่มข้อมูลสุกร
-        function addPig() {
-            const pigType = document.getElementById('pigType').value;
-            const quantity = document.getElementById('quantity').value;
-            const entryDate = document.getElementById('entryDate').value;
-            const weight = document.getElementById('weight').value;
-            const notes = document.getElementById('notes').value;
-
-            // ตรวจสอบข้อมูล
-            if (!pigType || !quantity || !entryDate) {
-                showMessage('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
-                return;
-            }
-
-            if (quantity < 1) {
-                showMessage('จำนวนต้องมากกว่า 0', 'error');
-                return;
-            }
-
-            // สร้างข้อมูลใหม่
-            const newPig = {
-                id: Date.now(),
-                type: pigType,
-                quantity: parseInt(quantity),
-                entryDate: entryDate,
-                weight: parseFloat(weight) || 0,
-                notes: notes,
-                addedDate: new Date().toLocaleString('th-TH')
-            };
-
-            // เพิ่มลงในรายการ
-            pigs.push(newPig);
-            
-            // บันทึกข้อมูล
-            saveData();
-            
-            // อัพเดทหน้าจอ
-            updateStats();
-            displayPigs();
-            clearForm();
-            
-            showMessage('เพิ่มข้อมูลเรียบร้อย!', 'success');
-        }
-
-        // ล้างฟอร์ม
-        function clearForm() {
-            document.getElementById('pigType').value = '';
-            document.getElementById('quantity').value = '';
-            document.getElementById('weight').value = '';
-            document.getElementById('notes').value = '';
-            document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        // อัพเดทสถิติ
-        function updateStats() {
-            const stats = {
-                total: 0,
-                sows: 0,
-                piglets: 0,
-                finishers: 0
-            };
-
-            pigs.forEach(pig => {
-                stats.total += pig.quantity;
-                switch(pig.type) {
-                    case 'sow':
-                        stats.sows += pig.quantity;
-                        break;
-                    case 'piglet':
-                        stats.piglets += pig.quantity;
-                        break;
-                    case 'finisher':
-                        stats.finishers += pig.quantity;
-                        break;
-                }
-            });
-
-            document.getElementById('totalPigs').textContent = stats.total;
-            document.getElementById('totalSows').textContent = stats.sows;
-            document.getElementById('totalPiglets').textContent = stats.piglets;
-            document.getElementById('totalFinishers').textContent = stats.finishers;
-        }
-
-        // แสดงรายการสุกร
-        function displayPigs() {
-            const container = document.getElementById('pigListContainer');
-            
-            if (pigs.length === 0) {
-                container.innerHTML = `
-                    <p style="text-align: center; color: #666; padding: 20px;">
-                        ยังไม่มีข้อมูลสุกร<br>
-                        เริ่มเพิ่มข้อมูลแรกของคุณ
-                    </p>
-                `;
-                return;
-            }
-
-            const typeNames = {
-                'sow': 'แม่พันธุ์',
-                'piglet': 'ลูกสุกร', 
-                'finisher': 'สุกรขุน'
-            };
-
-            let html = '';
-            pigs.forEach(pig => {
-                html += `
-                    <div class="pig-item">
-                        <div class="pig-info">
-                            <div class="pig-type">${typeNames[pig.type]} จำนวน ${pig.quantity} ตัว</div>
-                            <div class="pig-details">
-                                เข้าฟาร์ม: ${new Date(pig.entryDate).toLocaleDateString('th-TH')}
-                                ${pig.weight > 0 ? ` | น้ำหนัก: ${pig.weight} กก.` : ''}
-                                ${pig.notes ? ` | ${pig.notes}` : ''}
-                            </div>
+        <!-- Pigs Management Section -->
+        <div id="pigs" class="content-section">
+            <div class="card">
+                <div class="card-title">เพิ่มข้อมูลสุกร</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ประเภทสุกร</label>
+                            <select class="form-select" id="pigType">
+                                <option value="">เลือกประเภท</option>
+                                <option value="sow">แม่พันธุ์</option>
+                                <option value="boar">พ่อพันธุ์</option>
+                                <option value="piglet">ลูกสุกร</option>
+                                <option value="grower">สุกรรุ่น</option>
+                                <option value="finisher">สุกรขุน</option>
+                            </select>
                         </div>
-                        <div class="pig-actions">
-                            <button class="btn-small btn-edit" onclick="editPig(${pig.id})">แก้ไข</button>
-                            <button class="btn-small btn-delete" onclick="deletePig(${pig.id})">ลบ</button>
+
+                        <div class="form-group">
+                            <label class="form-label required">สายพันธุ์</label>
+                            <select class="form-select" id="pigBreed">
+                                <option value="">เลือกสายพันธุ์</option>
+                                <option value="landrace">แลนด์เรซ</option>
+                                <option value="largwhite">ลาร์จไวท์</option>
+                                <option value="duroc">ดูรอค</option>
+                                <option value="yorkshire">ยอร์คเชียร์</option>
+                                <option value="hybrid">ลูกผสม</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">จำนวน</label>
+                            <input type="number" class="form-input" id="pigQuantity" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">วันที่เข้าฟาร์ม</label>
+                            <input type="date" class="form-input" id="pigEntryDate">
                         </div>
                     </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
 
-        // ลบข้อมูลสุกร
-        function deletePig(id) {
-            if (confirm('ต้องการลบข้อมูลนี้หรือไม่?')) {
-                pigs = pigs.filter(pig => pig.id !== id);
-                saveData();
-                updateStats();
-                displayPigs();
-                showMessage('ลบข้อมูลเรียบร้อย', 'success');
-            }
-        }
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label">น้ำหนักเฉลี่ย (กิโลกรัม)</label>
+                            <input type="number" class="form-input" id="pigWeight" step="0.1">
+                        </div>
 
-        // แก้ไขข้อมูลสุกร
-        function editPig(id) {
-            const pig = pigs.find(p => p.id === id);
-            if (pig) {
-                document.getElementById('pigType').value = pig.type;
-                document.getElementById('quantity').value = pig.quantity;
-                document.getElementById('entryDate').value = pig.entryDate;
-                document.getElementById('weight').value = pig.weight;
-                document.getElementById('notes').value = pig.notes;
-                
-                // ลบข้อมูลเก่า
-                deletePig(id);
-                
-                showMessage('ข้อมูลถูกโหลดในฟอร์ม กรุณาแก้ไขและบันทึกใหม่', 'success');
-            }
-        }
+                        <div class="form-group">
+                            <label class="form-label">อายุ (วัน)</label>
+                            <input type="number" class="form-input" id="pigAge">
+                        </div>
 
-        // ล้างข้อมูลทั้งหมด
-        function clearAllData() {
-            if (confirm('ต้องการล้างข้อมูลทั้งหมดหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้')) {
-                pigs = [];
-                saveData();
-                updateStats();
-                displayPigs();
-                showMessage('ล้างข้อมูลทั้งหมดเรียบร้อย', 'success');
-            }
-        }
+                        <div class="form-group">
+                            <label class="form-label">คอก/โรงเรือน</label>
+                            <input type="text" class="form-input" id="pigPen" placeholder="เช่น คอกที่ 1, โรงเรือน A">
+                        </div>
 
-        // ส่งออกข้อมูล
-        function exportData() {
-            if (pigs.length === 0) {
-                showMessage('ไม่มีข้อมูลให้ส่งออก', 'error');
-                return;
-            }
+                        <div class="form-group">
+                            <label class="form-label">หมายเหตุ</label>
+                            <textarea class="form-textarea" id="pigNotes" placeholder="บันทึกข้อมูลเพิ่มเติม"></textarea>
+                        </div>
+                    </div>
+                </div>
 
-            const data = {
-                exportDate: new Date().toLocaleString('th-TH'),
-                totalPigs: pigs.reduce((sum, pig) => sum + pig.quantity, 0),
-                pigs: pigs
-            };
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="addPig()">บันทึกข้อมูล</button>
+                    <button class="btn btn-secondary" onclick="clearPigForm()">ล้างฟอร์ม</button>
+                </div>
+            </div>
 
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `farm-data-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showMessage('ส่งออกข้อมูลเรียบร้อย', 'success');
-        }
+            <div class="card">
+                <div class="card-title">รายการสุกรในฟาร์ม</div>
+                <div id="pigsList">
+                    <p>ยังไม่มีข้อมูลสุกร</p>
+                </div>
+            </div>
+        </div>
 
-        // บันทึกข้อมูล
-        function saveData() {
-            try {
-                const data = JSON.stringify(pigs);
-                if (typeof(Storage) !== "undefined") {
-                    localStorage.setItem('farmPigs', data);
-                }
-            } catch (error) {
-                console.error('Error saving data:', error);
-            }
-        }
+        <!-- Feeds Management Section -->
+        <div id="feeds" class="content-section">
+            <div class="card">
+                <div class="card-title">จัดการอาหารสุกร</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ประเภทอาหาร</label>
+                            <select class="form-select" id="feedType">
+                                <option value="">เลือกประเภทอาหาร</option>
+                                <option value="prestarter">Pre-Starter (ลูกสุกรแรกเกิด)</option>
+                                <option value="starter">Starter (ลูกสุกร 1-2 เดือน)</option>
+                                <option value="grower">Grower (สุกรรุ่น 2-4 เดือน)</option>
+                                <option value="finisher">Finisher (สุกรขุนใกล้ขาย)</option>
+                                <option value="sow">อาหารแม่พันธุ์</option>
+                                <option value="boar">อาหารพ่อพันธุ์</option>
+                            </select>
+                        </div>
 
-        // โหลดข้อมูล
-        function loadData() {
-            try {
-                if (typeof(Storage) !== "undefined") {
-                    const data = localStorage.getItem('farmPigs');
-                    if (data) {
-                        pigs = JSON.parse(data);
-                        displayPigs();
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                pigs = [];
-            }
-        }
+                        <div class="form-group">
+                            <label class="form-label required">ชื่อยี่ห้อ/ผลิตภัณฑ์</label>
+                            <input type="text" class="form-input" id="feedBrand" placeholder="เช่น เบทาโกร, ซีพี">
+                        </div>
 
-        // แสดงข้อความ
-        function showMessage(text, type = 'success') {
-            const messageEl = document.getElementById('message');
-            messageEl.className = `message message-${type}`;
-            messageEl.textContent = text;
-            messageEl.classList.remove('hidden');
-            
-            setTimeout(() => {
-                messageEl.classList.add('hidden');
-            }, 3000);
-        }
+                        <div class="form-group">
+                            <label class="form-label required">จำนวน (กิโลกรัม)</label>
+                            <input type="number" class="form-input" id="feedQuantity" step="0.1">
+                        </div>
+                    </div>
 
-        // เมนูล่าง
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ราคาต่อกิโลกรัม (บาท)</label>
+                            <input type="number" class="form-input" id="feedPrice" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">วันที่ซื้อ</label>
+                            <input type="date" class="form-input" id="feedPurchaseDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">วันหมดอายุ</label>
+                            <input type="date" class="form-input" id="feedExpiryDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="addFeed()">เพิ่มอาหาร</button>
+                    <button class="btn btn-secondary" onclick="clearFeedForm()">ล้างฟอร์ม</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">สต็อกอาหาร</div>
+                <div id="feedStock">
+                    <p>ยังไม่มีข้อมูลอาหาร</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Management Section -->
+        <div id="medical" class="content-section">
+            <div class="card">
+                <div class="card-title">จัดการยาและวัคซีน</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ประเภท</label>
+                            <select class="form-select" id="medicalType">
+                                <option value="">เลือกประเภท</option>
+                                <option value="vaccine">วัคซีน</option>
+                                <option value="antibiotic">ยาปฏิชีวนะ</option>
+                                <option value="vitamin">วิตามิน</option>
+                                <option value="deworming">ยาถ่ายพยาธิ</option>
+                                <option value="hormone">ฮอร์โมน</option>
+                                <option value="supplement">อาหารเสริม</option>
+                                <option value="disinfectant">ยาฆ่าเชื้อ</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">ชื่อยา/วัคซีน</label>
+                            <input type="text" class="form-input" id="medicalName" placeholder="ชื่อยาหรือวัคซีน">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ยี่ห้อ/บริษัทผผลิต</label>
+                            <input type="text" class="form-input" id="medicalBrand" placeholder="เช่น โซลูเฟียร์ม, ไฟเซอร์">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">จำนวน</label>
+                            <input type="number" class="form-input" id="medicalQuantity" step="1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">หน่วย</label>
+                            <select class="form-select" id="medicalUnit">
+                                <option value="">เลือกหน่วย</option>
+                                <option value="dose">โดส</option>
+                                <option value="ml">มิลลิลิตร</option>
+                                <option value="tablet">เม็ด</option>
+                                <option value="bottle">ขวด</option>
+                                <option value="vial">หลอด</option>
+                                <option value="kg">กิโลกรัม</option>
+                                <option value="gram">กรัม</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">ราคาต่อหน่วย (บาท)</label>
+                            <input type="number" class="form-input" id="medicalPrice" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">วันที่ซื้อ</label>
+                            <input type="date" class="form-input" id="medicalPurchaseDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">วันหมดอายุ</label>
+                            <input type="date" class="form-input" id="medicalExpiryDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">วิธีการใช้/ข้อมูลเพิ่มเติม</label>
+                    <textarea class="form-textarea" id="medicalInstructions" placeholder="วิธีการใช้, ข้อควรระวัง, หรือข้อมูลเพิ่มเติม"></textarea>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="addMedical()">เพิ่มยา/วัคซีน</button>
+                    <button class="btn btn-secondary" onclick="clearMedicalForm()">ล้างฟอร์ม</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">คลังยาและวัคซีน</div>
+                <div id="medicalStock">
+                    <p>ยังไม่มีข้อมูลยาและวัคซีน</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Supplies Section -->
+        <div id="supplies" class="content-section">
+            <div class="card">
+                <div class="card-title">จัดการอุปกรณ์การแพทย์</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ประเภทอุปกรณ์</label>
+                            <select class="form-select" id="supplyType">
+                                <option value="">เลือกประเภทอุปกรณ์</option>
+                                <option value="syringe">เข็มฉีดยา</option>
+                                <option value="needle">เข็มฉีด</option>
+                                <option value="clipper">คีมตัดฟัน</option>
+                                <option value="tail_cutter">คีมตัดหาง</option>
+                                <option value="ear_tag">ต่างหู</option>
+                                <option value="thermometer">เทอร์โมมิเตอร์</option>
+                                <option value="weighing_scale">เครื่องชั่งน้ำหนัก</option>
+                                <option value="feeding_equipment">อุปกรณ์ให้อาหาร</option>
+                                <option value="cleaning_tools">อุปกรณ์ทำความสะอาด</option>
+                                <option value="safety_equipment">อุปกรณ์ความปลอดภัย</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">ชื่ออุปกรณ์</label>
+                            <input type="text" class="form-input" id="supplyName" placeholder="ชื่ออุปกรณ์">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ยี่ห้อ/รุ่น</label>
+                            <input type="text" class="form-input" id="supplyBrand" placeholder="ยี่ห้อหรือรุ่น">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">จำนวน</label>
+                            <input type="number" class="form-input" id="supplyQuantity" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">ราคาต่อชิ้น (บาท)</label>
+                            <input type="number" class="form-input" id="supplyPrice" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">วันที่ซื้อ</label>
+                            <input type="date" class="form-input" id="supplyPurchaseDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">รายละเอียดเพิ่มเติม</label>
+                    <textarea class="form-textarea" id="supplyNotes" placeholder="ข้อมูลเพิ่มเติมเกี่ยวกับอุปกรณ์"></textarea>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="addSupply()">เพิ่มอุปกรณ์</button>
+                    <button class="btn btn-secondary" onclick="clearSupplyForm()">ล้างฟอร์ม</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">คลังอุปกรณ์การแพทย์</div>
+                <div id="suppliesStock">
+                    <p>ยังไม่มีข้อมูลอุปกรณ์</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Section -->
+        <div id="sales" class="content-section">
+            <div class="card">
+                <div class="card-title">บันทึกการขาย</div>
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">วันที่ขาย</label>
+                            <input type="date" class="form-input" id="saleDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">ประเภทสุกรที่ขาย</label>
+                            <select class="form-select" id="saleType">
+                                <option value="">เลือกประเภท</option>
+                                <option value="piglet">ลูกสุกร</option>
+                                <option value="grower">สุกรรุ่น</option>
+                                <option value="finisher">สุกรขุน</option>
+                                <option value="sow">แม่พันธุ์</option>
+                                <option value="boar">พ่อพันธุ์</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">จำนวนที่ขาย (ตัว)</label>
+                            <input type="number" class="form-input" id="saleQuantity" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">น้ำหนักรวม (กิโลกรัม)</label>
+                            <input type="number" class="form-input" id="saleWeight" step="0.1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label class="form-label required">ราคาต่อกิโลกรัม (บาท)</label>
+                            <input type="number" class="form-input" id="salePricePerKg" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ค่าขนส่ง (บาท)</label>
+                            <input type="number" class="form-input" id="saleTransportCost" step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ผู้ซื้อ</label>
+                            <input type="text" class="form-input" id="saleBuyer" placeholder="ชื่อผู้ซื้อหรือบริษัท">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">หมายเหตุ</label>
+
+<textarea class="form-textarea" id="saleNotes" placeholder="บันทึกข้อมูลเพิ่มเติมเกี่ยวกับการขาย"></textarea>
+                       </div>
+                   </div>
+               </div>
+
+               <div style="margin-top: 20px;">
+                   <button class="btn btn-success" onclick="addSale()">บันทึกการขาย</button>
+                   <button class="btn btn-secondary" onclick="clearSaleForm()">ล้างฟอร์ม</button>
+               </div>
+           </div>
+
+           <div class="card">
+               <div class="card-title">ประวัติการขาย</div>
+               <div id="salesHistory">
+                   <p>ยังไม่มีข้อมูลการขาย</p>
+               </div>
+           </div>
+       </div>
+
+       <!-- Reports Section -->
+       <div id="reports" class="content-section">
+           <div class="card">
+               <div class="card-title">รายงานสรุป</div>
+               <div class="form-grid">
+                   <div>
+                       <div class="form-group">
+                           <label class="form-label">เลือกช่วงเวลา</label>
+                           <select class="form-select" id="reportPeriod">
+                               <option value="today">วันนี้</option>
+                               <option value="week">สัปดาห์นี้</option>
+                               <option value="month">เดือนนี้</option>
+                               <option value="quarter">ไตรมาสนี้</option>
+                               <option value="year">ปีนี้</option>
+                               <option value="custom">กำหนดเอง</option>
+                           </select>
+                       </div>
+
+                       <div class="form-group">
+                           <label class="form-label">วันที่เริ่มต้น</label>
+                           <input type="date" class="form-input" id="reportStartDate">
+                       </div>
+
+                       <div class="form-group">
+                           <label class="form-label">วันที่สิ้นสุด</label>
+                           <input type="date" class="form-input" id="reportEndDate">
+                       </div>
+                   </div>
+
+                   <div>
+                       <div class="form-group">
+                           <label class="form-label">ประเภทรายงาน</label>
+                           <select class="form-select" id="reportType">
+                               <option value="overview">ภาพรวมฟาร์ม</option>
+                               <option value="financial">รายงานการเงิน</option>
+                               <option value="livestock">รายงานสุกร</option>
+                               <option value="feed">รายงานอาหาร</option>
+                               <option value="medical">รายงานยาและวัคซีน</option>
+                               <option value="sales">รายงานการขาย</option>
+                           </select>
+                       </div>
+
+                       <button class="btn btn-primary" onclick="generateReport()" style="margin-top: 30px;">สร้างรายงาน</button>
+                       <button class="btn btn-secondary" onclick="exportReport()">ส่งออกรายงาน</button>
+                   </div>
+               </div>
+
+               <div id="reportResults" style="margin-top: 30px;">
+                   <p>เลือกประเภทรายงานและช่วงเวลาเพื่อสร้างรายงาน</p>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script>
+       // ข้อมูลระบบ
+       let farmData = {
+           pigs: [],
+           feeds: [],
+           medical: [],
+           supplies: [],
+           sales: []
+       };
+
+       // เริ่มต้นระบบ
+       document.addEventListener('DOMContentLoaded', function() {
+           loadAllData();
+           updateOverview();
+           setDefaultDates();
+       });
+
+       // ตั้งค่าวันที่เริ่มต้น
+       function setDefaultDates() {
+           const today = new Date().toISOString().split('T')[0];
+           document.getElementById('pigEntryDate').value = today;
+           document.getElementById('feedPurchaseDate').value = today;
+           document.getElementById('medicalPurchaseDate').value = today;
+           document.getElementById('supplyPurchaseDate').value = today;
+           document.getElementById('saleDate').value = today;
+           document.getElementById('reportStartDate').value = today;
+           document.getElementById('reportEndDate').value = today;
+       }
+
+       // แสดงส่วนต่างๆ
+       function showSection(sectionName) {
+           // ซ่อนทุกส่วน
+           document.querySelectorAll('.content-section').forEach(section => {
+               section.classList.remove('active');
+           });
+
+           // ลบ active จากปุ่มทั้งหมด
+           document.querySelectorAll('.nav-tab').forEach(tab => {
+               tab.classList.remove('active');
+           });
+
+           // แสดงส่วนที่เลือก
+           document.getElementById(sectionName).classList.add('active');
+           event.target.classList.add('active');
+
+           // อัพเดทข้อมูลตามส่วนที่เลือก
+           switch(sectionName) {
+               case 'overview':
+                   updateOverview();
+                   break;
+               case 'pigs':
+                   displayPigs();
+                   break;
+               case 'feeds':
+                   displayFeeds();
+                   break;
+               case 'medical':
+                   displayMedical();
+                   break;
+               case 'supplies':
+                   displaySupplies();
+                   break;
+               case 'sales':
+                   displaySales();
+                   break;
+           }
+       }
+
+       // แสดงข้อความแจ้งเตือน
+       function showAlert(message, type = 'success') {
+           const alertEl = document.getElementById('alertMessage');
+           alertEl.textContent = message;
+           alertEl.className = `alert alert-${type}`;
+           alertEl.classList.remove('hidden');
+
+           setTimeout(() => {
+               alertEl.classList.add('hidden');
+           }, 5000);
+       }
+
+       // === การจัดการสุกร ===
+       function addPig() {
+           const pigType = document.getElementById('pigType').value;
+           const pigBreed = document.getElementById('pigBreed').value;
+           const quantity = parseInt(document.getElementById('pigQuantity').value);
+           const entryDate = document.getElementById('pigEntryDate').value;
+           const weight = parseFloat(document.getElementById('pigWeight').value) || 0;
+           const age = parseInt(document.getElementById('pigAge').value) || 0;
+           const pen = document.getElementById('pigPen').value;
+           const notes = document.getElementById('pigNotes').value;
+
+           if (!pigType || !pigBreed || !quantity || !entryDate) {
+               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+               return;
+           }
+
+           const newPig = {
+               id: Date.now(),
+               type: pigType,
+               breed: pigBreed,
+               quantity: quantity,
+               entryDate: entryDate,
+               weight: weight,
+               age: age,
+               pen: pen,
+               notes: notes,
+               createdDate: new Date().toISOString()
+           };
+
+           farmData.pigs.push(newPig);
+           saveAllData();
+           displayPigs();
+           updateOverview();
+           clearPigForm();
+           showAlert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
+       }
+
+       function clearPigForm() {
+           document.getElementById('pigType').value = '';
+           document.getElementById('pigBreed').value = '';
+           document.getElementById('pigQuantity').value = '';
+           document.getElementById('pigWeight').value = '';
+           document.getElementById('pigAge').value = '';
+           document.getElementById('pigPen').value = '';
+           document.getElementById('pigNotes').value = '';
+           document.getElementById('pigEntryDate').value = new Date().toISOString().split('T')[0];
+       }
+
+       function displayPigs() {
+           const container = document.getElementById('pigsList');
+           
+           if (farmData.pigs.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลสุกร</p>';
+               return;
+           }
+
+           const typeNames = {
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์',
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน'
+           };
+
+           let html = '<table class="table"><thead><tr><th>ประเภท</th><th>สายพันธุ์</th><th>จำนวน</th><th>น้ำหนัก</th><th>อายุ</th><th>คอก</th><th>การจัดการ</th></tr></thead><tbody>';
+
+           farmData.pigs.forEach(pig => {
+               html += `
+                   <tr>
+                       <td>${typeNames[pig.type]}</td>
+                       <td>${pig.breed}</td>
+                       <td>${pig.quantity} ตัว</td>
+                       <td>${pig.weight > 0 ? pig.weight + ' กก.' : '-'}</td>
+                       <td>${pig.age > 0 ? pig.age + ' วัน' : '-'}</td>
+                       <td>${pig.pen || '-'}</td>
+                       <td>
+                           <button class="btn btn-small btn-secondary" onclick="editPig(${pig.id})">แก้ไข</button>
+                           <button class="btn btn-small btn-danger" onclick="deletePig(${pig.id})">ลบ</button>
+                       </td>
+                   </tr>
+               `;
+           });
+
+           html += '</tbody></table>';
+           container.innerHTML = html;
+       }
+
+       function deletePig(id) {
+           if (confirm('ต้องการลบข้อมูลสุกรนี้หรือไม่?')) {
+               farmData.pigs = farmData.pigs.filter(pig => pig.id !== id);
+               saveAllData();
+               displayPigs();
+               updateOverview();
+               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+           }
+       }
+
+       // === การจัดการอาหาร ===
+       function addFeed() {
+           const feedType = document.getElementById('feedType').value;
+           const brand = document.getElementById('feedBrand').value;
+           const quantity = parseFloat(document.getElementById('feedQuantity').value);
+           const price = parseFloat(document.getElementById('feedPrice').value);
+           const purchaseDate = document.getElementById('feedPurchaseDate').value;
+           const expiryDate = document.getElementById('feedExpiryDate').value;
+
+           if (!feedType || !brand || !quantity || !price || !purchaseDate) {
+               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+               return;
+           }
+
+           const newFeed = {
+               id: Date.now(),
+               type: feedType,
+               brand: brand,
+               quantity: quantity,
+               price: price,
+               purchaseDate: purchaseDate,
+               expiryDate: expiryDate,
+               createdDate: new Date().toISOString()
+           };
+
+           farmData.feeds.push(newFeed);
+           saveAllData();
+           displayFeeds();
+           clearFeedForm();
+           showAlert('เพิ่มข้อมูลอาหารเรียบร้อยแล้ว');
+       }
+
+       function clearFeedForm() {
+           document.getElementById('feedType').value = '';
+           document.getElementById('feedBrand').value = '';
+           document.getElementById('feedQuantity').value = '';
+           document.getElementById('feedPrice').value = '';
+           document.getElementById('feedExpiryDate').value = '';
+           document.getElementById('feedPurchaseDate').value = new Date().toISOString().split('T')[0];
+       }
+
+       function displayFeeds() {
+           const container = document.getElementById('feedStock');
+           
+           if (farmData.feeds.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลอาหาร</p>';
+               return;
+           }
+
+           const feedTypes = {
+               'prestarter': 'Pre-Starter',
+               'starter': 'Starter',
+               'grower': 'Grower',
+               'finisher': 'Finisher',
+               'sow': 'อาหารแม่พันธุ์',
+               'boar': 'อาหารพ่อพันธุ์'
+           };
+
+           let html = '';
+           farmData.feeds.forEach(feed => {
+               const totalValue = feed.quantity * feed.price;
+               html += `
+                   <div class="supply-item">
+                       <div class="supply-info">
+                           <div class="supply-name">${feedTypes[feed.type]} - ${feed.brand}</div>
+                           <div class="supply-details">จำนวน: ${feed.quantity} กก. | ราคา: ${feed.price} บาท/กก. | มูลค่ารวม: ${totalValue.toLocaleString()} บาท</div>
+                           <div class="supply-details">วันที่ซื้อ: ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')} ${feed.expiryDate ? '| หมดอายุ: ' + new Date(feed.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                       </div>
+                       <div class="supply-actions">
+                           <button class="btn btn-small btn-danger" onclick="deleteFeed(${feed.id})">ลบ</button>
+                       </div>
+                   </div>
+               `;
+           });
+
+           container.innerHTML = html;
+       }
+
+       function deleteFeed(id) {
+           if (confirm('ต้องการลบข้อมูลอาหารนี้หรือไม่?')) {
+               farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
+               saveAllData();
+               displayFeeds();
+               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+           }
+       }
+
+       // === การจัดการยาและวัคซีน ===
+       function addMedical() {
+           const type = document.getElementById('medicalType').value;
+           const name = document.getElementById('medicalName').value;
+           const brand = document.getElementById('medicalBrand').value;
+           const quantity = parseInt(document.getElementById('medicalQuantity').value);
+           const unit = document.getElementById('medicalUnit').value;
+           const price = parseFloat(document.getElementById('medicalPrice').value);
+           const purchaseDate = document.getElementById('medicalPurchaseDate').value;
+           const expiryDate = document.getElementById('medicalExpiryDate').value;
+           const instructions = document.getElementById('medicalInstructions').value;
+
+           if (!type || !name || !quantity || !unit || !price || !purchaseDate) {
+               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+               return;
+           }
+
+           const newMedical = {
+               id: Date.now(),
+               type: type,
+               name: name,
+               brand: brand,
+               quantity: quantity,
+               unit: unit,
+               price: price,
+               purchaseDate: purchaseDate,
+               expiryDate: expiryDate,
+               instructions: instructions,
+               createdDate: new Date().toISOString()
+           };
+
+           farmData.medical.push(newMedical);
+           saveAllData();
+           displayMedical();
+           clearMedicalForm();
+           showAlert('เพิ่มข้อมูลยา/วัคซีนเรียบร้อยแล้ว');
+       }
+
+       function clearMedicalForm() {
+           document.getElementById('medicalType').value = '';
+           document.getElementById('medicalName').value = '';
+           document.getElementById('medicalBrand').value = '';
+           document.getElementById('medicalQuantity').value = '';
+           document.getElementById('medicalUnit').value = '';
+           document.getElementById('medicalPrice').value = '';
+           document.getElementById('medicalExpiryDate').value = '';
+           document.getElementById('medicalInstructions').value = '';
+           document.getElementById('medicalPurchaseDate').value = new Date().toISOString().split('T')[0];
+       }
+
+       function displayMedical() {
+           const container = document.getElementById('medicalStock');
+           
+           if (farmData.medical.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลยาและวัคซีน</p>';
+               return;
+           }
+
+           const medicalTypes = {
+               'vaccine': 'วัคซีน',
+               'antibiotic': 'ยาปฏิชีวนะ',
+               'vitamin': 'วิตามิน',
+               'deworming': 'ยาถ่ายพยาธิ',
+               'hormone': 'ฮอร์โมน',
+               'supplement': 'อาหารเสริม',
+               'disinfectant': 'ยาฆ่าเชื้อ'
+           };
+
+           let html = '';
+           farmData.medical.forEach(med => {
+               const totalValue = med.quantity * med.price;
+               html += `
+                   <div class="supply-item">
+                       <div class="supply-info">
+                           <div class="supply-name">${medicalTypes[med.type]} - ${med.name}</div>
+                           <div class="supply-details">${med.brand ? 'ยี่ห้อ: ' + med.brand + ' | ' : ''}จำนวน: ${med.quantity} ${med.unit} | ราคา: ${med.price} บาท/${med.unit}</div>
+                           <div class="supply-details">มูลค่ารวม: ${totalValue.toLocaleString()} บาท | วันที่ซื้อ: ${new Date(med.purchaseDate).toLocaleDateString('th-TH')}</div>
+                           ${med.expiryDate ? '<div class="supply-details">หมดอายุ: ' + new Date(med.expiryDate).toLocaleDateString('th-TH') + '</div>' : ''}
+                           ${med.instructions ? '<div class="supply-details">วิธีใช้: ' + med.instructions + '</div>' : ''}
+                       </div>
+                       <div class="supply-actions">
+                           <button class="btn btn-small btn-danger" onclick="deleteMedical(${med.id})">ลบ</button>
+                       </div>
+                   </div>
+               `;
+           });
+
+           container.innerHTML = html;
+       }
+
+       function deleteMedical(id) {
+           if (confirm('ต้องการลบข้อมูลยา/วัคซีนนี้หรือไม่?')) {
+               farmData.medical = farmData.medical.filter(med => med.id !== id);
+               saveAllData();
+               displayMedical();
+               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+           }
+       }
+
+       // === การจัดการอุปกรณ์ ===
+       function addSupply() {
+           const type = document.getElementById('supplyType').value;
+           const name = document.getElementById('supplyName').value;
+           const brand = document.getElementById('supplyBrand').value;
+           const quantity = parseInt(document.getElementById('supplyQuantity').value);
+           const price = parseFloat(document.getElementById('supplyPrice').value);
+           const purchaseDate = document.getElementById('supplyPurchaseDate').value;
+           const notes = document.getElementById('supplyNotes').value;
+
+           if (!type || !name || !quantity || !price || !purchaseDate) {
+               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+               return;
+           }
+
+           const newSupply = {
+               id: Date.now(),
+               type: type,
+               name: name,
+               brand: brand,
+               quantity: quantity,
+               price: price,
+               purchaseDate: purchaseDate,
+               notes: notes,
+               createdDate: new Date().toISOString()
+           };
+
+           farmData.supplies.push(newSupply);
+           saveAllData();
+           displaySupplies();
+           clearSupplyForm();
+           showAlert('เพิ่มข้อมูลอุปกรณ์เรียบร้อยแล้ว');
+       }
+
+       function clearSupplyForm() {
+           document.getElementById('supplyType').value = '';
+           document.getElementById('supplyName').value = '';
+           document.getElementById('supplyBrand').value = '';
+           document.getElementById('supplyQuantity').value = '';
+           document.getElementById('supplyPrice').value = '';
+           document.getElementById('supplyNotes').value = '';
+           document.getElementById('supplyPurchaseDate').value = new Date().toISOString().split('T')[0];
+       }
+
+       function displaySupplies() {
+           const container = document.getElementById('suppliesStock');
+           
+           if (farmData.supplies.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลอุปกรณ์</p>';
+               return;
+           }
+
+           const supplyTypes = {
+               'syringe': 'เข็มฉีดยา',
+               'needle': 'เข็มฉีด',
+               'clipper': 'คีมตัดฟัน',
+               'tail_cutter': 'คีมตัดหาง',
+               'ear_tag': 'ต่างหู',
+               'thermometer': 'เทอร์โมมิเตอร์',
+               'weighing_scale': 'เครื่องชั่งน้ำหนัก',
+               'feeding_equipment': 'อุปกรณ์ให้อาหาร',
+               'cleaning_tools': 'อุปกรณ์ทำความสะอาด',
+               'safety_equipment': 'อุปกรณ์ความปลอดภัย'
+           };
+
+           let html = '';
+           farmData.supplies.forEach(supply => {
+               const totalValue = supply.quantity * supply.price;
+               html += `
+                   <div class="supply-item">
+                       <div class="supply-info">
+                           <div class="supply-name">${supplyTypes[supply.type]} - ${supply.name}</div>
+                           <div class="supply-details">${supply.brand ? 'ยี่ห้อ: ' + supply.brand + ' | ' : ''}จำนวน: ${supply.quantity} ชิ้น | ราคา: ${supply.price} บาท/ชิ้น</div>
+                           <div class="supply-details">มูลค่ารวม: ${totalValue.toLocaleString()} บาท | วันที่ซื้อ: ${new Date(supply.purchaseDate).toLocaleDateString('th-TH')}</div>
+                           ${supply.notes ? '<div class="supply-details">หมายเหตุ: ' + supply.notes + '</div>' : ''}
+                       </div>
+                       <div class="supply-actions">
+                           <button class="btn btn-small btn-danger" onclick="deleteSupply(${supply.id})">ลบ</button>
+                       </div>
+                   </div>
+               `;
+           });
+
+           container.innerHTML = html;
+       }
+
+       function deleteSupply(id) {
+           if (confirm('ต้องการลบข้อมูลอุปกรณ์นี้หรือไม่?')) {
+               farmData.supplies = farmData.supplies.filter(supply => supply.id !== id);
+               saveAllData();
+               displaySupplies();
+               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+           }
+       }
+
+       // === การจัดการการขาย ===
+       function addSale() {
+           const date = document.getElementById('saleDate').value;
+           const type = document.getElementById('saleType').value;
+           const quantity = parseInt(document.getElementById('saleQuantity').value);
+           const weight = parseFloat(document.getElementById('saleWeight').value) || 0;
+           const pricePerKg = parseFloat(document.getElementById('salePricePerKg').value);
+           const transportCost = parseFloat(document.getElementById('saleTransportCost').value) || 0;
+           const buyer = document.getElementById('saleBuyer').value;
+           const notes = document.getElementById('saleNotes').value;
+
+           if (!date || !type || !quantity || !pricePerKg) {
+               showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+               return;
+           }
+
+           const totalRevenue = weight * pricePerKg;
+           const netRevenue = totalRevenue - transportCost;
+
+           const newSale = {
+               id: Date.now(),
+               date: date,
+               type: type,
+               quantity: quantity,
+               weight: weight,
+               pricePerKg: pricePerKg,
+               transportCost: transportCost,
+               totalRevenue: totalRevenue,
+               netRevenue: netRevenue,
+               buyer: buyer,
+               notes: notes,
+               createdDate: new Date().toISOString()
+           };
+
+           farmData.sales.push(newSale);
+           saveAllData();
+           displaySales();
+           clearSaleForm();
+           showAlert('บันทึกการขายเรียบร้อยแล้ว');
+       }
+
+       function clearSaleForm() {
+           document.getElementById('saleType').value = '';
+           document.getElementById('saleQuantity').value = '';
+           document.getElementById('saleWeight').value = '';
+           document.getElementById('salePricePerKg').value = '';
+           document.getElementById('saleTransportCost').value = '';
+           document.getElementById('saleBuyer').value = '';
+           document.getElementById('saleNotes').value = '';
+           document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
+       }
+
+       function displaySales() {
+           const container = document.getElementById('salesHistory');
+           
+           if (farmData.sales.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลการขาย</p>';
+               return;
+           }
+
+           const saleTypes = {
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน',
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์'
+           };
+
+           let html = '<table class="table"><thead><tr><th>วันที่</th><th>ประเภท</th><th>จำนวน</th><th>น้ำหนัก</th><th>รายได้สุทธิ</th><th>ผู้ซื้อ</th><th>การจัดการ</th></tr></thead><tbody>';
+
+           farmData.sales.forEach(sale => {
+               html += `
+                   <tr>
+                       <td>${new Date(sale.date).toLocaleDateString('th-TH')}</td>
+                       <td>${saleTypes[sale.type]}</td>
+                       <td>${sale.quantity} ตัว</td>
+                       <td>${sale.weight > 0 ? sale.weight + ' กก.' : '-'}</td>
+                       <td>${sale.netRevenue.toLocaleString()} บาท</td>
+                       <td>${sale.buyer || '-'}</td>
+                       <td>
+                           <button class="btn btn-small btn-danger" onclick="deleteSale(${sale.id})">ลบ</button>
+                       </td>
+                   </tr>
+               `;
+           });
+
+           html += '</tbody></table>';
+           container.innerHTML = html;
+       }
+
+       function deleteSale(id) {
+           if (confirm('ต้องการลบข้อมูลการขายนี้หรือไม่?')) {
+               farmData.sales = farmData.sales.filter(sale => sale.id !== id);
+               saveAllData();
+               displaySales();
+               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+           }
+       }
+
+       // === อัพเดทภาพรวม ===
+       function updateOverview() {
+           const stats = {
+               totalPigs: 0,
+               sows: 0,
+               piglets: 0,
+               finishers: 0
+           };
+
+           farmData.pigs.forEach(pig => {
+               stats.totalPigs += pig.quantity;
+               switch(pig.type) {
+                   case 'sow':
+                       stats.sows += pig.quantity;
+                       break;
+                   case 'piglet':
+                       stats.piglets += pig.quantity;
+                       break;
+                   case 'finisher':
+                       stats.finishers += pig.quantity;
+                       break;
+               }
+           });
+
+           document.getElementById('totalPigs').textContent = stats.totalPigs || '-';
+           document.getElementById('totalSows').textContent = stats.sows || '-';
+           document.getElementById('totalPiglets').textContent = stats.piglets || '-';
+           document.getElementById('totalFinishers').textContent = stats.finishers || '-';
+
+           // อัพเดทสรุปประจำวัน
+           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const totalFeeds = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
+           const totalMedical = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+           const totalSupplies = farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
+           const summaryContainer = document.getElementById('dailySummary');
+           if (farmData.pigs.length > 0 || farmData.sales.length > 0) {
+               summaryContainer.innerHTML = `
+                   <div class="form-grid">
+                       <div>
+                           <h4>สถิติการเงิน</h4>
+                           <p><strong>รายได้จากการขาย:</strong> ${totalSales.toLocaleString()} บาท</p>
+                           <p><strong>ค่าอาหาร:</strong> ${totalFeeds.toLocaleString()} บาท</p>
+                           <p><strong>ค่ายาและวัคซีน:</strong> ${totalMedical.toLocaleString()} บาท</p>
+                           <p><strong>ค่าอุปกรณ์:</strong> ${totalSupplies.toLocaleString()} บาท</p>
+                       </div>
+                       <div>
+                           <h4>สรุปต้นทุน</h4>
+                           <p><strong>ต้นทุนรวม:</strong> ${(totalFeeds + totalMedical + totalSupplies).toLocaleString()} บาท</p>
+                           <p><strong>กำไร/ขาดทุน:</strong> ${(totalSales - totalFeeds - totalMedical - totalSupplies).toLocaleString()} บาท</p>
+                           <p><strong>จำนวนรายการ:</strong> ${farmData.pigs.length + farmData.sales.length} รายการ</p>
+                           <p><strong>อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
+                       </div>
+                   </div>
+               `;
+           } else {
+               summaryContainer.innerHTML = '<p>ระบบพร้อมใช้งาน กรุณาเริ่มบันทึกข้อมูล</p>';
+           }
+       }
+
+       // === การสร้างรายงาน ===
+       function generateReport() {
+           const period = document.getElementById('reportPeriod').value;
+           const startDate = document.getElementById('reportStartDate').value;
+           const endDate = document.getElementById('reportEndDate').value;
+           const type = document.getElementById('reportType').value;
+
+           if (!type) {
+               showAlert('กรุณาเลือกประเภทรายงาน', 'error');
+               return;
+           }
+
+           const container = document.getElementById('reportResults');
+           
+           switch(type) {
+               case 'overview':
+                   generateOverviewReport(container);
+                   break;
+               case 'financial':
+                   generateFinancialReport(container, startDate, endDate);
+                   break;
+               case 'livestock':
+                   generateLivestockReport(container);
+                   break;
+               case 'feed':
+                   generateFeedReport(container);
+                   break;
+               case 'medical':
+                   generateMedicalReport(container);
+                   break;
+               case 'sales':
+                   generateSalesReport(container, startDate, endDate);
+                   break;
+           }
+       }
+
+       function generateOverviewReport(container) {
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+           const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const totalCosts = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
+                             farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0) +
+                             farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
+
+           container.innerHTML = `
+               <div class="card">
+                   <div class="card-title">รายงานภาพรวมฟาร์ม</div>
+                   <div class="form-grid">
+                       <div>
+                           <h4>สถิติสุกร</h4>
+                           <p>จำนวนสุกรทั้งหมด: ${totalPigs} ตัว</p>
+                           <p>จำนวนประเภท: ${farmData.pigs.length} กลุ่ม</p>
+                           <p>รายการบันทึก: ${farmData.pigs.length} รายการ</p>
+                       </div>
+                       <div>
+                           <h4>สถิติการเงิน</h4>
+                           <p>รายได้รวม: ${totalSales.toLocaleString()} บาท</p>
+                           <p>ต้นทุนรวม: ${totalCosts.toLocaleString()} บาท</p>
+                           <p>กำไร/ขาดทุน: ${(totalSales - totalCosts).toLocaleString()} บาท</p>
+                       </div>
+                   </div>
+                   <div style="margin-top: 20px;">
+                       <h4>สถิติการขาย</h4>
+                       <p>จำนวนครั้งที่ขาย: ${farmData.sales.length} ครั้ง</p>
+                       <p>สุกรที่ขายแล้ว: ${farmData.sales.reduce((sum, sale) => sum + sale.quantity, 0)} ตัว</p>
+                   </div>
+               </div>
+           `;
+       }
+
+       function generateFinancialReport(container, startDate, endDate) {
+           let filteredSales = farmData.sales;
+           if (startDate && endDate) {
+               filteredSales = farmData.sales.filter(sale => 
+                   sale.date >= startDate && sale.date <= endDate
+               );
+           }
+
+           const revenue = filteredSales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const feedCosts = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
+           const medicalCosts = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+           const supplyCosts = farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0);
+           const totalCosts = feedCosts + medicalCosts + supplyCosts;
+
+           container.innerHTML = `
+               <div class="card">
+                   <div class="card-title">รายงานการเงิน</div>
+                   <div class="form-grid">
+                       <div>
+                           <h4>รายได้</h4>
+                           <p>รายได้จากการขาย: ${revenue.toLocaleString()} บาท</p>
+                           <p>จำนวนครั้งที่ขาย: ${filteredSales.length} ครั้ง</p>
+                       </div>
+                       <div>
+                           <h4>รายจ่าย</h4>
+                           <p>ค่าอาหาร: ${feedCosts.toLocaleString()} บาท</p>
+                           <p>ค่ายาและวัคซีน: ${medicalCosts.toLocaleString()} บาท</p>
+                           <p>ค่าอุปกรณ์: ${supplyCosts.toLocaleString()} บาท</p>
+                           <p><strong>รวมรายจ่าย: ${totalCosts.toLocaleString()} บาท</strong></p>
+                       </div>
+                   </div>
+                   <div style="margin-top: 20px;">
+                       <h4>สรุปผลการดำเนินงาน</h4>
+                       <p><strong>กำไร/ขาดทุนสุทธิ: ${(revenue - totalCosts).toLocaleString()} บาท</strong></p>
+                       <p>อัตรากำไร: ${totalCosts > 0 ? ((revenue - totalCosts) / totalCosts * 100).toFixed(2) : 0}%</p>
+                   </div>
+               </div>
+           `;
+       }
+
+       function generateLivestockReport(container) {
+           const pigsByType = {};
+           farmData.pigs.forEach(pig => {
+               if (!pigsByType[pig.type]) {
+                   pigsByType[pig.type] = { count: 0, total: 0 };
+               }
+               pigsByType[pig.type].count++;
+               pigsByType[pig.type].total += pig.quantity;
+           });
+
+           const typeNames = {
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์',
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน'
+           };
+
+           let html = `
+               <div class="card">
+                   <div class="card-title">รายงานสุกร</div>
+                   <table class="table">
+                       <thead>
+                           <tr>
+                               <th>ประเภทสุกร</th>
+                               <th>จำนวนกลุ่ม</th>
+                               <th>จำนวนตัว</th>
+                               <th>เปอร์เซ็นต์</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+           `;
+
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+
+           Object.keys(pigsByType).forEach(type => {
+               const percentage = totalPigs > 0 ? (pigsByType[type].total / totalPigs * 100).toFixed(1) : 0;
+               html += `
+                   <tr>
+                       <td>${typeNames[type]}</td>
+                       <td>${pigsByType[type].count}</td>
+                       <td>${pigsByType[type].total}</td>
+                       <td>${percentage}%</td>
+                   </tr>
+               `;
+           });
+
+           html += `
+                       </tbody>
+                   </table>
+                   <div style="margin-top: 20px;">
+                       <p><strong>รวมทั้งหมด: ${totalPigs} ตัว</strong></p>
+                       <p>จำนวนกลุ่มทั้งหมด: ${farmData.pigs.length} กลุ่ม</p>
+                   </div>
+               </div>
+           `;
+
+           container.innerHTML = html;
+       }
+
+       function generateFeedReport(container) {
+           const feedsByType = {};
+           let totalValue = 0;
+
+           farmData.feeds.forEach(feed => {
+               if (!feedsByType[feed.type]) {
+                   feedsByType[feed.type] = { quantity: 0, value: 0, count: 0 };
+               }
+               feedsByType[feed.type].quantity += feed.quantity;
+               feedsByType[feed.type].value += feed.quantity * feed.price;
+               feedsByType[feed.type].count++;
+               totalValue += feed.quantity * feed.price;
+           });
+
+           const feedTypes = {
+               'prestarter': 'Pre-Starter',
+               'starter': 'Starter',
+               'grower': 'Grower',
+               'finisher': 'Finisher',
+               'sow': 'อาหารแม่พันธุ์',
+               'boar': 'อาหารพ่อพันธุ์'
+           };
+
+           let html = `
+               <div class="card">
+                   <div class="card-title">รายงานอาหาร</div>
+                   <table class="table">
+                       <thead>
+                           <tr>
+                               <th>ประเภทอาหาร</th>
+                               <th>จำนวน (กก.)</th>
+                               <th>มูลค่า (บาท)</th>
+                               <th>เปอร์เซ็นต์</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+           `;
+
+           Object.keys(feedsByType).forEach(type => {
+               const percentage = totalValue > 0 ? (feedsByType[type].value / totalValue * 100).toFixed(1) : 0;
+               html += `
+                   <tr>
+                       <td>${feedTypes[type]}</td>
+                       <td>${feedsByType[type].quantity.toLocaleString()}</td>
+                       <td>${feedsByType[type].value.toLocaleString()}</td>
+                       <td>${percentage}%</td>
+                   </tr>
+               `;
+           });
+
+           html += `
+                       </tbody>
+                   </table>
+                   <div style="margin-top: 20px;">
+                       <p><strong>มูลค่ารวม: ${totalValue.toLocaleString()} บาท</strong></p>
+                       <p>จำนวนรายการ: ${farmData.feeds.length} รายการ</p>
+                   </div>
+               </div>
+           `;
+
+           container.innerHTML = html;
+       }
+
+       function generateMedicalReport(container) {
+           const medicalByType = {};
+           let totalValue = 0;
+
+           farmData.medical.forEach(med => {
+               if (!medicalByType[med.type]) {
+                   medicalByType[med.type] = { quantity: 0, value: 0, count: 0 };
+               }
+               medicalByType[med.type].quantity += med.quantity;
+               medicalByType[med.type].value += med.quantity * med.price;
+               medicalByType[med.type].count++;
+               totalValue += med.quantity * med.price;
+           });
+
+           const medicalTypes = {
+               'vaccine': 'วัคซีน',
+               'antibiotic': 'ยาปฏิชีวนะ',
+               'vitamin': 'วิตามิน',
+               'deworming': 'ยาถ่ายพยาธิ',
+               'hormone': 'ฮอร์โมน',
+               'supplement': 'อาหารเสริม',
+               'disinfectant': 'ยาฆ่าเชื้อ'
+           };
+
+           let html = `
+               <div class="card">
+                   <div class="card-title">รายงานยาและวัคซีน</div>
+                   <table class="table">
+                       <thead>
+                           <tr>
+                               <th>ประเภท</th>
+                               <th>จำนวนรายการ</th>
+                               <th>มูลค่า (บาท)</th>
+                               <th>เปอร์เซ็นต์</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+           `;
+
+           Object.keys(medicalByType).forEach(type => {
+               const percentage = totalValue > 0 ? (medicalByType[type].value / totalValue * 100).toFixed(1) : 0;
+               html += `
+                   <tr>
+                       <td>${medicalTypes[type]}</td>
+                       <td>${medicalByType[type].count}</td>
+                       <td>${medicalByType[type].value.toLocaleString()}</td>
+                       <td>${percentage}%</td>
+                   </tr>
+               `;
+           });
+
+           html += `
+                       </tbody>
+                   </table>
+                   <div style="margin-top: 20px;">
+                       <p><strong>มูลค่ารวม: ${totalValue.toLocaleString()} บาท</strong></p>
+                       <p>จำนวนรายการ: ${farmData.medical.length} รายการ</p>
+                   </div>
+               </div>
+           `;
+
+           container.innerHTML = html;
+       }
+
+       function generateSalesReport(container, startDate, endDate) {
+           let filteredSales = farmData.sales;
+           if (startDate && endDate) {
+               filteredSales = farmData.sales.filter(sale => 
+                   sale.date >= startDate && sale.date <= endDate
+               );
+           }
+
+           const salesByType = {};
+           let totalRevenue = 0;
+           let totalQuantity = 0;
+
+           filteredSales.forEach(sale => {
+               if (!salesByType[sale.type]) {
+                   salesByType[sale.type] = { quantity: 0, revenue: 0, count: 0 };
+               }
+               salesByType[sale.type].quantity += sale.quantity;
+               salesByType[sale.type].revenue += sale.netRevenue;
+               salesByType[sale.type].count++;
+               totalRevenue += sale.netRevenue;
+               totalQuantity += sale.quantity;
+           });
+
+           const saleTypes = {
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน',
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์'
+           };
+
+           let html = `
+               <div class="card">
+                   <div class="card-title">รายงานการขาย</div>
+                   <table class="table">
+                       <thead>
+                           <tr>
+                               <th>ประเภทสุกร</th>
+                               <th>จำนวนตัว</th>
+                               <th>รายได้ (บาท)</th>
+                               <th>เปอร์เซ็นต์</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+           `;
+
+           Object.keys(salesByType).forEach(type => {
+               const percentage = totalRevenue > 0 ? (salesByType[type].revenue / totalRevenue * 100).toFixed(1) : 0;
+               html += `
+                   <tr>
+                       <td>${saleTypes[type]}</td>
+                       <td>${salesByType[type].quantity}</td>
+                       <td>${salesByType[type].revenue.toLocaleString()}</td>
+                       <td>${percentage}%</td>
+                   </tr>
+               `;
+           });
+
+           html += `
+                       </tbody>
+                   </table>
+                   <div style="margin-top: 20px;">
+                       <p><strong>รายได้รวม: ${totalRevenue.toLocaleString()} บาท</strong></p>
+                       <p>จำนวนที่ขาย: ${totalQuantity} ตัว</p>
+                       <p>จำนวนครั้งที่ขาย: ${filteredSales.length} ครั้ง</p>
+                       <p>ราคาเฉลี่ยต่อตัว: ${totalQuantity > 0 ? (totalRevenue / totalQuantity).toLocaleString() : 0} บาท</p>
+                   </div>
+               </div>
+           `;
+
+           container.innerHTML = html;
+       }
+
+       function exportReport() {
+           const reportData = {
+               exportDate: new Date().toISOString(),
+               farmData: farmData,
+               summary: {
+                   totalPigs: farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0),
+                   totalSales: farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0),
+                   totalCosts: farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
+                              farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0) +
+                              farmData.supplies.reduce((sum, supply) => sum + (supply.quantity * supply.price), 0)
+               }
+           };
+
+           const blob = new Blob([JSON.stringify(reportData, null, 2)], {type: 'application/json'});
+           const url = URL.createObjectURL(blob);
+           const a = document.createElement('a');
+           a.href = url;
+           a.download = `farm-report-${new Date().toISOString().split('T')[0]}.json`;
+           a.click();
+           URL.revokeObjectURL(url);
+           
+           showAlert('ส่งออกรายงานเรียบร้อยแล้ว');
+       }
+
+       // === การจัดการข้อมูล ===
+       function saveAllData() {
+           try {
+               const dataToSave = JSON.stringify(farmData);
+               localStorage.setItem('farmManagementData', dataToSave);
+               console.log('บันทึกข้อมูลเรียบร้อย');
+           } catch (error) {
+               console.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล:', error);
+               showAlert('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+           }
+       }
+
+       function loadAllData() {
+           try {
+               const savedData = localStorage.getItem('farmManagementData');
+               if (savedData) {
+                   farmData = JSON.parse(savedData);
+                   console.log('โหลดข้อมูลเรียบร้อย');
+               } else {
+                   console.log('ไม่พบข้อมูลที่บันทึกไว้');
+               }
+           } catch (error) {
+               console.error('เกิดข้อผิดพลาดในการโหลดข้อมูล:', error);
+               farmData = { pigs: [], feeds: [], medical: [], supplies: [], sales: [] };
+               showAlert('เกิดข้อผิดพลาดในการโหลดข้อมูล ระบบจะเริ่มต้นใหม่', 'error');
+           }
+       }
+
+       // Auto-save ทุก 30 วินาที
+       setInterval(saveAllData, 30000);
+
+       console.log('ระบบจัดการฟาร์มสุกรพร้อมใช้งาน');
+   </script>
 </body>
-</html>
+</html>                            

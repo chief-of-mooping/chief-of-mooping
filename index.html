@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการฟาร์ม - หน้าหลัก</title>
+    <title>ฟาร์มของฉัน - มือถือ</title>
     <style>
         * {
             margin: 0;
@@ -13,181 +12,176 @@
         }
 
         body {
-            font-family: 'Courier New', 'TH Sarabun New', monospace;
-            background: #f5f5f5;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
             color: #333;
-            line-height: 1.4;
-            font-size: 14px;
+            padding-bottom: 80px;
         }
 
-        .header {
+        .mobile-header {
             background: #2c3e50;
             color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        .header h1 {
-            font-size: 22px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-        }
-
-        .header-info {
-            font-size: 14px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .nav-bar {
-            background: #34495e;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .nav-item {
-            float: left;
-            padding: 15px 25px;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-            border-right: 1px solid #2c3e50;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: #3498db;
-        }
-
-        .main-content {
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        .widget {
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 4px solid #3498db;
-        }
-
-        .widget-title {
+        .mobile-header h1 {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 10px;
-            font-family: 'Courier New', monospace;
         }
 
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .inventory-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #27ae60;
-        }
-
-        .inventory-label {
+        .mobile-header .date {
             font-size: 12px;
-            color: #7f8c8d;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .quick-stats {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .quick-stats .main-number {
+            font-size: 48px;
+            font-weight: bold;
             margin-bottom: 5px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
         }
 
-        .inventory-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
-            font-family: 'Courier New', monospace;
+        .quick-stats .main-label {
+            font-size: 14px;
+            opacity: 0.9;
         }
 
-        .total-section {
-            background: #e8f5e8;
-            padding: 15px;
-            border-radius: 5px;
-            border: 2px solid #27ae60;
+        .quick-stats .sub-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .quick-stats .sub-item {
             text-align: center;
         }
 
-        .total-value {
-            font-size: 36px;
+        .quick-stats .sub-number {
+            font-size: 20px;
             font-weight: bold;
-            color: #27ae60;
-            font-family: 'Courier New', monospace;
+        }
+
+        .quick-stats .sub-label {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .card {
+            background: white;
+            margin: 10px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .card-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .card-badge.warning { background: #f39c12; }
+        .card-badge.success { background: #27ae60; }
+        .card-badge.info { background: #3498db; }
+
+        .card-content {
+            padding: 20px;
         }
 
         .alert-item {
             background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-left: 4px solid #fdcb6e;
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-bottom: 8px;
             border-radius: 4px;
-            display: flex;
-            align-items: center;
-            font-family: 'Courier New', monospace;
+            font-size: 13px;
         }
 
-        .alert-critical {
+        .alert-item.critical {
             background: #f8d7da;
-            border-color: #f5c6cb;
-            border-left-color: #e74c3c;
+            border-left-color: #dc3545;
         }
 
-        .alert-icon {
-            margin-right: 10px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
+        .alert-item .time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
         }
 
-        .financial-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .money-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
         }
 
-        .financial-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
+        .money-card .card-header {
+            border-bottom-color: rgba(255,255,255,0.2);
         }
 
-        .financial-item {
+        .money-summary {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
-            font-family: 'Courier New', monospace;
+            margin-bottom: 15px;
         }
 
-        .financial-item:last-child {
-            border-bottom: none;
+        .money-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .money-value {
+            font-size: 14px;
             font-weight: bold;
-            background: #e9ecef;
-            padding: 12px;
-            margin: 10px -15px -15px -15px;
-            border-radius: 0 0 5px 5px;
+            margin-bottom: 3px;
+        }
+
+        .money-label {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        .profit-section {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .profit-amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 3px;
         }
 
         .metrics-grid {
@@ -196,338 +190,417 @@
             gap: 15px;
         }
 
-        .metric-item {
+        .metric-box {
             background: #f8f9fa;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: center;
+            border-left: 3px solid #3498db;
         }
 
         .metric-value {
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
-            color: #3498db;
-            font-family: 'Courier New', monospace;
+            color: #2c3e50;
+            margin-bottom: 5px;
         }
 
         .metric-label {
             font-size: 11px;
-            color: #7f8c8d;
-            margin-top: 5px;
-            font-family: 'Courier New', monospace;
+            color: #666;
+        }
+
+        .metric-trend {
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .metric-trend.up { color: #27ae60; }
+        .metric-trend.down { color: #e74c3c; }
+        .metric-trend.same { color: #f39c12; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-right: 1px solid #eee;
+        }
+
+        .nav-item:last-child {
+            border-right: none;
+        }
+
+        .nav-item.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .nav-item:not(.active):hover {
+            background: #f8f9fa;
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 10px;
             font-weight: bold;
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .livestock-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .livestock-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 3px solid #27ae60;
+        }
+
+        .livestock-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+
+        .livestock-label {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #e74c3c;
+            color: white;
+            border: none;
             border-radius: 50%;
-            margin-right: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 99;
         }
 
-        .status-healthy { background: #27ae60; }
-        .status-warning { background: #f39c12; }
-        .status-critical { background: #e74c3c; }
-
-        .thai-text {
-            font-family: 'Courier New', 'TH Sarabun New', monospace;
+        .fab:active {
+            transform: scale(0.95);
         }
 
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+        @media (max-width: 360px) {
+            .quick-stats .main-number {
+                font-size: 36px;
             }
             
-            .financial-grid, .metrics-grid {
+            .livestock-summary {
                 grid-template-columns: 1fr;
-            }
-            
-            .inventory-grid {
-                grid-template-columns: 1fr;
+                gap: 8px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🏭 ระบบจัดการฟาร์ม เวอร์ชัน 2.1</h1>
-        <div class="header-info">
-            <strong>ผู้ใช้:</strong> ผู้ดูแลระบบ | <strong>วันที่:</strong> <span id="currentDate"></span>
-        </div>
+    <div class="mobile-header">
+        <h1>🏭 ฟาร์มของฉัน</h1>
+        <div class="date" id="currentDate"></div>
     </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="showSection('dashboard')">📊 หน้าหลัก</div>
-        <div class="nav-item" onclick="showSection('livestock')">🐷 จัดการสุกร</div>
-        <div class="nav-item" onclick="showSection('breeding')">🧬 การผสมพันธุ์</div>
-        <div class="nav-item" onclick="showSection('health')">🏥 สุขภาพสุกร</div>
-        <div class="nav-item" onclick="showSection('finance')">💰 การเงิน</div>
-        <div class="nav-item" onclick="showSection('schedule')">📅 ตารางงาน</div>
-        <div class="nav-item" onclick="showSection('reports')">📊 รายงาน</div>
-    </div>
-
-    <div class="main-content">
-        <!-- หน้าหลัก -->
-        <div id="dashboard-section">
-            <div class="dashboard-grid">
-                <!-- สถานะสุกรในฟาร์ม -->
-                <div class="widget">
-                    <div class="widget-title">🐷 สถานะสุกรในฟาร์ม</div>
-                    <div class="inventory-grid">
-                        <div class="inventory-item">
-                            <div class="inventory-label">แม่พันธุ์</div>
-                            <div class="inventory-value">15</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">ท้อง</div>
-                            <div class="inventory-value">3</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">สถานะ</div>
-                            <div style="margin-top: 5px;">
-                                <span class="status-indicator status-healthy"></span><span class="thai-text">ปกติ</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="inventory-grid">
-                        <div class="inventory-item">
-                            <div class="inventory-label">ลูกหมู (0-8 สัปดาห์)</div>
-                            <div class="inventory-value">32</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">ป่วย</div>
-                            <div class="inventory-value">2</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">สถานะ</div>
-                            <div style="margin-top: 5px;">
-                                <span class="status-indicator status-warning"></span><span class="thai-text">รักษา</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="inventory-grid">
-                        <div class="inventory-item">
-                            <div class="inventory-label">หมูขุน (8+ สัปดาห์)</div>
-                            <div class="inventory-value">58</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">พร้อมขาย</div>
-                            <div class="inventory-value">12</div>
-                        </div>
-                        <div class="inventory-item">
-                            <div class="inventory-label">สถานะ</div>
-                            <div style="margin-top: 5px;">
-                                <span class="status-indicator status-healthy"></span><span class="thai-text">พร้อม</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="total-section">
-                        <div class="inventory-label">จำนวนสุกรทั้งหมด</div>
-                        <div class="total-value">105</div>
-                    </div>
+    <!-- หน้าหลัก -->
+    <div id="dashboard" class="section active">
+        <div class="quick-stats">
+            <div class="main-number" id="totalPigs">105</div>
+            <div class="main-label">สุกรทั้งหมด</div>
+            <div class="sub-stats">
+                <div class="sub-item">
+                    <div class="sub-number">15</div>
+                    <div class="sub-label">แม่พันธุ์</div>
                 </div>
-
-                <!-- การแจ้งเตือน -->
-                <div class="widget">
-                    <div class="widget-title">⚠️ การแจ้งเตือน</div>
-                    <div class="alert-item alert-critical">
-                        <span class="alert-icon">[ด่วน]</span>
-                        <span class="thai-text">ฉีดวัคซีน: 10 ตัว (วันนี้)</span>
-                    </div>
-                    <div class="alert-item alert-critical">
-                        <span class="alert-icon">[ด่วน]</span>
-                        <span class="thai-text">ตรวจครรภ์: แม่พันธุ์#03 (เลยกำหนด 2 วัน)</span>
-                    </div>
-                    <div class="alert-item">
-                        <span class="alert-icon">[แจ้ง]</span>
-                        <span class="thai-text">พร้อมขาย: 12 ตัว (น้ำหนักถึงเป้า)</span>
-                    </div>
-                    <div class="alert-item">
-                        <span class="alert-icon">[ทั่วไป]</span>
-                        <span class="thai-text">อาหารคงเหลือ: 78% (เหลือ 15 วัน)</span>
-                    </div>
-                    <div class="alert-item">
-                        <span class="alert-icon">[ทั่วไป]</span>
-                        <span class="thai-text">ยาปฏิชีวนะเหลือน้อย (เหลือ 3 ขวด)</span>
-                    </div>
+                <div class="sub-item">
+                    <div class="sub-number">32</div>
+                    <div class="sub-label">ลูกหมู</div>
                 </div>
-            </div>
-
-            <div class="dashboard-grid">
-                <!-- สถานะการเงิน -->
-                <div class="widget">
-                    <div class="widget-title">💰 สถานะการเงิน (เดือนนี้)</div>
-                    <div class="financial-grid">
-                        <div class="financial-section">
-                            <h4 style="margin-bottom: 10px; color: #27ae60; font-family: 'Courier New', monospace;">📈 รายได้</h4>
-                            <div class="financial-item">
-                                <span class="thai-text">ขายหมู:</span>
-                                <span>45,000 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">ผลพลอยได้:</span>
-                                <span>2,500 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">ค่าผสมพันธุ์:</span>
-                                <span>1,200 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">รายได้รวม:</span>
-                                <span style="color: #27ae60;">48,700 บาท</span>
-                            </div>
-                        </div>
-                        
-                        <div class="financial-section">
-                            <h4 style="margin-bottom: 10px; color: #e74c3c; font-family: 'Courier New', monospace;">📉 รายจ่าย</h4>
-                            <div class="financial-item">
-                                <span class="thai-text">ค่าอาหาร:</span>
-                                <span>18,000 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">ค่ายา/สัตวแพทย์:</span>
-                                <span>3,500 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">ค่าแรงงาน:</span>
-                                <span>8,000 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">ค่าสาธารณูปโภค:</span>
-                                <span>2,200 บาท</span>
-                            </div>
-                            <div class="financial-item">
-                                <span class="thai-text">รายจ่ายรวม:</span>
-                                <span style="color: #e74c3c;">31,700 บาท</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
-                        <div style="font-size: 16px; margin-bottom: 5px; font-family: 'Courier New', monospace;" class="thai-text">💰 กำไรสุทธิ</div>
-                        <div style="font-size: 32px; font-weight: bold; color: #27ae60; font-family: 'Courier New', monospace;">+17,000 บาท</div>
-                        <div style="font-size: 14px; color: #155724; font-family: 'Courier New', monospace;" class="thai-text">อัตรากำไร: 34.9%</div>
-                    </div>
-                </div>
-
-                <!-- ตัวชี้วัดการผลิต -->
-                <div class="widget">
-                    <div class="widget-title">📊 ตัวชี้วัดการผลิต</div>
-                    <div class="metrics-grid">
-                        <div class="metric-item">
-                            <div class="metric-value">2.1%</div>
-                            <div class="metric-label">อัตราการตาย</div>
-                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px; font-family: 'Courier New', monospace;" class="thai-text">↓ ลดจากเดือนที่แล้ว</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="metric-value">650g</div>
-                            <div class="metric-label">น้ำหนักขึ้นเฉลี่ย/วัน</div>
-                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px; font-family: 'Courier New', monospace;" class="thai-text">↑ เกินเป้า 600g</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="metric-value">2.8:1</div>
-                            <div class="metric-label">อัตราแปลงอาหาร</div>
-                            <div style="font-size: 11px; color: #f39c12; margin-top: 3px; font-family: 'Courier New', monospace;" class="thai-text">→ เป้าหมาย 2.5:1</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="metric-value">95</div>
-                            <div class="metric-label">วันถึงตลาด</div>
-                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px; font-family: 'Courier New', monospace;" class="thai-text">↓ เร็วกว่าแผน 5 วัน</div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
-                        <div style="font-size: 16px; margin-bottom: 5px; font-family: 'Courier New', monospace;" class="thai-text">🎯 ดัชนีประสิทธิภาพ</div>
-                        <div style="font-size: 32px; font-weight: bold; color: #3498db; font-family: 'Courier New', monospace;">7.2</div>
-                        <div style="font-size: 14px; color: #1976d2; font-family: 'Courier New', monospace;" class="thai-text">เป้าหมาย: 8.0 (ปรับปรุงได้)</div>
-                    </div>
+                <div class="sub-item">
+                    <div class="sub-number">58</div>
+                    <div class="sub-label">หมูขุน</div>
                 </div>
             </div>
         </div>
 
-        <!-- หน้าจัดการสุกร -->
-        <div id="livestock-section" style="display: none;">
-            <div class="widget">
-                <div class="widget-title">🐷 ระบบจัดการสุกร</div>
-                <p style="padding: 20px; font-size: 16px; color: #7f8c8d; font-family: 'Courier New', monospace;" class="thai-text">
-                    📋 โมดูลนี้จะประกอบด้วย:<br><br>
-                    • <strong>จัดการสินค้าคงคลัง</strong> - จัดการปศุสัตว์ทั้งหมด<br>
-                    • <strong>ข้อมูลรายตัว</strong> - บันทึกข้อมูลแต่ละตัว<br>
-                    • <strong>จัดการเป็นกลุ่ม</strong> - จัดการเป็นแบทช์<br>
-                    • <strong>ติดตามการเคลื่อนไหว</strong> - เกิด ตาย ขาย ย้าย<br><br>
-                    <em>กำลังพัฒนาระบบ...</em>
-                </p>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">⚠️ แจ้งเตือนด่วน</div>
+                <div class="card-badge">3</div>
             </div>
+            <div class="card-content">
+                <div class="alert-item critical">
+                    <div>ฉีดวัคซีน 10 ตัว</div>
+                    <div class="time">กำหนด: วันนี้</div>
+                </div>
+                <div class="alert-item critical">
+                    <div>ตรวจครรภ์ แม่พันธุ์#03</div>
+                    <div class="time">เลยกำหนด: 2 วัน</div>
+                </div>
+                <div class="alert-item">
+                    <div>หมูพร้อมขาย 12 ตัว</div>
+                    <div class="time">น้ำหนักถึงเป้าแล้ว</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card money-card">
+            <div class="card-header">
+                <div class="card-title">💰 การเงินเดือนนี้</div>
+            </div>
+            <div class="card-content">
+                <div class="money-summary">
+                    <div class="money-item">
+                        <div class="money-value">48,700</div>
+                        <div class="money-label">รายได้ (บาท)</div>
+                    </div>
+                    <div class="money-item">
+                        <div class="money-value">31,700</div>
+                        <div class="money-label">รายจ่าย (บาท)</div>
+                    </div>
+                </div>
+                <div class="profit-section">
+                    <div class="profit-amount">+17,000 บาท</div>
+                    <div>กำไรสุทธิ (34.9%)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">📊 ตัวชี้วัดสำคัญ</div>
+            </div>
+            <div class="card-content">
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-value">2.1%</div>
+                        <div class="metric-label">อัตราการตาย</div>
+                        <div class="metric-trend down">↓ ลดลง</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">650g</div>
+                        <div class="metric-label">น้ำหนักขึ้น/วัน</div>
+                        <div class="metric-trend up">↑ ดีขึ้น</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">2.8:1</div>
+                        <div class="metric-label">อัตราแปลงอาหาร</div>
+                        <div class="metric-trend same">→ ปรับปรุงได้</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value">95</div>
+                        <div class="metric-label">วันถึงตลาด</div>
+                        <div class="metric-trend up">↑ เร็วขึ้น</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าจัดการสุกร -->
+    <div id="livestock" class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">🐷 สุกรในฟาร์ม</div>
+                <div class="card-badge success">105</div>
+            </div>
+            <div class="card-content">
+                <div class="livestock-summary">
+                    <div class="livestock-item">
+                        <div class="livestock-number">15</div>
+                        <div class="livestock-label">แม่พันธุ์</div>
+                    </div>
+                    <div class="livestock-item">
+                        <div class="livestock-number">32</div>
+                        <div class="livestock-label">ลูกหมู</div>
+                    </div>
+                    <div class="livestock-item">
+                        <div class="livestock-number">58</div>
+                        <div class="livestock-label">หมูขุน</div>
+                    </div>
+                    <div class="livestock-item">
+                        <div class="livestock-number">3</div>
+                        <div class="livestock-label">ท้อง</div>
+                    </div>
+                    <div class="livestock-item">
+                        <div class="livestock-number">2</div>
+                        <div class="livestock-label">ป่วย</div>
+                    </div>
+                    <div class="livestock-item">
+                        <div class="livestock-number">12</div>
+                        <div class="livestock-label">พร้อมขาย</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
+                    📋 ระบบจัดการรายละเอียด<br>
+                    กำลังพัฒนา...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าสุขภาพ -->
+    <div id="health" class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">🏥 สุขภาพสุกร</div>
+                <div class="card-badge warning">2</div>
+            </div>
+            <div class="card-content">
+                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
+                    💊 ระบบติดตามสุขภาพ<br>
+                    🩺 วัคซีน และการรักษา<br><br>
+                    กำลังพัฒนา...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- หน้าการเงิน -->
+    <div id="finance" class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">💰 การเงิน</div>
+                <div class="card-badge success">+17K</div>
+            </div>
+            <div class="card-content">
+                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
+                    📊 รายงานการเงินรายละเอียด<br>
+                    📈 กำไร-ขาดทุน<br>
+                    💸 ต้นทุนต่อตัว<br><br>
+                    กำลังพัฒนา...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ปุ่มลอย -->
+    <button class="fab" onclick="quickAction()">+</button>
+
+    <!-- เมนูด้านล่าง -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showSection('dashboard')">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">หน้าหลัก</div>
+        </div>
+        <div class="nav-item" onclick="showSection('livestock')">
+            <div class="nav-icon">🐷</div>
+            <div class="nav-label">สุกร</div>
+        </div>
+        <div class="nav-item" onclick="showSection('health')">
+            <div class="nav-icon">🏥</div>
+            <div class="nav-label">สุขภาพ</div>
+        </div>
+        <div class="nav-item" onclick="showSection('finance')">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label">การเงิน</div>
         </div>
     </div>
 
     <script>
-        // อัปเดตวันที่ปัจจุบัน
+        // อัปเดตวันที่
         function updateDate() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('th-TH', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
+                weekday: 'short',
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
             });
             document.getElementById('currentDate').textContent = dateStr;
         }
 
-        // ฟังก์ชันนำทาง
-        function showSection(section) {
-            // ซ่อนทุกส่วน
-            document.getElementById('dashboard-section').style.display = 'none';
-            document.getElementById('livestock-section').style.display = 'none';
+        // เปลี่ยนหน้า
+        function showSection(sectionName) {
+            // ซ่อนทุกหน้า
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
             
-            // ลบคลาส active จากเมนูทั้งหมด
+            // ลบ active จากเมนู
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // แสดงส่วนที่เลือก
-            if (section === 'dashboard') {
-                document.getElementById('dashboard-section').style.display = 'block';
-                document.querySelectorAll('.nav-item')[0].classList.add('active');
-            } else if (section === 'livestock') {
-                document.getElementById('livestock-section').style.display = 'block';
-                document.querySelectorAll('.nav-item')[1].classList.add('active');
-            } else {
-                // สำหรับส่วนอื่นๆ ที่ยังไม่ได้ทำ
-                document.querySelector(`.nav-item:nth-child(${getNavIndex(section)})`).classList.add('active');
-                alert(`โมดูล ${getSectionName(section)} กำลังพัฒนา...`);
-                setTimeout(() => showSection('dashboard'), 100);
+            // แสดงหน้าที่เลือก
+            document.getElementById(sectionName).classList.add('active');
+            
+            // เพิ่ม active ให้เมนู
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        // ปุ่มลอย
+        function quickAction() {
+            const actions = [
+                '➕ เพิ่มสุกร',
+                '➖ ลดสุกร', 
+                '💰 ขายสุกร',
+                '💊 บันทึกรักษา',
+                '📞 โทรสัตวแพทย์'
+            ];
+            
+            const choice = prompt('เลือกการทำงาน:\n\n' + 
+                actions.map((action, i) => `${i+1}. ${action}`).join('\n'));
+            
+            if (choice >= 1 && choice <= 5) {
+                alert(`${actions[choice-1]} - กำลังพัฒนาฟีเจอร์นี้...`);
             }
         }
 
-        function getNavIndex(section) {
-            const sections = ['dashboard', 'livestock', 'breeding', 'health', 'finance', 'schedule', 'reports'];
-            return sections.indexOf(section) + 1;
-        }
-
-        function getSectionName(section) {
-            const names = {
-                'breeding': 'การผสมพันธุ์',
-                'health': 'สุขภาพสุกร', 
-                'finance': 'การเงิน',
-                'schedule': 'ตารางงาน',
-                'reports': 'รายงาน'
-            };
-            return names[section] || section;
-        }
-
-        // เริ่มต้นระบบ
+        // เริ่มต้น
         updateDate();
-        setInterval(updateDate, 60000); // อัปเดตทุกนาที
+        setInterval(updateDate, 60000);
 
-        // รีเฟรชข้อมูลอัตโนมัติทุก 5 นาที
+        // จำลองการอัปเดตข้อมูล
         setInterval(() => {
-            console.log('กำลังรีเฟรชข้อมูลฟาร์ม...');
-            // ที่นี่จะดึงข้อมูลจริงจากเซิร์ฟเวอร์
-        }, 300000);
+            console.log('อัปเดตข้อมูลฟาร์ม...');
+        }, 30000);
+
+        // ป้องกันการ refresh โดยไม่ตั้งใจ
+        let touchTime = 0;
+        document.addEventListener('touchstart', function() {
+            touchTime = Date.now();
+        });
+
+        document.addEventListener('touchend', function() {
+            if (Date.now() - touchTime < 300) {
+                // Quick tap - ไม่ทำอะไร
+            }
+        });
     </script>
 </body>
 </html>

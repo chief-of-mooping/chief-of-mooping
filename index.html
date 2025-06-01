@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบจัดการฟาร์ม</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap');
         
         * {
             margin: 0;
@@ -14,230 +14,258 @@
         }
 
         body {
-            font-family: 'Roboto', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #2d3748;
-            padding-bottom: 80px;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            padding-bottom: 90px;
             min-height: 100vh;
+            font-size: 16px;
         }
 
         .mobile-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            color: #2d3748;
-            padding: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            color: #f1f5f9;
+            padding: 24px 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         .mobile-header h1 {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 4px;
-            color: #1a202c;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #f8fafc;
         }
 
         .mobile-header .date {
-            font-size: 12px;
-            color: #718096;
-            font-weight: 300;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 400;
         }
 
         .quick-stats {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(79, 70, 229, 0.15));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 30px 20px;
-            margin: 20px 15px;
-            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #f1f5f9;
+            padding: 32px 24px;
+            margin: 20px 16px;
+            border-radius: 20px;
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             text-align: center;
         }
 
         .quick-stats .main-number {
-            font-size: 48px;
-            font-weight: 300;
+            font-family: 'Orbitron', monospace;
+            font-size: 64px;
+            font-weight: 900;
             margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            color: #60a5fa;
+            text-align: center;
+            letter-spacing: -2px;
         }
 
         .quick-stats .main-label {
-            font-size: 14px;
-            font-weight: 400;
-            opacity: 0.9;
-            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: #cbd5e1;
         }
 
         .quick-stats .sub-stats {
             display: flex;
             justify-content: space-around;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 24px;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         .quick-stats .sub-item {
             text-align: center;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-stats .sub-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .quick-stats .sub-number {
-            font-size: 22px;
-            font-weight: 400;
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 4px;
+            color: #a5f3fc;
         }
 
         .quick-stats .sub-label {
-            font-size: 11px;
-            font-weight: 300;
-            opacity: 0.8;
+            font-size: 12px;
+            font-weight: 400;
+            color: #94a3b8;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(20px);
-            margin: 15px;
-            border-radius: 16px;
+            margin: 16px;
+            border-radius: 20px;
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                0 8px 16px rgba(0, 0, 0, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(71, 85, 105, 0.3);
             overflow: hidden;
-            transform: translateZ(0);
         }
 
         .card-header {
-            padding: 20px 24px 16px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 24px 28px 20px;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(248, 250, 252, 0.5);
+            background: rgba(15, 23, 42, 0.5);
         }
 
         .card-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: #1a202c;
+            font-size: 20px;
+            font-weight: 600;
+            color: #f1f5f9;
         }
 
         .card-badge {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            min-width: 40px;
+            text-align: center;
         }
 
         .card-badge.warning { 
-            background: linear-gradient(135deg, #ff9500, #ff6b35);
-            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
         
         .card-badge.success { 
-            background: linear-gradient(135deg, #4ade80, #16a34a);
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-        }
-        
-        .card-badge.danger { 
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
 
         .card-content {
-            padding: 24px;
+            padding: 28px;
         }
 
         .alert-item {
-            background: rgba(248, 250, 252, 0.8);
-            border-left: 4px solid #cbd5e0;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 400;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #475569;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(71, 85, 105, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .alert-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateX(4px);
         }
 
         .alert-item.critical {
-            background: rgba(254, 242, 242, 0.9);
+            background: rgba(127, 29, 29, 0.3);
             border-left-color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
         }
 
         .alert-item.warning {
-            background: rgba(255, 251, 235, 0.9);
+            background: rgba(120, 53, 15, 0.3);
             border-left-color: #f59e0b;
-            border-color: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
         }
 
         .alert-item .time {
-            font-size: 11px;
-            color: #9ca3af;
-            margin-top: 6px;
-            font-weight: 300;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-weight: 400;
         }
 
         .money-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .money-summary {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            gap: 16px;
         }
 
         .money-item {
             text-align: center;
             flex: 1;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(71, 85, 105, 0.2);
         }
 
         .money-value {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 4px;
-            color: #1a202c;
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #34d399;
         }
 
         .money-label {
-            font-size: 11px;
-            color: #718096;
-            font-weight: 300;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 400;
         }
 
         .profit-section {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 12px;
+            padding: 24px;
+            border-radius: 16px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.1);
         }
 
         .profit-amount {
-            font-size: 28px;
-            font-weight: 400;
-            margin-bottom: 4px;
-            color: #1a202c;
+            font-family: 'Orbitron', monospace;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 6px;
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
 
         .profit-label {
-            font-size: 12px;
-            color: #718096;
-            font-weight: 300;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 400;
         }
 
         .metrics-grid {
@@ -247,65 +275,74 @@
         }
 
         .metric-box {
-            background: rgba(248, 250, 252, 0.6);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
-            padding: 18px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 16px;
             text-align: center;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(71, 85, 105, 0.2);
             box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                0 8px 16px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(148, 163, 184, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateY(-2px);
         }
 
         .metric-value {
-            font-size: 22px;
-            font-weight: 400;
-            color: #1a202c;
-            margin-bottom: 6px;
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 8px;
         }
 
         .metric-label {
-            font-size: 11px;
-            color: #718096;
-            font-weight: 300;
-            margin-bottom: 4px;
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-bottom: 6px;
         }
 
         .metric-trend {
-            font-size: 10px;
-            font-weight: 400;
+            font-size: 11px;
+            font-weight: 500;
         }
 
-        .metric-trend.up { color: #16a34a; }
-        .metric-trend.down { color: #dc2626; }
-        .metric-trend.same { color: #d97706; }
+        .metric-trend.up { color: #10b981; }
+        .metric-trend.down { color: #ef4444; }
+        .metric-trend.same { color: #f59e0b; }
 
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
             display: flex;
             z-index: 100;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+            padding: 8px 0;
         }
 
         .nav-item {
             flex: 1;
             text-align: center;
-            padding: 14px 8px;
+            padding: 16px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            color: #667eea;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
+            color: #60a5fa;
         }
 
         .nav-item.active::before {
@@ -314,16 +351,15 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
+            width: 60px;
             height: 3px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 0 0 4px 4px;
+            background: linear-gradient(135deg, #3b82f6, #4f46e5);
+            border-radius: 0 0 6px 6px;
         }
 
         .nav-label {
-            font-size: 11px;
-            font-weight: 400;
-            margin-top: 4px;
+            font-size: 13px;
+            font-weight: 500;
         }
 
         .section {
@@ -336,84 +372,121 @@
 
         .livestock-summary {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .livestock-item {
-            background: rgba(248, 250, 252, 0.6);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
-            padding: 16px 12px;
-            border-radius: 12px;
+            padding: 20px 16px;
+            border-radius: 16px;
             text-align: center;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(71, 85, 105, 0.2);
             box-shadow: 
-                0 4px 12px rgba(0, 0, 0, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+                0 8px 16px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(148, 163, 184, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .livestock-item:hover {
+            background: rgba(15, 23, 42, 0.8);
+            transform: translateY(-2px);
         }
 
         .livestock-number {
-            font-size: 20px;
-            font-weight: 400;
-            color: #1a202c;
-            margin-bottom: 4px;
+            font-family: 'Orbitron', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #a5f3fc;
+            margin-bottom: 6px;
         }
 
         .livestock-label {
-            font-size: 10px;
-            color: #718096;
-            font-weight: 300;
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 400;
         }
 
         .fab {
             position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            bottom: 100px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 20px;
-            font-weight: 300;
+            font-size: 24px;
+            font-weight: 700;
             cursor: pointer;
             box-shadow: 
-                0 8px 24px rgba(102, 126, 234, 0.3),
-                0 4px 12px rgba(0, 0, 0, 0.1);
+                0 12px 24px rgba(59, 130, 246, 0.4),
+                0 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 99;
             transition: all 0.3s ease;
         }
 
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
         .fab:active {
             transform: scale(0.95);
-            box-shadow: 
-                0 4px 12px rgba(102, 126, 234, 0.3),
-                0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .developing {
             text-align: center;
-            padding: 40px 20px;
-            color: #9ca3af;
-            font-size: 14px;
-            font-weight: 300;
+            padding: 48px 24px;
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 400;
             line-height: 1.6;
+        }
+
+        .editable {
+            background: transparent;
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 4px 8px;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .editable:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .editable:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.2);
         }
 
         @media (max-width: 360px) {
             .quick-stats .main-number {
-                font-size: 40px;
+                font-size: 48px;
             }
             
             .livestock-summary {
                 grid-template-columns: 1fr;
-                gap: 10px;
             }
             
             .metrics-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .money-summary {
+                flex-direction: column;
                 gap: 12px;
             }
         }
@@ -428,19 +501,19 @@
     <!-- หน้าหลัก -->
     <div id="dashboard" class="section active">
         <div class="quick-stats">
-            <div class="main-number" id="totalPigs">105</div>
+            <div class="main-number editable" id="totalPigs" onclick="editNumber(this, 'totalPigs')">105</div>
             <div class="main-label">สุกรทั้งหมด</div>
             <div class="sub-stats">
-                <div class="sub-item">
-                    <div class="sub-number">15</div>
+                <div class="sub-item" onclick="editNumber(document.getElementById('breedingSows'), 'breedingSows')">
+                    <div class="sub-number editable" id="breedingSows">15</div>
                     <div class="sub-label">แม่พันธุ์</div>
                 </div>
-                <div class="sub-item">
-                    <div class="sub-number">32</div>
+                <div class="sub-item" onclick="editNumber(document.getElementById('piglets'), 'piglets')">
+                    <div class="sub-number editable" id="piglets">32</div>
                     <div class="sub-label">ลูกหมู</div>
                 </div>
-                <div class="sub-item">
-                    <div class="sub-number">58</div>
+                <div class="sub-item" onclick="editNumber(document.getElementById('finishers'), 'finishers')">
+                    <div class="sub-number editable" id="finishers">58</div>
                     <div class="sub-label">หมูขุน</div>
                 </div>
             </div>
@@ -449,19 +522,19 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-title">แจ้งเตือนด่วน</div>
-                <div class="card-badge danger">3</div>
+                <div class="card-badge" id="alertCount">3</div>
             </div>
             <div class="card-content">
-                <div class="alert-item critical">
-                    <div>ฉีดวัคซีน 10 ตัว</div>
+                <div class="alert-item critical" onclick="handleAlert(this)">
+                    <div>ฉีดวัคซีน <span class="editable" onclick="editNumber(this, 'vaccine')" id="vaccine">10</span> ตัว</div>
                     <div class="time">กำหนด: วันนี้</div>
                 </div>
-                <div class="alert-item critical">
+                <div class="alert-item critical" onclick="handleAlert(this)">
                     <div>ตรวจครรภ์ แม่พันธุ์ #03</div>
                     <div class="time">เลยกำหนด: 2 วัน</div>
                 </div>
-                <div class="alert-item warning">
-                    <div>หมูพร้อมขาย 12 ตัว</div>
+                <div class="alert-item warning" onclick="handleAlert(this)">
+                    <div>หมูพร้อมขาย <span class="editable" onclick="editNumber(this, 'readySale')" id="readySale">12</span> ตัว</div>
                     <div class="time">น้ำหนักถึงเป้าแล้ว</div>
                 </div>
             </div>
@@ -473,18 +546,18 @@
             </div>
             <div class="card-content">
                 <div class="money-summary">
-                    <div class="money-item">
-                        <div class="money-value">48,700</div>
+                    <div class="money-item" onclick="editNumber(document.getElementById('revenue'), 'revenue')">
+                        <div class="money-value editable" id="revenue">48,700</div>
                         <div class="money-label">รายได้ (บาท)</div>
                     </div>
-                    <div class="money-item">
-                        <div class="money-value">31,700</div>
+                    <div class="money-item" onclick="editNumber(document.getElementById('expenses'), 'expenses')">
+                        <div class="money-value editable" id="expenses">31,700</div>
                         <div class="money-label">รายจ่าย (บาท)</div>
                     </div>
                 </div>
                 <div class="profit-section">
-                    <div class="profit-amount">+17,000</div>
-                    <div class="profit-label">กำไรสุทธิ (34.9%)</div>
+                    <div class="profit-amount" id="profit">+17,000</div>
+                    <div class="profit-label">กำไรสุทธิ (<span id="profitPercent">34.9</span>%)</div>
                 </div>
             </div>
         </div>
@@ -495,23 +568,23 @@
             </div>
             <div class="card-content">
                 <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-value">2.1%</div>
-                        <div class="metric-label">อัตราการตาย</div>
+                    <div class="metric-box" onclick="editMetric('mortality')">
+                        <div class="metric-value editable" id="mortality">2.1</div>
+                        <div class="metric-label">อัตราการตาย (%)</div>
                         <div class="metric-trend down">ลดลง</div>
                     </div>
-                    <div class="metric-box">
-                        <div class="metric-value">650g</div>
-                        <div class="metric-label">น้ำหนักขึ้น/วัน</div>
+                    <div class="metric-box" onclick="editMetric('dailyGain')">
+                        <div class="metric-value editable" id="dailyGain">650</div>
+                        <div class="metric-label">น้ำหนักขึ้น (g/วัน)</div>
                         <div class="metric-trend up">ดีขึ้น</div>
                     </div>
-                    <div class="metric-box">
-                        <div class="metric-value">2.8:1</div>
+                    <div class="metric-box" onclick="editMetric('feedConversion')">
+                        <div class="metric-value editable" id="feedConversion">2.8</div>
                         <div class="metric-label">อัตราแปลงอาหาร</div>
                         <div class="metric-trend same">ปรับปรุงได้</div>
                     </div>
-                    <div class="metric-box">
-                        <div class="metric-value">95</div>
+                    <div class="metric-box" onclick="editMetric('daysToMarket')">
+                        <div class="metric-value editable" id="daysToMarket">95</div>
                         <div class="metric-label">วันถึงตลาด</div>
                         <div class="metric-trend up">เร็วขึ้น</div>
                     </div>
@@ -525,38 +598,40 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-title">สุกรในฟาร์ม</div>
-                <div class="card-badge success">105</div>
+                <div class="card-badge success" id="livestockTotal">105</div>
             </div>
             <div class="card-content">
                 <div class="livestock-summary">
-                    <div class="livestock-item">
-                        <div class="livestock-number">15</div>
+                    <div class="livestock-item" onclick="editLivestock('breedingSows2')">
+                        <div class="livestock-number editable" id="breedingSows2">15</div>
                         <div class="livestock-label">แม่พันธุ์</div>
                     </div>
-                    <div class="livestock-item">
-                        <div class="livestock-number">32</div>
+                    <div class="livestock-item" onclick="editLivestock('piglets2')">
+                        <div class="livestock-number editable" id="piglets2">32</div>
                         <div class="livestock-label">ลูกหมู</div>
                     </div>
-                    <div class="livestock-item">
-                        <div class="livestock-number">58</div>
+                    <div class="livestock-item" onclick="editLivestock('finishers2')">
+                        <div class="livestock-number editable" id="finishers2">58</div>
                         <div class="livestock-label">หมูขุน</div>
                     </div>
-                    <div class="livestock-item">
-                        <div class="livestock-number">3</div>
+                    <div class="livestock-item" onclick="editLivestock('pregnant')">
+                        <div class="livestock-number editable" id="pregnant">3</div>
                         <div class="livestock-label">ท้อง</div>
                     </div>
-                    <div class="livestock-item">
-                        <div class="livestock-number">2</div>
+                    <div class="livestock-item" onclick="editLivestock('sick')">
+                        <div class="livestock-number editable" id="sick">2</div>
                         <div class="livestock-label">ป่วย</div>
                     </div>
-                    <div class="livestock-item">
-                        <div class="livestock-number">12</div>
+                    <div class="livestock-item" onclick="editLivestock('readyToSell')">
+                        <div class="livestock-number editable" id="readyToSell">12</div>
                         <div class="livestock-label">พร้อมขาย</div>
                     </div>
                 </div>
                 
                 <div class="developing">
                     ระบบจัดการรายละเอียด<br>
+                    บันทึกข้อมูลรายตัว<br>
+                    ติดตามการเคลื่อนไหว<br><br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -573,7 +648,9 @@
             <div class="card-content">
                 <div class="developing">
                     ระบบติดตามสุขภาพ<br>
-                    วัคซีน และการรักษา<br><br>
+                    การฉีดวัคซีน<br>
+                    การรักษาพยาบาล<br>
+                    สถิติการป่วย<br><br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -584,14 +661,15 @@
     <div id="finance" class="section">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">การเงิน</div>
+                <div class="card-title">การเงินรายละเอียด</div>
                 <div class="card-badge success">+17K</div>
             </div>
             <div class="card-content">
                 <div class="developing">
-                    รายงานการเงินรายละเอียด<br>
-                    กำไร-ขาดทุน<br>
-                    ต้นทุนต่อตัว<br><br>
+                    รายงานการเงินแบบละเอียด<br>
+                    วิเคราะห์กำไร-ขาดทุน<br>
+                    ต้นทุนต่อหน่วย<br>
+                    คาดการณ์รายได้<br><br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -618,12 +696,30 @@
     </div>
 
     <script>
+        // ข้อมูลฟาร์ม
+        let farmData = {
+            totalPigs: 105,
+            breedingSows: 15,
+            piglets: 32,
+            finishers: 58,
+            pregnant: 3,
+            sick: 2,
+            readyToSell: 12,
+            vaccine: 10,
+            revenue: 48700,
+            expenses: 31700,
+            mortality: 2.1,
+            dailyGain: 650,
+            feedConversion: 2.8,
+            daysToMarket: 95
+        };
+
         function updateDate() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('th-TH', {
-                weekday: 'short',
+                weekday: 'long',
                 day: '2-digit',
-                month: 'short',
+                month: 'long',
                 year: 'numeric'
             });
             document.getElementById('currentDate').textContent = dateStr;
@@ -642,26 +738,312 @@
             event.target.closest('.nav-item').classList.add('active');
         }
 
-        function quickAction() {
-            const actions = [
-                'เพิ่มสุกร',
-                'ลดสุกร', 
-                'ขายสุกร',
-                'บันทึกรักษา',
-                'โทรสัตวแพทย์'
-            ];
+        function editNumber(element, dataKey) {
+            event.stopPropagation();
+            const currentValue = farmData[dataKey] || element.textContent.replace(/,/g, '');
+            const newValue = prompt('แก้ไขตัวเลข:', currentValue);
             
-            const choice = prompt('เลือกการทำงาน:\n\n' + 
-                actions.map((action, i) => `${i+1}. ${action}`).join('\n'));
-            
-            if (choice >= 1 && choice <= 5) {
-                alert(`${actions[choice-1]} - กำลังพัฒนาฟีเจอร์นี้...`);
+            if (newValue !== null && !isNaN(newValue) && newValue !== '') {
+                const numValue = parseFloat(newValue);
+                farmData[dataKey] = numValue;
+                element.textContent = numValue.toLocaleString();
+                
+                // อัปเดตข้อมูลที่เกี่ยวข้อง
+                updateRelatedData();
+                
+                // เอฟเฟค
+                element.style.transform = 'scale(1.1)';
+                element.style.color = '#10b981';
+                setTimeout(() => {
+                    element.style.transform = '';
+                    element.style.color = '';
+                }, 300);
             }
         }
 
-        updateDate();
-        setInterval(updateDate, 60000);
-        setInterval(() => console.log('อัปเดตข้อมูลฟาร์ม...'), 30000);
-    </script>
+        function editMetric(metricKey) {
+function editMetric(metricKey) {
+           const element = document.getElementById(metricKey);
+           const currentValue = farmData[metricKey] || element.textContent;
+           const newValue = prompt('แก้ไขตัวเลข:', currentValue);
+           
+           if (newValue !== null && !isNaN(newValue) && newValue !== '') {
+               const numValue = parseFloat(newValue);
+               farmData[metricKey] = numValue;
+               element.textContent = numValue;
+               
+               // เอฟเฟค
+               element.style.transform = 'scale(1.2)';
+               element.style.color = '#3b82f6';
+               setTimeout(() => {
+                   element.style.transform = '';
+                   element.style.color = '';
+               }, 400);
+               
+               saveData();
+           }
+       }
+
+       function editLivestock(livestockKey) {
+           const element = document.getElementById(livestockKey);
+           const currentValue = farmData[livestockKey] || element.textContent;
+           const newValue = prompt('แก้ไขจำนวนสุกร:', currentValue);
+           
+           if (newValue !== null && !isNaN(newValue) && newValue !== '') {
+               const numValue = parseInt(newValue);
+               farmData[livestockKey] = numValue;
+               element.textContent = numValue;
+               
+               // อัปเดตยอดรวม
+               updateTotalLivestock();
+               
+               // เอฟเฟค
+               element.style.transform = 'scale(1.2)';
+               element.style.color = '#a5f3fc';
+               setTimeout(() => {
+                   element.style.transform = '';
+                   element.style.color = '';
+               }, 400);
+               
+               saveData();
+           }
+       }
+
+       function updateRelatedData() {
+           // คำนวณกำไร
+           const revenue = farmData.revenue || 48700;
+           const expenses = farmData.expenses || 31700;
+           const profit = revenue - expenses;
+           const profitPercent = ((profit / revenue) * 100).toFixed(1);
+           
+           document.getElementById('profit').textContent = `+${profit.toLocaleString()}`;
+           document.getElementById('profitPercent').textContent = profitPercent;
+           
+           // อัปเดตยอดรวมสุกร
+           updateTotalLivestock();
+       }
+
+       function updateTotalLivestock() {
+           const total = (farmData.breedingSows || 15) + 
+                        (farmData.piglets || 32) + 
+                        (farmData.finishers || 58);
+           
+           farmData.totalPigs = total;
+           
+           // อัปเดตแสดงผล
+           document.getElementById('totalPigs').textContent = total;
+           document.getElementById('livestockTotal').textContent = total;
+           
+           // อัปเดตหน้าสุกรด้วย
+           document.getElementById('breedingSows2').textContent = farmData.breedingSows || 15;
+           document.getElementById('piglets2').textContent = farmData.piglets || 32;
+           document.getElementById('finishers2').textContent = farmData.finishers || 58;
+       }
+
+       function handleAlert(alertElement) {
+           if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
+               alertElement.style.opacity = '0.5';
+               alertElement.style.transform = 'translateX(100%)';
+               
+               setTimeout(() => {
+                   alertElement.remove();
+                   updateAlertCount();
+               }, 300);
+           }
+       }
+
+       function updateAlertCount() {
+           const alertItems = document.querySelectorAll('.alert-item');
+           const count = alertItems.length;
+           document.getElementById('alertCount').textContent = count;
+           
+           if (count === 0) {
+               document.querySelector('.card-content').innerHTML = `
+                   <div style="text-align: center; padding: 40px; color: #10b981;">
+                       ✓ ไม่มีการแจ้งเตือน<br>
+                       ทุกอย่างเรียบร้อยดี
+                   </div>
+               `;
+           }
+       }
+
+       function quickAction() {
+           const actions = [
+               'เพิ่มสุกรใหม่',
+               'บันทึกการตาย', 
+               'บันทึกการขาย',
+               'ฉีดวัคซีน',
+               'บันทึกการรักษา',
+               'ตรวจครรภ์',
+               'เพิ่มค่าใช้จ่าย',
+               'บันทึกรายได้'
+           ];
+           
+           let actionList = 'เลือกการทำงาน:\n\n';
+           actions.forEach((action, i) => {
+               actionList += `${i+1}. ${action}\n`;
+           });
+           
+           const choice = prompt(actionList);
+           
+           if (choice >= 1 && choice <= actions.length) {
+               handleQuickAction(parseInt(choice), actions[choice-1]);
+           }
+       }
+
+       function handleQuickAction(choice, actionName) {
+           switch(choice) {
+               case 1: // เพิ่มสุกร
+                   const addCount = prompt('เพิ่มสุกรกี่ตัว?', '1');
+                   if (addCount && !isNaN(addCount)) {
+                       farmData.totalPigs += parseInt(addCount);
+                       farmData.piglets += parseInt(addCount);
+                       updateTotalLivestock();
+                       showNotification(`เพิ่มสุกร ${addCount} ตัว สำเร็จ`);
+                   }
+                   break;
+                   
+               case 2: // บันทึกการตาย
+                   const deathCount = prompt('สุกรตายกี่ตัว?', '1');
+                   if (deathCount && !isNaN(deathCount)) {
+                       farmData.totalPigs -= parseInt(deathCount);
+                       updateTotalLivestock();
+                       showNotification(`บันทึกการตาย ${deathCount} ตัว`);
+                   }
+                   break;
+                   
+               case 3: // บันทึกการขาย
+                   const sellCount = prompt('ขายสุกรกี่ตัว?', '1');
+                   const sellPrice = prompt('ราคาต่อตัว (บาท)?', '4000');
+                   if (sellCount && sellPrice && !isNaN(sellCount) && !isNaN(sellPrice)) {
+                       farmData.totalPigs -= parseInt(sellCount);
+                       farmData.revenue += parseInt(sellCount) * parseInt(sellPrice);
+                       updateTotalLivestock();
+                       updateRelatedData();
+                       showNotification(`ขายสุกร ${sellCount} ตัว ได้ ${(parseInt(sellCount) * parseInt(sellPrice)).toLocaleString()} บาท`);
+                   }
+                   break;
+                   
+               case 7: // เพิ่มค่าใช้จ่าย
+                   const expense = prompt('ค่าใช้จ่าย (บาท)?', '1000');
+                   const expenseNote = prompt('หมายเหตุ:', 'ค่าอาหาร');
+                   if (expense && !isNaN(expense)) {
+                       farmData.expenses += parseInt(expense);
+                       updateRelatedData();
+                       showNotification(`เพิ่มค่าใช้จ่าย ${parseInt(expense).toLocaleString()} บาท (${expenseNote})`);
+                   }
+                   break;
+                   
+               default:
+                   showNotification(`${actionName} - กำลังพัฒนา...`);
+           }
+           
+           saveData();
+       }
+
+       function showNotification(message) {
+           const notification = document.createElement('div');
+           notification.style.cssText = `
+               position: fixed;
+               top: 80px;
+               right: 20px;
+               background: rgba(16, 185, 129, 0.9);
+               color: white;
+               padding: 16px 20px;
+               border-radius: 12px;
+               font-size: 14px;
+               font-weight: 500;
+               box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+               z-index: 1000;
+               transform: translateX(100%);
+               transition: transform 0.3s ease;
+               max-width: 300px;
+               word-wrap: break-word;
+           `;
+           notification.textContent = message;
+           document.body.appendChild(notification);
+           
+           setTimeout(() => {
+               notification.style.transform = 'translateX(0)';
+           }, 100);
+           
+           setTimeout(() => {
+               notification.style.transform = 'translateX(100%)';
+               setTimeout(() => notification.remove(), 300);
+           }, 3000);
+       }
+
+       function saveData() {
+           // บันทึกข้อมูลใน memory (จริงๆ ควรส่งไปเซิร์ฟเวอร์)
+           console.log('บันทึกข้อมูล:', farmData);
+           localStorage.setItem('farmData', JSON.stringify(farmData));
+       }
+
+       function loadData() {
+           try {
+               const saved = localStorage.getItem('farmData');
+               if (saved) {
+                   const data = JSON.parse(saved);
+                   farmData = { ...farmData, ...data };
+                   
+                   // อัปเดตหน้าจอ
+                   Object.keys(farmData).forEach(key => {
+                       const element = document.getElementById(key);
+                       if (element) {
+                           element.textContent = farmData[key];
+                       }
+                   });
+                   
+                   updateRelatedData();
+               }
+           } catch (e) {
+               console.log('ไม่สามารถโหลดข้อมูลได้');
+           }
+       }
+
+       // เพิ่มการคำนวณอัตโนมัติ
+       function autoCalculate() {
+           // คำนวณประสิทธิภาพ
+           const mortality = farmData.mortality || 2.1;
+           const dailyGain = farmData.dailyGain || 650;
+           const feedConversion = farmData.feedConversion || 2.8;
+           
+           // คำนวณดัชนีประสิทธิภาพ (สมมติ)
+           const efficiency = (10 - mortality) + (dailyGain / 100) + (4 - feedConversion);
+           
+           // อัปเดตทุกๆ 30 วินาที
+           setTimeout(autoCalculate, 30000);
+       }
+
+       // การทำงานเมื่อโหลดหน้า
+       window.addEventListener('load', function() {
+           updateDate();
+           loadData();
+           autoCalculate();
+           
+           // อัปเดตวันที่ทุกนาที
+           setInterval(updateDate, 60000);
+           
+           // แสดงข้อความต้อนรับ
+           setTimeout(() => {
+               showNotification('ยินดีต้อนรับสู่ระบบจัดการฟาร์ม');
+           }, 1000);
+       });
+
+       // ป้องกันการสูญหายข้อมูล
+       window.addEventListener('beforeunload', function(e) {
+           saveData();
+       });
+
+       // เพิ่มการ backup อัตโนมัติ
+       setInterval(() => {
+           saveData();
+           console.log('Auto-save ข้อมูลฟาร์ม:', new Date().toLocaleTimeString('th-TH'));
+       }, 60000); // ทุกนาที
+   </script>
 </body>
 </html>
+
+
+
+        

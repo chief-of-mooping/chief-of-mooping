@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ฟาร์มของฉัน - มือถือ</title>
+    <title>ระบบจัดการฟาร์ม</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,59 +14,72 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: #f8f9fa;
-            color: #333;
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2d3748;
             padding-bottom: 80px;
+            min-height: 100vh;
         }
 
         .mobile-header {
-            background: #2c3e50;
-            color: white;
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: #2d3748;
+            padding: 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .mobile-header h1 {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #1a202c;
         }
 
         .mobile-header .date {
             font-size: 12px;
-            opacity: 0.8;
-            margin-top: 2px;
+            color: #718096;
+            font-weight: 300;
         }
 
         .quick-stats {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 20px;
+            padding: 30px 20px;
+            margin: 20px 15px;
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             text-align: center;
-            margin-bottom: 10px;
         }
 
         .quick-stats .main-number {
             font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 300;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .quick-stats .main-label {
             font-size: 14px;
+            font-weight: 400;
             opacity: 0.9;
+            margin-bottom: 20px;
         }
 
         .quick-stats .sub-stats {
             display: flex;
             justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .quick-stats .sub-item {
@@ -72,87 +87,116 @@
         }
 
         .quick-stats .sub-number {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 22px;
+            font-weight: 400;
+            margin-bottom: 4px;
         }
 
         .quick-stats .sub-label {
             font-size: 11px;
+            font-weight: 300;
             opacity: 0.8;
         }
 
         .card {
-            background: white;
-            margin: 10px 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            margin: 15px;
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 8px 16px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
+            transform: translateZ(0);
         }
 
         .card-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(248, 250, 252, 0.5);
         }
 
         .card-title {
             font-size: 16px;
-            font-weight: bold;
-            color: #2c3e50;
+            font-weight: 500;
+            color: #1a202c;
         }
 
         .card-badge {
-            background: #e74c3c;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 11px;
-            font-weight: bold;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
-        .card-badge.warning { background: #f39c12; }
-        .card-badge.success { background: #27ae60; }
-        .card-badge.info { background: #3498db; }
+        .card-badge.warning { 
+            background: linear-gradient(135deg, #ff9500, #ff6b35);
+            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+        }
+        
+        .card-badge.success { 
+            background: linear-gradient(135deg, #4ade80, #16a34a);
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+        }
+        
+        .card-badge.danger { 
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
 
         .card-content {
-            padding: 20px;
+            padding: 24px;
         }
 
         .alert-item {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 4px;
+            background: rgba(248, 250, 252, 0.8);
+            border-left: 4px solid #cbd5e0;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
             font-size: 13px;
+            font-weight: 400;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .alert-item.critical {
-            background: #f8d7da;
-            border-left-color: #dc3545;
+            background: rgba(254, 242, 242, 0.9);
+            border-left-color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .alert-item.warning {
+            background: rgba(255, 251, 235, 0.9);
+            border-left-color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.1);
         }
 
         .alert-item .time {
             font-size: 11px;
-            color: #666;
-            margin-top: 3px;
+            color: #9ca3af;
+            margin-top: 6px;
+            font-weight: 300;
         }
 
         .money-card {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-        }
-
-        .money-card .card-header {
-            border-bottom-color: rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .money-summary {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .money-item {
@@ -161,105 +205,125 @@
         }
 
         .money-value {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 3px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #1a202c;
         }
 
         .money-label {
             font-size: 11px;
-            opacity: 0.8;
+            color: #718096;
+            font-weight: 300;
         }
 
         .profit-section {
-            background: rgba(255,255,255,0.15);
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .profit-amount {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 3px;
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 4px;
+            color: #1a202c;
+        }
+
+        .profit-label {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 300;
         }
 
         .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 16px;
         }
 
         .metric-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
-            border-left: 3px solid #3498db;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .metric-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            font-size: 22px;
+            font-weight: 400;
+            color: #1a202c;
+            margin-bottom: 6px;
         }
 
         .metric-label {
             font-size: 11px;
-            color: #666;
+            color: #718096;
+            font-weight: 300;
+            margin-bottom: 4px;
         }
 
         .metric-trend {
             font-size: 10px;
-            margin-top: 3px;
+            font-weight: 400;
         }
 
-        .metric-trend.up { color: #27ae60; }
-        .metric-trend.down { color: #e74c3c; }
-        .metric-trend.same { color: #f39c12; }
+        .metric-trend.up { color: #16a34a; }
+        .metric-trend.down { color: #dc2626; }
+        .metric-trend.same { color: #d97706; }
 
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: white;
-            border-top: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
             display: flex;
             z-index: 100;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
             flex: 1;
             text-align: center;
-            padding: 12px 8px;
+            padding: 14px 8px;
             cursor: pointer;
-            transition: background 0.3s;
-            border-right: 1px solid #eee;
-        }
-
-        .nav-item:last-child {
-            border-right: none;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .nav-item.active {
-            background: #3498db;
-            color: white;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            color: #667eea;
         }
 
-        .nav-item:not(.active):hover {
-            background: #f8f9fa;
-        }
-
-        .nav-icon {
-            font-size: 16px;
-            margin-bottom: 2px;
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 0 0 4px 4px;
         }
 
         .nav-label {
-            font-size: 10px;
-            font-weight: bold;
+            font-size: 11px;
+            font-weight: 400;
+            margin-top: 4px;
         }
 
         .section {
@@ -273,28 +337,33 @@
         .livestock-summary {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .livestock-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 16px 12px;
+            border-radius: 12px;
             text-align: center;
-            border-left: 3px solid #27ae60;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
 
         .livestock-number {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 3px;
+            font-size: 20px;
+            font-weight: 400;
+            color: #1a202c;
+            margin-bottom: 4px;
         }
 
         .livestock-label {
             font-size: 10px;
-            color: #666;
+            color: #718096;
+            font-weight: 300;
         }
 
         .fab {
@@ -303,35 +372,56 @@
             right: 20px;
             width: 56px;
             height: 56px;
-            background: #e74c3c;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 20px;
+            font-weight: 300;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 
+                0 8px 24px rgba(102, 126, 234, 0.3),
+                0 4px 12px rgba(0, 0, 0, 0.1);
             z-index: 99;
+            transition: all 0.3s ease;
         }
 
         .fab:active {
             transform: scale(0.95);
+            box-shadow: 
+                0 4px 12px rgba(102, 126, 234, 0.3),
+                0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .developing {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
         }
 
         @media (max-width: 360px) {
             .quick-stats .main-number {
-                font-size: 36px;
+                font-size: 40px;
             }
             
             .livestock-summary {
                 grid-template-columns: 1fr;
-                gap: 8px;
+                gap: 10px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="mobile-header">
-        <h1>🏭 ฟาร์มของฉัน</h1>
+        <h1>ระบบจัดการฟาร์ม</h1>
         <div class="date" id="currentDate"></div>
     </div>
 
@@ -358,8 +448,8 @@
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">⚠️ แจ้งเตือนด่วน</div>
-                <div class="card-badge">3</div>
+                <div class="card-title">แจ้งเตือนด่วน</div>
+                <div class="card-badge danger">3</div>
             </div>
             <div class="card-content">
                 <div class="alert-item critical">
@@ -367,10 +457,10 @@
                     <div class="time">กำหนด: วันนี้</div>
                 </div>
                 <div class="alert-item critical">
-                    <div>ตรวจครรภ์ แม่พันธุ์#03</div>
+                    <div>ตรวจครรภ์ แม่พันธุ์ #03</div>
                     <div class="time">เลยกำหนด: 2 วัน</div>
                 </div>
-                <div class="alert-item">
+                <div class="alert-item warning">
                     <div>หมูพร้อมขาย 12 ตัว</div>
                     <div class="time">น้ำหนักถึงเป้าแล้ว</div>
                 </div>
@@ -379,7 +469,7 @@
 
         <div class="card money-card">
             <div class="card-header">
-                <div class="card-title">💰 การเงินเดือนนี้</div>
+                <div class="card-title">การเงินเดือนนี้</div>
             </div>
             <div class="card-content">
                 <div class="money-summary">
@@ -393,37 +483,37 @@
                     </div>
                 </div>
                 <div class="profit-section">
-                    <div class="profit-amount">+17,000 บาท</div>
-                    <div>กำไรสุทธิ (34.9%)</div>
+                    <div class="profit-amount">+17,000</div>
+                    <div class="profit-label">กำไรสุทธิ (34.9%)</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <div class="card-title">📊 ตัวชี้วัดสำคัญ</div>
+                <div class="card-title">ตัวชี้วัดสำคัญ</div>
             </div>
             <div class="card-content">
                 <div class="metrics-grid">
                     <div class="metric-box">
                         <div class="metric-value">2.1%</div>
                         <div class="metric-label">อัตราการตาย</div>
-                        <div class="metric-trend down">↓ ลดลง</div>
+                        <div class="metric-trend down">ลดลง</div>
                     </div>
                     <div class="metric-box">
                         <div class="metric-value">650g</div>
                         <div class="metric-label">น้ำหนักขึ้น/วัน</div>
-                        <div class="metric-trend up">↑ ดีขึ้น</div>
+                        <div class="metric-trend up">ดีขึ้น</div>
                     </div>
                     <div class="metric-box">
                         <div class="metric-value">2.8:1</div>
                         <div class="metric-label">อัตราแปลงอาหาร</div>
-                        <div class="metric-trend same">→ ปรับปรุงได้</div>
+                        <div class="metric-trend same">ปรับปรุงได้</div>
                     </div>
                     <div class="metric-box">
                         <div class="metric-value">95</div>
                         <div class="metric-label">วันถึงตลาด</div>
-                        <div class="metric-trend up">↑ เร็วขึ้น</div>
+                        <div class="metric-trend up">เร็วขึ้น</div>
                     </div>
                 </div>
             </div>
@@ -434,7 +524,7 @@
     <div id="livestock" class="section">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">🐷 สุกรในฟาร์ม</div>
+                <div class="card-title">สุกรในฟาร์ม</div>
                 <div class="card-badge success">105</div>
             </div>
             <div class="card-content">
@@ -465,8 +555,8 @@
                     </div>
                 </div>
                 
-                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
-                    📋 ระบบจัดการรายละเอียด<br>
+                <div class="developing">
+                    ระบบจัดการรายละเอียด<br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -477,13 +567,13 @@
     <div id="health" class="section">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">🏥 สุขภาพสุกร</div>
+                <div class="card-title">สุขภาพสุกร</div>
                 <div class="card-badge warning">2</div>
             </div>
             <div class="card-content">
-                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
-                    💊 ระบบติดตามสุขภาพ<br>
-                    🩺 วัคซีน และการรักษา<br><br>
+                <div class="developing">
+                    ระบบติดตามสุขภาพ<br>
+                    วัคซีน และการรักษา<br><br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -494,14 +584,14 @@
     <div id="finance" class="section">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">💰 การเงิน</div>
+                <div class="card-title">การเงิน</div>
                 <div class="card-badge success">+17K</div>
             </div>
             <div class="card-content">
-                <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
-                    📊 รายงานการเงินรายละเอียด<br>
-                    📈 กำไร-ขาดทุน<br>
-                    💸 ต้นทุนต่อตัว<br><br>
+                <div class="developing">
+                    รายงานการเงินรายละเอียด<br>
+                    กำไร-ขาดทุน<br>
+                    ต้นทุนต่อตัว<br><br>
                     กำลังพัฒนา...
                 </div>
             </div>
@@ -514,25 +604,20 @@
     <!-- เมนูด้านล่าง -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="showSection('dashboard')">
-            <div class="nav-icon">📊</div>
             <div class="nav-label">หน้าหลัก</div>
         </div>
         <div class="nav-item" onclick="showSection('livestock')">
-            <div class="nav-icon">🐷</div>
             <div class="nav-label">สุกร</div>
         </div>
         <div class="nav-item" onclick="showSection('health')">
-            <div class="nav-icon">🏥</div>
             <div class="nav-label">สุขภาพ</div>
         </div>
         <div class="nav-item" onclick="showSection('finance')">
-            <div class="nav-icon">💰</div>
             <div class="nav-label">การเงิน</div>
         </div>
     </div>
 
     <script>
-        // อัปเดตวันที่
         function updateDate() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('th-TH', {
@@ -544,33 +629,26 @@
             document.getElementById('currentDate').textContent = dateStr;
         }
 
-        // เปลี่ยนหน้า
         function showSection(sectionName) {
-            // ซ่อนทุกหน้า
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // ลบ active จากเมนู
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // แสดงหน้าที่เลือก
             document.getElementById(sectionName).classList.add('active');
-            
-            // เพิ่ม active ให้เมนู
             event.target.closest('.nav-item').classList.add('active');
         }
 
-        // ปุ่มลอย
         function quickAction() {
             const actions = [
-                '➕ เพิ่มสุกร',
-                '➖ ลดสุกร', 
-                '💰 ขายสุกร',
-                '💊 บันทึกรักษา',
-                '📞 โทรสัตวแพทย์'
+                'เพิ่มสุกร',
+                'ลดสุกร', 
+                'ขายสุกร',
+                'บันทึกรักษา',
+                'โทรสัตวแพทย์'
             ];
             
             const choice = prompt('เลือกการทำงาน:\n\n' + 
@@ -581,26 +659,9 @@
             }
         }
 
-        // เริ่มต้น
         updateDate();
         setInterval(updateDate, 60000);
-
-        // จำลองการอัปเดตข้อมูล
-        setInterval(() => {
-            console.log('อัปเดตข้อมูลฟาร์ม...');
-        }, 30000);
-
-        // ป้องกันการ refresh โดยไม่ตั้งใจ
-        let touchTime = 0;
-        document.addEventListener('touchstart', function() {
-            touchTime = Date.now();
-        });
-
-        document.addEventListener('touchend', function() {
-            if (Date.now() - touchTime < 300) {
-                // Quick tap - ไม่ทำอะไร
-            }
-        });
+        setInterval(() => console.log('อัปเดตข้อมูลฟาร์ม...'), 30000);
     </script>
 </body>
 </html>

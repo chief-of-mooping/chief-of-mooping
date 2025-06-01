@@ -3,975 +3,526 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👗 AI Princess Dress Designer</title>
+    <title>🐷 ฟาร์มของฉัน</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
         body {
-            background: linear-gradient(45deg, #ffd1dc, #e6e6fa, #ffb6c1, #f0e68c);
-            background-size: 400% 400%;
-            animation: dreamyGradient 8s ease infinite;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        @keyframes dreamyGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .sparkles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .sparkle {
-            position: absolute;
-            color: #ffd700;
-            font-size: 1.2rem;
-            animation: sparkleFloat 6s infinite linear;
-        }
-
-        @keyframes sparkleFloat {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10%, 90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-50px) rotate(360deg);
-                opacity: 0;
-            }
+            font-size: 28px;
+            line-height: 1.4;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.9);
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #2e7d32;
+            color: white;
             border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
         }
 
-        .title {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, #d63384, #6f42c1, #e91e63);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            animation: titleBounce 2s ease-in-out infinite;
+        .farm-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
 
-        @keyframes titleBounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+        .date-display {
+            font-size: 32px;
+            opacity: 0.9;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #6f42c1;
-            margin-bottom: 10px;
+        .main-display {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            border: 4px solid #2e7d32;
         }
 
-        .main-content {
+        .pig-count {
+            font-size: 80px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pig-label {
+            font-size: 36px;
+            color: #1b5e20;
+            font-weight: bold;
+        }
+
+        .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .drawing-section, .result-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border: 2px solid #d63384;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            color: #d63384;
-            text-align: center;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .canvas-container {
-            position: relative;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #drawingCanvas {
-            border: 3px solid #e91e63;
-            border-radius: 15px;
-            background: #ffffff;
-            cursor: crosshair;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-        }
-
-        .tools {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .color-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .color-btn:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .color-btn.active {
-            transform: scale(1.3);
-            border-color: #000;
-        }
-
-        .control-btn {
-            background: linear-gradient(45deg, #6f42c1, #e91e63);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin: 5px;
-        }
-
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .style-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .style-option {
-            background: linear-gradient(135deg, #ffd1dc, #e6e6fa);
-            border: 2px solid #d63384;
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .style-option:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .style-option.selected {
-            background: linear-gradient(135deg, #d63384, #6f42c1);
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .generate-btn {
-            background: linear-gradient(45deg, #d63384, #ffd700, #e91e63);
-            background-size: 200% 200%;
-            animation: rainbowShift 3s ease infinite;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.3rem;
-            border-radius: 25px;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-        }
-
-        @keyframes rainbowShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .generate-btn:hover {
-            transform: scale(1.05) translateY(-3px);
-        }
-
-        .result-dress {
-            width: 200px;
-            height: 250px;
-            margin: 0 auto 20px;
-            border-radius: 15px;
-            border: 3px solid #d63384;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dress-animation {
-            animation: dressGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes dressGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(214, 51, 132, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(214, 51, 132, 0.8); }
-        }
-
-        .story-container {
-            background: linear-gradient(135deg, #fff8e1, #f3e5f5);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 15px;
-            border: 2px dashed #d63384;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .story-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 15px,
-                rgba(214, 51, 132, 0.1) 15px,
-                rgba(214, 51, 132, 0.1) 30px
-            );
-            animation: patternMove 10s linear infinite;
-        }
-
-        @keyframes patternMove {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .story-text {
-            position: relative;
-            z-index: 2;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #495057;
-        }
-
-        .accessories-panel {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .accessory-btn {
-            background: rgba(255,255,255,0.9);
-            border: 2px solid #d63384;
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .accessory-btn:hover {
-            background: #d63384;
-            transform: scale(1.1);
-        }
-
-        .accessory-btn.active {
-            background: #d63384;
-            color: white;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 1.2rem;
-            color: #d63384;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #d63384;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 15px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .save-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .action-btn {
-            background: #6f42c1;
-            color: white;
+            padding: 40px 20px;
+            font-size: 32px;
+            font-weight: bold;
             border: none;
-            padding: 8px 16px;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.9rem;
             transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .action-btn:hover {
-            background: #5a2d91;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .action-btn:active {
             transform: translateY(-2px);
         }
 
+        .btn-add {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-remove {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-sell {
+            background: #ff9800;
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .summary-section {
+            background: #e3f2fd;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #1976d2;
+            margin-bottom: 30px;
+        }
+
+        .summary-title {
+            font-size: 36px;
+            color: #1976d2;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            border: 2px solid #bbdefb;
+            font-size: 28px;
+        }
+
+        .summary-value {
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .history-section {
+            background: #fff3e0;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #f57c00;
+            margin-bottom: 30px;
+        }
+
+        .history-title {
+            font-size: 36px;
+            color: #f57c00;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .history-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            border-left: 8px solid #f57c00;
+            font-size: 24px;
+        }
+
+        .history-time {
+            color: #666;
+            font-size: 20px;
+        }
+
+        .clear-btn {
+            background: #9e9e9e;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .alert-box {
+            background: #ffebee;
+            border: 3px solid #f44336;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .success-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4caf50;
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .success-feedback.show {
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 20px;
             }
             
-            .title {
-                font-size: 2rem;
+            .farm-title {
+                font-size: 36px;
             }
             
-            #drawingCanvas {
-                width: 100%;
-                max-width: 300px;
+            .pig-count {
+                font-size: 60px;
             }
             
-            .style-selector {
-                grid-template-columns: 1fr;
-            }
-            
-            .accessories-panel {
-                grid-template-columns: repeat(3, 1fr);
+            .action-btn {
+                font-size: 28px;
+                padding: 30px 15px;
+                min-height: 120px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sparkles"></div>
-
     <div class="container">
         <div class="header">
-            <h1 class="title">👗 AI นักออกแบบชุดเจ้าหญิง 👗</h1>
-            <p class="subtitle">วาดชุดในฝันของเธอ แล้วให้ AI เปลี่ยนเป็นชุดเจ้าหญิงสวยๆ!</p>
-            <p style="color: #6f42c1; font-size: 1rem;">✨ เพียงวาดรูปง่ายๆ เราจะทำให้มันกลายเป็นเวทมนตร์!</p>
+            <div class="farm-title">🐷 ฟาร์มของฉัน</div>
+            <div class="date-display" id="currentDate"></div>
         </div>
 
-        <div class="main-content">
-            <div class="drawing-section">
-                <h2 class="section-title">🎨 วาดชุดของเธอ</h2>
-                
-                <div class="tools">
-                    <div class="color-btn active" data-color="#d63384" style="background: #d63384;" title="สีชมพูเจ้าหญิง"></div>
-                    <div class="color-btn" data-color="#6f42c1" style="background: #6f42c1;" title="สีม่วงเวทมนตร์"></div>
-                    <div class="color-btn" data-color="#e91e63" style="background: #e91e63;" title="สีแดงกุหลาบ"></div>
-                    <div class="color-btn" data-color="#ffd700" style="background: #ffd700;" title="สีทองราชินี"></div>
-                    <div class="color-btn" data-color="#00bcd4" style="background: #00bcd4;" title="สีฟ้าเอลซ่า"></div>
-                    <div class="color-btn" data-color="#4caf50" style="background: #4caf50;" title="สีเขียวธรรมชาติ"></div>
-                </div>
+        <div class="main-display">
+            <div class="pig-count" id="pigCount">105</div>
+            <div class="pig-label">ตัว</div>
+        </div>
 
-                <div class="canvas-container">
-                    <canvas id="drawingCanvas" width="300" height="350"></canvas>
-                </div>
+        <div class="action-buttons">
+            <button class="action-btn btn-add" onclick="addPig()">
+                <div style="font-size: 48px;">➕</div>
+                <div>เพิ่มหมู</div>
+                <div style="font-size: 24px;">(เกิด/ซื้อ)</div>
+            </button>
 
-                <div style="text-align: center;">
-                    <button class="control-btn" onclick="clearCanvas()">🗑️ ลบทั้งหมด</button>
-                    <button class="control-btn" onclick="undoStroke()">↶ ยกเลิก</button>
-                </div>
+            <button class="action-btn btn-remove" onclick="removePig()">
+                <div style="font-size: 48px;">➖</div>
+                <div>ลดหมู</div>
+                <div style="font-size: 24px;">(ตาย/ใช้เอง)</div>
+            </button>
 
-                <h3 style="text-align: center; color: #d63384; margin: 20px 0 10px;">👸 เลือกธีมเจ้าหญิง</h3>
-                <div class="style-selector">
-                    <div class="style-option selected" data-style="cinderella">
-                        🏰<br>ซินเดอเรลล่า<br><small>คลาสสิค</small>
-                    </div>
-                    <div class="style-option" data-style="elsa">
-                        ❄️<br>เอลซ่า<br><small>ราชินีน้ำแข็ง</small>
-                    </div>
-                    <div class="style-option" data-style="rose">
-                        🌹<br>เจ้าหญิงกุหลาบ<br><small>โรแมนติก</small>
-                    </div>
-                </div>
+            <button class="action-btn btn-sell" onclick="sellPig()">
+                <div style="font-size: 48px;">💰</div>
+                <div>ขายหมู</div>
+                <div style="font-size: 24px;">(ได้เงิน)</div>
+            </button>
+        </div>
 
-                <button class="generate-btn" onclick="generateDress()">
-                    ✨ เปลี่ยนเป็นชุดเจ้าหญิง ✨
-                </button>
+        <div class="summary-section">
+            <div class="summary-title">📊 สรุปวันนี้</div>
+            <div class="summary-item">
+                <span>หมูเพิ่ม:</span>
+                <span class="summary-value" id="todayAdded">0 ตัว</span>
             </div>
+            <div class="summary-item">
+                <span>หมูลด:</span>
+                <span class="summary-value" id="todayRemoved">0 ตัว</span>
+            </div>
+            <div class="summary-item">
+                <span>หมูขาย:</span>
+                <span class="summary-value" id="todaySold">0 ตัว</span>
+            </div>
+            <div class="summary-item">
+                <span>รายได้:</span>
+                <span class="summary-value" id="todayIncome">0 บาท</span>
+            </div>
+        </div>
 
-            <div class="result-section">
-                <h2 class="section-title">👗 ชุดเจ้าหญิงของเธอ</h2>
-                
-                <div id="resultArea">
-                    <div class="result-dress">
-                        <div style="text-align: center; color: #ccc;">
-                            👗<br>
-                            <small>วาดชุดแล้วกด<br>"เปลี่ยนเป็นชุดเจ้าหญิง"</small>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: center; color: #6f42c1; margin-bottom: 15px;">
-                        รอชุดเจ้าหญิงสวยๆ ของเธออยู่นะ! ✨
-                    </div>
-
-                    <h3 style="text-align: center; color: #d63384; margin-bottom: 10px;">💎 เครื่องประดับ</h3>
-                    <div class="accessories-panel">
-                        <div class="accessory-btn" data-accessory="crown" title="มงกุฎ">👑</div>
-                        <div class="accessory-btn" data-accessory="necklace" title="สร้อยคอ">📿</div>
-                        <div class="accessory-btn" data-accessory="earrings" title="ต่างหู">💎</div>
-                        <div class="accessory-btn" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
-                        <div class="accessory-btn" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
-                    </div>
+        <div class="history-section">
+            <div class="history-title">📝 กิจกรรมล่าสุด</div>
+            <div id="historyList">
+                <div class="history-item">
+                    <div>ยังไม่มีกิจกรรมวันนี้</div>
+                    <div class="history-time">รอการบันทึก</div>
                 </div>
             </div>
+            <button class="clear-btn" onclick="clearToday()">🗑️ ล้างข้อมูลวันนี้</button>
         </div>
     </div>
 
+    <div class="success-feedback" id="successFeedback"></div>
+
     <script>
-        // Drawing variables
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let currentColor = '#d63384';
-        let currentStyle = 'cinderella';
-        let strokes = [];
-        let currentStroke = [];
-        let selectedAccessories = [];
-        let currentDress = null;
-
-        // Initialize canvas
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.lineWidth = 3;
-
-        // Dress templates and stories
-        const dressStyles = {
-            cinderella: {
-                name: "ชุดซินเดอเรลล่า",
-                emoji: "🏰👗✨",
-                description: "ชุดเจ้าหญิงคลาสสิคสีฟ้าอ่อน ประดับด้วยดาวเงิน เหมาะสำหรับงานเต้นรำในปราสาท มีพลังเวทมนตร์ที่ทำให้ผู้สวมใส่มีความมั่นใจและเสน่ห์ที่ไม่อาจต้านทานได้",
-                colors: ["#87ceeb", "#ffffff", "#c0c0c0"]
-            },
-            elsa: {
-                name: "ชุดเอลซ่าราชินีน้ำแข็ง", 
-                emoji: "❄️👗💎",
-                description: "ชุดราชินีน้ำแข็งสีฟ้าน้ำแข็ง ประดับด้วยผลึกน้ำแข็งระยิบระยับ มีพลังควบคุมน้ำแข็งและหิมะ ทำให้ผู้สวมใส่สามารถสร้างปราสาทน้ำแข็งและดอกไม้หิมะได้",
-                colors: ["#0066cc", "#ccffff", "#ffffff"]
-            },
-            rose: {
-                name: "ชุดเจ้าหญิงกุหลาบ",
-                emoji: "🌹👗💖", 
-                description: "ชุดเจ้าหญิงสีชมพูกุหลาบ ประดับด้วยกลีบกุหลาบทองคำ มีพลังเวทมนตร์แห่งความรัก ทำให้ดอกกุหลาบบานเบิกและส่งกลิ่นหอมหวานไปทั่วสวน",
-                colors: ["#ff69b4", "#ffd700", "#ffb6c1"]
-            }
+        // Farm data (stored in memory, resets on refresh)
+        let farmData = {
+            totalPigs: 105,
+            todayAdded: 0,
+            todayRemoved: 0,
+            todaySold: 0,
+            todayIncome: 0,
+            history: []
         };
 
-        const accessories = {
-            crown: "👑 มงกุฎเพชรระยิบระยับ",
-            necklace: "📿 สร้อยคอไข่มุกเวทมนตร์", 
-            earrings: "💎 ต่างหูคริสตัลส่องแสง",
-            shoes: "👠 รองเท้าแก้วใสวิเศษ",
-            wand: "🪄 ไม้เวทมนตร์ดาวทอง"
-        };
-
-        // Create floating sparkles
-        function createSparkles() {
-            const sparklesContainer = document.querySelector('.sparkles');
-            const sparkleSymbols = ['✨', '⭐', '🌟', '💫', '🔮', '💎'];
+        // Initialize the app
+        function initializeApp() {
+            updateDisplay();
+            updateDate();
             
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.animationDelay = Math.random() * 6 + 's';
-                sparkle.style.animationDuration = (4 + Math.random() * 4) + 's';
-                sparklesContainer.appendChild(sparkle);
-            }
+            // Update date every minute
+            setInterval(updateDate, 60000);
         }
 
-        // Drawing functions
-        function startDrawing(e) {
-            isDrawing = true;
-            currentStroke = [];
-            draw(e);
+        function updateDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('th-TH', options);
         }
 
-        function draw(e) {
-            if (!isDrawing) return;
+        function updateDisplay() {
+            document.getElementById('pigCount').textContent = farmData.totalPigs;
+            document.getElementById('todayAdded').textContent = farmData.todayAdded + ' ตัว';
+            document.getElementById('todayRemoved').textContent = farmData.todayRemoved + ' ตัว';
+            document.getElementById('todaySold').textContent = farmData.todaySold + ' ตัว';
+            document.getElementById('todayIncome').textContent = farmData.todayIncome.toLocaleString() + ' บาท';
             
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const historyList = document.getElementById('historyList');
             
-            ctx.strokeStyle = currentColor;
-            
-            if (currentStroke.length === 0) {
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            }
-            
-            currentStroke.push({x, y, color: currentColor});
-        }
-
-        function stopDrawing() {
-            if (isDrawing && currentStroke.length > 0) {
-                strokes.push([...currentStroke]);
-            }
-            isDrawing = false;
-        }
-
-        // Canvas event listeners
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
-        canvas.addEventListener('touchmove', draw);
-        canvas.addEventListener('touchend', stopDrawing);
-
-        // Color selection
-        document.querySelectorAll('.color-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentColor = this.dataset.color;
-            });
-        });
-
-        // Style selection
-        document.querySelectorAll('.style-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-                currentStyle = this.dataset.style;
-            });
-        });
-
-        // Accessory selection
-        document.querySelectorAll('.accessory-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const accessory = this.dataset.accessory;
-                if (this.classList.contains('active')) {
-                    this.classList.remove('active');
-                    selectedAccessories = selectedAccessories.filter(a => a !== accessory);
-                } else {
-                    this.classList.add('active');
-                    selectedAccessories.push(accessory);
-                }
-                
-                if (currentDress) {
-                    updateDressDisplay();
-                }
-            });
-        });
-
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            strokes = [];
-        }
-
-        function undoStroke() {
-            if (strokes.length > 0) {
-                strokes.pop();
-                redrawCanvas();
-            }
-        }
-
-        function redrawCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            strokes.forEach(stroke => {
-                if (stroke.length > 0) {
-                    ctx.strokeStyle = stroke[0].color;
-                    ctx.beginPath();
-                    ctx.moveTo(stroke[0].x, stroke[0].y);
-                    stroke.forEach(point => {
-                        ctx.lineTo(point.x, point.y);
-                    });
-                    ctx.stroke();
-                }
-            });
-        }
-
-        function generateDress() {
-            if (strokes.length === 0) {
-                alert('กรุณาวาดชุดก่อนนะคะ! 🎨');
+            if (farmData.history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="history-item">
+                        <div>ยังไม่มีกิจกรรมวันนี้</div>
+                        <div class="history-time">รอการบันทึก</div>
+                    </div>
+                `;
                 return;
             }
 
-            const resultArea = document.getElementById('resultArea');
+            historyList.innerHTML = '';
             
-            // Show loading
-            resultArea.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>🪄 AI กำลังสร้างชุดเจ้าหญิงวิเศษให้เธอ...</p>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">✨ รอสักครู่นะคะ กำลังใส่เวทมนตร์! ✨</p>
-                </div>
-            `;
-
-            // Simulate AI processing
-            setTimeout(() => {
-                const style = dressStyles[currentStyle];
-                currentDress = style;
-                updateDressDisplay();
-                createCelebrationEffect();
-            }, 2500 + Math.random() * 1500);
-        }
-
-        function updateDressDisplay() {
-            const style = currentDress;
-            const accessoryText = selectedAccessories.map(acc => accessories[acc]).join(', ');
+            // Show last 5 activities
+            const recentHistory = farmData.history.slice(-5).reverse();
             
-            const resultArea = document.getElementById('resultArea');
-            resultArea.innerHTML = `
-                <div class="result-dress dress-animation">
-                    <div style="text-align: center; font-size: 2.5rem;">
-                        ${style.emoji}
-                    </div>
-                </div>
-                
-                <div style="text-align: center; font-weight: bold; color: #d63384; margin-bottom: 15px;">
-                    ${style.name}
-                </div>
-
-                <div class="story-container">
-                    <div class="story-text">
-                        ${style.description}
-                        ${selectedAccessories.length > 0 ? `<br><br>🌟 เครื่องประดับ: ${accessoryText}` : ''}
-                    </div>
-                </div>
-
-                <h3 style="text-align: center; color: #d63384; margin: 20px 0 10px;">💎 เครื่องประดับ</h3>
-                <div class="accessories-panel">
-                    <div class="accessory-btn ${selectedAccessories.includes('crown') ? 'active' : ''}" data-accessory="crown" title="มงกุฎ">👑</div>
-                    <div class="accessory-btn ${selectedAccessories.includes('necklace') ? 'active' : ''}" data-accessory="necklace" title="สร้อยคอ">📿</div>
-                    <div class="accessory-btn ${selectedAccessories.includes('earrings') ? 'active' : ''}" data-accessory="earrings" title="ต่างหู">💎</div>
-                    <div class="accessory-btn ${selectedAccessories.includes('shoes') ? 'active' : ''}" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
-                    <div class="accessory-btn ${selectedAccessories.includes('wand') ? 'active' : ''}" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
-                </div>
-
-                <div class="save-actions">
-                    <button class="action-btn" onclick="saveDress()">💾 บันทึกชุด</button>
-                    <button class="action-btn" onclick="readStory()">📢 อ่านเรื่องราว</button>
-                    <button class="action-btn" onclick="newDesign()">✨ ออกแบบใหม่</button>
-                </div>
-            `;
-
-            // Re-attach accessory event listeners
-            document.querySelectorAll('.accessory-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const accessory = this.dataset.accessory;
-                    if (this.classList.contains('active')) {
-                        this.classList.remove('active');
-                        selectedAccessories = selectedAccessories.filter(a => a !== accessory);
-                    } else {
-                        this.classList.add('active');
-                        selectedAccessories.push(accessory);
-                    }
-                    updateDressDisplay();
-                });
+            recentHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>${item.action}</div>
+                    <div class="history-time">${item.time}</div>
+                `;
+                historyList.appendChild(historyItem);
             });
         }
 
-        function createCelebrationEffect() {
-            const celebration = document.createElement('div');
-            celebration.style.position = 'fixed';
-            celebration.style.top = '0';
-            celebration.style.left = '0';
-            celebration.style.width = '100%';
-            celebration.style.height = '100%';
-            celebration.style.pointerEvents = 'none';
-            celebration.style.zIndex = '1000';
-            document.body.appendChild(celebration);
-            const confettiSymbols = ['🎉', '✨', '🌟', '💖', '🌸', '👗', '👑', '💎'];
-           
-           for (let i = 0; i < 30; i++) {
-               const confetti = document.createElement('div');
-               confetti.innerHTML = confettiSymbols[Math.floor(Math.random() * confettiSymbols.length)];
-               confetti.style.position = 'absolute';
-               confetti.style.left = Math.random() * 100 + '%';
-               confetti.style.top = '-50px';
-               confetti.style.fontSize = '2rem';
-               confetti.style.zIndex = '1001';
-               celebration.appendChild(confetti);
+        function addToHistory(action) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('th-TH', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            farmData.history.push({
+                action: action,
+                time: timeString,
+                timestamp: now
+            });
+        }
 
-               confetti.animate([
-                   { 
-                       transform: 'translateY(-50px) rotate(0deg)', 
-                       opacity: 1 
-                   },
-                   { 
-                       transform: `translateY(${window.innerHeight + 100}px) rotate(${360 + Math.random() * 360}deg)`, 
-                       opacity: 0 
-                   }
-               ], {
-                   duration: 3000 + Math.random() * 2000,
-                   easing: 'ease-in'
-               }).onfinish = () => confetti.remove();
-           }
+        function showSuccess(message) {
+            const feedback = document.getElementById('successFeedback');
+            feedback.textContent = message;
+            feedback.classList.add('show');
+            
+            // Play sound if possible
+            try {
+                const audio = new Audio();
+                audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjiS2e/IfCwHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsGJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsH';
+                audio.play().catch(() => {});
+            } catch (e) {}
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 2000);
+        }
 
-           setTimeout(() => celebration.remove(), 6000);
-       }
+        function addPig() {
+            // Ask for number of pigs (simple way)
+            const numPigs = prompt('กี่ตัว?', '1');
+            const num = parseInt(numPigs);
+            
+            if (isNaN(num) || num <= 0) {
+                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
+                return;
+            }
+            
+            farmData.totalPigs += num;
+            farmData.todayAdded += num;
+            
+            const action = `➕ เพิ่มหมู ${num} ตัว (รวม ${farmData.totalPigs} ตัว)`;
+            addToHistory(action);
+            
+            updateDisplay();
+            showSuccess(`เพิ่มหมู ${num} ตัว ✅`);
+        }
 
-       function saveDress() {
-           if (!currentDress) return;
-           
-           const accessoryText = selectedAccessories.length > 0 
-               ? selectedAccessories.map(acc => accessories[acc]).join(', ')
-               : 'ไม่มีเครื่องประดับ';
-           
-           const dressData = `
-👗 ชุดเจ้าหญิงของฉัน 👗
-==============================
+        function removePig() {
+            // Ask for number of pigs
+            const numPigs = prompt('กี่ตัว?', '1');
+            const num = parseInt(numPigs);
+            
+            if (isNaN(num) || num <= 0) {
+                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
+                return;
+            }
+            
+            if (num > farmData.totalPigs) {
+                alert('จำนวนหมูไม่พอ');
+                return;
+            }
+            
+            farmData.totalPigs -= num;
+            farmData.todayRemoved += num;
+            
+            const action = `➖ ลดหมู ${num} ตัว (เหลือ ${farmData.totalPigs} ตัว)`;
+            addToHistory(action);
+            
+            updateDisplay();
+            showSuccess(`ลดหมู ${num} ตัว ✅`);
+        }
 
-📅 วันที่สร้าง: ${new Date().toLocaleString('th-TH')}
-👸 ชื่อชุด: ${currentDress.name}
-🎨 ธีม: ${currentStyle}
+        function sellPig() {
+            // Ask for number and price
+            const numPigs = prompt('ขายกี่ตัว?', '1');
+            const num = parseInt(numPigs);
+            
+            if (isNaN(num) || num <= 0) {
+                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
+                return;
+            }
+            
+            if (num > farmData.totalPigs) {
+                alert('จำนวนหมูไม่พอ');
+                return;
+            }
+            
+            const pricePerPig = prompt('ราคาต่อตัว (บาท)?', '4000');
+            const price = parseInt(pricePerPig);
+            
+            if (isNaN(price) || price <= 0) {
+                alert('กรุณาใส่ราคาที่ถูกต้อง');
+                return;
+            }
+            
+            const totalIncome = num * price;
+            
+            farmData.totalPigs -= num;
+            farmData.todaySold += num;
+            farmData.todayIncome += totalIncome;
+            
+            const action = `💰 ขายหมู ${num} ตัว ได้ ${totalIncome.toLocaleString()} บาท`;
+            addToHistory(action);
+            
+            updateDisplay();
+            showSuccess(`ขายได้ ${totalIncome.toLocaleString()} บาท! 💰`);
+        }
 
-📖 เรื่องราว:
-${currentDress.description}
+        function clearToday() {
+            if (confirm('ต้องการล้างข้อมูลวันนี้หรือไม่?')) {
+                farmData.todayAdded = 0;
+                farmData.todayRemoved = 0;
+                farmData.todaySold = 0;
+                farmData.todayIncome = 0;
+                farmData.history = [];
+                
+                updateDisplay();
+                showSuccess('ล้างข้อมูลวันนี้แล้ว ✅');
+            }
+        }
 
-💎 เครื่องประดับ:
-${accessoryText}
+        // Start the app
+        window.addEventListener('load', initializeApp);
 
-✨ สร้างโดย AI Princess Dress Designer ✨
-🌈 ความฝันของเจ้าหญิงน้อย 🌈
-           `;
-           
-           const blob = new Blob([dressData], { type: 'text/plain;charset=utf-8' });
-           const url = URL.createObjectURL(blob);
-           const a = document.createElement('a');
-           a.href = url;
-           a.download = `ชุดเจ้าหญิง-${currentStyle}-${Date.now()}.txt`;
-           a.click();
-           URL.revokeObjectURL(url);
-
-           // Visual feedback
-           const btn = event.target;
-           const originalText = btn.innerHTML;
-           btn.innerHTML = '✅ บันทึกแล้ว!';
-           btn.style.background = '#28a745';
-           
-           setTimeout(() => {
-               btn.innerHTML = originalText;
-               btn.style.background = '#6f42c1';
-           }, 2000);
-       }
-
-       function readStory() {
-           if (!currentDress) return;
-           
-           const accessoryText = selectedAccessories.length > 0 
-               ? ` พร้อมกับเครื่องประดับ ${selectedAccessories.map(acc => accessories[acc]).join(' ')}`
-               : '';
-           
-           const fullStory = `${currentDress.name}. ${currentDress.description}${accessoryText}`;
-           
-           const utterance = new SpeechSynthesisUtterance(fullStory);
-           utterance.lang = 'th-TH';
-           utterance.rate = 0.8;
-           utterance.pitch = 1.3;
-           speechSynthesis.speak(utterance);
-
-           // Visual feedback
-           const btn = event.target;
-           const originalText = btn.innerHTML;
-           btn.innerHTML = '🔊 กำลังอ่าน...';
-           btn.style.background = '#e91e63';
-           
-           utterance.onend = () => {
-               btn.innerHTML = originalText;
-               btn.style.background = '#6f42c1';
-           };
-       }
-
-       function newDesign() {
-           clearCanvas();
-           selectedAccessories = [];
-           currentDress = null;
-           
-           const resultArea = document.getElementById('resultArea');
-           resultArea.innerHTML = `
-               <div class="result-dress">
-                   <div style="text-align: center; color: #ccc;">
-                       👗<br>
-                       <small>วาดชุดแล้วกด<br>"เปลี่ยนเป็นชุดเจ้าหญิง"</small>
-                   </div>
-               </div>
-               
-               <div style="text-align: center; color: #6f42c1; margin-bottom: 15px;">
-                   รอชุดเจ้าหญิงสวยๆ ของเธออยู่นะ! ✨
-               </div>
-
-               <h3 style="text-align: center; color: #d63384; margin-bottom: 10px;">💎 เครื่องประดับ</h3>
-               <div class="accessories-panel">
-                   <div class="accessory-btn" data-accessory="crown" title="มงกุฎ">👑</div>
-                   <div class="accessory-btn" data-accessory="necklace" title="สร้อยคอ">📿</div>
-                   <div class="accessory-btn" data-accessory="earrings" title="ต่างหู">💎</div>
-                   <div class="accessory-btn" data-accessory="shoes" title="รองเท้าแก้ว">👠</div>
-                   <div class="accessory-btn" data-accessory="wand" title="ไม้เวทมนตร์">🪄</div>
-               </div>
-           `;
-
-           // Reset style selection
-           document.querySelectorAll('.style-option').forEach(o => o.classList.remove('selected'));
-           document.querySelector('.style-option[data-style="cinderella"]').classList.add('selected');
-           currentStyle = 'cinderella';
-       }
-
-       // Touch events for mobile
-       function preventScrolling(e) {
-           if (e.target === canvas) {
-               e.preventDefault();
-           }
-       }
-
-       document.addEventListener('touchstart', preventScrolling, { passive: false });
-       document.addEventListener('touchend', preventScrolling, { passive: false });
-       document.addEventListener('touchmove', preventScrolling, { passive: false });
-
-       // Keyboard shortcuts
-       document.addEventListener('keydown', function(e) {
-           if (e.key === 'Enter' && strokes.length > 0) {
-               generateDress();
-           } else if (e.key === 'Delete' || e.key === 'Backspace') {
-               clearCanvas();
-           } else if (e.ctrlKey && e.key === 'z') {
-               e.preventDefault();
-               undoStroke();
-           }
-       });
-
-       // Initialize the app
-       document.addEventListener('DOMContentLoaded', function() {
-           createSparkles();
-           
-           // Add random sparkle refresher
-           setInterval(() => {
-               if (Math.random() > 0.8) {
-                   createSparkles();
-               }
-           }, 5000);
-
-           // Add welcome message
-           setTimeout(() => {
-               const welcomeMsg = document.createElement('div');
-               welcomeMsg.style.position = 'fixed';
-               welcomeMsg.style.top = '50%';
-               welcomeMsg.style.left = '50%';
-               welcomeMsg.style.transform = 'translate(-50%, -50%)';
-               welcomeMsg.style.background = 'rgba(214, 51, 132, 0.95)';
-               welcomeMsg.style.color = 'white';
-               welcomeMsg.style.padding = '30px';
-               welcomeMsg.style.borderRadius = '20px';
-               welcomeMsg.style.textAlign = 'center';
-               welcomeMsg.style.zIndex = '1000';
-               welcomeMsg.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
-               welcomeMsg.innerHTML = `
-                   <h2 style="margin-bottom: 15px;">🌟 ยินดีต้อนรับสู่โลกแห่งเวทมนตร์! 🌟</h2>
-                   <p style="margin-bottom: 20px;">วาดชุดในฝันของเธอ แล้วเราจะเปลี่ยนให้เป็นชุดเจ้าหญิงสวยๆ!</p>
-                   <button onclick="this.parentElement.remove()" style="background: white; color: #d63384; border: none; padding: 10px 20px; border-radius: 15px; cursor: pointer; font-weight: bold;">
-                       ✨ เริ่มต้นเลย! ✨
-                   </button>
-               `;
-               document.body.appendChild(welcomeMsg);
-               
-               // Auto-remove after 5 seconds
-               setTimeout(() => {
-                   if (welcomeMsg.parentElement) {
-                       welcomeMsg.remove();
-                   }
-               }, 5000);
-           }, 1000);
-       });
-
-       // Add some magical sound effects (optional)
-       function playMagicSound() {
-           // Create a simple beep sound using Web Audio API
-           const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-           const oscillator = audioContext.createOscillator();
-           const gainNode = audioContext.createGain();
-           
-           oscillator.connect(gainNode);
-           gainNode.connect(audioContext.destination);
-           
-           oscillator.frequency.value = 800;
-           oscillator.type = 'sine';
-           gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-           gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-           
-           oscillator.start(audioContext.currentTime);
-           oscillator.stop(audioContext.currentTime + 0.5);
-       }
-
-       // Add magic sound to generate button
-       const originalGenerateDress = generateDress;
-       generateDress = function() {
-           try {
-               playMagicSound();
-           } catch (e) {
-               // Ignore audio errors
-           }
-           originalGenerateDress();
-       };
-
-       // Performance optimization for mobile
-       let isTouch = false;
-       document.addEventListener('touchstart', () => { isTouch = true; });
-       
-       if (isTouch) {
-           // Reduce sparkle count on mobile
-           const sparkles = document.querySelectorAll('.sparkle');
-           sparkles.forEach((sparkle, index) => {
-               if (index > 10) sparkle.remove();
-           });
-       }
-   </script>
+        // Prevent accidental page refresh
+        window.addEventListener('beforeunload', function(e) {
+            if (farmData.history.length > 0) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบจัดการฟาร์ม</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
@@ -14,12 +12,12 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: #e2e8f0;
             padding-bottom: 90px;
             min-height: 100vh;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .mobile-header {
@@ -32,104 +30,114 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
         }
 
         .mobile-header h1 {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 6px;
-            color: #f8fafc;
         }
 
         .mobile-header .date {
-            font-size: 14px;
+            font-size: 16px;
             color: #94a3b8;
-            font-weight: 400;
         }
 
         .quick-stats {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(79, 70, 229, 0.15));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(148, 163, 184, 0.2);
+            border: 2px solid rgba(148, 163, 184, 0.3);
             color: #f1f5f9;
             padding: 32px 24px;
             margin: 20px 16px;
             border-radius: 20px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
-        .quick-stats .main-number {
-            font-family: 'Orbitron', monospace;
-            font-size: 64px;
+        .main-number {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 72px;
             font-weight: 900;
-            margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            color: #60a5fa;
-            text-align: center;
-            letter-spacing: -2px;
+            margin-bottom: 12px;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            padding: 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 3px dashed transparent;
         }
 
-        .quick-stats .main-label {
-            font-size: 18px;
-            font-weight: 500;
+        .main-number:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: scale(1.05);
+        }
+
+        .main-label {
+            font-size: 20px;
+            font-weight: bold;
             margin-bottom: 24px;
             color: #cbd5e1;
         }
 
-        .quick-stats .sub-stats {
+        .sub-stats {
             display: flex;
             justify-content: space-around;
             padding-top: 24px;
-            border-top: 1px solid rgba(148, 163, 184, 0.2);
+            border-top: 2px solid rgba(148, 163, 184, 0.3);
+            gap: 8px;
         }
 
-        .quick-stats .sub-item {
+        .sub-item {
             text-align: center;
             cursor: pointer;
-            padding: 12px;
+            padding: 16px 8px;
             border-radius: 12px;
             transition: all 0.3s ease;
+            flex: 1;
+            border: 2px dashed transparent;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .quick-stats .sub-item:hover {
+        .sub-item:hover {
             background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
             transform: translateY(-2px);
         }
 
-        .quick-stats .sub-number {
-            font-family: 'Orbitron', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #a5f3fc;
+        .sub-number {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            color: #ffffff;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .quick-stats .sub-label {
-            font-size: 12px;
-            font-weight: 400;
+        .sub-label {
+            font-size: 14px;
+            font-weight: bold;
             color: #94a3b8;
         }
 
         .card {
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(20px);
             margin: 16px;
             border-radius: 20px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.2),
-                0 8px 16px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(148, 163, 184, 0.1);
-            border: 1px solid rgba(71, 85, 105, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(71, 85, 105, 0.3);
             overflow: hidden;
         }
 
         .card-header {
             padding: 24px 28px 20px;
-            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            border-bottom: 2px solid rgba(71, 85, 105, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -137,32 +145,22 @@
         }
 
         .card-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: bold;
             color: #f1f5f9;
         }
 
         .card-badge {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 20px;
-            font-family: 'Orbitron', monospace;
-            font-size: 14px;
-            font-weight: 700;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-            min-width: 40px;
+            min-width: 45px;
             text-align: center;
-        }
-
-        .card-badge.warning { 
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        
-        .card-badge.success { 
-            background: linear-gradient(135deg, #10b981, #059669);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
 
         .card-content {
@@ -170,47 +168,47 @@
         }
 
         .alert-item {
-            background: rgba(15, 23, 42, 0.6);
-            border-left: 4px solid #475569;
-            padding: 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border-left: 6px solid #475569;
+            padding: 24px;
             margin-bottom: 16px;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(71, 85, 105, 0.2);
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 2px solid rgba(71, 85, 105, 0.2);
         }
 
         .alert-item:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateX(4px);
+            background: rgba(15, 23, 42, 0.9);
+            transform: translateX(8px);
+            border-left-width: 8px;
         }
 
         .alert-item.critical {
-            background: rgba(127, 29, 29, 0.3);
+            background: rgba(127, 29, 29, 0.4);
             border-left-color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
         }
 
         .alert-item.warning {
-            background: rgba(120, 53, 15, 0.3);
+            background: rgba(120, 53, 15, 0.4);
             border-left-color: #f59e0b;
-            border-color: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.3);
         }
 
-        .alert-item .time {
-            font-size: 13px;
+        .time {
+            font-size: 14px;
             color: #94a3b8;
             margin-top: 8px;
-            font-weight: 400;
+            font-weight: normal;
         }
 
         .money-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.3);
         }
 
         .money-summary {
@@ -223,99 +221,58 @@
         .money-item {
             text-align: center;
             flex: 1;
-            padding: 16px;
-            background: rgba(15, 23, 42, 0.4);
-            border-radius: 12px;
-            border: 1px solid rgba(71, 85, 105, 0.2);
-        }
-
-        .money-value {
-            font-family: 'Orbitron', monospace;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #34d399;
-        }
-
-        .money-label {
-            font-size: 13px;
-            color: #94a3b8;
-            font-weight: 400;
-        }
-
-        .profit-section {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 24px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.1);
-        }
-
-        .profit-amount {
-            font-family: 'Orbitron', monospace;
-            font-size: 36px;
-            font-weight: 900;
-            margin-bottom: 6px;
-            color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .profit-label {
-            font-size: 14px;
-            color: #94a3b8;
-            font-weight: 400;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .metric-box {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(10px);
             padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(71, 85, 105, 0.2);
-            box-shadow: 
-                0 8px 16px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(148, 163, 184, 0.1);
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 2px solid rgba(71, 85, 105, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .metric-box:hover {
+        .money-item:hover {
             background: rgba(15, 23, 42, 0.8);
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            border-color: rgba(16, 185, 129, 0.5);
         }
 
-        .metric-value {
-            font-family: 'Orbitron', monospace;
+        .money-value {
+            font-family: 'Arial Black', Arial, sans-serif;
             font-size: 24px;
-            font-weight: 700;
-            color: #60a5fa;
+            font-weight: bold;
             margin-bottom: 8px;
+            color: #ffffff;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .metric-label {
-            font-size: 12px;
+        .money-label {
+            font-size: 14px;
             color: #94a3b8;
-            font-weight: 400;
-            margin-bottom: 6px;
+            font-weight: bold;
         }
 
-        .metric-trend {
-            font-size: 11px;
-            font-weight: 500;
+        .profit-section {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 28px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid rgba(16, 185, 129, 0.4);
         }
 
-        .metric-trend.up { color: #10b981; }
-        .metric-trend.down { color: #ef4444; }
-        .metric-trend.same { color: #f59e0b; }
+        .profit-amount {
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #10b981;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .profit-label {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: bold;
+        }
 
         .bottom-nav {
             position: fixed;
@@ -324,42 +281,63 @@
             right: 0;
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            border-top: 2px solid rgba(71, 85, 105, 0.3);
             display: flex;
             z-index: 100;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
-            padding: 8px 0;
+            padding: 12px 0;
         }
 
         .nav-item {
             flex: 1;
             text-align: center;
-            padding: 16px 12px;
+            padding: 20px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
+            border: 2px solid transparent;
+            margin: 0 4px;
+            border-radius: 12px;
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(79, 70, 229, 0.3));
             color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.5);
         }
 
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(135deg, #3b82f6, #4f46e5);
-            border-radius: 0 0 6px 6px;
+        .nav-item:not(.active):hover {
+            background: rgba(71, 85, 105, 0.3);
+            border-color: rgba(148, 163, 184, 0.3);
         }
 
         .nav-label {
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab:active {
+            transform: scale(0.9);
         }
 
         .section {
@@ -370,129 +348,132 @@
             display: block;
         }
 
-        .livestock-summary {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .livestock-item {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 20px 16px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(71, 85, 105, 0.2);
-            box-shadow: 
-                0 8px 16px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(148, 163, 184, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .livestock-item:hover {
-            background: rgba(15, 23, 42, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .livestock-number {
-            font-family: 'Orbitron', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            color: #a5f3fc;
-            margin-bottom: 6px;
-        }
-
-        .livestock-label {
-            font-size: 12px;
-            color: #94a3b8;
-            font-weight: 400;
-        }
-
-        .fab {
-            position: fixed;
-            bottom: 100px;
-            right: 24px;
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 
-                0 12px 24px rgba(59, 130, 246, 0.4),
-                0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 99;
-            transition: all 0.3s ease;
-        }
-
-        .fab:hover {
-            transform: scale(1.1);
-        }
-
-        .fab:active {
-            transform: scale(0.95);
-        }
-
         .developing {
             text-align: center;
             padding: 48px 24px;
             color: #64748b;
-            font-size: 16px;
-            font-weight: 400;
+            font-size: 18px;
             line-height: 1.6;
         }
 
-        .editable {
-            background: transparent;
-            border: 2px dashed rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            padding: 4px 8px;
-            color: inherit;
-            font-family: inherit;
-            font-size: inherit;
-            font-weight: inherit;
+        /* Modal สำหรับแก้ไขตัวเลข */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            margin: 50% auto;
+            padding: 32px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            transform: translateY(-50%);
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #f1f5f9;
+            margin-bottom: 20px;
             text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .editable:hover {
-            border-color: rgba(59, 130, 246, 0.6);
-            background: rgba(59, 130, 246, 0.1);
+        .modal-btn.save {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
         }
 
-        .editable:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.2);
+        .modal-btn.cancel {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
         }
 
-        @media (max-width: 360px) {
-            .quick-stats .main-number {
-                font-size: 48px;
-            }
-            
-            .livestock-summary {
-                grid-template-columns: 1fr;
-            }
-            
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .money-summary {
-                flex-direction: column;
-                gap: 12px;
-            }
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 320px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
         }
     </style>
 </head>
 <body>
+    <!-- Modal แก้ไขตัวเลข -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">แก้ไขจำนวน</div>
+            <input type="number" id="modalInput" class="modal-input" placeholder="0">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal()">ยกเลิก</button>
+                <button class="modal-btn save" onclick="saveEdit()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
     <div class="mobile-header">
         <h1>ระบบจัดการฟาร์ม</h1>
         <div class="date" id="currentDate"></div>
@@ -501,19 +482,19 @@
     <!-- หน้าหลัก -->
     <div id="dashboard" class="section active">
         <div class="quick-stats">
-            <div class="main-number editable" id="totalPigs" onclick="editNumber(this, 'totalPigs')">105</div>
+            <div class="main-number" onclick="openEditModal('totalPigs', 'จำนวนสุกรทั้งหมด')" id="totalPigs">105</div>
             <div class="main-label">สุกรทั้งหมด</div>
             <div class="sub-stats">
-                <div class="sub-item" onclick="editNumber(document.getElementById('breedingSows'), 'breedingSows')">
-                    <div class="sub-number editable" id="breedingSows">15</div>
+                <div class="sub-item" onclick="openEditModal('breedingSows', 'แม่พันธุ์')">
+                    <div class="sub-number" id="breedingSows">15</div>
                     <div class="sub-label">แม่พันธุ์</div>
                 </div>
-                <div class="sub-item" onclick="editNumber(document.getElementById('piglets'), 'piglets')">
-                    <div class="sub-number editable" id="piglets">32</div>
+                <div class="sub-item" onclick="openEditModal('piglets', 'ลูกหมู')">
+                    <div class="sub-number" id="piglets">32</div>
                     <div class="sub-label">ลูกหมู</div>
                 </div>
-                <div class="sub-item" onclick="editNumber(document.getElementById('finishers'), 'finishers')">
-                    <div class="sub-number editable" id="finishers">58</div>
+                <div class="sub-item" onclick="openEditModal('finishers', 'หมูขุน')">
+                    <div class="sub-number" id="finishers">58</div>
                     <div class="sub-label">หมูขุน</div>
                 </div>
             </div>
@@ -526,7 +507,7 @@
             </div>
             <div class="card-content">
                 <div class="alert-item critical" onclick="handleAlert(this)">
-                    <div>ฉีดวัคซีน <span class="editable" onclick="editNumber(this, 'vaccine')" id="vaccine">10</span> ตัว</div>
+                    <div>ฉีดวัคซีน 10 ตัว</div>
                     <div class="time">กำหนด: วันนี้</div>
                 </div>
                 <div class="alert-item critical" onclick="handleAlert(this)">
@@ -534,7 +515,7 @@
                     <div class="time">เลยกำหนด: 2 วัน</div>
                 </div>
                 <div class="alert-item warning" onclick="handleAlert(this)">
-                    <div>หมูพร้อมขาย <span class="editable" onclick="editNumber(this, 'readySale')" id="readySale">12</span> ตัว</div>
+                    <div>หมูพร้อมขาย 12 ตัว</div>
                     <div class="time">น้ำหนักถึงเป้าแล้ว</div>
                 </div>
             </div>
@@ -546,12 +527,12 @@
             </div>
             <div class="card-content">
                 <div class="money-summary">
-                    <div class="money-item" onclick="editNumber(document.getElementById('revenue'), 'revenue')">
-                        <div class="money-value editable" id="revenue">48,700</div>
+                    <div class="money-item" onclick="openEditModal('revenue', 'รายได้')">
+                        <div class="money-value" id="revenue">48,700</div>
                         <div class="money-label">รายได้ (บาท)</div>
                     </div>
-                    <div class="money-item" onclick="editNumber(document.getElementById('expenses'), 'expenses')">
-                        <div class="money-value editable" id="expenses">31,700</div>
+                    <div class="money-item" onclick="openEditModal('expenses', 'รายจ่าย')">
+                        <div class="money-value" id="expenses">31,700</div>
                         <div class="money-label">รายจ่าย (บาท)</div>
                     </div>
                 </div>
@@ -561,118 +542,27 @@
                 </div>
             </div>
         </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">ตัวชี้วัดสำคัญ</div>
-            </div>
-            <div class="card-content">
-                <div class="metrics-grid">
-                    <div class="metric-box" onclick="editMetric('mortality')">
-                        <div class="metric-value editable" id="mortality">2.1</div>
-                        <div class="metric-label">อัตราการตาย (%)</div>
-                        <div class="metric-trend down">ลดลง</div>
-                    </div>
-                    <div class="metric-box" onclick="editMetric('dailyGain')">
-                        <div class="metric-value editable" id="dailyGain">650</div>
-                        <div class="metric-label">น้ำหนักขึ้น (g/วัน)</div>
-                        <div class="metric-trend up">ดีขึ้น</div>
-                    </div>
-                    <div class="metric-box" onclick="editMetric('feedConversion')">
-                        <div class="metric-value editable" id="feedConversion">2.8</div>
-                        <div class="metric-label">อัตราแปลงอาหาร</div>
-                        <div class="metric-trend same">ปรับปรุงได้</div>
-                    </div>
-                    <div class="metric-box" onclick="editMetric('daysToMarket')">
-                        <div class="metric-value editable" id="daysToMarket">95</div>
-                        <div class="metric-label">วันถึงตลาด</div>
-                        <div class="metric-trend up">เร็วขึ้น</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!-- หน้าจัดการสุกร -->
+    <!-- หน้าอื่นๆ -->
     <div id="livestock" class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">สุกรในฟาร์ม</div>
-                <div class="card-badge success" id="livestockTotal">105</div>
-            </div>
-            <div class="card-content">
-                <div class="livestock-summary">
-                    <div class="livestock-item" onclick="editLivestock('breedingSows2')">
-                        <div class="livestock-number editable" id="breedingSows2">15</div>
-                        <div class="livestock-label">แม่พันธุ์</div>
-                    </div>
-                    <div class="livestock-item" onclick="editLivestock('piglets2')">
-                        <div class="livestock-number editable" id="piglets2">32</div>
-                        <div class="livestock-label">ลูกหมู</div>
-                    </div>
-                    <div class="livestock-item" onclick="editLivestock('finishers2')">
-                        <div class="livestock-number editable" id="finishers2">58</div>
-                        <div class="livestock-label">หมูขุน</div>
-                    </div>
-                    <div class="livestock-item" onclick="editLivestock('pregnant')">
-                        <div class="livestock-number editable" id="pregnant">3</div>
-                        <div class="livestock-label">ท้อง</div>
-                    </div>
-                    <div class="livestock-item" onclick="editLivestock('sick')">
-                        <div class="livestock-number editable" id="sick">2</div>
-                        <div class="livestock-label">ป่วย</div>
-                    </div>
-                    <div class="livestock-item" onclick="editLivestock('readyToSell')">
-                        <div class="livestock-number editable" id="readyToSell">12</div>
-                        <div class="livestock-label">พร้อมขาย</div>
-                    </div>
-                </div>
-                
-                <div class="developing">
-                    ระบบจัดการรายละเอียด<br>
-                    บันทึกข้อมูลรายตัว<br>
-                    ติดตามการเคลื่อนไหว<br><br>
-                    กำลังพัฒนา...
-                </div>
-            </div>
+        <div class="developing">
+            หน้าจัดการสุกร<br>
+            กำลังพัฒนา...
         </div>
     </div>
 
-    <!-- หน้าสุขภาพ -->
     <div id="health" class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">สุขภาพสุกร</div>
-                <div class="card-badge warning">2</div>
-            </div>
-            <div class="card-content">
-                <div class="developing">
-                    ระบบติดตามสุขภาพ<br>
-                    การฉีดวัคซีน<br>
-                    การรักษาพยาบาล<br>
-                    สถิติการป่วย<br><br>
-                    กำลังพัฒนา...
-                </div>
-            </div>
+        <div class="developing">
+            หน้าสุขภาพสุกร<br>
+            กำลังพัฒนา...
         </div>
     </div>
 
-    <!-- หน้าการเงิน -->
     <div id="finance" class="section">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">การเงินรายละเอียด</div>
-                <div class="card-badge success">+17K</div>
-            </div>
-            <div class="card-content">
-                <div class="developing">
-                    รายงานการเงินแบบละเอียด<br>
-                    วิเคราะห์กำไร-ขาดทุน<br>
-                    ต้นทุนต่อหน่วย<br>
-                    คาดการณ์รายได้<br><br>
-                    กำลังพัฒนา...
-                </div>
-            </div>
+        <div class="developing">
+            หน้าการเงินรายละเอียด<br>
+            กำลังพัฒนา...
         </div>
     </div>
 
@@ -702,17 +592,12 @@
             breedingSows: 15,
             piglets: 32,
             finishers: 58,
-            pregnant: 3,
-            sick: 2,
-            readyToSell: 12,
-            vaccine: 10,
             revenue: 48700,
-            expenses: 31700,
-            mortality: 2.1,
-            dailyGain: 650,
-            feedConversion: 2.8,
-            daysToMarket: 95
+            expenses: 31700
         };
+
+        let currentEditField = '';
+        let currentEditTitle = '';
 
         function updateDate() {
             const now = new Date();
@@ -726,324 +611,180 @@
         }
 
         function showSection(sectionName) {
+            // ซ่อนทุกหน้า
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             
+            // ลบ active จากเมนู
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
+            // แสดงหน้าที่เลือก
             document.getElementById(sectionName).classList.add('active');
+            
+            // เพิ่ม active ให้เมนู
             event.target.closest('.nav-item').classList.add('active');
         }
 
-        function editNumber(element, dataKey) {
-            event.stopPropagation();
-            const currentValue = farmData[dataKey] || element.textContent.replace(/,/g, '');
-            const newValue = prompt('แก้ไขตัวเลข:', currentValue);
+        function openEditModal(fieldName, title) {
+            currentEditField = fieldName;
+            currentEditTitle = title;
             
-            if (newValue !== null && !isNaN(newValue) && newValue !== '') {
-                const numValue = parseFloat(newValue);
-                farmData[dataKey] = numValue;
-                element.textContent = numValue.toLocaleString();
+            document.getElementById('modalTitle').textContent = `แก้ไข${title}`;
+            document.getElementById('modalInput').value = farmData[fieldName] || 0;
+            document.getElementById('editModal').style.display = 'block';
+            
+            // Focus ที่ input
+            setTimeout(() => {
+                document.getElementById('modalInput').focus();
+                document.getElementById('modalInput').select();
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditField = '';
+            currentEditTitle = '';
+        }
+
+        function saveEdit() {
+            const newValue = parseInt(document.getElementById('modalInput').value);
+            
+            if (isNaN(newValue) || newValue < 0) {
+                showNotification('กรุณาใส่ตัวเลขที่ถูกต้อง');
+                return;
+            }
+            
+            // บันทึกข้อมูล
+            farmData[currentEditField] = newValue;
+            
+            // อัปเดตหน้าจอ
+            updateDisplay();
+            
+            // แสดงการแจ้งเตือน
+            showNotification(`แก้ไข${currentEditTitle}: ${newValue.toLocaleString()} สำเร็จ`);
+            
+            // ปิด Modal
+            closeModal();
+        }
+
+        function updateDisplay() {
+            // อัปเดตตัวเลขทั้งหมด
+            Object.keys(farmData).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = farmData[key].toLocaleString();
+                }
+            });
+
+            // คำนวณกำไร
+            const profit = farmData.revenue - farmData.expenses;
+            const profitPercent = farmData.revenue > 0 ? ((profit / farmData.revenue) * 100).toFixed(1) : 0;
+            
+            document.getElementById('profit').textContent = profit >= 0 ? `+${profit.toLocaleString()}` : profit.toLocaleString();
+            document.getElementById('profitPercent').textContent = profitPercent;
+
+            // อัปเดตยอดรวมสุกร
+            const totalPigs = farmData.breedingSows + farmData.piglets + farmData.finishers;
+            farmData.totalPigs = totalPigs;
+            document.getElementById('totalPigs').textContent = totalPigs.toLocaleString();
+        }
+
+        function handleAlert(alertElement) {
+            if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
+                alertElement.style.opacity = '0.3';
+                alertElement.style.transform = 'translateX(100%)';
                 
-                // อัปเดตข้อมูลที่เกี่ยวข้อง
-                updateRelatedData();
-                
-                // เอฟเฟค
-                element.style.transform = 'scale(1.1)';
-                element.style.color = '#10b981';
                 setTimeout(() => {
-                    element.style.transform = '';
-                    element.style.color = '';
+                    alertElement.remove();
+                    updateAlertCount();
                 }, 300);
+                
+                showNotification('ทำงานเสร็จแล้ว');
             }
         }
 
-        function editMetric(metricKey) {
-function editMetric(metricKey) {
-           const element = document.getElementById(metricKey);
-           const currentValue = farmData[metricKey] || element.textContent;
-           const newValue = prompt('แก้ไขตัวเลข:', currentValue);
-           
-           if (newValue !== null && !isNaN(newValue) && newValue !== '') {
-               const numValue = parseFloat(newValue);
-               farmData[metricKey] = numValue;
-               element.textContent = numValue;
-               
-               // เอฟเฟค
-               element.style.transform = 'scale(1.2)';
-               element.style.color = '#3b82f6';
-               setTimeout(() => {
-                   element.style.transform = '';
-                   element.style.color = '';
-               }, 400);
-               
-               saveData();
-           }
-       }
+        function updateAlertCount() {
+            const alertItems = document.querySelectorAll('.alert-item');
+            const count = alertItems.length;
+            document.getElementById('alertCount').textContent = count;
+        }
 
-       function editLivestock(livestockKey) {
-           const element = document.getElementById(livestockKey);
-           const currentValue = farmData[livestockKey] || element.textContent;
-           const newValue = prompt('แก้ไขจำนวนสุกร:', currentValue);
-           
-           if (newValue !== null && !isNaN(newValue) && newValue !== '') {
-               const numValue = parseInt(newValue);
-               farmData[livestockKey] = numValue;
-               element.textContent = numValue;
-               
-               // อัปเดตยอดรวม
-               updateTotalLivestock();
-               
-               // เอฟเฟค
-               element.style.transform = 'scale(1.2)';
-               element.style.color = '#a5f3fc';
-               setTimeout(() => {
-                   element.style.transform = '';
-                   element.style.color = '';
-               }, 400);
-               
-               saveData();
-           }
-       }
+        function quickAction() {
+            const actions = [
+                'เพิ่มสุกรใหม่',
+                'บันทึกการตาย',
+                'บันทึกการขาย',
+                'ฉีดวัคซีน',
+                'ตรวจครรภ์'
+            ];
+            
+            let message = 'เลือกการทำงาน:\n\n';
+            actions.forEach((action, i) => {
+                message += `${i + 1}. ${action}\n`;
+            });
+            
+            const choice = prompt(message);
+            const choiceNum = parseInt(choice);
+            
+            if (choiceNum >= 1 && choiceNum <= actions.length) {
+                showNotification(`${actions[choiceNum - 1]} - กำลังพัฒนา...`);
+            }
+        }
 
-       function updateRelatedData() {
-           // คำนวณกำไร
-           const revenue = farmData.revenue || 48700;
-           const expenses = farmData.expenses || 31700;
-           const profit = revenue - expenses;
-           const profitPercent = ((profit / revenue) * 100).toFixed(1);
-           
-           document.getElementById('profit').textContent = `+${profit.toLocaleString()}`;
-           document.getElementById('profitPercent').textContent = profitPercent;
-           
-           // อัปเดตยอดรวมสุกร
-           updateTotalLivestock();
-       }
+        function showNotification(message) {
+            // ลบ notification เก่า
+            const oldNotification = document.querySelector('.notification');
+            if (oldNotification) {
+                oldNotification.remove();
+            }
 
-       function updateTotalLivestock() {
-           const total = (farmData.breedingSows || 15) + 
-                        (farmData.piglets || 32) + 
-                        (farmData.finishers || 58);
-           
-           farmData.totalPigs = total;
-           
-           // อัปเดตแสดงผล
-           document.getElementById('totalPigs').textContent = total;
-           document.getElementById('livestockTotal').textContent = total;
-           
-           // อัปเดตหน้าสุกรด้วย
-           document.getElementById('breedingSows2').textContent = farmData.breedingSows || 15;
-           document.getElementById('piglets2').textContent = farmData.piglets || 32;
-           document.getElementById('finishers2').textContent = farmData.finishers || 58;
-       }
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // แสดง notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // ซ่อน notification
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
 
-       function handleAlert(alertElement) {
-           if (confirm('ทำงานนี้เสร็จแล้วหรือไม่?')) {
-               alertElement.style.opacity = '0.5';
-               alertElement.style.transform = 'translateX(100%)';
-               
-               setTimeout(() => {
-                   alertElement.remove();
-                   updateAlertCount();
-               }, 300);
-           }
-       }
+        // เมื่อกด Enter ใน Modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.getElementById('editModal').style.display === 'block') {
+                saveEdit();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
 
-       function updateAlertCount() {
-           const alertItems = document.querySelectorAll('.alert-item');
-           const count = alertItems.length;
-           document.getElementById('alertCount').textContent = count;
-           
-           if (count === 0) {
-               document.querySelector('.card-content').innerHTML = `
-                   <div style="text-align: center; padding: 40px; color: #10b981;">
-                       ✓ ไม่มีการแจ้งเตือน<br>
-                       ทุกอย่างเรียบร้อยดี
-                   </div>
-               `;
-           }
-       }
+        // เริ่มต้นระบบ
+        window.addEventListener('load', function() {
+            updateDate();
+            updateDisplay();
+            setInterval(updateDate, 60000);
+            
+            setTimeout(() => {
+                showNotification('ระบบพร้อมใช้งาน - คลิกตัวเลขเพื่อแก้ไข');
+            }, 1000);
+        });
 
-       function quickAction() {
-           const actions = [
-               'เพิ่มสุกรใหม่',
-               'บันทึกการตาย', 
-               'บันทึกการขาย',
-               'ฉีดวัคซีน',
-               'บันทึกการรักษา',
-               'ตรวจครรภ์',
-               'เพิ่มค่าใช้จ่าย',
-               'บันทึกรายได้'
-           ];
-           
-           let actionList = 'เลือกการทำงาน:\n\n';
-           actions.forEach((action, i) => {
-               actionList += `${i+1}. ${action}\n`;
-           });
-           
-           const choice = prompt(actionList);
-           
-           if (choice >= 1 && choice <= actions.length) {
-               handleQuickAction(parseInt(choice), actions[choice-1]);
-           }
-       }
-
-       function handleQuickAction(choice, actionName) {
-           switch(choice) {
-               case 1: // เพิ่มสุกร
-                   const addCount = prompt('เพิ่มสุกรกี่ตัว?', '1');
-                   if (addCount && !isNaN(addCount)) {
-                       farmData.totalPigs += parseInt(addCount);
-                       farmData.piglets += parseInt(addCount);
-                       updateTotalLivestock();
-                       showNotification(`เพิ่มสุกร ${addCount} ตัว สำเร็จ`);
-                   }
-                   break;
-                   
-               case 2: // บันทึกการตาย
-                   const deathCount = prompt('สุกรตายกี่ตัว?', '1');
-                   if (deathCount && !isNaN(deathCount)) {
-                       farmData.totalPigs -= parseInt(deathCount);
-                       updateTotalLivestock();
-                       showNotification(`บันทึกการตาย ${deathCount} ตัว`);
-                   }
-                   break;
-                   
-               case 3: // บันทึกการขาย
-                   const sellCount = prompt('ขายสุกรกี่ตัว?', '1');
-                   const sellPrice = prompt('ราคาต่อตัว (บาท)?', '4000');
-                   if (sellCount && sellPrice && !isNaN(sellCount) && !isNaN(sellPrice)) {
-                       farmData.totalPigs -= parseInt(sellCount);
-                       farmData.revenue += parseInt(sellCount) * parseInt(sellPrice);
-                       updateTotalLivestock();
-                       updateRelatedData();
-                       showNotification(`ขายสุกร ${sellCount} ตัว ได้ ${(parseInt(sellCount) * parseInt(sellPrice)).toLocaleString()} บาท`);
-                   }
-                   break;
-                   
-               case 7: // เพิ่มค่าใช้จ่าย
-                   const expense = prompt('ค่าใช้จ่าย (บาท)?', '1000');
-                   const expenseNote = prompt('หมายเหตุ:', 'ค่าอาหาร');
-                   if (expense && !isNaN(expense)) {
-                       farmData.expenses += parseInt(expense);
-                       updateRelatedData();
-                       showNotification(`เพิ่มค่าใช้จ่าย ${parseInt(expense).toLocaleString()} บาท (${expenseNote})`);
-                   }
-                   break;
-                   
-               default:
-                   showNotification(`${actionName} - กำลังพัฒนา...`);
-           }
-           
-           saveData();
-       }
-
-       function showNotification(message) {
-           const notification = document.createElement('div');
-           notification.style.cssText = `
-               position: fixed;
-               top: 80px;
-               right: 20px;
-               background: rgba(16, 185, 129, 0.9);
-               color: white;
-               padding: 16px 20px;
-               border-radius: 12px;
-               font-size: 14px;
-               font-weight: 500;
-               box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-               z-index: 1000;
-               transform: translateX(100%);
-               transition: transform 0.3s ease;
-               max-width: 300px;
-               word-wrap: break-word;
-           `;
-           notification.textContent = message;
-           document.body.appendChild(notification);
-           
-           setTimeout(() => {
-               notification.style.transform = 'translateX(0)';
-           }, 100);
-           
-           setTimeout(() => {
-               notification.style.transform = 'translateX(100%)';
-               setTimeout(() => notification.remove(), 300);
-           }, 3000);
-       }
-
-       function saveData() {
-           // บันทึกข้อมูลใน memory (จริงๆ ควรส่งไปเซิร์ฟเวอร์)
-           console.log('บันทึกข้อมูล:', farmData);
-           localStorage.setItem('farmData', JSON.stringify(farmData));
-       }
-
-       function loadData() {
-           try {
-               const saved = localStorage.getItem('farmData');
-               if (saved) {
-                   const data = JSON.parse(saved);
-                   farmData = { ...farmData, ...data };
-                   
-                   // อัปเดตหน้าจอ
-                   Object.keys(farmData).forEach(key => {
-                       const element = document.getElementById(key);
-                       if (element) {
-                           element.textContent = farmData[key];
-                       }
-                   });
-                   
-                   updateRelatedData();
-               }
-           } catch (e) {
-               console.log('ไม่สามารถโหลดข้อมูลได้');
-           }
-       }
-
-       // เพิ่มการคำนวณอัตโนมัติ
-       function autoCalculate() {
-           // คำนวณประสิทธิภาพ
-           const mortality = farmData.mortality || 2.1;
-           const dailyGain = farmData.dailyGain || 650;
-           const feedConversion = farmData.feedConversion || 2.8;
-           
-           // คำนวณดัชนีประสิทธิภาพ (สมมติ)
-           const efficiency = (10 - mortality) + (dailyGain / 100) + (4 - feedConversion);
-           
-           // อัปเดตทุกๆ 30 วินาที
-           setTimeout(autoCalculate, 30000);
-       }
-
-       // การทำงานเมื่อโหลดหน้า
-       window.addEventListener('load', function() {
-           updateDate();
-           loadData();
-           autoCalculate();
-           
-           // อัปเดตวันที่ทุกนาที
-           setInterval(updateDate, 60000);
-           
-           // แสดงข้อความต้อนรับ
-           setTimeout(() => {
-               showNotification('ยินดีต้อนรับสู่ระบบจัดการฟาร์ม');
-           }, 1000);
-       });
-
-       // ป้องกันการสูญหายข้อมูล
-       window.addEventListener('beforeunload', function(e) {
-           saveData();
-       });
-
-       // เพิ่มการ backup อัตโนมัติ
-       setInterval(() => {
-           saveData();
-           console.log('Auto-save ข้อมูลฟาร์ม:', new Date().toLocaleTimeString('th-TH'));
-       }, 60000); // ทุกนาที
-   </script>
+        // คลิกนอก Modal เพื่อปิด
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('editModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
-        

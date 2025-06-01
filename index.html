@@ -1,1 +1,707 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการฟาร์มสุกร</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* หน้าจอมือถือ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0;
+            }
+
+            .header {
+                background: linear-gradient(135deg, #4CAF50, #2196F3);
+                color: white;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .header h1 {
+                font-size: 24px;
+                margin-bottom: 5px;
+            }
+
+            .header p {
+                opacity: 0.9;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            /* การ์ดสถิติ */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .stat-card {
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+
+            .stat-number {
+                font-size: 28px;
+                font-weight: bold;
+                color: #4CAF50;
+                margin-bottom: 5px;
+            }
+
+            .stat-label {
+                font-size: 14px;
+                color: #666;
+            }
+
+            /* ฟอร์มเพิ่มข้อมูล */
+            .add-form {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 25px;
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+
+            .form-title {
+                font-size: 20px;
+                margin-bottom: 20px;
+                color: #333;
+                text-align: center;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #555;
+            }
+
+            .form-input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #4CAF50;
+            }
+
+            .form-select {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 16px;
+                background: white;
+            }
+
+            /* ปุ่มใหญ่ */
+            .btn {
+                width: 100%;
+                padding: 15px;
+                border: none;
+                border-radius: 10px;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                margin-bottom: 10px;
+                transition: transform 0.2s;
+            }
+
+            .btn:active {
+                transform: scale(0.98);
+            }
+
+            .btn-primary {
+                background: #4CAF50;
+                color: white;
+            }
+
+            .btn-secondary {
+                background: #2196F3;
+                color: white;
+            }
+
+            .btn-danger {
+                background: #f44336;
+                color: white;
+            }
+
+            /* รายการสุกร */
+            .pig-list {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 25px;
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+
+            .pig-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .pig-item:last-child {
+                border-bottom: none;
+            }
+
+            .pig-info {
+                flex: 1;
+            }
+
+            .pig-type {
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .pig-details {
+                font-size: 14px;
+                color: #666;
+            }
+
+            .pig-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .btn-small {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            .btn-edit {
+                background: #FF9800;
+                color: white;
+            }
+
+            .btn-delete {
+                background: #f44336;
+                color: white;
+            }
+
+            /* เมนูล่าง */
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                display: flex;
+                border-top: 1px solid #e0e0e0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-item {
+                flex: 1;
+                text-align: center;
+                padding: 15px 10px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            .nav-item.active {
+                background: #e8f5e8;
+                color: #4CAF50;
+            }
+
+            .nav-icon {
+                font-size: 24px;
+                margin-bottom: 5px;
+            }
+
+            .nav-text {
+                font-size: 12px;
+            }
+
+            /* ข้อความแจ้งเตือน */
+            .message {
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .message-success {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .message-error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            /* เว้นพื้นที่สำหรับเมนูล่าง */
+            .main-content {
+                padding-bottom: 80px;
+            }
+        }
+
+        /* หน้าจอใหญ่ */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .header {
+                background: #0078d4;
+                color: white;
+                padding: 30px;
+                text-align: center;
+                border-radius: 10px;
+                margin-bottom: 30px;
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+                margin-bottom: 30px;
+                grid-column: 1 / -1;
+            }
+
+            .add-form {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .pig-list {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+
+            .form-group {
+                display: grid;
+                grid-template-columns: 150px 1fr;
+                gap: 15px;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                margin-bottom: 0;
+                text-align: right;
+            }
+
+            .btn {
+                width: auto;
+                padding: 12px 25px;
+                display: inline-block;
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- หัวเรื่อง -->
+        <div class="header">
+            <h1>ระบบจัดการฟาร์มสุกร</h1>
+            <p>จัดการข้อมูลสุกรของคุณได้ง่ายๆ</p>
+        </div>
+
+        <!-- ข้อความแจ้งเตือน -->
+        <div id="message" class="message hidden"></div>
+
+        <!-- สถิติรวม -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalPigs">0</div>
+                <div class="stat-label">สุกรทั้งหมด</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSows">0</div>
+                <div class="stat-label">แม่พันธุ์</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPiglets">0</div>
+                <div class="stat-label">ลูกสุกร</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalFinishers">0</div>
+                <div class="stat-label">สุกรขุน</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- ฟอร์มเพิ่มข้อมูล -->
+            <div class="add-form">
+                <h2 class="form-title">เพิ่มข้อมูลสุกร</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">ประเภทสุกร:</label>
+                    <select class="form-select" id="pigType">
+                        <option value="">เลือกประเภท</option>
+                        <option value="sow">แม่พันธุ์</option>
+                        <option value="piglet">ลูกสุกร</option>
+                        <option value="finisher">สุกรขุน</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">จำนวน:</label>
+                    <input type="number" class="form-input" id="quantity" min="1" placeholder="กรอกจำนวน">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">วันที่เข้าฟาร์ม:</label>
+                    <input type="date" class="form-input" id="entryDate">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">น้ำหนักเฉลี่ย (กก.):</label>
+                    <input type="number" class="form-input" id="weight" step="0.1" placeholder="กรอกน้ำหนัก">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">หมายเหตุ:</label>
+                    <input type="text" class="form-input" id="notes" placeholder="หมายเหตุเพิ่มเติม">
+                </div>
+
+                <button class="btn btn-primary" onclick="addPig()">เพิ่มข้อมูล</button>
+                <button class="btn btn-secondary" onclick="clearForm()">ล้างฟอร์ม</button>
+            </div>
+
+            <!-- รายการสุกร -->
+            <div class="pig-list">
+                <h2 class="form-title">รายการสุกรในฟาร์ม</h2>
+                <div id="pigListContainer">
+                    <p style="text-align: center; color: #666; padding: 20px;">
+                        ยังไม่มีข้อมูลสุกร<br>
+                        เริ่มเพิ่มข้อมูลแรกของคุณ
+                    </p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="exportData()">ส่งออกข้อมูล</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">ล้างข้อมูลทั้งหมด</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- เมนูล่าง (มือถือ) -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">หน้าหลัก</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🐷</div>
+                <div class="nav-text">สุกร</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-text">รายงาน</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-text">ตั้งค่า</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ข้อมูลสุกร
+        let pigs = [];
+        
+        // โหลดข้อมูลเมื่อเริ่มต้น
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateStats();
+            document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
+        });
+
+        // เพิ่มข้อมูลสุกร
+        function addPig() {
+            const pigType = document.getElementById('pigType').value;
+            const quantity = document.getElementById('quantity').value;
+            const entryDate = document.getElementById('entryDate').value;
+            const weight = document.getElementById('weight').value;
+            const notes = document.getElementById('notes').value;
+
+            // ตรวจสอบข้อมูล
+            if (!pigType || !quantity || !entryDate) {
+                showMessage('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+                return;
+            }
+
+            if (quantity < 1) {
+                showMessage('จำนวนต้องมากกว่า 0', 'error');
+                return;
+            }
+
+            // สร้างข้อมูลใหม่
+            const newPig = {
+                id: Date.now(),
+                type: pigType,
+                quantity: parseInt(quantity),
+                entryDate: entryDate,
+                weight: parseFloat(weight) || 0,
+                notes: notes,
+                addedDate: new Date().toLocaleString('th-TH')
+            };
+
+            // เพิ่มลงในรายการ
+            pigs.push(newPig);
+            
+            // บันทึกข้อมูล
+            saveData();
+            
+            // อัพเดทหน้าจอ
+            updateStats();
+            displayPigs();
+            clearForm();
+            
+            showMessage('เพิ่มข้อมูลเรียบร้อย!', 'success');
+        }
+
+        // ล้างฟอร์ม
+        function clearForm() {
+            document.getElementById('pigType').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('entryDate').value = new Date().toISOString().split('T')[0];
+        }
+
+        // อัพเดทสถิติ
+        function updateStats() {
+            const stats = {
+                total: 0,
+                sows: 0,
+                piglets: 0,
+                finishers: 0
+            };
+
+            pigs.forEach(pig => {
+                stats.total += pig.quantity;
+                switch(pig.type) {
+                    case 'sow':
+                        stats.sows += pig.quantity;
+                        break;
+                    case 'piglet':
+                        stats.piglets += pig.quantity;
+                        break;
+                    case 'finisher':
+                        stats.finishers += pig.quantity;
+                        break;
+                }
+            });
+
+            document.getElementById('totalPigs').textContent = stats.total;
+            document.getElementById('totalSows').textContent = stats.sows;
+            document.getElementById('totalPiglets').textContent = stats.piglets;
+            document.getElementById('totalFinishers').textContent = stats.finishers;
+        }
+
+        // แสดงรายการสุกร
+        function displayPigs() {
+            const container = document.getElementById('pigListContainer');
+            
+            if (pigs.length === 0) {
+                container.innerHTML = `
+                    <p style="text-align: center; color: #666; padding: 20px;">
+                        ยังไม่มีข้อมูลสุกร<br>
+                        เริ่มเพิ่มข้อมูลแรกของคุณ
+                    </p>
+                `;
+                return;
+            }
+
+            const typeNames = {
+                'sow': 'แม่พันธุ์',
+                'piglet': 'ลูกสุกร', 
+                'finisher': 'สุกรขุน'
+            };
+
+            let html = '';
+            pigs.forEach(pig => {
+                html += `
+                    <div class="pig-item">
+                        <div class="pig-info">
+                            <div class="pig-type">${typeNames[pig.type]} จำนวน ${pig.quantity} ตัว</div>
+                            <div class="pig-details">
+                                เข้าฟาร์ม: ${new Date(pig.entryDate).toLocaleDateString('th-TH')}
+                                ${pig.weight > 0 ? ` | น้ำหนัก: ${pig.weight} กก.` : ''}
+                                ${pig.notes ? ` | ${pig.notes}` : ''}
+                            </div>
+                        </div>
+                        <div class="pig-actions">
+                            <button class="btn-small btn-edit" onclick="editPig(${pig.id})">แก้ไข</button>
+                            <button class="btn-small btn-delete" onclick="deletePig(${pig.id})">ลบ</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ลบข้อมูลสุกร
+        function deletePig(id) {
+            if (confirm('ต้องการลบข้อมูลนี้หรือไม่?')) {
+                pigs = pigs.filter(pig => pig.id !== id);
+                saveData();
+                updateStats();
+                displayPigs();
+                showMessage('ลบข้อมูลเรียบร้อย', 'success');
+            }
+        }
+
+        // แก้ไขข้อมูลสุกร
+        function editPig(id) {
+            const pig = pigs.find(p => p.id === id);
+            if (pig) {
+                document.getElementById('pigType').value = pig.type;
+                document.getElementById('quantity').value = pig.quantity;
+                document.getElementById('entryDate').value = pig.entryDate;
+                document.getElementById('weight').value = pig.weight;
+                document.getElementById('notes').value = pig.notes;
+                
+                // ลบข้อมูลเก่า
+                deletePig(id);
+                
+                showMessage('ข้อมูลถูกโหลดในฟอร์ม กรุณาแก้ไขและบันทึกใหม่', 'success');
+            }
+        }
+
+        // ล้างข้อมูลทั้งหมด
+        function clearAllData() {
+            if (confirm('ต้องการล้างข้อมูลทั้งหมดหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้')) {
+                pigs = [];
+                saveData();
+                updateStats();
+                displayPigs();
+                showMessage('ล้างข้อมูลทั้งหมดเรียบร้อย', 'success');
+            }
+        }
+
+        // ส่งออกข้อมูล
+        function exportData() {
+            if (pigs.length === 0) {
+                showMessage('ไม่มีข้อมูลให้ส่งออก', 'error');
+                return;
+            }
+
+            const data = {
+                exportDate: new Date().toLocaleString('th-TH'),
+                totalPigs: pigs.reduce((sum, pig) => sum + pig.quantity, 0),
+                pigs: pigs
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `farm-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showMessage('ส่งออกข้อมูลเรียบร้อย', 'success');
+        }
+
+        // บันทึกข้อมูล
+        function saveData() {
+            try {
+                const data = JSON.stringify(pigs);
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('farmPigs', data);
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // โหลดข้อมูล
+        function loadData() {
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const data = localStorage.getItem('farmPigs');
+                    if (data) {
+                        pigs = JSON.parse(data);
+                        displayPigs();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                pigs = [];
+            }
+        }
+
+        // แสดงข้อความ
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.className = `message message-${type}`;
+            messageEl.textContent = text;
+            messageEl.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageEl.classList.add('hidden');
+            }, 3000);
+        }
+
+        // เมนูล่าง
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

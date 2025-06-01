@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐷 ฟาร์มของฉัน</title>
+    <title>Farm Management System - Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -12,517 +13,490 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
-            min-height: 100vh;
-            font-size: 28px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
             line-height: 1.4;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 30px;
-            background: white;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #2e7d32;
+            background: #2c3e50;
             color: white;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-        }
-
-        .farm-title {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .date-display {
-            font-size: 32px;
-            opacity: 0.9;
-        }
-
-        .main-display {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px;
-            background: #f8f9fa;
-            border-radius: 25px;
-            border: 4px solid #2e7d32;
-        }
-
-        .pig-count {
-            font-size: 80px;
-            font-weight: bold;
-            color: #2e7d32;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .pig-label {
-            font-size: 36px;
-            color: #1b5e20;
-            font-weight: bold;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .action-btn {
-            padding: 40px 20px;
-            font-size: 32px;
-            font-weight: bold;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
-        }
-
-        .action-btn:active {
-            transform: translateY(-2px);
-        }
-
-        .btn-add {
-            background: #4caf50;
-            color: white;
-        }
-
-        .btn-remove {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-sell {
-            background: #ff9800;
-            color: white;
-            grid-column: 1 / -1;
-        }
-
-        .summary-section {
-            background: #e3f2fd;
-            padding: 30px;
-            border-radius: 20px;
-            border: 3px solid #1976d2;
-            margin-bottom: 30px;
-        }
-
-        .summary-title {
-            font-size: 36px;
-            color: #1976d2;
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-
-        .summary-item {
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: white;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            border: 2px solid #bbdefb;
-            font-size: 28px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .summary-value {
-            font-weight: bold;
-            color: #1976d2;
-        }
-
-        .history-section {
-            background: #fff3e0;
-            padding: 30px;
-            border-radius: 20px;
-            border: 3px solid #f57c00;
-            margin-bottom: 30px;
-        }
-
-        .history-title {
-            font-size: 36px;
-            color: #f57c00;
-            text-align: center;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-
-        .history-item {
-            background: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            border-left: 8px solid #f57c00;
+        .header h1 {
             font-size: 24px;
+            font-weight: 600;
         }
 
-        .history-time {
-            color: #666;
-            font-size: 20px;
+        .header-info {
+            font-size: 14px;
         }
 
-        .clear-btn {
-            background: #9e9e9e;
+        .nav-bar {
+            background: #34495e;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .nav-item {
+            float: left;
+            padding: 15px 25px;
             color: white;
-            padding: 20px;
-            font-size: 24px;
-            border: none;
-            border-radius: 15px;
             cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
+            transition: background 0.3s;
+            border-right: 1px solid #2c3e50;
         }
 
-        .alert-box {
-            background: #ffebee;
-            border: 3px solid #f44336;
-            border-radius: 15px;
+        .nav-item:hover, .nav-item.active {
+            background: #3498db;
+        }
+
+        .main-content {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 8px;
             padding: 25px;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 28px;
-            color: #c62828;
-            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
         }
 
-        .success-feedback {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #4caf50;
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .inventory-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 3px solid #27ae60;
+        }
+
+        .inventory-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .inventory-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .total-section {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #27ae60;
+            text-align: center;
+        }
+
+        .total-value {
             font-size: 36px;
             font-weight: bold;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            color: #27ae60;
         }
 
-        .success-feedback.show {
-            opacity: 1;
+        .alert-item {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
         }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left-color: #e74c3c;
+        }
+
+        .alert-icon {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .financial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .financial-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .financial-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .financial-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            background: #e9ecef;
+            padding: 12px;
+            margin: 10px -15px -15px -15px;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .metric-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-healthy { background: #27ae60; }
+        .status-warning { background: #f39c12; }
+        .status-critical { background: #e74c3c; }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
             
-            .farm-title {
-                font-size: 36px;
+            .financial-grid, .metrics-grid {
+                grid-template-columns: 1fr;
             }
             
-            .pig-count {
-                font-size: 60px;
-            }
-            
-            .action-btn {
-                font-size: 28px;
-                padding: 30px 15px;
-                min-height: 120px;
+            .inventory-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="farm-title">🐷 ฟาร์มของฉัน</div>
-            <div class="date-display" id="currentDate"></div>
-        </div>
-
-        <div class="main-display">
-            <div class="pig-count" id="pigCount">105</div>
-            <div class="pig-label">ตัว</div>
-        </div>
-
-        <div class="action-buttons">
-            <button class="action-btn btn-add" onclick="addPig()">
-                <div style="font-size: 48px;">➕</div>
-                <div>เพิ่มหมู</div>
-                <div style="font-size: 24px;">(เกิด/ซื้อ)</div>
-            </button>
-
-            <button class="action-btn btn-remove" onclick="removePig()">
-                <div style="font-size: 48px;">➖</div>
-                <div>ลดหมู</div>
-                <div style="font-size: 24px;">(ตาย/ใช้เอง)</div>
-            </button>
-
-            <button class="action-btn btn-sell" onclick="sellPig()">
-                <div style="font-size: 48px;">💰</div>
-                <div>ขายหมู</div>
-                <div style="font-size: 24px;">(ได้เงิน)</div>
-            </button>
-        </div>
-
-        <div class="summary-section">
-            <div class="summary-title">📊 สรุปวันนี้</div>
-            <div class="summary-item">
-                <span>หมูเพิ่ม:</span>
-                <span class="summary-value" id="todayAdded">0 ตัว</span>
-            </div>
-            <div class="summary-item">
-                <span>หมูลด:</span>
-                <span class="summary-value" id="todayRemoved">0 ตัว</span>
-            </div>
-            <div class="summary-item">
-                <span>หมูขาย:</span>
-                <span class="summary-value" id="todaySold">0 ตัว</span>
-            </div>
-            <div class="summary-item">
-                <span>รายได้:</span>
-                <span class="summary-value" id="todayIncome">0 บาท</span>
-            </div>
-        </div>
-
-        <div class="history-section">
-            <div class="history-title">📝 กิจกรรมล่าสุด</div>
-            <div id="historyList">
-                <div class="history-item">
-                    <div>ยังไม่มีกิจกรรมวันนี้</div>
-                    <div class="history-time">รอการบันทึก</div>
-                </div>
-            </div>
-            <button class="clear-btn" onclick="clearToday()">🗑️ ล้างข้อมูลวันนี้</button>
+    <div class="header">
+        <h1>🏭 FARM MANAGEMENT SYSTEM v2.1</h1>
+        <div class="header-info">
+            <strong>USER:</strong> Admin | <strong>DATE:</strong> <span id="currentDate"></span>
         </div>
     </div>
 
-    <div class="success-feedback" id="successFeedback"></div>
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showSection('dashboard')">📊 DASHBOARD</div>
+        <div class="nav-item" onclick="showSection('livestock')">🐷 LIVESTOCK</div>
+        <div class="nav-item" onclick="showSection('breeding')">🧬 BREEDING</div>
+        <div class="nav-item" onclick="showSection('health')">🏥 HEALTH</div>
+        <div class="nav-item" onclick="showSection('finance')">💰 FINANCE</div>
+        <div class="nav-item" onclick="showSection('schedule')">📅 SCHEDULE</div>
+        <div class="nav-item" onclick="showSection('reports')">📊 REPORTS</div>
+    </div>
+
+    <div class="main-content">
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard-section">
+            <div class="dashboard-grid">
+                <!-- LIVESTOCK INVENTORY -->
+                <div class="widget">
+                    <div class="widget-title">🐷 LIVESTOCK INVENTORY</div>
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="inventory-label">BREEDING SOW</div>
+                            <div class="inventory-value">15</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">PREGNANT</div>
+                            <div class="inventory-value">3</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">STATUS</div>
+                            <div style="margin-top: 5px;">
+                                <span class="status-indicator status-healthy"></span>HEALTHY
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="inventory-label">PIGLETS (0-8 WK)</div>
+                            <div class="inventory-value">32</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">SICK</div>
+                            <div class="inventory-value">2</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">STATUS</div>
+                            <div style="margin-top: 5px;">
+                                <span class="status-indicator status-warning"></span>TREATMENT
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="inventory-grid">
+                        <div class="inventory-item">
+                            <div class="inventory-label">FINISHER (8+ WK)</div>
+                            <div class="inventory-value">58</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">READY SALE</div>
+                            <div class="inventory-value">12</div>
+                        </div>
+                        <div class="inventory-item">
+                            <div class="inventory-label">STATUS</div>
+                            <div style="margin-top: 5px;">
+                                <span class="status-indicator status-healthy"></span>READY
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="total-section">
+                        <div class="inventory-label">TOTAL POPULATION</div>
+                        <div class="total-value">105</div>
+                    </div>
+                </div>
+
+                <!-- ALERTS & NOTIFICATIONS -->
+                <div class="widget">
+                    <div class="widget-title">⚠️ ALERTS & NOTIFICATIONS</div>
+                    <div class="alert-item alert-critical">
+                        <span class="alert-icon">[!]</span>
+                        <span>VACCINATION DUE: 10 PIGS (วันนี้)</span>
+                    </div>
+                    <div class="alert-item alert-critical">
+                        <span class="alert-icon">[!]</span>
+                        <span>PREGNANCY CHECK: SOW#03 (เลยกำหนด 2 วัน)</span>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-icon">[!]</span>
+                        <span>READY FOR SALE: 12 PIGS (น้ำหนักถึงเป้า)</span>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-icon">[i]</span>
+                        <span>FEED INVENTORY: 78% (เหลือ 15 วัน)</span>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-icon">[i]</span>
+                        <span>MEDICINE STOCK: ANTIBIOTIC LOW (เหลือ 3 ขวด)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- FINANCIAL OVERVIEW -->
+                <div class="widget">
+                    <div class="widget-title">💰 FINANCIAL OVERVIEW (เดือนนี้)</div>
+                    <div class="financial-grid">
+                        <div class="financial-section">
+                            <h4 style="margin-bottom: 10px; color: #27ae60;">📈 REVENUE</h4>
+                            <div class="financial-item">
+                                <span>PIG SALES:</span>
+                                <span>45,000 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>BY-PRODUCTS:</span>
+                                <span>2,500 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>BREEDING FEES:</span>
+                                <span>1,200 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>TOTAL REVENUE:</span>
+                                <span style="color: #27ae60;">48,700 ฿</span>
+                            </div>
+                        </div>
+                        
+                        <div class="financial-section">
+                            <h4 style="margin-bottom: 10px; color: #e74c3c;">📉 EXPENSES</h4>
+                            <div class="financial-item">
+                                <span>FEED:</span>
+                                <span>18,000 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>MEDICINE/VET:</span>
+                                <span>3,500 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>LABOR:</span>
+                                <span>8,000 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>UTILITIES:</span>
+                                <span>2,200 ฿</span>
+                            </div>
+                            <div class="financial-item">
+                                <span>TOTAL EXPENSES:</span>
+                                <span style="color: #e74c3c;">31,700 ฿</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
+                        <div style="font-size: 16px; margin-bottom: 5px;">💰 NET PROFIT</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #27ae60;">+17,000 ฿</div>
+                        <div style="font-size: 14px; color: #155724;">Profit Margin: 34.9%</div>
+                    </div>
+                </div>
+
+                <!-- PRODUCTION METRICS -->
+                <div class="widget">
+                    <div class="widget-title">📊 PRODUCTION METRICS</div>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">2.1%</div>
+                            <div class="metric-label">MORTALITY RATE</div>
+                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px;">↓ จากเดือนที่แล้ว</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">650g</div>
+                            <div class="metric-label">AVG DAILY GAIN</div>
+                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px;">↑ เป้าหมาย 600g</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">2.8:1</div>
+                            <div class="metric-label">FEED CONVERSION</div>
+                            <div style="font-size: 11px; color: #f39c12; margin-top: 3px;">→ เป้าหมาย 2.5:1</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">95</div>
+                            <div class="metric-label">DAYS TO MARKET</div>
+                            <div style="font-size: 11px; color: #27ae60; margin-top: 3px;">↓ เร็วกว่าแผน 5 วัน</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
+                        <div style="font-size: 16px; margin-bottom: 5px;">🎯 EFFICIENCY INDEX</div>
+                        <div style="font-size: 32px; font-weight: bold; color: #3498db;">7.2</div>
+                        <div style="font-size: 14px; color: #1976d2;">เป้าหมาย: 8.0 (ปรับปรุงได้)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVESTOCK SECTION (จะแสดงเมื่อคลิก) -->
+        <div id="livestock-section" style="display: none;">
+            <div class="widget">
+                <div class="widget-title">🐷 LIVESTOCK MANAGEMENT</div>
+                <p style="padding: 20px; font-size: 16px; color: #7f8c8d;">
+                    📋 โมดูลนี้จะประกอบด้วย:<br><br>
+                    • <strong>Inventory Management</strong> - จัดการปศุสัตว์ทั้งหมด<br>
+                    • <strong>Individual Records</strong> - ข้อมูลรายตัว<br>
+                    • <strong>Batch Management</strong> - จัดการเป็นกลุ่ม<br>
+                    • <strong>Movement Tracking</strong> - ติดตามการเคลื่อนไหว<br><br>
+                    <em>กำลังพัฒนา...</em>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Farm data (stored in memory, resets on refresh)
-        let farmData = {
-            totalPigs: 105,
-            todayAdded: 0,
-            todayRemoved: 0,
-            todaySold: 0,
-            todayIncome: 0,
-            history: []
-        };
-
-        // Initialize the app
-        function initializeApp() {
-            updateDisplay();
-            updateDate();
-            
-            // Update date every minute
-            setInterval(updateDate, 60000);
-        }
-
+        // Update current date
         function updateDate() {
             const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            document.getElementById('currentDate').textContent = 
-                now.toLocaleDateString('th-TH', options);
-        }
-
-        function updateDisplay() {
-            document.getElementById('pigCount').textContent = farmData.totalPigs;
-            document.getElementById('todayAdded').textContent = farmData.todayAdded + ' ตัว';
-            document.getElementById('todayRemoved').textContent = farmData.todayRemoved + ' ตัว';
-            document.getElementById('todaySold').textContent = farmData.todaySold + ' ตัว';
-            document.getElementById('todayIncome').textContent = farmData.todayIncome.toLocaleString() + ' บาท';
-            
-            updateHistory();
-        }
-
-        function updateHistory() {
-            const historyList = document.getElementById('historyList');
-            
-            if (farmData.history.length === 0) {
-                historyList.innerHTML = `
-                    <div class="history-item">
-                        <div>ยังไม่มีกิจกรรมวันนี้</div>
-                        <div class="history-time">รอการบันทึก</div>
-                    </div>
-                `;
-                return;
-            }
-
-            historyList.innerHTML = '';
-            
-            // Show last 5 activities
-            const recentHistory = farmData.history.slice(-5).reverse();
-            
-            recentHistory.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div>${item.action}</div>
-                    <div class="history-time">${item.time}</div>
-                `;
-                historyList.appendChild(historyItem);
+            const dateStr = now.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
             });
+            document.getElementById('currentDate').textContent = dateStr;
         }
 
-        function addToHistory(action) {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('th-TH', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
+        // Navigation function
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('livestock-section').style.display = 'none';
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
             });
             
-            farmData.history.push({
-                action: action,
-                time: timeString,
-                timestamp: now
-            });
-        }
-
-        function showSuccess(message) {
-            const feedback = document.getElementById('successFeedback');
-            feedback.textContent = message;
-            feedback.classList.add('show');
-            
-            // Play sound if possible
-            try {
-                const audio = new Audio();
-                audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjiS2e/IfCwHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsGJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsHJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBjmU2e7HfCsH';
-                audio.play().catch(() => {});
-            } catch (e) {}
-            
-            setTimeout(() => {
-                feedback.classList.remove('show');
-            }, 2000);
-        }
-
-        function addPig() {
-            // Ask for number of pigs (simple way)
-            const numPigs = prompt('กี่ตัว?', '1');
-            const num = parseInt(numPigs);
-            
-            if (isNaN(num) || num <= 0) {
-                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
-                return;
-            }
-            
-            farmData.totalPigs += num;
-            farmData.todayAdded += num;
-            
-            const action = `➕ เพิ่มหมู ${num} ตัว (รวม ${farmData.totalPigs} ตัว)`;
-            addToHistory(action);
-            
-            updateDisplay();
-            showSuccess(`เพิ่มหมู ${num} ตัว ✅`);
-        }
-
-        function removePig() {
-            // Ask for number of pigs
-            const numPigs = prompt('กี่ตัว?', '1');
-            const num = parseInt(numPigs);
-            
-            if (isNaN(num) || num <= 0) {
-                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
-                return;
-            }
-            
-            if (num > farmData.totalPigs) {
-                alert('จำนวนหมูไม่พอ');
-                return;
-            }
-            
-            farmData.totalPigs -= num;
-            farmData.todayRemoved += num;
-            
-            const action = `➖ ลดหมู ${num} ตัว (เหลือ ${farmData.totalPigs} ตัว)`;
-            addToHistory(action);
-            
-            updateDisplay();
-            showSuccess(`ลดหมู ${num} ตัว ✅`);
-        }
-
-        function sellPig() {
-            // Ask for number and price
-            const numPigs = prompt('ขายกี่ตัว?', '1');
-            const num = parseInt(numPigs);
-            
-            if (isNaN(num) || num <= 0) {
-                alert('กรุณาใส่ตัวเลขที่ถูกต้อง');
-                return;
-            }
-            
-            if (num > farmData.totalPigs) {
-                alert('จำนวนหมูไม่พอ');
-                return;
-            }
-            
-            const pricePerPig = prompt('ราคาต่อตัว (บาท)?', '4000');
-            const price = parseInt(pricePerPig);
-            
-            if (isNaN(price) || price <= 0) {
-                alert('กรุณาใส่ราคาที่ถูกต้อง');
-                return;
-            }
-            
-            const totalIncome = num * price;
-            
-            farmData.totalPigs -= num;
-            farmData.todaySold += num;
-            farmData.todayIncome += totalIncome;
-            
-            const action = `💰 ขายหมู ${num} ตัว ได้ ${totalIncome.toLocaleString()} บาท`;
-            addToHistory(action);
-            
-            updateDisplay();
-            showSuccess(`ขายได้ ${totalIncome.toLocaleString()} บาท! 💰`);
-        }
-
-        function clearToday() {
-            if (confirm('ต้องการล้างข้อมูลวันนี้หรือไม่?')) {
-                farmData.todayAdded = 0;
-                farmData.todayRemoved = 0;
-                farmData.todaySold = 0;
-                farmData.todayIncome = 0;
-                farmData.history = [];
-                
-                updateDisplay();
-                showSuccess('ล้างข้อมูลวันนี้แล้ว ✅');
+            // Show selected section
+            if (section === 'dashboard') {
+                document.getElementById('dashboard-section').style.display = 'block';
+                document.querySelectorAll('.nav-item')[0].classList.add('active');
+            } else if (section === 'livestock') {
+                document.getElementById('livestock-section').style.display = 'block';
+                document.querySelectorAll('.nav-item')[1].classList.add('active');
+            } else {
+                // For other sections, just highlight nav
+                document.querySelector(`.nav-item:nth-child(${getNavIndex(section)})`).classList.add('active');
+                alert(`โมดูล ${section.toUpperCase()} กำลังพัฒนา...`);
+                setTimeout(() => showSection('dashboard'), 100);
             }
         }
 
-        // Start the app
-        window.addEventListener('load', initializeApp);
+        function getNavIndex(section) {
+            const sections = ['dashboard', 'livestock', 'breeding', 'health', 'finance', 'schedule', 'reports'];
+            return sections.indexOf(section) + 1;
+        }
 
-        // Prevent accidental page refresh
-        window.addEventListener('beforeunload', function(e) {
-            if (farmData.history.length > 0) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
+        // Initialize
+        updateDate();
+        setInterval(updateDate, 60000); // Update every minute
+
+        // Auto-refresh data every 5 minutes (simulation)
+        setInterval(() => {
+            console.log('Refreshing farm data...');
+            // Here you would fetch real data from server
+        }, 300000);
     </script>
 </body>
 </html>

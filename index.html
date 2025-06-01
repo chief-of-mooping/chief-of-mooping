@@ -1786,132 +1786,137 @@
        }
 
        function generateUsageReport(container) {
-           const last30Days = new Date();
-           last30Days.setDate(last30Days.getDate() - 30);
-           const last30DaysStr = last30Days.toISOString().split('T')[0];
-           
-           const recentUsage = farmData.usage.filter(usage => usage.date >= last30DaysStr);
-           const feedUsage = recentUsage.filter(u => u.type === 'feed');
-           const medicalUsage = recentUsage.filter(u => u.type === 'medical');
-           
-           const totalFeedUsed = feedUsage.reduce((sum, u) => sum + u.amount, 0);
-           const totalMedicalUsed = medicalUsage.reduce((sum, u) => sum + u.amount, 0);
-           const avgFeedPerDay = totalFeedUsed / 30;
-           const avgMedicalPerDay = totalMedicalUsed / 30;
+    const last30Days = new Date();
+    last30Days.setDate(last30Days.getDate() - 30);
+    const last30DaysStr = last30Days.toISOString().split('T')[0];
+    
+    const recentUsage = farmData.usage.filter(usage => usage.date >= last30DaysStr);
+    const feedUsage = recentUsage.filter(u => u.type === 'feed');
+    const medicalUsage = recentUsage.filter(u => u.type === 'medical');
+    
+    const totalFeedUsed = feedUsage.reduce((sum, u) => sum + u.amount, 0);
+    const totalMedicalUsed = medicalUsage.reduce((sum, u) => sum + u.amount, 0);
+    const avgFeedPerDay = totalFeedUsed / 30;
+    const avgMedicalPerDay = totalMedicalUsed / 30;
 
-           // จัดกลุ่มข้อมูลตามวันที่
-           const usageByDate = {};
-           recentUsage.forEach(usage => {
-               if (!usageByDate[usage.date]) {
-                   usageByDate[usage.date] = [];
-               }
-               usageByDate[usage.date].push(usage);
-           });
+    // จัดกลุ่มข้อมูลตามวันที่
+    const usageByDate = {};
+    recentUsage.forEach(usage => {
+        if (!usageByDate[usage.date]) {
+            usageByDate[usage.date] = [];
+        }
+        usageByDate[usage.date].push(usage);
+    });
 
-           const sortedDates = Object.keys(usageByDate).sort().reverse();
+    const sortedDates = Object.keys(usageByDate).sort().reverse();
 
-           container.innerHTML = `
-               <div class="card">
-                   <div class="card-title">รายงานการใช้งาน (30 วันล่าสุด)</div>
-                   
-                   <div class="form-grid" style="margin-bottom: 30px;">
-                       <div>
-                           <h4>การใช้อาหาร</h4>
-                           <p><strong>ใช้รวม:</strong> ${totalFeedUsed.toLocaleString()} กก.</p>
-                           <p><strong>เฉลี่ยต่อวัน:</strong> ${avgFeedPerDay.toFixed(1)} กก.</p>
-                           <p><strong>จำนวนครั้ง:</strong> ${feedUsage.length} ครั้ง</p>
-                       </div>
-                       <div>
-                           <h4>การใช้ยา/วัคซีน</h4>
-                           <p><strong>ใช้รวม:</strong> ${totalMedicalUsed.toLocaleString()} หน่วย</p>
-                           <p><strong>เฉลี่ยต่อวัน:</strong> ${avgMedicalPerDay.toFixed(1)} หน่วย</p>
-                           <p><strong>จำนวนครั้ง:</strong> ${medicalUsage.length} ครั้ง</p>
-                       </div>
-                   </div>
+    // สร้าง HTML แบบแยกส่วน
+    let tableHTML = '';
+    
+    if (sortedDates.length === 0) {
+        tableHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
+                    ไม่มีข้อมูลการใช้งานใน 30 วันล่าสุด
+                </td>
+            </tr>
+        `;
+    } else {
+        sortedDates.forEach((date, dateIndex) => {
+            const dateUsage = usageByDate[date];
+            const formattedDate = new Date(date).toLocaleDateString('th-TH');
+            
+            dateUsage.forEach((usage, usageIndex) => {
+                const typeText = usage.type === 'feed' ? 'อาหาร' : 'ยา/วัคซีน';
+                const timeText = new Date(usage.time).toLocaleTimeString('th-TH', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const isFirstRowOfDate = usageIndex === 0;
+                
+                tableHTML += `
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="${isFirstRowOfDate ? 'border-left: 4px solid #3498db; font-weight: 600;' : 'padding-left: 20px; color: #999;'}">${isFirstRowOfDate ? formattedDate : ''}</td>
+                        <td>
+                            <span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; ${usage.type === 'feed' ? 'background: #e8f5e8; color: #27ae60;' : 'background: #fef9e7; color: #f39c12;'}">${typeText}</span>
+                        </td>
+                        <td style="font-weight: 500;">${usage.itemName}</td>
+                        <td style="text-align: right; font-weight: 600;">${usage.amount} ${usage.unit}</td>
+                        <td style="color: #666; font-size: 14px;">${timeText}</td>
+                    </tr>
+                `;
+            });
+            
+            // เส้นแบ่งระหว่างวัน (ยกเว้นวันสุดท้าย)
+            if (dateIndex < sortedDates.length - 1) {
+                tableHTML += `
+                    <tr>
+                        <td colspan="5" style="height: 8px; background: #f8f9fa; border: none;"></td>
+                    </tr>
+                `;
+            }
+        });
+    }
 
-                   <div style="margin-top: 30px;">
-                       <h4>รายละเอียดการใช้งานแยกตามวัน</h4>
-                       <div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px;">
-                           <table class="table" style="margin: 0;">
-                               <thead style="position: sticky; top: 0; background: #34495e; z-index: 10;">
-                                   <tr>
-                                       <th style="width: 120px;">วันที่</th>
-                                       <th style="width: 120px;">ประเภท</th>
-                                       <th style="min-width: 250px;">รายการ</th>
-                                       <th style="width: 100px;">จำนวน</th>
-                                       <th style="width: 80px;">เวลา</th>
-                                   </tr>
-                               </thead>
-                               <tbody>
-           `;
+    // สร้าง HTML สมบูรณ์
+    container.innerHTML = `
+        <div class="card">
+            <div class="card-title">รายงานการใช้งาน (30 วันล่าสุด)</div>
+            
+            <!-- สรุปภาพรวม -->
+            <div class="form-grid" style="margin-bottom: 30px;">
+                <div>
+                    <h4>การใช้อาหาร</h4>
+                    <p><strong>ใช้รวม:</strong> ${totalFeedUsed.toLocaleString()} กก.</p>
+                    <p><strong>เฉลี่ยต่อวัน:</strong> ${avgFeedPerDay.toFixed(1)} กก.</p>
+                    <p><strong>จำนวนครั้ง:</strong> ${feedUsage.length} ครั้ง</p>
+                </div>
+                <div>
+                    <h4>การใช้ยา/วัคซีน</h4>
+                    <p><strong>ใช้รวม:</strong> ${totalMedicalUsed.toLocaleString()} หน่วย</p>
+                    <p><strong>เฉลี่ยต่อวัน:</strong> ${avgMedicalPerDay.toFixed(1)} หน่วย</p>
+                    <p><strong>จำนวนครั้ง:</strong> ${medicalUsage.length} ครั้ง</p>
+                </div>
+            </div>
 
-           if (sortedDates.length === 0) {
-               container.innerHTML += `
-                                   <tr>
-                                       <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
-                                           ไม่มีข้อมูลการใช้งานใน 30 วันล่าสุด
-                                       </td>
-                                   </tr>
-               `;
-           } else {
-               sortedDates.forEach(date => {
-                   const dateUsage = usageByDate[date];
-                   const formattedDate = new Date(date).toLocaleDateString('th-TH');
-                   
-                   let isFirstRow = true;
-                   
-                   dateUsage.forEach(usage => {
-                       const typeText = usage.type === 'feed' ? 'อาหาร' : 'ยา/วัคซีน';
-                       const timeText = new Date(usage.time).toLocaleTimeString('th-TH', {
-                           hour: '2-digit',
-                           minute: '2-digit'
-                       });
-                       
-                       container.innerHTML += `
-                           <tr style="border-bottom: 1px solid #f0f0f0;">
-                               <td style="${isFirstRow ? 'border-left: 4px solid #3498db; font-weight: 600;' : 'padding-left: 20px; color: #999;'}">${isFirstRow ? formattedDate : ''}</td>
-                               <td>
-                                   <span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; ${usage.type === 'feed' ? 'background: #e8f5e8; color: #27ae60;' : 'background: #fef9e7; color: #f39c12;'}">${typeText}</span>
-                               </td>
-                               <td style="font-weight: 500;">${usage.itemName}</td>
-                               <td style="text-align: right; font-weight: 600;">${usage.amount} ${usage.unit}</td>
-                               <td style="color: #666; font-size: 14px;">${timeText}</td>
-                           </tr>
-                       `;
-                       isFirstRow = false;
-                   });
-                   
-                   if (sortedDates.indexOf(date) < sortedDates.length - 1) {
-                       container.innerHTML += `
-                           <tr>
-                               <td colspan="5" style="height: 8px; background: #f8f9fa; border: none;"></td>
-                           </tr>
-                       `;
-                   }
-               });
-           }
-
-           container.innerHTML += `
-                               </tbody>
-                           </table>
-                       </div>
-                       
-                       <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
-                           <div class="form-grid">
-                               <div>
-                                   <p><strong>จำนวนวันที่มีการใช้งาน:</strong> ${sortedDates.length} วัน</p>
-                                   <p><strong>รายการทั้งหมด:</strong> ${recentUsage.length} รายการ</p>
-                               </div>
-                               <div>
-                                   <p><strong>วันที่เริ่มต้น:</strong> ${sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]).toLocaleDateString('th-TH') : '-'}</p>
-                                   <p><strong>วันล่าสุด:</strong> ${sortedDates.length > 0 ? new Date(sortedDates[0]).toLocaleDateString('th-TH') : '-'}</p>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           `;
-       }
+            <!-- ตารางรายละเอียดการใช้งาน -->
+            <div style="margin-top: 30px;">
+                <h4>รายละเอียดการใช้งานแยกตามวัน</h4>
+                <div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; margin-top: 15px;">
+                    <table class="table" style="margin: 0;">
+                        <thead style="position: sticky; top: 0; background: #34495e; z-index: 10;">
+                            <tr>
+                                <th style="width: 120px; color: white;">วันที่</th>
+                                <th style="width: 120px; color: white;">ประเภท</th>
+                                <th style="min-width: 250px; color: white;">รายการ</th>
+                                <th style="width: 100px; color: white;">จำนวน</th>
+                                <th style="width: 80px; color: white;">เวลา</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableHTML}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- สรุปท้ายตาราง -->
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                    <div class="form-grid">
+                        <div>
+                            <p><strong>จำนวนวันที่มีการใช้งาน:</strong> ${sortedDates.length} วัน</p>
+                            <p><strong>รายการทั้งหมด:</strong> ${recentUsage.length} รายการ</p>
+                        </div>
+                        <div>
+                            <p><strong>วันที่เริ่มต้น:</strong> ${sortedDates.length > 0 ? new Date(sortedDates[sortedDates.length - 1]).toLocaleDateString('th-TH') : '-'}</p>
+                            <p><strong>วันล่าสุด:</strong> ${sortedDates.length > 0 ? new Date(sortedDates[0]).toLocaleDateString('th-TH') : '-'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
        function generateStockReport(container) {
            const totalFeedValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);

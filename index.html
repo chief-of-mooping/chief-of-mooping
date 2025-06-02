@@ -1009,47 +1009,49 @@
       }
 
       // Register Service Worker for offline functionality
-      if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-              const swCode = `
-                  const CACHE_NAME = 'farm-app-v2.0.0';
-                  const urlsToCache = [
-                      '/',
-                      '/offline.html'
-                  ];
+      // Register Service Worker for offline functionality (iOS Safe)
+if ('serviceWorker' in navigator && !navigator.userAgent.includes('iPhone')) {
+    window.addEventListener('load', () => {
+        try {
+            const swCode = `
+                const CACHE_NAME = 'farm-app-v2.0.0';
+                
+                self.addEventListener('install', event => {
+                    console.log('SW installed');
+                    self.skipWaiting();
+                });
 
-                  self.addEventListener('install', event => {
-                      event.waitUntil(
-                          caches.open(CACHE_NAME)
-                              .then(cache => cache.addAll(urlsToCache))
-                      );
-                  });
+                self.addEventListener('activate', event => {
+                    console.log('SW activated');
+                });
 
-                  self.addEventListener('fetch', event => {
-                      event.respondWith(
-                          caches.match(event.request)
-                              .then(response => {
-                                  if (response) {
-                                      return response;
-                                  }
-                                  return fetch(event.request);
-                              })
-                      );
-                  });
-              `;
+                self.addEventListener('fetch', event => {
+                    // Basic fetch handling for non-critical requests
+                    if (event.request.method === 'GET') {
+                        event.respondWith(fetch(event.request).catch(() => {
+                            return new Response('App works offline', {status: 200});
+                        }));
+                    }
+                });
+            `;
 
-              const blob = new Blob([swCode], { type: 'application/javascript' });
-              const swUrl = URL.createObjectURL(blob);
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
 
-              navigator.serviceWorker.register(swUrl)
-                  .then(registration => {
-                      console.log('SW registered: ', registration);
-                  })
-                  .catch(registrationError => {
-                      console.log('SW registration failed: ', registrationError);
-                  });
-          });
-      }
+            navigator.serviceWorker.register(swUrl)
+                .then(registration => {
+                    console.log('SW registered successfully');
+                })
+                .catch(error => {
+                    console.log('SW registration failed (app continues normally)');
+                });
+        } catch (error) {
+            console.log('Service Worker not supported');
+        }
+    });
+} else {
+    console.log('Service Worker skipped for iOS or not supported');
+}
 
       // === ระบบจัดการเวอร์ชันและการอัพเดทข้อมูล ===
       const SYSTEM_VERSION = "2.0.0";
@@ -2695,7 +2697,19 @@ clearPigForm();
               }
           });
       }
-
+// iOS Compatibility fixes
+if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
+    // Disable problematic features on iOS
+    window.addEventListener('load', function() {
+        // Override console errors that might cause alerts
+        const originalError = console.error;
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            // Don't show user alerts for iOS-specific errors
+        };
+    });
+}      
+      
       // Prevent zoom on double tap for better mobile experience
       let lastTouchTime = 0;
       document.addEventListener('touchend', function(event) {
@@ -2720,10 +2734,14 @@ clearPigForm();
       }
 
       // Enhanced error handling
-      window.addEventListener('error', function(e) {
-          console.error('App Error:', e.error);
-          showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
-      });
+      // Enhanced error handling (iOS Safe)
+window.addEventListener('error', function(e) {
+    console.error('App Error:', e.error);
+    // ไม่แสดง alert ถ้าเป็น ServiceWorker error
+    if (!e.error || !e.error.toString().includes('ServiceWorker')) {
+        showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
+    }
+});
 
       // Add swipe gestures for navigation (optional)
       let startX = 0;

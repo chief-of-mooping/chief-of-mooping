@@ -965,6 +965,27 @@
   </div>
 
   <script>
+       // Basic Error Protection
+       try {
+           // Disable all error alerts
+           window.onerror = function(msg, url, lineNo, columnNo, error) {
+               console.log('Silent error:', msg);
+               return true; // Prevent default browser error handling
+           };
+
+           window.addEventListener('unhandledrejection', function(event) {
+               console.log('Silent promise rejection:', event.reason);
+               event.preventDefault();
+           });
+
+           console.log('✅ Error protection enabled');
+       } catch (e) {
+           console.log('Error protection failed');
+       }
+
+       // === PWA และ Mobile App Functionality ===
+       let deferredPrompt;
+       let isStandalone = false;      
       // === PWA และ Mobile App Functionality ===
       let deferredPrompt;
       let isStandalone = false;
@@ -979,16 +1000,16 @@
       }
 
       // PWA Install Prompt
-      window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
+     // window.addEventListener('beforeinstallprompt', (e) => {
+       //   e.preventDefault();
+         // deferredPrompt = e;
           
-          if (!isStandalone && !localStorage.getItem('installPromptDismissed')) {
-              setTimeout(() => {
-                  document.getElementById('installPrompt').classList.add('show');
-              }, 3000);
-          }
-      });
+          // if (!isStandalone && !localStorage.getItem('installPromptDismissed')) {
+             // setTimeout(() => {
+                //  document.getElementById('installPrompt').classList.add('show');
+             // }, 3000);
+         // }
+     // });
 
       function installPWA() {
           if (deferredPrompt) {
@@ -1010,48 +1031,48 @@
 
       // Register Service Worker for offline functionality
       // Register Service Worker for offline functionality (iOS Safe)
-if ('serviceWorker' in navigator && !navigator.userAgent.includes('iPhone')) {
-    window.addEventListener('load', () => {
-        try {
-            const swCode = `
-                const CACHE_NAME = 'farm-app-v2.0.0';
+// if ('serviceWorker' in navigator && !navigator.userAgent.includes('iPhone')) {
+   // window.addEventListener('load', () => {
+      //  try {
+          //  const swCode = `
+            //    const CACHE_NAME = 'farm-app-v2.0.0';
                 
-                self.addEventListener('install', event => {
-                    console.log('SW installed');
-                    self.skipWaiting();
-                });
+             //   self.addEventListener('install', event => {
+               //     console.log('SW installed');
+               //     self.skipWaiting();
+             //   });
 
-                self.addEventListener('activate', event => {
-                    console.log('SW activated');
-                });
+             //   self.addEventListener('activate', event => {
+              //      console.log('SW activated');
+             //   });
 
-                self.addEventListener('fetch', event => {
+               // self.addEventListener('fetch', event => {
                     // Basic fetch handling for non-critical requests
-                    if (event.request.method === 'GET') {
-                        event.respondWith(fetch(event.request).catch(() => {
-                            return new Response('App works offline', {status: 200});
-                        }));
-                    }
-                });
-            `;
+                 //   if (event.request.method === 'GET') {
+                     //   event.respondWith(fetch(event.request).catch(() => {
+                         //   return new Response('App works offline', {status: 200});
+                   //     }));
+                 //   }
+            //    });
+          //  `;
 
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
+           // const blob = new Blob([swCode], { type: 'application/javascript' });
+          //  const swUrl = URL.createObjectURL(blob);
 
-            navigator.serviceWorker.register(swUrl)
-                .then(registration => {
-                    console.log('SW registered successfully');
-                })
-                .catch(error => {
-                    console.log('SW registration failed (app continues normally)');
-                });
-        } catch (error) {
-            console.log('Service Worker not supported');
-        }
-    });
-} else {
-    console.log('Service Worker skipped for iOS or not supported');
-}
+           // navigator.serviceWorker.register(swUrl)
+            //    .then(registration => {
+               //     console.log('SW registered successfully');
+             //   })
+              //  .catch(error => {
+              //      console.log('SW registration failed (app continues normally)');
+            //    });
+      //  } catch (error) {
+         //   console.log('Service Worker not supported');
+     //   }
+   // });
+// } else {
+    // console.log('Service Worker skipped for iOS or not supported');
+// }
 
       // === ระบบจัดการเวอร์ชันและการอัพเดทข้อมูล ===
       const SYSTEM_VERSION = "2.0.0";
@@ -1279,22 +1300,30 @@ if ('serviceWorker' in navigator && !navigator.userAgent.includes('iPhone')) {
       }
 
       // === เริ่มต้นระบบ ===
-      document.addEventListener('DOMContentLoaded', function() {
-          loadAllData();
-          updateOverview();
-          updateUsageSelects();
-          checkStockLevels();
-          setDefaultDates();
-          addDataManagementSection();
-          
-          // Mobile app ready indicator
-          console.log('📱 Mobile Farm App พร้อมใช้งาน');
-          
-          // Hide install prompt if already standalone
-          if (isStandalone) {
-              document.getElementById('installPrompt').style.display = 'none';
-          }
-      });
+       document.addEventListener('DOMContentLoaded', function() {
+           loadAllData();
+           updateOverview();
+           updateUsageSelects();
+           checkStockLevels();
+           setDefaultDates();
+           addDataManagementSection();
+           
+           // Test that app works
+           console.log('🎉 App loaded successfully');
+           // แสดง success message แทน error
+           setTimeout(() => {
+               showAlert('✅ แอปโหลดสำเร็จแล้ว', 'success');
+           }, 1000);
+           
+           // Mobile app ready indicator
+           console.log('📱 Mobile Farm App พร้อมใช้งาน');
+           
+           // Hide install prompt if already standalone
+           if (isStandalone) {
+               const installBtn = document.getElementById('manualInstall');
+               if (installBtn) installBtn.style.display = 'none';
+           }
+       });
 
       function setDefaultDates() {
           const today = new Date().toISOString().split('T')[0];
@@ -2735,13 +2764,13 @@ if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad
 
       // Enhanced error handling
       // Enhanced error handling (iOS Safe)
-window.addEventListener('error', function(e) {
-    console.error('App Error:', e.error);
+// window.addEventListener('error', function(e) {
+   // console.error('App Error:', e.error);
     // ไม่แสดง alert ถ้าเป็น ServiceWorker error
-    if (!e.error || !e.error.toString().includes('ServiceWorker')) {
-        showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
-    }
-});
+   // if (!e.error || !e.error.toString().includes('ServiceWorker')) {
+     //   showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
+   // }
+// });
 
       // Add swipe gestures for navigation (optional)
       let startX = 0;

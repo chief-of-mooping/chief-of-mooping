@@ -1589,42 +1589,134 @@
       let farmSystemData = DEFAULT_DATA_STRUCTURE;
       let farmData = farmSystemData.farmData;
 
-      // === Mobile Optimizations ===
-      
-      // Prevent zoom on double tap
-      let lastTouchEnd = 0;
-      document.addEventListener('touchend', function (event) {
-          const now = (new Date()).getTime();
-          if (now - lastTouchEnd <= 300) {
-              event.preventDefault();
-          }
-          lastTouchEnd = now;
-      }, false);
+      // === Mobile Optimizations (แก้ไขปัญหา scroll) ===
 
-      // Handle viewport changes (for keyboard appearing)
-      function handleViewportChange() {
-          const vh = window.innerHeight * 0.01;
-          document.documentElement.style.setProperty('--vh', `${vh}px`);
-      }
+// Prevent zoom on double tap
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
 
-      window.addEventListener('resize', handleViewportChange);
-      window.addEventListener('orientationchange', handleViewportChange);
-      handleViewportChange();
+// Handle viewport changes (for keyboard appearing) - แก้ไขแล้ว
+function handleViewportChange() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
 
-      // Touch feedback for buttons
-      document.addEventListener('touchstart', function(e) {
-          if (e.target.classList.contains('btn') || e.target.classList.contains('nav-tab')) {
-              e.target.style.transform = 'scale(0.98)';
-          }
-      });
+window.addEventListener('resize', handleViewportChange);
+window.addEventListener('orientationchange', handleViewportChange);
+handleViewportChange();
 
-      document.addEventListener('touchend', function(e) {
-          if (e.target.classList.contains('btn') || e.target.classList.contains('nav-tab')) {
-              setTimeout(() => {
-                  e.target.style.transform = '';
-              }, 100);
-          }
-      });
+// แก้ปัญหา: หน้าจอล็อคเมื่อ focus input
+let isInputFocused = false;
+let currentScrollPosition = 0;
+
+// เมื่อ focus ใน input/select
+document.addEventListener('focusin', function(e) {
+    if (e.target.matches('input, select, textarea')) {
+        isInputFocused = true;
+        currentScrollPosition = window.pageYOffset;
+        
+        // อนุญาตให้เลื่อนได้ในขณะที่ focus
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'relative';
+        document.body.style.width = 'auto';
+        
+        // ป้องกันหน้าจอกระโดด แต่ยังให้เลื่อนได้
+        setTimeout(() => {
+            if (Math.abs(window.pageYOffset - currentScrollPosition) > 100) {
+                window.scrollTo(0, currentScrollPosition);
+            }
+        }, 100);
+    }
+});
+
+// เมื่อ unfocus จาก input/select
+document.addEventListener('focusout', function(e) {
+    if (e.target.matches('input, select, textarea')) {
+        isInputFocused = false;
+        
+        // คืนค่าการเลื่อนให้ปกติ
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    }
+});
+
+// แก้ปัญหา: dropdown ทำให้หน้าจอกระโดด
+document.addEventListener('click', function(e) {
+    if (e.target.matches('select, .form-select')) {
+        e.preventDefault();
+        
+        // จำตำแหน่งปัจจุบัน
+        const currentPosition = window.pageYOffset;
+        
+        // อนุญาตให้ dropdown เปิด
+        setTimeout(() => {
+            e.target.focus();
+        }, 10);
+        
+        // คืนตำแหน่งหลังจาก dropdown เปิด
+        setTimeout(() => {
+            if (Math.abs(window.pageYOffset - currentPosition) > 50) {
+                window.scrollTo({
+                    top: currentPosition,
+                    behavior: 'instant'
+                });
+            }
+        }, 150);
+    }
+});
+
+// แก้ปัญหา: select dropdown บน iOS
+document.addEventListener('change', function(e) {
+    if (e.target.matches('select, .form-select')) {
+        // จำตำแหน่งปัจจุบัน
+        const currentPosition = window.pageYOffset;
+        
+        // คืนตำแหน่งหลังจากเลือกแล้ว
+        setTimeout(() => {
+            window.scrollTo({
+                top: currentPosition,
+                behavior: 'smooth'
+            });
+            
+            // ปิด focus
+            e.target.blur();
+        }, 100);
+    }
+});
+
+// เพิ่ม smooth scroll สำหรับทุก scroll event
+document.documentElement.style.scrollBehavior = 'smooth';
+
+// Touch feedback for buttons (คงเดิม)
+document.addEventListener('touchstart', function(e) {
+    if (e.target.classList.contains('btn') || e.target.classList.contains('nav-tab')) {
+        e.target.style.transform = 'scale(0.98)';
+    }
+});
+
+document.addEventListener('touchend', function(e) {
+    if (e.target.classList.contains('btn') || e.target.classList.contains('nav-tab')) {
+        setTimeout(() => {
+            e.target.style.transform = '';
+        }, 100);
+    }
+});
+
+// เพิ่ม: ป้องกันการ scroll หาย เมื่อ orientation เปลี่ยน
+window.addEventListener('orientationchange', function() {
+    setTimeout(() => {
+        if (isInputFocused && currentScrollPosition > 0) {
+            window.scrollTo(0, currentScrollPosition);
+        }
+    }, 500);
+});
 
       // === ระบบ Data Migration ===
       function migrateData(savedData) {

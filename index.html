@@ -1660,8 +1660,7 @@ function preventScrollJump(element) {
 
 // เฝ้าดู SELECT elements (ทั้งมือถือและคอม)
 document.addEventListener('mousedown', function(e) {
-    try {
-        if (e.target && e.target.matches && e.target.matches('select, .form-select')) {
+    if (e.target.matches('select, .form-select')) {
         originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
         isDropdownActive = true;
         
@@ -1736,27 +1735,20 @@ document.addEventListener('focusout', function(e) {
 });
 
 // === แก้ปัญหาเพิ่มเติมสำหรับ iOS/Safari ===
-try {
-    if (/iPad|iPhone|iPod|Safari/.test(navigator.userAgent)) {
-        // สำหรับ iOS และ Safari
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.matches && e.target.matches('select, .form-select')) {
-                originalScrollPosition = window.pageYOffset;
-                
-                setTimeout(() => {
-                    window.scrollTo({
-                        top: originalScrollPosition,
-                        behavior: 'instant'
-                    });
-                }, 300);
-            }
-    } catch (error) {
-        console.log('mousedown error:', error);
-    }
-});
-    }
-} catch (error) {
-    console.log('Browser compatibility issue:', error);
+if (/iPad|iPhone|iPod|Safari/.test(navigator.userAgent)) {
+    // สำหรับ iOS และ Safari
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('select, .form-select')) {
+            originalScrollPosition = window.pageYOffset;
+            
+            setTimeout(() => {
+                window.scrollTo({
+                    top: originalScrollPosition,
+                    behavior: 'instant'
+                });
+            }, 300);
+        }
+    });
 }
 
 // Handle viewport changes (orientation change, keyboard open/close)
@@ -1821,13 +1813,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Debug log
 console.log('🔧 แก้ปัญหา scroll และ dropdown สำหรับทุก device แล้ว');
 console.log('📱 Device:', navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop');
-
-// ซ่อน error messages ใน web browser
-window.addEventListener('error', function(e) {
-    e.preventDefault();
-    console.log('Error caught:', e.error);
-    return false;
-});
 
 document.addEventListener('focusout', function(e) {
     if (e.target.matches('input, textarea')) {
@@ -3530,4 +3515,3 @@ console.log('🔧 แก้ปัญหา scroll และ dropdown แล้�
   </script>
 </body>
 </html>
-

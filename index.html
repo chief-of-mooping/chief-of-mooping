@@ -575,7 +575,7 @@
             <button class="nav-tab" onclick="showSection('pigs')">🐷 สุกร</button>
             <button class="nav-tab" onclick="showSection('feeds')">🌾 อาหาร</button>
             <button class="nav-tab" onclick="showSection('medical')">💊 ยา</button>
-            <button class="nav-tab" onclick="showSection('usage')">📝 ใช้งาน</button>
+            <button class="nav-tab" onclick="showSection('usage')">📝 ของที่ใช้ไป</button>
             <button class="nav-tab" onclick="showSection('sales')">💰 ขาย</button>
             <button class="nav-tab" onclick="showSection('reports')">📊 รายงาน</button>
         </div>
@@ -855,7 +855,7 @@
            </div>
 
            <div class="usage-history">
-               <h3>📊 ประวัติการใช้งานวันนี้</h3>
+               <h3>📊 ประวัติการของใช้งานวันนี้</h3>
                <div id="todayUsage">
                    <p>ยังไม่มีการใช้งานวันนี้</p>
                </div>
@@ -946,7 +946,7 @@
                            <select class="form-select" id="reportType">
                                <option value="overview">ภาพรวมฟาร์ม</option>
                                <option value="stock">รายงานสต็อก</option>
-                               <option value="usage">รายงานการใช้งาน</option>
+                               <option value="usage">รายงานการของที่ใช้งานไป</option>
                                <option value="financial">รายงานการเงิน</option>
                                <option value="livestock">รายงานสุกร</option>
                                <option value="sales">รายงานการขาย</option>
@@ -2043,7 +2043,7 @@
                           <p><strong>💵 รวมทั้งหมด:</strong> ${(totalFeedValue + totalMedicalValue).toLocaleString()} บาท</p>
                       </div>
                       <div>
-                          <h4>📊 การใช้งานวันนี้</h4>
+                          <h4>📊 ของที่ใช้งานวันนี้</h4>
                           <p><strong>🌾 อาหารที่ใช้:</strong> ${todayFeedUsage.toLocaleString()} กก.</p>
                           <p><strong>💊 ยาที่ใช้:</strong> ${todayMedicalUsage} หน่วย</p>
                           <p><strong>💰 รายได้รวม:</strong> ${totalSales.toLocaleString()} บาท</p>
@@ -2051,7 +2051,7 @@
                   </div>
                   <div style="margin-top: 20px;">
                       <h4>📈 สถิติการใช้งาน</h4>
-                      <p><strong>📝 จำนวนรายการใช้งาน:</strong> ${farmData.usage.length} รายการ</p>
+                      <p><strong>📝 จำนวนรายการของที่ใช้งานไป:</strong> ${farmData.usage.length} รายการ</p>
                       <p><strong>⚠️ รายการที่ต้องเติมสต็อก:</strong> ${lowStockTotal} รายการ</p>
                       <p><strong>🕐 อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
                   </div>

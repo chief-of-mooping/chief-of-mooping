@@ -546,6 +546,522 @@
                 display: none !important;
             }
         }
+
+        /* === Responsive Design: Mobile vs Desktop === */
+
+/* Desktop Styles (Default) */
+@media (min-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .container {
+        max-width: 1400px;
+        padding: 30px;
+    }
+    
+    .header h1 {
+        font-size: 32px;
+    }
+    
+    .header p {
+        font-size: 16px;
+    }
+    
+    .nav-tabs {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .nav-tab {
+        padding: 16px 24px;
+        font-size: 16px;
+        min-width: 140px;
+    }
+    
+    .card {
+        padding: 40px;
+        margin-bottom: 40px;
+    }
+    
+    .card-title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+    
+    .form-input, .form-select, .form-textarea {
+        padding: 16px 20px;
+        font-size: 16px;
+    }
+    
+    .form-label {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .btn {
+        padding: 16px 32px;
+        font-size: 16px;
+        margin-right: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .btn-small {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    
+    .stat-card {
+        padding: 30px;
+    }
+    
+    .stat-number {
+        font-size: 36px;
+    }
+    
+    .stat-label {
+        font-size: 16px;
+    }
+    
+    .stock-item {
+        flex-direction: row;
+        align-items: center;
+        padding: 24px;
+    }
+    
+    .stock-info {
+        flex: 1;
+        margin-bottom: 0;
+        margin-right: 20px;
+    }
+    
+    .stock-name {
+        font-size: 18px;
+    }
+    
+    .stock-details {
+        font-size: 15px;
+    }
+    
+    .stock-actions {
+        flex-direction: row;
+        min-width: 250px;
+    }
+    
+    .table {
+        font-size: 16px;
+        display: table;
+        white-space: normal;
+        min-width: auto;
+    }
+    
+    .table th {
+        padding: 16px 20px;
+        font-size: 16px;
+    }
+    
+    .table td {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+    
+    .usage-form {
+        padding: 24px;
+    }
+    
+    .usage-form h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    /* Desktop: Hide mobile install button */
+    .manual-install {
+        display: none;
+    }
+    
+    /* Desktop: Show hover effects */
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    
+    .nav-tab:hover {
+        background: #ecf0f1;
+    }
+    
+    .stock-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .header h1 {
+        font-size: 28px;
+    }
+    
+    .nav-tab {
+        padding: 14px 18px;
+        font-size: 15px;
+        min-width: 110px;
+    }
+    
+    .card {
+        padding: 30px;
+    }
+    
+    .card-title {
+        font-size: 22px;
+    }
+    
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+    
+    .stock-item {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .stock-info {
+        margin-bottom: 0;
+        margin-right: 16px;
+    }
+    
+    .stock-actions {
+        flex-direction: column;
+        min-width: 180px;
+    }
+    
+    .btn {
+        padding: 14px 24px;
+        font-size: 15px;
+    }
+    
+    .manual-install {
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+}
+
+/* Mobile Styles (เดิม) */
+@media (max-width: 767px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+    
+    .header {
+        padding: 20px 15px;
+    }
+    
+    .header h1 {
+        font-size: 22px;
+    }
+    
+    .header p {
+        font-size: 14px;
+    }
+    
+    .nav-tabs {
+        overflow-x: auto;
+        padding: 8px;
+        gap: 4px;
+    }
+    
+    .nav-tab {
+        padding: 12px 16px;
+        font-size: 13px;
+        min-width: 80px;
+        white-space: nowrap;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .card-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        padding: 14px 20px;
+        font-size: 15px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .btn-small {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 20px;
+    }
+    
+    .stat-number {
+        font-size: 24px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+    
+    .stock-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+    
+    .stock-info {
+        margin-bottom: 12px;
+        width: 100%;
+    }
+    
+    .stock-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .stock-actions .btn {
+        flex: 1;
+        margin: 0 4px 8px 0;
+        min-width: 80px;
+    }
+    
+    .table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        min-width: 600px;
+        font-size: 14px;
+    }
+    
+    .table th {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+    
+    .table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+    
+    .manual-install {
+        display: flex;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    /* Mobile: Disable hover effects */
+    .btn:hover,
+    .nav-tab:hover,
+    .stock-item:hover,
+    .stat-card:hover {
+        transform: none;
+        box-shadow: initial;
+    }
+}
+
+/* Large Desktop (4K/Ultrawide) */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1800px;
+        padding: 40px;
+    }
+    
+    .header h1 {
+        font-size: 40px;
+    }
+    
+    .header p {
+        font-size: 18px;
+    }
+    
+    .card {
+        padding: 50px;
+    }
+    
+    .card-title {
+        font-size: 28px;
+    }
+    
+    .nav-tab {
+        padding: 20px 32px;
+        font-size: 18px;
+        min-width: 160px;
+    }
+    
+    .btn {
+        padding: 18px 36px;
+        font-size: 18px;
+    }
+    
+    .form-input, .form-select, .form-textarea {
+        padding: 18px 24px;
+        font-size: 18px;
+    }
+    
+    .form-label {
+        font-size: 18px;
+    }
+    
+    .stat-number {
+        font-size: 42px;
+    }
+    
+    .stat-label {
+        font-size: 18px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+}
+
+/* Touch Device Detection */
+@media (hover: none) and (pointer: coarse) {
+    /* This is likely a touch device */
+    .btn:hover,
+    .nav-tab:hover,
+    .stock-item:hover,
+    .stat-card:hover {
+        transform: none;
+        box-shadow: initial;
+        background: initial;
+    }
+    
+    /* Increase touch targets */
+    .btn {
+        min-height: 44px;
+    }
+    
+    .nav-tab {
+        min-height: 44px;
+    }
+    
+    .form-input,
+    .form-select {
+        min-height: 44px;
+    }
+}
+
+/* High DPI Display */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+    .header {
+        padding: 15px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    
+    .header p {
+        font-size: 13px;
+    }
+    
+    .nav-tabs {
+        margin-bottom: 15px;
+    }
+    
+    .card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 20px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .manual-install,
+    .nav-tabs,
+    .btn {
+        display: none !important;
+    }
+    
+    .container {
+        max-width: none;
+        padding: 0;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        break-inside: avoid;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+    
     </style>
 </head>
 <body>

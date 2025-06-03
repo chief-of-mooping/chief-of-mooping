@@ -1624,7 +1624,13 @@ body.input-focused {
 let scrollPosition = 0;
 let isSelectOpen = false;
 
-// ป้องกันการ zoom เมื่อ double tap
+// === แก้ปัญหา Scroll และ Dropdown สำหรับทุก Device ===
+
+let originalScrollPosition = 0;
+let isDropdownActive = false;
+let isInputActive = false;
+
+// ป้องกันการ zoom เมื่อ double tap (มือถือ)
 let lastTouchEnd = 0;
 document.addEventListener('touchend', function (event) {
     const now = (new Date()).getTime();
@@ -1634,50 +1640,179 @@ document.addEventListener('touchend', function (event) {
     lastTouchEnd = now;
 }, false);
 
-// แก้ปัญหาหลัก: Select dropdown ทำให้หน้าจอกระโดด
+// === แก้ปัญหาหลัก: Dropdown/Select ทำให้หน้าจอกระโดด ===
+function preventScrollJump(element) {
+    // เก็บตำแหน่งปัจจุบัน
+    originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // ป้องกันการเปลี่ยนแปลง scroll
+    element.addEventListener('focus', function() {
+        setTimeout(() => {
+            if (Math.abs(window.pageYOffset - originalScrollPosition) > 5) {
+                window.scrollTo({
+                    top: originalScrollPosition,
+                    behavior: 'instant'
+                });
+            }
+        }, 10);
+    });
+}
+
+// เฝ้าดู SELECT elements (ทั้งมือถือและคอม)
+document.addEventListener('mousedown', function(e) {
+    if (e.target.matches('select, .form-select')) {
+        originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        isDropdownActive = true;
+        
+        // ป้องกันหน้าจอกระโดดสำหรับคอม
+        e.target.addEventListener('change', function() {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: originalScrollPosition,
+                    behavior: 'instant'
+                });
+                isDropdownActive = false;
+            }, 50);
+        }, { once: true });
+    }
+});
+
+// เฝ้าดู SELECT สำหรับมือถือ
 document.addEventListener('touchstart', function(e) {
     if (e.target.matches('select, .form-select')) {
-        scrollPosition = window.pageYOffset;
-        isSelectOpen = true;
-        
-        // เพิ่ม class เพื่อป้องกัน jump
-        document.body.classList.add('no-jump');
-        e.target.classList.add('no-jump');
+        originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        isDropdownActive = true;
     }
 });
 
-// เมื่อเลือกเสร็จจาก dropdown
+// เมื่อเลือกเสร็จจาก dropdown (มือถือ)
 document.addEventListener('change', function(e) {
-    if (e.target.matches('select, .form-select') && isSelectOpen) {
-        isSelectOpen = false;
-        
-        // คืนตำแหน่ง scroll ทันที
+    if (e.target.matches('select, .form-select') && isDropdownActive) {
         setTimeout(() => {
-            window.scrollTo(0, scrollPosition);
-            document.body.classList.remove('no-jump');
-            e.target.classList.remove('no-jump');
-        }, 50);
-    }
-});
-
-// แก้ปัญหา: Input focus ทำให้เลื่อนหน้าจอไม่ได้
-document.addEventListener('focusin', function(e) {
-    if (e.target.matches('input, textarea')) {
-        scrollPosition = window.pageYOffset;
-        
-        // อนุญาตให้เลื่อนหน้าจอได้ขณะ focus
-        document.body.classList.add('input-focused');
-        document.body.style.position = 'relative';
-        document.body.style.overflow = 'auto';
-        
-        // ป้องกันหน้าจอเด้ง
-        setTimeout(() => {
-            if (Math.abs(window.pageYOffset - scrollPosition) > 10) {
-                window.scrollTo(0, scrollPosition);
-            }
+            window.scrollTo({
+                top: originalScrollPosition,
+                behavior: 'instant'
+            });
+            isDropdownActive = false;
         }, 100);
     }
 });
+
+// === แก้ปัญหา: Input Focus ไม่ให้เลื่อนหน้าจอ ===
+document.addEventListener('focusin', function(e) {
+    if (e.target.matches('input[type="text"], input[type="number"], input[type="date"], textarea')) {
+        isInputActive = true;
+        originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // บังคับให้ body เลื่อนได้
+        document.body.style.overflow = 'visible';
+        document.body.style.position = 'static';
+        document.body.style.height = 'auto';
+        document.documentElement.style.overflow = 'visible';
+        
+        // ป้องกันหน้าจอเด้งเมื่อ keyboard ขึ้น (มือถือ)
+        setTimeout(() => {
+            if (Math.abs(window.pageYOffset - originalScrollPosition) > 20) {
+                window.scrollTo({
+                    top: originalScrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 200);
+    }
+});
+
+document.addEventListener('focusout', function(e) {
+    if (e.target.matches('input[type="text"], input[type="number"], input[type="date"], textarea')) {
+        isInputActive = false;
+        
+        // คืนค่า CSS ให้ปกติ
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.height = '';
+        document.documentElement.style.overflow = '';
+    }
+});
+
+// === แก้ปัญหาเพิ่มเติมสำหรับ iOS/Safari ===
+if (/iPad|iPhone|iPod|Safari/.test(navigator.userAgent)) {
+    // สำหรับ iOS และ Safari
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('select, .form-select')) {
+            originalScrollPosition = window.pageYOffset;
+            
+            setTimeout(() => {
+                window.scrollTo({
+                    top: originalScrollPosition,
+                    behavior: 'instant'
+                });
+            }, 300);
+        }
+    });
+}
+
+// Handle viewport changes (orientation change, keyboard open/close)
+function handleViewportChange() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    
+    // คืนตำแหน่ง scroll หลัง orientation change
+    if (originalScrollPosition > 0 && !isInputActive) {
+        setTimeout(() => {
+            window.scrollTo({
+                top: originalScrollPosition,
+                behavior: 'smooth'
+            });
+        }, 100);
+    }
+}
+
+window.addEventListener('resize', handleViewportChange);
+window.addEventListener('orientationchange', handleViewportChange);
+handleViewportChange();
+
+// === Touch feedback for buttons (มือถือ) ===
+document.addEventListener('touchstart', function(e) {
+    if (e.target.matches('.btn, .nav-tab')) {
+        e.target.style.transform = 'scale(0.98)';
+        e.target.style.transition = 'transform 0.1s ease';
+    }
+});
+
+document.addEventListener('touchend', function(e) {
+    if (e.target.matches('.btn, .nav-tab')) {
+        setTimeout(() => {
+            e.target.style.transform = '';
+        }, 100);
+    }
+});
+
+// === Hover effects for desktop ===
+if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+    // Desktop: เพิ่ม hover effects
+    document.addEventListener('mouseenter', function(e) {
+        if (e.target.matches('.btn:not(.btn-small)')) {
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.transition = 'all 0.2s ease';
+        }
+    }, true);
+    
+    document.addEventListener('mouseleave', function(e) {
+        if (e.target.matches('.btn:not(.btn-small)')) {
+            e.target.style.transform = '';
+        }
+    }, true);
+}
+
+// บังคับให้หน้าจอ scroll ได้เสมอ
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.overflow = 'visible';
+    document.documentElement.style.overflow = 'visible';
+});
+
+// Debug log
+console.log('🔧 แก้ปัญหา scroll และ dropdown สำหรับทุก device แล้ว');
+console.log('📱 Device:', navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop');
 
 document.addEventListener('focusout', function(e) {
     if (e.target.matches('input, textarea')) {

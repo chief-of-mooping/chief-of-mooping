@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการฟาร์มสุกรมาตรฐานสากล</title>
+    <title>ระบบจัดการฟาร์มสุกรอัจฉริยะ</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuC4o+C4sOC4muC4muC4iOC4seC4lOC4geC4suC4o+C4n+C4suC4o+C5jOC4oeC4quC4uOC4geC4o+C4reC4seC4iOC4ieC4o+C4tOC4jeC4sOIsCiAgInNob3J0X25hbWUiOiAi4LmA4Lit4LiXIOC4n+C4suC4o+C5jOC4oeC4quC4uOC4geC4oyIsCiAgImRlc2NyaXB0aW9uIjogIuC4o+C4sOC4muC4muC4iOC4seC4lOC4geC4suC4o+C4n+C4suC4o+C5jOC4oeC4quC4uOC4geC4o+C4reC4seC4iOC4ieC4o+C4tOC4jeC4sOC4quC4s+C4q+C4o+C4seC4muC4q+C4suC4o+C4suC4geC4suC4o+C4i+C4reC4meC5gOC4peC4suC4sOIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzA1OTY2OSIsCiAgInRoZW1lX2NvbG9yIjogIiMwNTk2NjkiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXlOREFpSUdobGFXZG9kRDBpTWpRd0lqNDhjR0YwYUNCa1BTSk5NVEkwTGpjZ01UZzJMalExTXpnc01UZzJMalEwTlRjdVl6a2lJR1pwYkd3OUlpTXdOVGsyTmpraUx6NDhMM04yWno0PSIsCiAgICAgICJzaXplcyI6ICIyNDB4MjQwIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Niramit:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-green: #059669;
+            --primary-blue: #2563eb;
+            --neutral-gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
         
         * {
             margin: 0;
@@ -14,2047 +29,2189 @@
         }
         
         body {
-            font-family: 'Niramit', sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #059669 100%);
-            min-height: 100vh;
-            color: #1f2937;
+            font-family: 'Niramit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e2e8f0 100%);
+            color: #334155;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 1rem;
         }
         
+        /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            color: #059669;
-            font-size: 1.3rem;
-            font-weight: 500;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .nav-tab {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 18px 30px;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            color: #374151;
-        }
-        
-        .nav-tab:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .nav-tab.active {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-blue) 100%);
             color: white;
-            transform: translateY(-3px);
-        }
-        
-        .tab-content {
-            display: none;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .metric-card {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            border-left: 6px solid #2563eb;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .metric-card::before {
-            content: '';
-            position: absolute;
+            padding: 1rem 0;
+            position: sticky;
             top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), transparent);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
+            z-index: 100;
+            box-shadow: var(--shadow);
         }
         
-        .metric-card h3 {
-            font-size: 1.2rem;
-            color: #475569;
-            margin-bottom: 15px;
-            font-weight: 600;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .metric-value {
-            font-size: 3rem;
+        .logo {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .metric-unit {
-            font-size: 1.1rem;
-            color: #64748b;
+        .nav-desktop {
+            display: none;
+            gap: 2rem;
+        }
+        
+        .nav-desktop button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
             font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-desktop button:hover,
+        .nav-desktop button.active {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-blue) 100%);
+            padding: 80px 2rem 2rem;
+            transition: left 0.3s ease;
+            z-index: 99;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 98;
+        }
+        
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .mobile-nav button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 1rem;
+            text-align: left;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-nav button:hover,
+        .mobile-nav button.active {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
         }
         
         .section {
-            background: #f8fafc;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            display: none;
+            animation: fadeIn 0.5s ease;
         }
         
-        .section h3 {
-            font-size: 1.6rem;
-            color: #1e40af;
-            margin-bottom: 25px;
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--neutral-gray);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .change {
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 1rem;
+            color: #1e293b;
             font-weight: 600;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #e2e8f0;
+        }
+        
+        .chart {
+            height: 300px;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--primary-green), var(--primary-blue));
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+        
+        .chart-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--neutral-gray);
+        }
+        
+        /* Alerts */
+        .alerts-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .alert.warning {
+            background: #fef3c7;
+            border-color: var(--warning);
+            color: #92400e;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border-color: var(--error);
+            color: #991b1b;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border-color: var(--success);
+            color: #065f46;
+        }
+        
+        /* Forms */
+        .form-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
         }
         
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
         }
         
         .form-group {
             display: flex;
             flex-direction: column;
+            gap: 0.5rem;
         }
         
         .form-group label {
-            font-size: 1.1rem;
             font-weight: 600;
             color: #374151;
-            margin-bottom: 10px;
         }
         
         .form-group input,
-        .form-group select {
-            padding: 15px 20px;
-            border: 3px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-family: 'Niramit', sans-serif;
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
             transition: all 0.3s ease;
-            background: white;
+            min-height: 44px;
         }
         
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-            transform: translateY(-2px);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
         }
         
         .btn {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
+            padding: 0.75rem 1.5rem;
             border: none;
-            padding: 18px 35px;
-            border-radius: 15px;
-            font-size: 1.2rem;
+            border-radius: var(--radius);
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
-            margin-top: 20px;
+            min-height: 44px;
+            font-family: inherit;
         }
         
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-blue) 100%);
+            color: white;
         }
         
-        .btn-success {
-            background: linear-gradient(135deg, #059669, #047857);
-            box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(5, 150, 105, 0.3);
         }
         
-        .btn-success:hover {
-            box-shadow: 0 15px 30px rgba(5, 150, 105, 0.4);
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
         }
         
-        .btn-danger {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        .btn-secondary:hover {
+            background: #e2e8f0;
         }
         
-        .btn-danger:hover {
-            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+        /* Tables */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
         }
         
-        .data-table {
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            margin-top: 25px;
         }
         
-        .data-table th {
-            background: linear-gradient(135deg, #1e40af, #1d4ed8);
-            color: white;
-            padding: 20px 18px;
-            font-weight: 600;
-            font-size: 1.1rem;
+        th, td {
             text-align: left;
-        }
-        
-        .data-table td {
-            padding: 18px;
+            padding: 1rem;
             border-bottom: 1px solid #e5e7eb;
-            font-size: 1.1rem;
         }
         
-        .data-table tr:nth-child(even) {
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        tr:hover {
             background: #f8fafc;
         }
         
-        .data-table tr:hover {
-            background: #e0f2fe;
-            transform: scale(1.001);
-            transition: all 0.2s ease;
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
         }
         
-        .alert {
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: var(--neutral-gray);
             font-size: 1.1rem;
-            font-weight: 500;
         }
         
-        .alert-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border-left: 6px solid #f59e0b;
-        }
-        
-        .alert-danger {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 6px solid #ef4444;
-        }
-        
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 6px solid #10b981;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        
-        .status-active {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-sold {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .status-dead {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        .qr-code {
-            width: 90px;
-            height: 90px;
-            background: #f3f4f6;
-            border: 3px solid #d1d5db;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-weight: 500;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 15px;
-            background: #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(135deg, #059669, #047857);
-            transition: width 0.5s ease;
-            border-radius: 8px;
-        }
-        
-        .chart-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        
-        .chart-container h3 {
-            font-size: 1.5rem;
-            color: #1e40af;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        
-        .chart-canvas {
-            width: 100%;
-            height: 350px;
-            border-radius: 15px;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .hamburger {
+                display: none;
             }
             
-            .header h1 {
-                font-size: 2.2rem;
+            .nav-desktop {
+                display: flex;
             }
             
-            .nav-tab {
-                flex: 1;
-                min-width: 140px;
-                text-align: center;
-                font-size: 1rem;
-                padding: 15px 20px;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .dashboard-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 2fr 1fr;
             }
             
             .form-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
             
-            .metric-value {
-                font-size: 2.5rem;
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1440px) {
+            .form-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* PWA Styles */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .install-prompt.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --white: #1e293b;
+                --light-gray: #0f172a;
+                --neutral-gray: #94a3b8;
             }
             
-            .data-table {
-                font-size: 0.9rem;
+            body {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                color: #e2e8f0;
             }
-            
-            .data-table th,
-            .data-table td {
-                padding: 12px 8px;
-            }
+        }
+
+        /* Additional Modern Styling */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Performance indicators */
+        .performance-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .performance-indicator.good {
+            background: var(--success);
+        }
+        
+        .performance-indicator.warning {
+            background: var(--warning);
+        }
+        
+        .performance-indicator.poor {
+            background: var(--error);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>ระบบจัดการฟาร์มสุกรมาตรฐานสากล</h1>
-            <p>Advanced Pig Farm Management System - Professional Edition</p>
-        </div>
-        
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('dashboard')">แดชบอร์ด</button>
-            <button class="nav-tab" onclick="showTab('batches')">จัดการ Batch</button>
-            <button class="nav-tab" onclick="showTab('pigs')">ข้อมูลสุกร</button>
-            <button class="nav-tab" onclick="showTab('feed')">จัดการอาหาร</button>
-            <button class="nav-tab" onclick="showTab('sales')">ขายและกำไร</button>
-            <button class="nav-tab" onclick="showTab('breeding')">การผสมพันธุ์</button>
-            <button class="nav-tab" onclick="showTab('health')">สุขภาพและวัคซีน</button>
-            <button class="nav-tab" onclick="showTab('reports')">รายงาน</button>
-        </div>
-        
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <div class="dashboard-grid">
-                <div class="metric-card">
-                    <h3>จำนวนสุกรทั้งหมด</h3>
-                    <div class="metric-value" id="totalPigs">0</div>
-                    <div class="metric-unit">ตัว</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 240 240" fill="none">
+                        <path d="M124.7 186.453c0,0 38.186.457.6z9" fill="#ffffff"/>
+                    </svg>
+                    ระบบจัดการฟาร์มสุกร
                 </div>
-                <div class="metric-card">
-                    <h3>Batch ที่ใช้งาน</h3>
-                    <div class="metric-value" id="activeBatches">0</div>
-                    <div class="metric-unit">กลุ่ม</div>
-                </div>
-                <div class="metric-card">
-                    <h3>FCR เฉลี่ย</h3>
-                    <div class="metric-value" id="avgFCR">0.00</div>
-                    <div class="metric-unit">kg อาหาร/kg น้ำหนัก</div>
-                </div>
-                <div class="metric-card">
-                    <h3>ADG เฉลี่ย</h3>
-                    <div class="metric-value" id="avgADG">0.00</div>
-                    <div class="metric-unit">kg/วัน</div>
-                </div>
-                <div class="metric-card">
-                    <h3>รายได้เดือนนี้</h3>
-                    <div class="metric-value" id="monthlyRevenue">0</div>
-                    <div class="metric-unit">บาท</div>
-                </div>
-                <div class="metric-card">
-                    <h3>กำไรสุทธิ</h3>
-                    <div class="metric-value" id="netProfit">0</div>
-                    <div class="metric-unit">บาท</div>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <h3>แนวโน้ม FCR รายเดือน</h3>
-                <canvas id="fcrChart" class="chart-canvas"></canvas>
-            </div>
-            
-            <div class="section">
-                <h3>การแจ้งเตือนสำคัญ</h3>
-                <div id="alertsContainer">
-                    <div class="alert alert-success">
-                        ระบบพร้อมใช้งาน - เริ่มต้นการจัดการฟาร์มของคุณ
-                    </div>
+                
+                <nav class="nav-desktop">
+                    <button onclick="showSection('dashboard')" class="active">แผงควบคุม</button>
+                    <button onclick="showSection('pigs')">จัดการสุกร</button>
+                    <button onclick="showSection('feeding')">การให้อาหาร</button>
+                    <button onclick="showSection('health')">สุขภาพ</button>
+                    <button onclick="showSection('reports')">รายงาน</button>
+                </nav>
+                
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
         </div>
-        
-        <!-- Batches Tab -->
-        <div id="batches" class="tab-content">
-            <div class="section">
-                <h3>เพิ่ม Batch ใหม่</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>รหัส Batch</label>
-                        <input type="text" id="batchId" placeholder="เช่น BATCH-2024-001">
-                    </div>
-                    <div class="form-group">
-                        <label>วันเกิด</label>
-                        <input type="date" id="batchBirthDate">
-                    </div>
-                    <div class="form-group">
-                        <label>จำนวนสุกร</label>
-                        <input type="number" id="batchPigCount" placeholder="45">
-                    </div>
-                    <div class="form-group">
-                        <label>ขั้นตอนปัจจุบัน</label>
-                        <select id="batchStage">
-                            <option value="creep">Creep (0-3 สัปดาห์)</option>
-                            <option value="starter">Starter (3-8 สัปดาห์)</option>
-                            <option value="grower">Grower (8-16 สัปดาห์)</option>
-                            <option value="finisher">Finisher (16-24 สัปดาห์)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>น้ำหนักเฉลี่ย (kg)</label>
-                        <input type="number" step="0.1" id="batchWeight" placeholder="28.5">
-                    </div>
-                    <div class="form-group">
-                        <label>น้ำหนักเป้าหมาย (kg)</label>
-                        <input type="number" id="batchTargetWeight" placeholder="100">
-                    </div>
-                </div>
-                <button class="btn" onclick="addBatch()">เพิ่ม Batch</button>
-            </div>
-            
-            <div class="section">
-                <h3>รายการ Batch ทั้งหมด</h3>
-                <table class="data-table" id="batchesTable">
-                    <thead>
-                        <tr>
-                            <th>รหัส Batch</th>
-                            <th>วันเกิด</th>
-                            <th>อายุ (วัน)</th>
-                            <th>จำนวน</th>
-                            <th>ขั้นตอน</th>
-                            <th>น้ำหนักเฉลี่ย</th>
-                            <th>FCR</th>
-                            <th>ต้นทุน</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="batchesTableBody">
-                    </tbody>
-                </table>
-            </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" onclick="toggleMobileMenu()"></div>
+    <nav class="mobile-menu">
+        <div class="mobile-nav">
+            <button onclick="showSection('dashboard'); toggleMobileMenu()" class="active">🏠 แผงควบคุม</button>
+            <button onclick="showSection('pigs'); toggleMobileMenu()">🐷 จัดการสุกร</button>
+            <button onclick="showSection('feeding'); toggleMobileMenu()">🥗 การให้อาหาร</button>
+            <button onclick="showSection('health'); toggleMobileMenu()">💊 สุขภาพ</button>
+            <button onclick="showSection('reports'); toggleMobileMenu()">📊 รายงาน</button>
         </div>
-        
-        <!-- Pigs Tab -->
-        <div id="pigs" class="tab-content">
-            <div class="section">
-                <h3>ลงทะเบียนสุกรใหม่</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>รหัสสุกร</label>
-                        <input type="text" id="pigId" placeholder="PIG-2024-001">
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="page-header">
+                    <h1>แผงควบคุมฟาร์มสุกร</h1>
+                    <p>ภาพรวมประสิทธิภาพฟาร์มของคุณ</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>จำนวนสุกรทั้งหมด</h3>
+                        <div class="value" id="totalPigs">0</div>
+                        <div class="change">+5% จากเดือนที่แล้ว</div>
                     </div>
-                    <div class="form-group">
-                        <label>Batch ที่สังกัด</label>
-                        <select id="pigBatchId">
-                            <option value="">เลือก Batch</option>
-                        </select>
+                    <div class="stat-card">
+                        <h3>FCR เฉลี่ย</h3>
+                        <div class="value" id="avgFCR">0.00</div>
+                        <div class="change" id="fcrChange">เป้าหมาย: 2.35</div>
                     </div>
-                    <div class="form-group">
-                        <label>หมายเลขติดหู</label>
-                        <input type="text" id="pigTagNumber" placeholder="001">
+                    <div class="stat-card">
+                        <h3>ADG เฉลี่ย (กรัม/วัน)</h3>
+                        <div class="value" id="avgADG">0</div>
+                        <div class="change" id="adgChange">เป้าหมาย: 700g</div>
                     </div>
-                    <div class="form-group">
-                        <label>วันเกิด</label>
-                        <input type="date" id="pigBirthDate">
-                    </div>
-                    <div class="form-group">
-                        <label>สายพันธุ์</label>
-                        <select id="pigBreed">
-                            <option value="LandracexYorkshire">Landrace x Yorkshire</option>
-                            <option value="DurocxYorkshire">Duroc x Yorkshire</option>
-                            <option value="LandracexDuroc">Landrace x Duroc</option>
-                            <option value="PietranxYorkshire">Pietran x Yorkshire</option>
-                            <option value="Other">อื่นๆ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>เพศ</label>
-                        <select id="pigSex">
-                            <option value="male">ผู้</option>
-                            <option value="female">เมีย</option>
-                            <option value="castrated">ตอนแล้ว</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>น้ำหนักปัจจุบัน (kg)</label>
-                        <input type="number" step="0.1" id="pigCurrentWeight" placeholder="28.5">
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสแม่พันธุ์</label>
-                        <input type="text" id="pigParentSow" placeholder="SOW-2023-045">
-                    </div>
-                    <div class="form-group">
-                        <label>รหัสพ่อพันธุ์</label>
-                        <input type="text" id="pigParentBoar" placeholder="BOAR-2022-003">
+                    <div class="stat-card">
+                        <h3>อัตราการตาย (%)</h3>
+                        <div class="value" id="mortalityRate">0.0</div>
+                        <div class="change">ต่ำกว่ามาตรฐาน</div>
                     </div>
                 </div>
-                <button class="btn" onclick="addPig()">ลงทะเบียนสุกร</button>
-            </div>
-            
-            <div class="section">
-                <h3>รายการสุกรทั้งหมด</h3>
-                <table class="data-table" id="pigsTable">
-                    <thead>
-                        <tr>
-                            <th>QR Code</th>
-                            <th>รหัสสุกร</th>
-                            <th>หมายเลขหู</th>
-                            <th>Batch</th>
-                            <th>อายุ (วัน)</th>
-                            <th>สายพันธุ์</th>
-                            <th>เพศ</th>
-                            <th>น้ำหนักปัจจุบัน</th>
-                            <th>ADG</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pigsTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Feed Management Tab -->
-        <div id="feed" class="tab-content">
-            <div class="section">
-                <h3>เพิ่มอาหารสุกรใหม่</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>รหัสอาหาร</label>
-                        <input type="text" id="feedId" placeholder="FEED-001">
+
+                <div class="dashboard-grid">
+                    <div class="chart-container">
+                        <h3>แนวโน้ม FCR รายเดือน</h3>
+                        <div class="chart" id="fcrChart">
+                            <div>
+                                <div class="chart-bar" style="height: 80px;"></div>
+                                <div class="chart-label">ม.ค.</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar" style="height: 120px;"></div>
+                                <div class="chart-label">ก.พ.</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar" style="height: 100px;"></div>
+                                <div class="chart-label">มี.ค.</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar" style="height: 90px;"></div>
+                                <div class="chart-label">เม.ย.</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar" style="height: 85px;"></div>
+                                <div class="chart-label">พ.ค.</div>
+                            </div>
+                            <div>
+                                <div class="chart-bar" style="height: 75px;"></div>
+                                <div class="chart-label">มิ.ย.</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>ประเภทอาหาร</label>
-                        <select id="feedType">
-                            <option value="creep">Creep Feed</option>
-                            <option value="starter">Starter Feed</option>
-                            <option value="grower">Grower Feed</option>
-                            <option value="finisher">Finisher Feed</option>
-                            <option value="sow">Sow Feed</option>
-                            <option value="boar">Boar Feed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>ยี่ห้อ/ชื่อสินค้า</label>
-                        <input type="text" id="feedBrand" placeholder="CP Starter">
-                    </div>
-                    <div class="form-group">
-                        <label>ราคาต่อถุง (บาท)</label>
-                        <input type="number" id="feedPrice" placeholder="650">
-                    </div>
-                    <div class="form-group">
-                        <label>น้ำหนักต่อถุง (kg)</label>
-                        <input type="number" id="feedWeight" placeholder="20">
-                    </div>
-                    <div class="form-group">
-                        <label>โปรตีน (%)</label>
-                        <input type="number" step="0.1" id="feedProtein" placeholder="18.5">
+
+                    <div class="alerts-container">
+                        <h3>การแจ้งเตือนอัจฉริยะ</h3>
+                        <div id="alertsContainer">
+                            <!-- Alerts will be dynamically generated -->
+                        </div>
                     </div>
                 </div>
-                <button class="btn" onclick="addFeed()">เพิ่มอาหาร</button>
-            </div>
-            
-            <div class="section">
-                <h3>บันทึกการให้อาหาร</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Batch ที่ให้อาหาร</label>
-                        <select id="feedingBatchId">
-                            <option value="">เลือก Batch</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>ประเภทอาหาร</label>
-                        <select id="feedingFeedId">
-                            <option value="">เลือกอาหาร</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>ปริมาณ (kg)</label>
-                        <input type="number" step="0.1" id="feedingAmount" placeholder="50.0">
-                    </div>
-                    <div class="form-group">
-                        <label>วันที่ให้อาหาร</label>
-                        <input type="date" id="feedingDate">
-                    </div>
+            </section>
+
+            <!-- Pigs Management Section -->
+            <section id="pigs" class="section">
+                <div class="page-header">
+                    <h1>จัดการสุกร</h1>
+                    <p>เพิ่ม แก้ไข และติดตามข้อมูลสุกร</p>
                 </div>
-                <button class="btn btn-success" onclick="recordFeeding()">บันทึกการให้อาหาร</button>
-            </div>
-            
-            <div class="section">
-                <h3>สต็อกอาหารคงเหลือ</h3>
-                <table class="data-table" id="feedTable">
-                    <thead>
-                        <tr>
-                            <th>รหัส</th>
-                            <th>ประเภท</th>
-                            <th>ยี่ห้อ</th>
-                            <th>ราคา/ถุง</th>
-                            <th>ราคา/kg</th>
-                            <th>โปรตีน</th>
-                            <th>สต็อกคงเหลือ</th>
-                            <th>สถานะ</th>
-                            <th>จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="feedTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Sales Tab -->
-        <div id="sales" class="tab-content">
-            <div class="section">
-                <h3>บันทึกการขาย</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>รหัสการขาย</label>
-                        <input type="text" id="saleId" placeholder="SALE-001">
-                    </div>
-                    <div class="form-group">
-                        <label>วันที่ขาย</label>
-                        <input type="date" id="saleDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Batch ที่ขาย</label>
-                        <select id="saleBatchId">
-                            <option value="">เลือก Batch</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>จำนวนสุกรที่ขาย</label>
-                        <input type="number" id="salePigCount" placeholder="2">
-                    </div>
-                    <div class="form-group">
-                        <label>น้ำหนักรวม (kg)</label>
-                        <input type="number" step="0.1" id="saleTotalWeight" placeholder="185.5">
-                    </div>
-                    <div class="form-group">
-                        <label>ราคาต่อกิโลกรัม (บาท)</label>
-                        <input type="number" step="0.1" id="salePricePerKg" placeholder="85">
-                    </div>
-                </div>
-                <button class="btn btn-success" onclick="recordSale()">บันทึกการขาย</button>
-            </div>
-            
-            <div class="section">
-                <h3>สรุปการขายและกำไร</h3
-<div class="dashboard-grid">
-                   <div class="metric-card">
-                       <h3>ยอดขายรวม</h3>
-                       <div class="metric-value" id="totalSalesRevenue">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>ต้นทุนรวม</h3>
-                       <div class="metric-value" id="totalSalesCost">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>กำไรสุทธิ</h3>
-                       <div class="metric-value" id="totalSalesProfit">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>ROI</h3>
-                       <div class="metric-value" id="totalROI">0.00</div>
-                       <div class="metric-unit">%</div>
+
+                <div class="form-container">
+                    <h3>เพิ่มสุกรใหม่</h3>
+                    <form id="pigForm" class="form-grid">
+                        <div class="form-group">
+                            <label for="pigId">รหัสสุกร *</label>
+                            <input type="text" id="pigId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pigGroup">กลุ่ม</label>
+                            <select id="pigGroup">
+                               <option value="อนุบาล">อนุบาล</option>
+                               <option value="รุ่น">รุ่น</option>
+                               <option value="ขุน">ขุน</option>
+                               <option value="พ่อพันธุ์">พ่อพันธุ์</option>
+                               <option value="แม่พันธุ์">แม่พันธุ์</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="pigWeight">น้ำหนัก (กก.)</label>
+                           <input type="number" id="pigWeight" step="0.1" min="0">
+                       </div>
+                       <div class="form-group">
+                           <label for="pigAge">อายุ (วัน)</label>
+                           <input type="number" id="pigAge" min="0">
+                       </div>
+                       <div class="form-group">
+                           <label for="pigGender">เพศ</label>
+                           <select id="pigGender">
+                               <option value="ผู้">ผู้</option>
+                               <option value="เมีย">เมีย</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="pigBreed">สายพันธุ์</label>
+                           <input type="text" id="pigBreed" placeholder="เช่น ลาร์จไวท์, แลนด์เรซ">
+                       </div>
+                       <div class="form-group">
+                           <label for="pigCost">ต้นทุนลูกพันธุ์ (บาท)</label>
+                           <input type="number" id="pigCost" step="0.01" min="0" value="2700">
+                       </div>
+                       <div class="form-group">
+                           <label for="pigTargetWeight">น้ำหนักเป้าหมาย (กก.)</label>
+                           <input type="number" id="pigTargetWeight" step="0.1" min="0" value="110">
+                       </div>
+                       <div class="form-group" style="grid-column: 1 / -1;">
+                           <button type="submit" class="btn btn-primary">เพิ่มสุกร</button>
+                       </div>
+                   </form>
+               </div>
+
+               <div class="table-container" style="margin-top: 2rem;">
+                   <h3 style="padding: 1rem; margin: 0;">รายชื่อสุกรในฟาร์ม</h3>
+                   <div class="table-responsive">
+                       <table id="pigsTable">
+                           <thead>
+                               <tr>
+                                   <th>รหัส</th>
+                                   <th>กลุ่ม</th>
+                                   <th>น้ำหนัก (กก.)</th>
+                                   <th>อายุ (วัน)</th>
+                                   <th>FCR</th>
+                                   <th>ADG</th>
+                                   <th>สถานะ</th>
+                                   <th>การจัดการ</th>
+                               </tr>
+                           </thead>
+                           <tbody id="pigsTableBody">
+                               <!-- Pig data will be populated here -->
+                           </tbody>
+                       </table>
                    </div>
                </div>
-               
-               <table class="data-table" id="salesTable">
-                   <thead>
-                       <tr>
-                           <th>รหัสการขาย</th>
-                           <th>วันที่</th>
-                           <th>Batch</th>
-                           <th>จำนวน</th>
-                           <th>น้ำหนักรวม</th>
-                           <th>ราคา/kg</th>
-                           <th>รายได้</th>
-                           <th>กำไร</th>
-                           <th>กำไรต่อตัว</th>
-                       </tr>
-                   </thead>
-                   <tbody id="salesTableBody">
-                   </tbody>
-               </table>
-           </div>
+           </section>
+
+           <!-- Feeding Section -->
+           <section id="feeding" class="section">
+               <div class="page-header">
+                   <h1>การให้อาหาร</h1>
+                   <p>บันทึกการให้อาหารและคำนวณ FCR</p>
+               </div>
+
+               <div class="form-container">
+                   <h3>บันทึกการให้อาหาร</h3>
+                   <form id="feedingForm" class="form-grid">
+                       <div class="form-group">
+                           <label for="feedPigId">รหัสสุกร / กลุ่ม *</label>
+                           <select id="feedPigId" required>
+                               <option value="">เลือกสุกรหรือกลุ่ม</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="feedType">ประเภทอาหาร</label>
+                           <select id="feedType">
+                               <option value="อาหารหมูเล็ก">อาหารหมูเล็ก (20 บาท/กก.)</option>
+                               <option value="อาหารหมูรุ่น">อาหารหมูรุ่น (18 บาท/กก.)</option>
+                               <option value="อาหารหมูขุน">อาหารหมูขุน (16 บาท/กก.)</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="feedAmount">ปริมาณอาหาร (กก.)</label>
+                           <input type="number" id="feedAmount" step="0.1" min="0" required>
+                       </div>
+                       <div class="form-group">
+                           <label for="feedDate">วันที่ให้อาหาร</label>
+                           <input type="date" id="feedDate" required>
+                       </div>
+                       <div class="form-group">
+                           <label for="feedNotes">หมายเหตุ</label>
+                           <textarea id="feedNotes" rows="3" placeholder="บันทึกเพิ่มเติม"></textarea>
+                       </div>
+                       <div class="form-group" style="grid-column: 1 / -1;">
+                           <button type="submit" class="btn btn-primary">บันทึกการให้อาหาร</button>
+                       </div>
+                   </form>
+               </div>
+
+               <div class="stats-grid" style="margin-top: 2rem;">
+                   <div class="stat-card">
+                       <h3>อาหารใช้วันนี้ (กก.)</h3>
+                       <div class="value" id="todayFeed">0</div>
+                       <div class="change">ต้นทุน: <span id="todayFeedCost">0</span> บาท</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>อาหารเหลือในสต็อก (กก.)</h3>
+                       <div class="value" id="feedStock">0</div>
+                       <div class="change">เพียงพอ <span id="daysRemaining">0</span> วัน</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>FCR เฉลี่ยล่าสุด</h3>
+                       <div class="value" id="latestFCR">0.00</div>
+                       <div class="change" id="fcrStatus">-</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ต้นทุนอาหารรวม (บาท)</h3>
+                       <div class="value" id="totalFeedCost">0</div>
+                       <div class="change">เดือนนี้</div>
+                   </div>
+               </div>
+
+               <div class="table-container" style="margin-top: 2rem;">
+                   <h3 style="padding: 1rem; margin: 0;">ประวัติการให้อาหาร</h3>
+                   <div class="table-responsive">
+                       <table id="feedingTable">
+                           <thead>
+                               <tr>
+                                   <th>วันที่</th>
+                                   <th>รหัส/กลุ่ม</th>
+                                   <th>ประเภทอาหาร</th>
+                                   <th>ปริมาณ (กก.)</th>
+                                   <th>ต้นทุน (บาท)</th>
+                                   <th>หมายเหตุ</th>
+                               </tr>
+                           </thead>
+                           <tbody id="feedingTableBody">
+                               <!-- Feeding records will be populated here -->
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </section>
+
+           <!-- Health Section -->
+           <section id="health" class="section">
+               <div class="page-header">
+                   <h1>สุขภาพและวัคซีน</h1>
+                   <p>ติดตามสุขภาพสุกรและตารางวัคซีน</p>
+               </div>
+
+               <div class="form-container">
+                   <h3>บันทึกข้อมูลสุขภาพ</h3>
+                   <form id="healthForm" class="form-grid">
+                       <div class="form-group">
+                           <label for="healthPigId">รหัสสุกร *</label>
+                           <select id="healthPigId" required>
+                               <option value="">เลือกสุกร</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="healthType">ประเภท</label>
+                           <select id="healthType">
+                               <option value="วัคซีน">วัคซีน</option>
+                               <option value="ตรวจสุขภาพ">ตรวจสุขภาพ</option>
+                               <option value="รักษาโรค">รักษาโรค</option>
+                               <option value="การตาย">การตาย</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="vaccineType">ประเภทวัคซีน/การรักษา</label>
+                           <select id="vaccineType">
+                               <option value="วัคซีนป้องกันโรคปากและเท้าเปื่อย">วัคซีนป้องกันโรคปากและเท้าเปื่อย</option>
+                               <option value="วัคซีนป้องกันโรคหูน้ำเหลือง">วัคซีนป้องกันโรคหูน้ำเหลือง</option>
+                               <option value="วัคซีนป้องกันโรค PRRS">วัคซีนป้องกันโรค PRRS</option>
+                               <option value="วัคซีนป้องกันโรคพิษสุนัขบ้า">วัคซีนป้องกันโรคพิษสุนัขบ้า</option>
+                               <option value="วัคซีนป้องกันโรคไข้หวัดใหญ่">วัคซีนป้องกันโรคไข้หวัดใหญ่</option>
+                               <option value="ยาปฏิชีวนะ">ยาปฏิชีวนะ</option>
+                               <option value="ยาบำรุงสุขภาพ">ยาบำรุงสุขภาพ</option>
+                               <option value="อื่นๆ">อื่นๆ</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="healthDate">วันที่</label>
+                           <input type="date" id="healthDate" required>
+                       </div>
+                       <div class="form-group">
+                           <label for="nextVaccineDate">วัคซีนเข็มต่อไป</label>
+                           <input type="date" id="nextVaccineDate">
+                       </div>
+                       <div class="form-group">
+                           <label for="healthCost">ค่าใช้จ่าย (บาท)</label>
+                           <input type="number" id="healthCost" step="0.01" min="0">
+                       </div>
+                       <div class="form-group">
+                           <label for="healthNotes">หมายเหตุ</label>
+                           <textarea id="healthNotes" rows="3" placeholder="อาการ การรักษา ผลข้างเคียง"></textarea>
+                       </div>
+                       <div class="form-group" style="grid-column: 1 / -1;">
+                           <button type="submit" class="btn btn-primary">บันทึกข้อมูลสุขภาพ</button>
+                       </div>
+                   </form>
+               </div>
+
+               <div class="stats-grid" style="margin-top: 2rem;">
+                   <div class="stat-card">
+                       <h3>วัคซีนครบกำหนดวันนี้</h3>
+                       <div class="value" id="vaccineDueToday">0</div>
+                       <div class="change">ตัว</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>วัคซีนครบกำหนด 7 วัน</h3>
+                       <div class="value" id="vaccineDueWeek">0</div>
+                       <div class="change">ตัว</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>อัตราการตายเดือนนี้</h3>
+                       <div class="value" id="monthlyMortality">0.0</div>
+                       <div class="change">%</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ค่ารักษาพยาบาลเดือนนี้</h3>
+                       <div class="value" id="monthlyHealthCost">0</div>
+                       <div class="change">บาท</div>
+                   </div>
+               </div>
+
+               <div class="table-container" style="margin-top: 2rem;">
+                   <h3 style="padding: 1rem; margin: 0;">ตารางวัคซีนและสุขภาพ</h3>
+                   <div class="table-responsive">
+                       <table id="healthTable">
+                           <thead>
+                               <tr>
+                                   <th>วันที่</th>
+                                   <th>รหัสสุกร</th>
+                                   <th>ประเภท</th>
+                                   <th>วัคซีน/การรักษา</th>
+                                   <th>เข็มต่อไป</th>
+                                   <th>ค่าใช้จ่าย</th>
+                                   <th>สถานะ</th>
+                               </tr>
+                           </thead>
+                           <tbody id="healthTableBody">
+                               <!-- Health records will be populated here -->
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </section>
+
+           <!-- Reports Section -->
+           <section id="reports" class="section">
+               <div class="page-header">
+                   <h1>รายงานและการวิเคราะห์</h1>
+                   <p>รายงานประสิทธิภาพและการเงินของฟาร์ม</p>
+               </div>
+
+               <div class="form-container">
+                   <h3>สร้างรายงาน</h3>
+                   <div class="form-grid">
+                       <div class="form-group">
+                           <label for="reportType">ประเภทรายงาน</label>
+                           <select id="reportType">
+                               <option value="performance">รายงานประสิทธิภาพการผลิต</option>
+                               <option value="financial">รายงานการเงิน</option>
+                               <option value="health">รายงานสุขภาพ</option>
+                               <option value="feeding">รายงานการให้อาหาร</option>
+                               <option value="growth">รายงานการเจริญเติบโต</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="reportPeriod">ช่วงเวลา</label>
+                           <select id="reportPeriod">
+                               <option value="today">วันนี้</option>
+                               <option value="week">สัปดาห์นี้</option>
+                               <option value="month">เดือนนี้</option>
+                               <option value="quarter">ไตรมาสนี้</option>
+                               <option value="year">ปีนี้</option>
+                               <option value="custom">กำหนดเอง</option>
+                           </select>
+                       </div>
+                       <div class="form-group">
+                           <label for="reportStartDate">วันที่เริ่มต้น</label>
+                           <input type="date" id="reportStartDate">
+                       </div>
+                       <div class="form-group">
+                           <label for="reportEndDate">วันที่สิ้นสุด</label>
+                           <input type="date" id="reportEndDate">
+                       </div>
+                       <div class="form-group" style="grid-column: 1 / -1;">
+                           <button type="button" onclick="generateReport()" class="btn btn-primary">สร้างรายงาน</button>
+                           <button type="button" onclick="exportReport()" class="btn btn-secondary" style="margin-left: 1rem;">ส่งออก PDF</button>
+                       </div>
+                   </div>
+               </div>
+
+               <div id="reportResults" class="table-container" style="margin-top: 2rem; display: none;">
+                   <h3 style="padding: 1rem; margin: 0;">ผลการรายงาน</h3>
+                   <div id="reportContent" style="padding: 2rem;">
+                       <!-- Report content will be generated here -->
+                   </div>
+               </div>
+
+               <!-- Financial Summary -->
+               <div class="chart-container" style="margin-top: 2rem;">
+                   <h3>สรุปการเงิน</h3>
+                   <div class="stats-grid">
+                       <div class="stat-card">
+                           <h3>รายได้รวม</h3>
+                           <div class="value" id="totalRevenue">0</div>
+                           <div class="change">บาท</div>
+                       </div>
+                       <div class="stat-card">
+                           <h3>ต้นทุนรวม</h3>
+                           <div class="value" id="totalCosts">0</div>
+                           <div class="change">บาท</div>
+                       </div>
+                       <div class="stat-card">
+                           <h3>กำไรสุทธิ</h3>
+                           <div class="value" id="netProfit">0</div>
+                           <div class="change">บาท</div>
+                       </div>
+                       <div class="stat-card">
+                           <h3>ROI (%)</h3>
+                           <div class="value" id="roi">0.0</div>
+                           <div class="change">%</div>
+                       </div>
+                   </div>
+               </div>
+           </section>
        </div>
-       
-       <!-- Breeding Tab -->
-       <div id="breeding" class="tab-content">
-           <div class="section">
-               <h3>บันทึกการผสมพันธุ์</h3>
-               <div class="form-grid">
-                   <div class="form-group">
-                       <label>รหัสการผสม</label>
-                       <input type="text" id="breedingId" placeholder="BREED-001">
-                   </div>
-                   <div class="form-group">
-                       <label>รหัสแม่พันธุ์</label>
-                       <input type="text" id="breedingSowId" placeholder="SOW-2023-045">
-                   </div>
-                   <div class="form-group">
-                       <label>รหัสพ่อพันธุ์</label>
-                       <input type="text" id="breedingBoarId" placeholder="BOAR-2022-003">
-                   </div>
-                   <div class="form-group">
-                       <label>วันที่ผสม</label>
-                       <input type="date" id="breedingDate" onchange="calculateFarrowDate()">
-                   </div>
-                   <div class="form-group">
-                       <label>วันที่คาดว่าจะคลอด</label>
-                       <input type="date" id="expectedFarrowDate" readonly>
-                   </div>
-                   <div class="form-group">
-                       <label>วิธีการผสม</label>
-                       <select id="breedingMethod">
-                           <option value="natural">ผสมธรรมชาติ</option>
-                           <option value="ai">ผสมเทียม (AI)</option>
-                       </select>
-                   </div>
-               </div>
-               <button class="btn" onclick="recordBreeding()">บันทึกการผสม</button>
+   </main>
+
+   <!-- PWA Install Prompt -->
+   <div class="install-prompt" id="installPrompt">
+       <div style="display: flex; justify-content: space-between; align-items: center;">
+           <div>
+               <strong>ติดตั้งแอปบนมือถือ</strong>
+               <p style="margin: 0; font-size: 0.9rem; color: var(--neutral-gray);">ใช้งานได้แม้ไม่มีอินเทอร์เน็ต</p>
            </div>
-           
-           <div class="section">
-               <h3>ประวัติการผสมและคลอด</h3>
-               <table class="data-table" id="breedingTable">
-                   <thead>
-                       <tr>
-                           <th>รหัสการผสม</th>
-                           <th>แม่พันธุ์</th>
-                           <th>พ่อพันธุ์</th>
-                           <th>วันที่ผสม</th>
-                           <th>คาดว่าจะคลอด</th>
-                           <th>วิธีการ</th>
-                           <th>สถานะ</th>
-                           <th>จัดการ</th>
-                       </tr>
-                   </thead>
-                   <tbody id="breedingTableBody">
-                   </tbody>
-               </table>
-           </div>
-       </div>
-       
-       <!-- Health Tab -->
-       <div id="health" class="tab-content">
-           <div class="section">
-               <h3>บันทึกการฉีดวัคซีน</h3>
-               <div class="form-grid">
-                   <div class="form-group">
-                       <label>สุกรที่ฉีดวัคซีน</label>
-                       <select id="vaccinePigId">
-                           <option value="">เลือกสุกร</option>
-                       </select>
-                   </div>
-                   <div class="form-group">
-                       <label>ชื่อวัคซีน</label>
-                       <input type="text" id="vaccineName" placeholder="Classical Swine Fever">
-                   </div>
-                   <div class="form-group">
-                       <label>วันที่ฉีด</label>
-                       <input type="date" id="vaccineDate">
-                   </div>
-                   <div class="form-group">
-                       <label>วันที่ฉีดครั้งต่อไป</label>
-                       <input type="date" id="vaccineNextDate">
-                   </div>
-                   <div class="form-group">
-                       <label>ผู้ฉีด</label>
-                       <input type="text" id="vaccineGivenBy" placeholder="สัตวแพทย์">
-                   </div>
-                   <div class="form-group">
-                       <label>หมายเหตุ</label>
-                       <input type="text" id="vaccineNotes" placeholder="ปกติดี">
-                   </div>
-               </div>
-               <button class="btn" onclick="recordVaccination()">บันทึกวัคซีน</button>
-           </div>
-           
-           <div class="section">
-               <h3>ประวัติการฉีดวัคซีน</h3>
-               <table class="data-table" id="healthTable">
-                   <thead>
-                       <tr>
-                           <th>รหัสสุกร</th>
-                           <th>ชื่อวัคซีน</th>
-                           <th>วันที่ฉีด</th>
-                           <th>ครั้งต่อไป</th>
-                           <th>ผู้ฉีด</th>
-                           <th>หมายเหตุ</th>
-                           <th>สถานะ</th>
-                       </tr>
-                   </thead>
-                   <tbody id="healthTableBody">
-                   </tbody>
-               </table>
-           </div>
-       </div>
-       
-       <!-- Reports Tab -->
-       <div id="reports" class="tab-content">
-           <div class="section">
-               <h3>รายงานประสิทธิภาพ FCR</h3>
-               <div class="dashboard-grid">
-                   <div class="metric-card">
-                       <h3>FCR เป้าหมาย Starter</h3>
-                       <div class="metric-value">1.50</div>
-                       <div class="metric-unit">มาตรฐาน</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>FCR เป้าหมาย Grower</h3>
-                       <div class="metric-value">2.20</div>
-                       <div class="metric-unit">มาตรฐาน</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>FCR เป้าหมาย Finisher</h3>
-                       <div class="metric-value">2.80</div>
-                       <div class="metric-unit">มาตรฐาน</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>FCR เฉลี่ยฟาร์ม</h3>
-                       <div class="metric-value" id="reportAvgFCR">0.00</div>
-                       <div class="metric-unit">ปัจจุบัน</div>
-                   </div>
-               </div>
-           </div>
-           
-           <div class="section">
-               <h3>รายงานการเงิน</h3>
-               <div class="dashboard-grid">
-                   <div class="metric-card">
-                       <h3>รายได้รวม</h3>
-                       <div class="metric-value" id="reportTotalRevenue">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>ต้นทุนรวม</h3>
-                       <div class="metric-value" id="reportTotalCost">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>กำไรสุทธิ</h3>
-                       <div class="metric-value" id="reportNetProfit">0</div>
-                       <div class="metric-unit">บาท</div>
-                   </div>
-                   <div class="metric-card">
-                       <h3>Profit Margin</h3>
-                       <div class="metric-value" id="reportProfitMargin">0.00</div>
-                       <div class="metric-unit">%</div>
-                   </div>
-               </div>
-           </div>
-           
-           <div class="section">
-               <h3>รายงานการผลิต</h3>
-               <table class="data-table" id="productionReportTable">
-                   <thead>
-                       <tr>
-                           <th>Batch</th>
-                           <th>จำนวนเริ่มต้น</th>
-                           <th>จำนวนขาย</th>
-                           <th>Mortality Rate</th>
-                           <th>FCR เฉลี่ย</th>
-                           <th>ADG เฉลี่ย</th>
-                           <th>ต้นทุนต่อตัว</th>
-                           <th>กำไรต่อตัว</th>
-                       </tr>
-                   </thead>
-                   <tbody id="productionReportBody">
-                   </tbody>
-               </table>
+           <div>
+               <button onclick="installPWA()" class="btn btn-primary" style="margin-right: 0.5rem;">ติดตั้ง</button>
+               <button onclick="dismissInstall()" class="btn btn-secondary">ปิด</button>
            </div>
        </div>
    </div>
 
    <script>
-       // Global Data Storage
-       let farmData = {
-           version: "4.0.0",
-           farmProfile: {
-               name: "ฟาร์มสุกรตัวอย่าง",
-               location: "จังหวัดเชียงราย",
-               establishedDate: "2024-01-01",
-               farmSize: "medium",
-               capacity: 500
-           },
-           batches: [],
+       // Application State
+       let appData = {
            pigs: [],
-           feeds: [],
-           sales: [],
-           breeding: [],
+           feeding: [],
            health: [],
-           feeding: []
+           settings: {
+               fcrTarget: 2.35,
+               adgTarget: 700,
+               mortalityTarget: 5.0
+           }
        };
 
-       // Initialize the application
-       document.addEventListener('DOMContentLoaded', function() {
-           loadData();
+       // Load data from localStorage
+       function loadData() {
+           const savedData = localStorage.getItem('pigFarmData');
+           if (savedData) {
+               appData = { ...appData, ...JSON.parse(savedData) };
+           }
            updateDashboard();
-           updateAllDropdowns();
-           setDefaultDates();
-       });
+           populateDropdowns();
+           populateTables();
+       }
 
-       // Tab Management
-       function showTab(tabName) {
-           // Hide all tab contents
-           const tabs = document.querySelectorAll('.tab-content');
-           tabs.forEach(tab => tab.classList.remove('active'));
+       // Save data to localStorage
+       function saveData() {
+           localStorage.setItem('pigFarmData', JSON.stringify(appData));
+       }
+
+       // Mobile menu functionality
+       function toggleMobileMenu() {
+           const mobileMenu = document.querySelector('.mobile-menu');
+           const overlay = document.querySelector('.mobile-menu-overlay');
+           const hamburger = document.querySelector('.hamburger');
            
-           // Remove active class from all nav tabs
-           const navTabs = document.querySelectorAll('.nav-tab');
-           navTabs.forEach(tab => tab.classList.remove('active'));
+           mobileMenu.classList.toggle('active');
+           overlay.classList.toggle('active');
+           hamburger.classList.toggle('active');
+       }
+
+       // Section navigation
+       function showSection(sectionName) {
+           // Hide all sections
+           document.querySelectorAll('.section').forEach(section => {
+               section.classList.remove('active');
+           });
            
-           // Show selected tab
-           document.getElementById(tabName).classList.add('active');
+           // Show selected section
+           document.getElementById(sectionName).classList.add('active');
            
-           // Add active class to clicked nav tab
+           // Update navigation active state
+           document.querySelectorAll('.nav-desktop button, .mobile-nav button').forEach(btn => {
+               btn.classList.remove('active');
+           });
+           
            event.target.classList.add('active');
            
-           // Update dropdowns and displays
-           updateAllDropdowns();
-           updateDashboard();
-       }
-
-       // Data Management Functions
-       function saveData() {
-           localStorage.setItem('pigFarmData', JSON.stringify(farmData));
-       }
-
-       function loadData() {
-           const saved = localStorage.getItem('pigFarmData');
-           if (saved) {
-               farmData = JSON.parse(saved);
+           // Update specific sections
+           if (sectionName === 'dashboard') {
+               updateDashboard();
            }
-       }
-
-       function exportData() {
-           const dataStr = JSON.stringify(farmData, null, 2);
-           const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-           
-           const exportFileDefaultName = `farm-data-${new Date().toISOString().split('T')[0]}.json`;
-           
-           const linkElement = document.createElement('a');
-           linkElement.setAttribute('href', dataUri);
-           linkElement.setAttribute('download', exportFileDefaultName);
-           linkElement.click();
-       }
-
-       function importData(event) {
-           const file = event.target.files[0];
-           if (file) {
-               const reader = new FileReader();
-               reader.onload = function(e) {
-                   try {
-                       farmData = JSON.parse(e.target.result);
-                       saveData();
-                       updateDashboard();
-                       updateAllDropdowns();
-                       alert('นำเข้าข้อมูลสำเร็จ!');
-                   } catch (error) {
-                       alert('ไฟล์ข้อมูลไม่ถูกต้อง!');
-                   }
-               };
-               reader.readAsText(file);
-           }
-       }
-
-       // Batch Management
-       function addBatch() {
-           const batchId = document.getElementById('batchId').value;
-           const birthDate = document.getElementById('batchBirthDate').value;
-           const pigCount = parseInt(document.getElementById('batchPigCount').value);
-           const stage = document.getElementById('batchStage').value;
-           const weight = parseFloat(document.getElementById('batchWeight').value);
-           const targetWeight = parseFloat(document.getElementById('batchTargetWeight').value);
-
-           if (!batchId || !birthDate || !pigCount || !stage || !weight) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const batch = {
-               batchId: batchId,
-               birthDate: birthDate,
-               currentStage: stage,
-               pigCount: pigCount,
-               averageWeight: weight,
-               targetWeight: targetWeight || 100,
-               feedAllocated: 0,
-               feedConsumed: 0,
-               fcrTarget: getTargetFCR(stage),
-               fcrActual: 0,
-               costToDate: 0,
-               estimatedSaleDate: calculateSaleDate(birthDate),
-               status: 'active'
-           };
-
-           farmData.batches.push(batch);
-           saveData();
-           updateBatchesTable();
-           updateAllDropdowns();
-           clearBatchForm();
-           alert('เพิ่ม Batch สำเร็จ!');
-       }
-
-       function getTargetFCR(stage) {
-           const targets = {
-               'creep': 1.2,
-               'starter': 1.5,
-               'grower': 2.2,
-               'finisher': 2.8
-           };
-           return targets[stage] || 2.5;
-       }
-
-       function calculateSaleDate(birthDate) {
-           const birth = new Date(birthDate);
-           birth.setDate(birth.getDate() + 168); // 24 weeks
-           return birth.toISOString().split('T')[0];
-       }
-
-       function updateBatchesTable() {
-           const tbody = document.getElementById('batchesTableBody');
-           tbody.innerHTML = '';
-
-           farmData.batches.forEach(batch => {
-               const age = calculateAge(batch.birthDate);
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${batch.batchId}</td>
-                   <td>${formatDate(batch.birthDate)}</td>
-                   <td>${age}</td>
-                   <td>${batch.pigCount}</td>
-                   <td>${getStageText(batch.currentStage)}</td>
-                   <td>${batch.averageWeight.toFixed(1)} kg</td>
-                   <td>${batch.fcrActual.toFixed(2)}</td>
-                   <td>${formatCurrency(batch.costToDate)}</td>
-                   <td><span class="status-badge status-${batch.status}">${getStatusText(batch.status)}</span></td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteBatch('${batch.batchId}')">ลบ</button>
-                   </td>
-               `;
-               tbody.appendChild(row);
-           });
-       }
-
-       function deleteBatch(batchId) {
-           if (confirm('คุณต้องการลบ Batch นี้หรือไม่?')) {
-               farmData.batches = farmData.batches.filter(b => b.batchId !== batchId);
-               saveData();
-               updateBatchesTable();
-               updateAllDropdowns();
-           }
-       }
-
-       function clearBatchForm() {
-           document.getElementById('batchId').value = '';
-           document.getElementById('batchBirthDate').value = '';
-           document.getElementById('batchPigCount').value = '';
-           document.getElementById('batchWeight').value = '';
-           document.getElementById('batchTargetWeight').value = '';
        }
 
        // Pig Management
-       function addPig() {
-           const pigId = document.getElementById('pigId').value;
-           const batchId = document.getElementById('pigBatchId').value;
-           const tagNumber = document.getElementById('pigTagNumber').value;
-           const birthDate = document.getElementById('pigBirthDate').value;
-           const breed = document.getElementById('pigBreed').value;
-           const sex = document.getElementById('pigSex').value;
-           const currentWeight = parseFloat(document.getElementById('pigCurrentWeight').value);
-           const parentSow = document.getElementById('pigParentSow').value;
-           const parentBoar = document.getElementById('pigParentBoar').value;
-
-           if (!pigId || !batchId || !tagNumber || !birthDate || !currentWeight) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const pig = {
-               pigId: pigId,
-               batchId: batchId,
-               tagNumber: tagNumber,
-               birthDate: birthDate,
-               breed: breed,
-               sex: sex,
-               parentSowId: parentSow,
-               parentBoarId: parentBoar,
-               currentWeight: currentWeight,
-               currentStage: getCurrentStageByAge(birthDate),
-               weightHistory: [{date: new Date().toISOString().split('T')[0], weight: currentWeight}],
-               feedHistory: [],
-               healthRecords: [],
+       document.getElementById('pigForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const pigData = {
+               id: document.getElementById('pigId').value,
+               group: document.getElementById('pigGroup').value,
+               weight: parseFloat(document.getElementById('pigWeight').value) || 0,
+               age: parseInt(document.getElementById('pigAge').value) || 0,
+               gender: document.getElementById('pigGender').value,
+               breed: document.getElementById('pigBreed').value,
+               cost: parseFloat(document.getElementById('pigCost').value) || 2700,
+               targetWeight: parseFloat(document.getElementById('pigTargetWeight').value) || 110,
+               startWeight: parseFloat(document.getElementById('pigWeight').value) || 0,
+               startDate: new Date().toISOString().split('T')[0],
+               totalFeed: 0,
                status: 'active'
            };
 
-           farmData.pigs.push(pig);
+           // Check if pig ID already exists
+           if (appData.pigs.find(pig => pig.id === pigData.id)) {
+               alert('รหัสสุกรนี้มีอยู่แล้ว กรุณาใช้รหัสอื่น');
+               return;
+           }
+
+           appData.pigs.push(pigData);
            saveData();
-           updatePigsTable();
-           updateAllDropdowns();
-           clearPigForm();
-           alert('ลงทะเบียนสุกรสำเร็จ!');
+           
+           // Reset form
+           this.reset();
+           
+           // Update displays
+           updateDashboard();
+           populateDropdowns();
+           populateTables();
+           
+           alert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
+       });
+
+       // Feeding Management
+       document.getElementById('feedingForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const feedingData = {
+               pigId: document.getElementById('feedPigId').value,
+               type: document.getElementById('feedType').value,
+               amount: parseFloat(document.getElementById('feedAmount').value),
+               date: document.getElementById('feedDate').value,
+               notes: document.getElementById('feedNotes').value,
+               cost: calculateFeedCost(document.getElementById('feedType').value, parseFloat(document.getElementById('feedAmount').value))
+           };
+
+           appData.feeding.push(feedingData);
+           
+           // Update pig's total feed consumption
+           const pig = appData.pigs.find(p => p.id === feedingData.pigId);
+           if (pig) {
+               pig.totalFeed = (pig.totalFeed || 0) + feedingData.amount;
+           }
+           
+           saveData();
+           
+           // Reset form
+           this.reset();
+           document.getElementById('feedDate').value = new Date().toISOString().split('T')[0];
+           
+           // Update displays
+           updateDashboard();
+           populateTables();
+           
+           alert('บันทึกการให้อาหารเรียบร้อยแล้ว');
+       });
+
+       // Health Management
+       document.getElementById('healthForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const healthData = {
+               pigId: document.getElementById('healthPigId').value,
+               type: document.getElementById('healthType').value,
+               vaccineType: document.getElementById('vaccineType').value,
+               date: document.getElementById('healthDate').value,
+               nextVaccineDate: document.getElementById('nextVaccineDate').value,
+               cost: parseFloat(document.getElementById('healthCost').value) || 0,
+               notes: document.getElementById('healthNotes').value
+           };
+
+           appData.health.push(healthData);
+           
+           // If it's a death record, update pig status
+           if (healthData.type === 'การตาย') {
+               const pig = appData.pigs.find(p => p.id === healthData.pigId);
+               if (pig) {
+                   pig.status = 'dead';
+                   pig.deathDate = healthData.date;
+               }
+           }
+           
+           saveData();
+           
+           // Reset form
+           this.reset();
+           document.getElementById('healthDate').value = new Date().toISOString().split('T')[0];
+           
+           // Update displays
+           updateDashboard();
+           populateTables();
+           
+           alert('บันทึกข้อมูลสุขภาพเรียบร้อยแล้ว');
+       });
+
+       // Calculation functions
+       function calculateFeedCost(feedType, amount) {
+           const prices = {
+               'อาหารหมูเล็ก': 20,
+               'อาหารหมูรุ่น': 18,
+               'อาหารหมูขุน': 16
+           };
+           return (prices[feedType] || 18) * amount;
        }
 
-       function getCurrentStageByAge(birthDate) {
-           const age = calculateAge(birthDate);
-           if (age <= 21) return 'creep';
-           if (age <= 56) return 'starter';
-           if (age <= 112) return 'grower';
-           return 'finisher';
-       }
-
-       function updatePigsTable() {
-           const tbody = document.getElementById('pigsTableBody');
-           tbody.innerHTML = '';
-
-           farmData.pigs.forEach(pig => {
-               const age = calculateAge(pig.birthDate);
-               const adg = calculateADG(pig);
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td><div class="qr-code">QR-${pig.tagNumber}</div></td>
-                   <td>${pig.pigId}</td>
-                   <td>${pig.tagNumber}</td>
-                   <td>${pig.batchId}</td>
-                   <td>${age}</td>
-                   <td>${pig.breed}</td>
-                   <td>${getSexText(pig.sex)}</td>
-                   <td>${pig.currentWeight.toFixed(1)} kg</td>
-                   <td>${adg.toFixed(2)} kg/วัน</td>
-                   <td><span class="status-badge status-${pig.status}">${getStatusText(pig.status)}</span></td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deletePig('${pig.pigId}')">ลบ</button>
-                   </td>
-               `;
-               tbody.appendChild(row);
-           });
+       function calculateFCR(pig) {
+           if (!pig.totalFeed || pig.weight <= pig.startWeight) return 0;
+           return pig.totalFeed / (pig.weight - pig.startWeight);
        }
 
        function calculateADG(pig) {
-           if (pig.weightHistory.length < 2) return 0;
-           const firstRecord = pig.weightHistory[0];
-           const lastRecord = pig.weightHistory[pig.weightHistory.length - 1];
-           const weightGain = lastRecord.weight - firstRecord.weight;
-           const daysDiff = (new Date(lastRecord.date) - new Date(firstRecord.date)) / (1000 * 60 * 60 * 24);
-           return daysDiff > 0 ? weightGain / daysDiff : 0;
+           const today = new Date();
+           const startDate = new Date(pig.startDate);
+           const daysDiff = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+           
+           if (daysDiff <= 0 || pig.weight <= pig.startWeight) return 0;
+           return ((pig.weight - pig.startWeight) * 1000) / daysDiff; // Convert to grams
        }
 
-       function deletePig(pigId) {
-           if (confirm('คุณต้องการลบสุกรนี้หรือไม่?')) {
-               farmData.pigs = farmData.pigs.filter(p => p.pigId !== pigId);
-               saveData();
-               updatePigsTable();
-               updateAllDropdowns();
-           }
+       function predictSaleDate(pig) {
+           const adg = calculateADG(pig);
+           if (adg <= 0) return null;
+           
+           const remainingWeight = pig.targetWeight - pig.weight;
+           const daysToTarget = Math.ceil((remainingWeight * 1000) / adg);
+           
+           const saleDate = new Date();
+           saleDate.setDate(saleDate.getDate() + daysToTarget);
+           return saleDate;
        }
 
-       function clearPigForm() {
-           document.getElementById('pigId').value = '';
-           document.getElementById('pigBatchId').value = '';
-           document.getElementById('pigTagNumber').value = '';
-           document.getElementById('pigBirthDate').value = '';
-           document.getElementById('pigCurrentWeight').value = '';
-           document.getElementById('pigParentSow').value = '';
-           document.getElementById('pigParentBoar').value = '';
-       }
-
-       // Feed Management
-       function addFeed() {
-           const feedId = document.getElementById('feedId').value;
-           const type = document.getElementById('feedType').value;
-           const brand = document.getElementById('feedBrand').value;
-           const price = parseFloat(document.getElementById('feedPrice').value);
-           const weight = parseFloat(document.getElementById('feedWeight').value);
-           const protein = parseFloat(document.getElementById('feedProtein').value);
-
-           if (!feedId || !type || !brand || !price || !weight) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const feed = {
-               feedId: feedId,
-               type: type,
-               brand: brand,
-               pricePerBag: price,
-               weightPerBag: weight,
-               protein: protein || 0,
-               energy: 3200,
-               currentStock: 0,
-               minStock: 10,
-               expiryDate: "2024-12-31"
-           };
-
-           farmData.feeds.push(feed);
-           saveData();
-           updateFeedTable();
-           updateAllDropdowns();
-           clearFeedForm();
-           alert('เพิ่มอาหารสำเร็จ!');
-       }
-
-       function updateFeedTable() {
-           const tbody = document.getElementById('feedTableBody');
-           tbody.innerHTML = '';
-
-           farmData.feeds.forEach(feed => {
-               const pricePerKg = feed.pricePerBag / feed.weightPerBag;
-               const stockStatus = feed.currentStock <= feed.minStock ? 'ต่ำ' : 'ปกติ';
-               const statusClass = feed.currentStock <= feed.minStock ? 'status-dead' : 'status-active';
-               
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${feed.feedId}</td>
-                   <td>${getFeedTypeText(feed.type)}</td>
-                   <td>${feed.brand}</td>
-                   <td>${formatCurrency(feed.pricePerBag)}</td>
-                   <td>${formatCurrency(pricePerKg)}</td>
-                   <td>${feed.protein}%</td>
-                   <td>${feed.currentStock} ถุง</td>
-                   <td><span class="status-badge ${statusClass}">${stockStatus}</span></td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteFeed('${feed.feedId}')">ลบ</button>
-                   </td>
-               `;
-               tbody.appendChild(row);
-           });
-       }
-
-       function recordFeeding() {
-           const batchId = document.getElementById('feedingBatchId').value;
-           const feedId = document.getElementById('feedingFeedId').value;
-           const amount = parseFloat(document.getElementById('feedingAmount').value);
-           const date = document.getElementById('feedingDate').value;
-
-           if (!batchId || !feedId || !amount || !date) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const feeding = {
-               id: Date.now().toString(),
-               batchId: batchId,
-               feedId: feedId,
-               amount: amount,
-               date: date,
-               cost: calculateFeedingCost(feedId, amount)
-           };
-
-           farmData.feeding.push(feeding);
-           updateBatchFeedConsumption(batchId, amount);
-           saveData();
-           clearFeedingForm();
-           alert('บันทึกการให้อาหารสำเร็จ!');
-       }
-
-       function calculateFeedingCost(feedId, amount) {
-           const feed = farmData.feeds.find(f => f.feedId === feedId);
-           if (feed) {
-               const pricePerKg = feed.pricePerBag / feed.weightPerBag;
-               return amount * pricePerKg;
-           }
-           return 0;
-       }
-
-       function updateBatchFeedConsumption(batchId, amount) {
-           const batch = farmData.batches.find(b => b.batchId === batchId);
-           if (batch) {
-               batch.feedConsumed += amount;
-               batch.fcrActual = batch.feedConsumed / (batch.averageWeight * batch.pigCount);
-               batch.costToDate += calculateFeedingCost(document.getElementById('feedingFeedId').value, amount);
-           }
-       }
-
-       function clearFeedingForm() {
-           document.getElementById('feedingBatchId').value = '';
-           document.getElementById('feedingFeedId').value = '';
-           document.getElementById('feedingAmount').value = '';
-           document.getElementById('feedingDate').value = '';
-       }
-
-       function clearFeedForm() {
-           document.getElementById('feedId').value = '';
-           document.getElementById('feedBrand').value = '';
-           document.getElementById('feedPrice').value = '';
-           document.getElementById('feedWeight').value = '';
-           document.getElementById('feedProtein').value = '';
-       }
-
-       // Sales Management
-       function recordSale() {
-           const saleId = document.getElementById('saleId').value;
-           const date = document.getElementById('saleDate').value;
-           const batchId = document.getElementById('saleBatchId').value;
-           const pigCount = parseInt(document.getElementById('salePigCount').value);
-           const totalWeight = parseFloat(document.getElementById('saleTotalWeight').value);
-           const pricePerKg = parseFloat(document.getElementById('salePricePerKg').value);
-
-           if (!saleId || !date || !batchId || !pigCount || !totalWeight || !pricePerKg) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const totalRevenue = totalWeight * pricePerKg;
-           const totalCost = calculateBatchCost(batchId, pigCount);
-           const profit = totalRevenue - totalCost;
-
-           const sale = {
-               saleId: saleId,
-               date: date,
-               batchId: batchId,
-               pigIds: [],
-               totalPigs: pigCount,
-               totalWeight: totalWeight,
-               pricePerKg: pricePerKg,
-               transportCost: 0,
-               totalRevenue: totalRevenue,
-               netRevenue: totalRevenue,
-               totalCost: totalCost,
-               profit: profit,
-               buyer: "ไม่ระบุ"
-           };
-
-           farmData.sales.push(sale);
-           updateBatchAfterSale(batchId, pigCount);
-           saveData();
-           updateSalesTable();
-           updateDashboard();
-           clearSaleForm();
-           alert('บันทึกการขายสำเร็จ!');
-       }
-
-       function calculateBatchCost(batchId, pigCount) {
-           const batch = farmData.batches.find(b => b.batchId === batchId);
-           if (batch) {
-               const costPerPig = batch.costToDate / batch.pigCount;
-               return costPerPig * pigCount;
-           }
-           return 0;
-       }
-
-       function updateBatchAfterSale(batchId, soldPigs) {
-           const batch = farmData.batches.find(b => b.batchId === batchId);
-           if (batch) {
-               batch.pigCount -= soldPigs;
-               if (batch.pigCount <= 0) {
-                   batch.status = 'sold';
+       // Update Dashboard
+       function updateDashboard() {
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const deadPigs = appData.pigs.filter(pig => pig.status === 'dead');
+           
+           // Total pigs
+           document.getElementById('totalPigs').textContent = activePigs.length;
+           
+           // Average FCR
+           const fcrs = activePigs.map(pig => calculateFCR(pig)).filter(fcr => fcr > 0);
+           const avgFCR = fcrs.length > 0 ? fcrs.reduce((a, b) => a + b, 0) / fcrs.length : 0;
+           document.getElementById('avgFCR').textContent = avgFCR.toFixed(2);
+           
+           // FCR status
+           const fcrStatus = document.getElementById('fcrChange');
+           if (avgFCR > 0) {
+               if (avgFCR <= appData.settings.fcrTarget) {
+                   fcrStatus.textContent = '✅ ดีกว่าเป้าหมาย';
+                   fcrStatus.style.color = 'var(--success)';
+               } else {
+                   fcrStatus.textContent = '⚠️ สูงกว่าเป้าหมาย';
+                   fcrStatus.style.color = 'var(--warning)';
                }
            }
-       }
-
-       function updateSalesTable() {
-           const tbody = document.getElementById('salesTableBody');
-           tbody.innerHTML = '';
-
-           farmData.sales.forEach(sale => {
-               const profitPerPig = sale.profit / sale.totalPigs;
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${sale.saleId}</td>
-                   <td>${formatDate(sale.date)}</td>
-                   <td>${sale.batchId}</td>
-                   <td>${sale.totalPigs}</td>
-                   <td>${sale.totalWeight.toFixed(1)} kg</td>
-                   <td>${formatCurrency(sale.pricePerKg)}</td>
-                   <td>${formatCurrency(sale.totalRevenue)}</td>
-                   <td>${formatCurrency(sale.profit)}</td>
-                   <td>${formatCurrency(profitPerPig)}</td>
-               `;
-tbody.appendChild(row);
-           });
-       }
-
-       function clearSaleForm() {
-           document.getElementById('saleId').value = '';
-           document.getElementById('saleDate').value = '';
-           document.getElementById('saleBatchId').value = '';
-           document.getElementById('salePigCount').value = '';
-           document.getElementById('saleTotalWeight').value = '';
-           document.getElementById('salePricePerKg').value = '';
-       }
-
-       // Breeding Management
-       function calculateFarrowDate() {
-           const breedingDate = document.getElementById('breedingDate').value;
-           if (breedingDate) {
-               const date = new Date(breedingDate);
-               date.setDate(date.getDate() + 114); // 114 days gestation
-               document.getElementById('expectedFarrowDate').value = date.toISOString().split('T')[0];
+           
+           // Average ADG
+           const adgs = activePigs.map(pig => calculateADG(pig)).filter(adg => adg > 0);
+           const avgADG = adgs.length > 0 ? adgs.reduce((a, b) => a + b, 0) / adgs.length : 0;
+           document.getElementById('avgADG').textContent = Math.round(avgADG);
+           
+           // ADG status
+           const adgStatus = document.getElementById('adgChange');
+           if (avgADG > 0) {
+               if (avgADG >= appData.settings.adgTarget) {
+                   adgStatus.textContent = '✅ ดีกว่าเป้าหมาย';
+                   adgStatus.style.color = 'var(--success)';
+               } else {
+                   adgStatus.textContent = '⚠️ ต่ำกว่าเป้าหมาย';
+                   adgStatus.style.color = 'var(--warning)';
+               }
            }
-       }
-
-       function recordBreeding() {
-           const breedingId = document.getElementById('breedingId').value;
-           const sowId = document.getElementById('breedingSowId').value;
-           const boarId = document.getElementById('breedingBoarId').value;
-           const date = document.getElementById('breedingDate').value;
-           const expectedFarrow = document.getElementById('expectedFarrowDate').value;
-           const method = document.getElementById('breedingMethod').value;
-
-           if (!breedingId || !sowId || !boarId || !date) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const breeding = {
-               breedingId: breedingId,
-               sowId: sowId,
-               boarId: boarId,
-               breedingDate: date,
-               expectedFarrowDate: expectedFarrow,
-               method: method,
-               status: 'bred',
-               actualFarrowDate: null,
-               totalBorn: 0,
-               totalAlive: 0,
-               avgBirthWeight: 0
-           };
-
-           farmData.breeding.push(breeding);
-           saveData();
-           updateBreedingTable();
-           clearBreedingForm();
-           alert('บันทึกการผสมสำเร็จ!');
-       }
-
-       function updateBreedingTable() {
-           const tbody = document.getElementById('breedingTableBody');
-           tbody.innerHTML = '';
-
-           farmData.breeding.forEach(breeding => {
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${breeding.breedingId}</td>
-                   <td>${breeding.sowId}</td>
-                   <td>${breeding.boarId}</td>
-                   <td>${formatDate(breeding.breedingDate)}</td>
-                   <td>${formatDate(breeding.expectedFarrowDate)}</td>
-                   <td>${getBreedingMethodText(breeding.method)}</td>
-                   <td><span class="status-badge status-${breeding.status}">${getBreedingStatusText(breeding.status)}</span></td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteBreeding('${breeding.breedingId}')">ลบ</button>
-                   </td>
-               `;
-               tbody.appendChild(row);
-           });
-       }
-
-       function clearBreedingForm() {
-           document.getElementById('breedingId').value = '';
-           document.getElementById('breedingSowId').value = '';
-           document.getElementById('breedingBoarId').value = '';
-           document.getElementById('breedingDate').value = '';
-           document.getElementById('expectedFarrowDate').value = '';
-       }
-
-       function deleteBreeding(breedingId) {
-           if (confirm('คุณต้องการลบข้อมูลการผสมนี้หรือไม่?')) {
-               farmData.breeding = farmData.breeding.filter(b => b.breedingId !== breedingId);
-               saveData();
-               updateBreedingTable();
-           }
-       }
-
-       // Health Management
-       function recordVaccination() {
-           const pigId = document.getElementById('vaccinePigId').value;
-           const vaccineName = document.getElementById('vaccineName').value;
-           const date = document.getElementById('vaccineDate').value;
-           const nextDate = document.getElementById('vaccineNextDate').value;
-           const givenBy = document.getElementById('vaccineGivenBy').value;
-           const notes = document.getElementById('vaccineNotes').value;
-
-           if (!pigId || !vaccineName || !date) {
-               alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-               return;
-           }
-
-           const vaccination = {
-               id: Date.now().toString(),
-               pigId: pigId,
-               vaccineName: vaccineName,
-               date: date,
-               nextDate: nextDate,
-               givenBy: givenBy,
-               notes: notes,
-               status: 'completed'
-           };
-
-           farmData.health.push(vaccination);
-           saveData();
-           updateHealthTable();
-           clearVaccineForm();
-           alert('บันทึกการฉีดวัคซีนสำเร็จ!');
-       }
-
-       function updateHealthTable() {
-           const tbody = document.getElementById('healthTableBody');
-           tbody.innerHTML = '';
-
-           farmData.health.forEach(record => {
-               const status = isVaccineDue(record.nextDate) ? 'ครบกำหนด' : 'ปกติ';
-               const statusClass = isVaccineDue(record.nextDate) ? 'status-dead' : 'status-active';
-               
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${record.pigId}</td>
-                   <td>${record.vaccineName}</td>
-                   <td>${formatDate(record.date)}</td>
-                   <td>${record.nextDate ? formatDate(record.nextDate) : '-'}</td>
-                   <td>${record.givenBy}</td>
-                   <td>${record.notes}</td>
-                   <td><span class="status-badge ${statusClass}">${status}</span></td>
-               `;
-               tbody.appendChild(row);
-           });
-       }
-
-       function isVaccineDue(nextDate) {
-           if (!nextDate) return false;
-           const today = new Date();
-           const dueDate = new Date(nextDate);
-           return dueDate <= today;
-       }
-
-       function clearVaccineForm() {
-           document.getElementById('vaccinePigId').value = '';
-           document.getElementById('vaccineName').value = '';
-           document.getElementById('vaccineDate').value = '';
-           document.getElementById('vaccineNextDate').value = '';
-           document.getElementById('vaccineGivenBy').value = '';
-           document.getElementById('vaccineNotes').value = '';
-       }
-
-       // Dashboard Updates
-       function updateDashboard() {
-           updateMetrics();
+           // Mortality rate
+           const totalPigs = appData.pigs.length;
+           const mortalityRate = totalPigs > 0 ? (deadPigs.length / totalPigs) * 100 : 0;
+           document.getElementById('mortalityRate').textContent = mortalityRate.toFixed(1);
+           
+           // Update alerts
            updateAlerts();
-           updateSalesMetrics();
-           updateReports();
-           drawFCRChart();
+           
+           // Update feeding stats
+           updateFeedingStats();
+           
+           // Update health stats
+           updateHealthStats();
+           
+           // Update financial summary
+           updateFinancialSummary();
        }
 
-       function updateMetrics() {
-           const totalPigs = farmData.pigs.filter(p => p.status === 'active').length;
-           const activeBatches = farmData.batches.filter(b => b.status === 'active').length;
-           const avgFCR = calculateAverageFCR();
-           const avgADG = calculateAverageADG();
-           const monthlyRevenue = calculateMonthlyRevenue();
-           const netProfit = calculateNetProfit();
-
-           document.getElementById('totalPigs').textContent = totalPigs;
-           document.getElementById('activeBatches').textContent = activeBatches;
-           document.getElementById('avgFCR').textContent = avgFCR.toFixed(2);
-           document.getElementById('avgADG').textContent = avgADG.toFixed(2);
-           document.getElementById('monthlyRevenue').textContent = formatNumber(monthlyRevenue);
-           document.getElementById('netProfit').textContent = formatNumber(netProfit);
-       }
-
-       function calculateAverageFCR() {
-           const activeBatches = farmData.batches.filter(b => b.status === 'active');
-           if (activeBatches.length === 0) return 0;
-           const totalFCR = activeBatches.reduce((sum, batch) => sum + batch.fcrActual, 0);
-           return totalFCR / activeBatches.length;
-       }
-
-       function calculateAverageADG() {
-           const activePigs = farmData.pigs.filter(p => p.status === 'active');
-           if (activePigs.length === 0) return 0;
-           const totalADG = activePigs.reduce((sum, pig) => sum + calculateADG(pig), 0);
-           return totalADG / activePigs.length;
-       }
-
-       function calculateMonthlyRevenue() {
-           const currentMonth = new Date().getMonth();
-           const currentYear = new Date().getFullYear();
-           return farmData.sales
-               .filter(sale => {
-                   const saleDate = new Date(sale.date);
-                   return saleDate.getMonth() === currentMonth && saleDate.getFullYear() === currentYear;
-               })
-               .reduce((sum, sale) => sum + sale.totalRevenue, 0);
-       }
-
-       function calculateNetProfit() {
-           return farmData.sales.reduce((sum, sale) => sum + sale.profit, 0);
-       }
-
-       function updateSalesMetrics() {
-           const totalRevenue = farmData.sales.reduce((sum, sale) => sum + sale.totalRevenue, 0);
-           const totalCost = farmData.sales.reduce((sum, sale) => sum + sale.totalCost, 0);
-           const totalProfit = farmData.sales.reduce((sum, sale) => sum + sale.profit, 0);
-           const roi = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
-
-           document.getElementById('totalSalesRevenue').textContent = formatNumber(totalRevenue);
-           document.getElementById('totalSalesCost').textContent = formatNumber(totalCost);
-           document.getElementById('totalSalesProfit').textContent = formatNumber(totalProfit);
-           document.getElementById('totalROI').textContent = roi.toFixed(2);
-       }
-
-       function updateReports() {
-           const avgFCR = calculateAverageFCR();
-           const totalRevenue = farmData.sales.reduce((sum, sale) => sum + sale.totalRevenue, 0);
-           const totalCost = farmData.sales.reduce((sum, sale) => sum + sale.totalCost, 0);
-           const netProfit = totalRevenue - totalCost;
-           const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
-
-           document.getElementById('reportAvgFCR').textContent = avgFCR.toFixed(2);
-           document.getElementById('reportTotalRevenue').textContent = formatNumber(totalRevenue);
-           document.getElementById('reportTotalCost').textContent = formatNumber(totalCost);
-           document.getElementById('reportNetProfit').textContent = formatNumber(netProfit);
-           document.getElementById('reportProfitMargin').textContent = profitMargin.toFixed(2);
-
-           updateProductionReport();
-       }
-
-       function updateProductionReport() {
-           const tbody = document.getElementById('productionReportBody');
-           tbody.innerHTML = '';
-
-           farmData.batches.forEach(batch => {
-               const soldPigs = farmData.sales
-                   .filter(sale => sale.batchId === batch.batchId)
-                   .reduce((sum, sale) => sum + sale.totalPigs, 0);
-               
-               const mortalityRate = batch.pigCount > 0 ? ((batch.pigCount - soldPigs) / batch.pigCount) * 100 : 0;
-               const costPerHead = batch.pigCount > 0 ? batch.costToDate / batch.pigCount : 0;
-               const profitPerHead = calculateProfitPerHead(batch.batchId);
-
-               const row = document.createElement('tr');
-               row.innerHTML = `
-                   <td>${batch.batchId}</td>
-                   <td>${batch.pigCount}</td>
-                   <td>${soldPigs}</td>
-                   <td>${mortalityRate.toFixed(1)}%</td>
-                   <td>${batch.fcrActual.toFixed(2)}</td>
-                   <td>0.65</td>
-                   <td>${formatCurrency(costPerHead)}</td>
-                   <td>${formatCurrency(profitPerHead)}</td>
-               `;
-               tbody.appendChild(row);
-           });
-       }
-
-       function calculateProfitPerHead(batchId) {
-           const batchSales = farmData.sales.filter(sale => sale.batchId === batchId);
-           const totalProfit = batchSales.reduce((sum, sale) => sum + sale.profit, 0);
-           const totalSoldPigs = batchSales.reduce((sum, sale) => sum + sale.totalPigs, 0);
-           return totalSoldPigs > 0 ? totalProfit / totalSoldPigs : 0;
-       }
-
+       // Update Alerts
        function updateAlerts() {
            const alertsContainer = document.getElementById('alertsContainer');
            alertsContainer.innerHTML = '';
-
-           // Check for low feed stock
-           const lowStockFeeds = farmData.feeds.filter(feed => feed.currentStock <= feed.minStock);
-           lowStockFeeds.forEach(feed => {
-               const alert = document.createElement('div');
-               alert.className = 'alert alert-warning';
-               alert.textContent = `แจ้งเตือน: อาหาร ${feed.brand} เหลือน้อย (${feed.currentStock} ถุง)`;
-               alertsContainer.appendChild(alert);
-           });
-
-           // Check for vaccination due
-           const dueVaccinations = farmData.health.filter(record => isVaccineDue(record.nextDate));
-           if (dueVaccinations.length > 0) {
-               const alert = document.createElement('div');
-               alert.className = 'alert alert-danger';
-               alert.textContent = `แจ้งเตือน: มีสุกร ${dueVaccinations.length} ตัว ที่ครบกำหนดฉีดวัคซีน`;
-               alertsContainer.appendChild(alert);
+           
+           const alerts = [];
+           
+           // Check pigs ready for sale
+           const readyForSale = appData.pigs.filter(pig => 
+               pig.status === 'active' && pig.weight >= pig.targetWeight
+           );
+           if (readyForSale.length > 0) {
+               alerts.push({
+                   type: 'success',
+                   message: `มีสุกร ${readyForSale.length} ตัว พร้อมขาย (น้ำหนักถึงเป้าหมายแล้ว)`
+               });
            }
-
-           // Check for ready to sell pigs
-           const readyToSell = farmData.batches.filter(batch => {
-               return batch.averageWeight >= batch.targetWeight && batch.status === 'active';
+           
+           // Check FCR performance
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const poorFCRPigs = activePigs.filter(pig => {
+               const fcr = calculateFCR(pig);
+               return fcr > 0 && fcr > appData.settings.fcrTarget * 1.1;
            });
-           readyToSell.forEach(batch => {
-               const alert = document.createElement('div');
-               alert.className = 'alert alert-success';
-               alert.textContent = `แจ้งเตือน: Batch ${batch.batchId} พร้อมขาย (น้ำหนักถึงเป้าหมายแล้ว)`;
-               alertsContainer.appendChild(alert);
-           });
-
-           if (alertsContainer.children.length === 0) {
-               const alert = document.createElement('div');
-               alert.className = 'alert alert-success';
-               alert.textContent = 'ไม่มีการแจ้งเตือน - ทุกอย่างเป็นปกติ';
-               alertsContainer.appendChild(alert);
+           if (poorFCRPigs.length > 0) {
+               alerts.push({
+                   type: 'warning',
+                   message: `มีสุกร ${poorFCRPigs.length} ตัว มี FCR สูงกว่าเป้าหมาย 10%`
+               });
+           }
+           
+           // Check vaccines due
+           const today = new Date().toISOString().split('T')[0];
+           const vaccinesDue = appData.health.filter(record => 
+               record.nextVaccineDate === today && record.type === 'วัคซีน'
+           );
+           if (vaccinesDue.length > 0) {
+               alerts.push({
+                   type: 'warning',
+                   message: `มีสุกร ${vaccinesDue.length} ตัว ครบกำหนดวัคซีนวันนี้`
+               });
+           }
+           
+           // Check feed stock (simulate low stock)
+           const totalFeedUsed = appData.feeding.reduce((sum, record) => sum + record.amount, 0);
+           const avgDailyFeed = totalFeedUsed / Math.max(1, appData.feeding.length);
+           if (avgDailyFeed > 0) {
+               const estimatedStock = 1000; // Simulated stock
+               const daysRemaining = estimatedStock / avgDailyFeed;
+               if (daysRemaining < 7) {
+                   alerts.push({
+                       type: 'error',
+                       message: `อาหารคงเหลือเพียงพอ ${Math.round(daysRemaining)} วัน ควรสั่งซื้อเพิ่ม`
+                   });
+               }
+           }
+           
+           // Display alerts
+           if (alerts.length === 0) {
+               alertsContainer.innerHTML = '<div class="alert success">ไม่มีการแจ้งเตือน ทุกอย่างปกติดี</div>';
+           } else {
+               alerts.forEach(alert => {
+                   const alertDiv = document.createElement('div');
+                   alertDiv.className = `alert ${alert.type}`;
+                   alertDiv.innerHTML = `
+                       <span class="performance-indicator ${alert.type === 'success' ? 'good' : alert.type === 'warning' ? 'warning' : 'poor'}"></span>
+                       ${alert.message}
+                   `;
+                   alertsContainer.appendChild(alertDiv);
+               });
            }
        }
 
-       // Chart Drawing
-       function drawFCRChart() {
-           const canvas = document.getElementById('fcrChart');
-           const ctx = canvas.getContext('2d');
+       // Update Feeding Stats
+       function updateFeedingStats() {
+           const today = new Date().toISOString().split('T')[0];
+           const todayFeeding = appData.feeding.filter(record => record.date === today);
            
-           // Clear canvas
-           ctx.clearRect(0, 0, canvas.width, canvas.height);
+           const todayFeed = todayFeeding.reduce((sum, record) => sum + record.amount, 0);
+           const todayFeedCost = todayFeeding.reduce((sum, record) => sum + record.cost, 0);
            
-           // Set canvas size
-           canvas.width = canvas.offsetWidth;
-           canvas.height = canvas.offsetHeight;
+           document.getElementById('todayFeed').textContent = todayFeed.toFixed(1);
+           document.getElementById('todayFeedCost').textContent = todayFeedCost.toFixed(2);
            
-           // Sample data for FCR trend
-           const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'];
-           const fcrData = [2.3, 2.1, 2.4, 2.2, 2.0, 2.3];
-           const targetFCR = 2.2;
+           // Simulate feed stock
+           const totalFeedUsed = appData.feeding.reduce((sum, record) => sum + record.amount, 0);
+           const avgDailyFeed = totalFeedUsed / Math.max(1, appData.feeding.length);
+           const estimatedStock = Math.max(0, 1000 - totalFeedUsed);
+           const daysRemaining = avgDailyFeed > 0 ? estimatedStock / avgDailyFeed : 0;
            
-           const padding = 60;
-           const chartWidth = canvas.width - 2 * padding;
-           const chartHeight = canvas.height - 2 * padding;
+           document.getElementById('feedStock').textContent = estimatedStock.toFixed(0);
+           document.getElementById('daysRemaining').textContent = Math.round(daysRemaining);
            
-           // Draw axes
-           ctx.strokeStyle = '#374151';
-           ctx.lineWidth = 2;
-           ctx.beginPath();
-           ctx.moveTo(padding, padding);
-           ctx.lineTo(padding, canvas.height - padding);
-           ctx.lineTo(canvas.width - padding, canvas.height - padding);
-           ctx.stroke();
+           // Latest FCR
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const fcrs = activePigs.map(pig => calculateFCR(pig)).filter(fcr => fcr > 0);
+           const latestFCR = fcrs.length > 0 ? fcrs.reduce((a, b) => a + b, 0) / fcrs.length : 0;
            
-           // Draw target line
-           ctx.strokeStyle = '#ef4444';
-           ctx.lineWidth = 2;
-           ctx.setLineDash([10, 5]);
-           const targetY = canvas.height - padding - ((targetFCR - 1.5) / 1.5) * chartHeight;
-           ctx.beginPath();
-           ctx.moveTo(padding, targetY);
-           ctx.lineTo(canvas.width - padding, targetY);
-           ctx.stroke();
-           ctx.setLineDash([]);
+           document.getElementById('latestFCR').textContent = latestFCR.toFixed(2);
            
-           // Draw FCR line
-           ctx.strokeStyle = '#2563eb';
-           ctx.lineWidth = 3;
-           ctx.beginPath();
-           
-           for (let i = 0; i < fcrData.length; i++) {
-               const x = padding + (i / (fcrData.length - 1)) * chartWidth;
-               const y = canvas.height - padding - ((fcrData[i] - 1.5) / 1.5) * chartHeight;
-               
-               if (i === 0) {
-                   ctx.moveTo(x, y);
+           const fcrStatusEl = document.getElementById('fcrStatus');
+           if (latestFCR > 0) {
+               if (latestFCR <= appData.settings.fcrTarget) {
+                   fcrStatusEl.textContent = '✅ ดีเยี่ยม';
+                   fcrStatusEl.style.color = 'var(--success)';
+               } else if (latestFCR <= appData.settings.fcrTarget * 1.1) {
+                   fcrStatusEl.textContent = '⚠️ ปานกลาง';
+                   fcrStatusEl.style.color = 'var(--warning)';
                } else {
-                   ctx.lineTo(x, y);
+                   fcrStatusEl.textContent = '❌ ต้องปรับปรุง';
+                   fcrStatusEl.style.color = 'var(--error)';
+               }
+           }
+           
+           // Total feed cost this month
+           const currentMonth = new Date().toISOString().slice(0, 7);
+           const monthlyFeeding = appData.feeding.filter(record => record.date.startsWith(currentMonth));
+           const monthlyFeedCost = monthlyFeeding.reduce((sum, record) => sum + record.cost, 0);
+           
+           document.getElementById('totalFeedCost').textContent = monthlyFeedCost.toFixed(2);
+       }
+
+       // Update Health Stats
+       function updateHealthStats() {
+           const today = new Date().toISOString().split('T')[0];
+           const nextWeek = new Date();
+           nextWeek.setDate(nextWeek.getDate() + 7);
+           const nextWeekDate = nextWeek.toISOString().split('T')[0];
+           
+           // Vaccines due today
+           const vaccinesToday = appData.health.filter(record => 
+               record.nextVaccineDate === today && record.type === 'วัคซีน'
+           );
+           document.getElementById('vaccineDueToday').textContent = vaccinesToday.length;
+           
+           // Vaccines due within 7 days
+           const vaccinesWeek = appData.health.filter(record => 
+               record.nextVaccineDate >= today && 
+               record.nextVaccineDate <= nextWeekDate && 
+               record.type === 'วัคซีน'
+           );
+           document.getElementById('vaccineDueWeek').textContent = vaccinesWeek.length;
+           
+           // Monthly mortality rate
+           const currentMonth = new Date().toISOString().slice(0, 7);
+           const monthlyDeaths = appData.health.filter(record => 
+               record.date.startsWith(currentMonth) && record.type === 'การตาย'
+           );
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const totalPigs = activePigs.length + monthlyDeaths.length;
+           const monthlyMortality = totalPigs > 0 ? (monthlyDeaths.length / totalPigs) * 100 : 0;
+           
+           document.getElementById('monthlyMortality').textContent = monthlyMortality.toFixed(1);
+           
+           // Monthly health cost
+           const monthlyHealthRecords = appData.health.filter(record => 
+               record.date.startsWith(currentMonth)
+           );
+           const monthlyHealthCost = monthlyHealthRecords.reduce((sum, record) => sum + (record.cost || 0), 0);
+           
+           document.getElementById('monthlyHealthCost').textContent = monthlyHealthCost.toFixed(2);
+       }
+
+       // Update Financial Summary
+       function updateFinancialSummary() {
+           // Calculate revenue (simulated from sold pigs)
+           const soldPigs = appData.pigs.filter(pig => pig.status === 'sold');
+           const avgSalePrice = 65; // 65 baht per kg
+           const totalRevenue = soldPigs.reduce((sum, pig) => sum + (pig.weight * avgSalePrice), 0);
+           
+           // Calculate costs
+           const feedCosts = appData.feeding.reduce((sum, record) => sum + record.cost, 0);
+           const healthCosts = appData.health.reduce((sum, record) => sum + (record.cost || 0), 0);
+           const pigCosts = appData.pigs.reduce((sum, pig) => sum + pig.cost, 0);
+           const totalCosts = feedCosts + healthCosts + pigCosts;
+           
+           // Calculate profit and ROI
+           const netProfit = totalRevenue - totalCosts;
+           const roi = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
+           
+           document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString();
+           document.getElementById('totalCosts').textContent = totalCosts.toLocaleString();
+           document.getElementById('netProfit').textContent = netProfit.toLocaleString();
+           document.getElementById('roi').textContent = roi.toFixed(1);
+       }
+
+       // Populate dropdowns
+       function populateDropdowns() {
+           const pigSelects = [
+               document.getElementById('feedPigId'),
+               document.getElementById('healthPigId')
+           ];
+           
+           pigSelects.forEach(select => {
+               if (!select) return;
+               
+               // Clear existing options except first
+               while (select.children.length > 1) {
+                   select.removeChild(select.lastChild);
                }
                
-               // Draw data points
-               ctx.fillStyle = '#2563eb';
-               ctx.beginPath();
-               ctx.arc(x, y, 6, 0, 2 * Math.PI);
-               ctx.fill();
-           }
-           ctx.stroke();
-           
-           // Draw labels
-           ctx.fillStyle = '#374151';
-           ctx.font = '14px Niramit';
-           ctx.textAlign = 'center';
-           
-           // X-axis labels
-           for (let i = 0; i < months.length; i++) {
-               const x = padding + (i / (months.length - 1)) * chartWidth;
-               ctx.fillText(months[i], x, canvas.height - padding + 25);
-           }
-           
-           // Y-axis labels
-           ctx.textAlign = 'right';
-           for (let i = 0; i <= 3; i++) {
-               const value = 1.5 + (i * 0.5);
-               const y = canvas.height - padding - (i / 3) * chartHeight;
-               ctx.fillText(value.toFixed(1), padding - 10, y + 5);
-           }
-           
-           // Chart title
-           ctx.fillStyle = '#1e40af';
-           ctx.font = 'bold 16px Niramit';
-           ctx.textAlign = 'center';
-           ctx.fillText('แนวโน้ม FCR รายเดือน', canvas.width / 2, 30);
-           
-           // Legend
-           ctx.font = '12px Niramit';
-           ctx.textAlign = 'left';
-           ctx.fillStyle = '#2563eb';
-           ctx.fillText('● FCR จริง', canvas.width - 150, 50);
-           ctx.fillStyle = '#ef4444';
-           ctx.fillText('--- เป้าหมาย (2.2)', canvas.width - 150, 70);
-       }
-
-       // Utility Functions
-       function updateAllDropdowns() {
-           updateBatchDropdowns();
-           updatePigDropdowns();
-           updateFeedDropdowns();
-       }
-
-       function updateBatchDropdowns() {
-           const activeBatches = farmData.batches.filter(b => b.status === 'active');
-           const dropdowns = ['pigBatchId', 'feedingBatchId', 'saleBatchId'];
-           
-           dropdowns.forEach(dropdownId => {
-               const dropdown = document.getElementById(dropdownId);
-               if (dropdown) {
-                   dropdown.innerHTML = '<option value="">เลือก Batch</option>';
-                   activeBatches.forEach(batch => {
+               // Add active pigs
+               const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+               activePigs.forEach(pig => {
+                   const option = document.createElement('option');
+                   option.value = pig.id;
+                   option.textContent = `${pig.id} (${pig.group}, ${pig.weight}kg)`;
+                   select.appendChild(option);
+               });
+               
+               // Add groups for feeding
+               if (select.id === 'feedPigId') {
+                   const groups = [...new Set(activePigs.map(pig => pig.group))];
+                   groups.forEach(group => {
                        const option = document.createElement('option');
-                       option.value = batch.batchId;
-                       option.textContent = `${batch.batchId} (${batch.pigCount} ตัว)`;
-                       dropdown.appendChild(option);
+                       option.value = `group:${group}`;
+                       option.textContent = `กลุ่ม: ${group}`;
+                       select.appendChild(option);
                    });
                }
            });
        }
 
-       function updatePigDropdowns() {
-           const activePigs = farmData.pigs.filter(p => p.status === 'active');
-           const dropdown = document.getElementById('vaccinePigId');
-           
-           if (dropdown) {
-               dropdown.innerHTML = '<option value="">เลือกสุกร</option>';
-               activePigs.forEach(pig => {
-                   const option = document.createElement('option');
-                   option.value = pig.pigId;
-                   option.textContent = `${pig.pigId} (${pig.tagNumber})`;
-                   dropdown.appendChild(option);
-               });
-           }
+       // Populate tables
+       function populateTables() {
+           populatePigsTable();
+           populateFeedingTable();
+           populateHealthTable();
        }
 
-       function updateFeedDropdowns() {
-           const dropdown = document.getElementById('feedingFeedId');
+       function populatePigsTable() {
+           const tbody = document.getElementById('pigsTableBody');
+           tbody.innerHTML = '';
            
-           if (dropdown) {
-               dropdown.innerHTML = '<option value="">เลือกอาหาร</option>';
-               farmData.feeds.forEach(feed => {
-                   const option = document.createElement('option');
-                   option.value = feed.feedId;
-                   option.textContent = `${feed.brand} (${getFeedTypeText(feed.type)})`;
-                   dropdown.appendChild(option);
-               });
-           }
-       }
-
-       function setDefaultDates() {
-           const today = new Date().toISOString().split('T')[0];
-           const dateInputs = ['feedingDate', 'saleDate', 'vaccineDate'];
-           
-           dateInputs.forEach(inputId => {
-               const input = document.getElementById(inputId);
-               if (input) {
-                   input.value = today;
-               }
+           appData.pigs.forEach(pig => {
+               const fcr = calculateFCR(pig);
+               const adg = calculateADG(pig);
+               
+               const row = document.createElement('tr');
+               row.innerHTML = `
+                   <td>${pig.id}</td>
+                   <td>${pig.group}</td>
+                   <td>${pig.weight}</td>
+                   <td>${pig.age}</td>
+                   <td>${fcr > 0 ? fcr.toFixed(2) : '-'}</td>
+                   <td>${adg > 0 ? Math.round(adg) : '-'}</td>
+                   <td>
+                       <span class="performance-indicator ${pig.status === 'active' ? 'good' : pig.status === 'dead' ? 'poor' : 'warning'}"></span>
+                       ${pig.status === 'active' ? 'ปกติ' : pig.status === 'dead' ? 'ตาย' : 'ขายแล้ว'}
+                   </td>
+                   <td>
+                       <button onclick="editPig('${pig.id}')" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; margin-right: 0.25rem;">แก้ไข</button>
+                       <button onclick="deletePig('${pig.id}')" class="btn" style="padding: 0.25rem 0.5rem; background: var(--error); color: white;">ลบ</button>
+                   </td>
+               `;
+               tbody.appendChild(row);
            });
        }
 
-       // Helper Functions
-       function calculateAge(birthDate) {
-           const birth = new Date(birthDate);
-           const today = new Date();
-           const diffTime = Math.abs(today - birth);
-           return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+       function populateFeedingTable() {
+           const tbody = document.getElementById('feedingTableBody');
+           tbody.innerHTML = '';
+           
+           // Sort by date descending
+           const sortedFeeding = [...appData.feeding].sort((a, b) => new Date(b.date) - new Date(a.date));
+           
+           sortedFeeding.slice(0, 50).forEach(record => { // Show last 50 records
+               const row = document.createElement('tr');
+               row.innerHTML = `
+                   <td>${new Date(record.date).toLocaleDateString('th-TH')}</td>
+                   <td>${record.pigId}</td>
+                   <td>${record.type}</td>
+                   <td>${record.amount}</td>
+                   <td>${record.cost.toFixed(2)}</td>
+                   <td>${record.notes || '-'}</td>
+               `;
+               tbody.appendChild(row);
+           });
        }
 
-       function formatDate(dateString) {
-           if (!dateString) return '-';
-           const date = new Date(dateString);
-           return date.toLocaleDateString('th-TH');
+       function populateHealthTable() {
+           const tbody = document.getElementById('healthTableBody');
+           tbody.innerHTML = '';
+           
+           // Sort by date descending
+           const sortedHealth = [...appData.health].sort((a, b) => new Date(b.date) - new Date(a.date));
+           
+           sortedHealth.slice(0, 50).forEach(record => { // Show last 50 records
+               const nextVaccine = record.nextVaccineDate ? new Date(record.nextVaccineDate).toLocaleDateString('th-TH') : '-';
+               const isOverdue = record.nextVaccineDate && new Date(record.nextVaccineDate) < new Date();
+               
+               const row = document.createElement('tr');
+               row.innerHTML = `
+                   <td>${new Date(record.date).toLocaleDateString('th-TH')}</td>
+                   <td>${record.pigId}</td>
+                   <td>${record.type}</td>
+                   <td>${record.vaccineType}</td>
+                   <td style="color: ${isOverdue ? 'var(--error)' : 'inherit'}">${nextVaccine}</td>
+                   <td>${record.cost ? record.cost.toFixed(2) : '-'}</td>
+                   <td>
+                       <span class="performance-indicator ${record.type === 'การตาย' ? 'poor' : isOverdue ? 'warning' : 'good'}"></span>
+                       ${record.type === 'การตาย' ? 'เสียชีวิต' : isOverdue ? 'เกินกำหนด' : 'ปกติ'}
+                   </td>
+               `;
+               tbody.appendChild(row);
+           });
        }
 
-       function formatCurrency(amount) {
-           return new Intl.NumberFormat('th-TH', {
-               style: 'currency',
-               currency: 'THB',
-               minimumFractionDigits: 0
-           }).format(amount);
+       // CRUD Operations
+       function editPig(pigId) {
+           const pig = appData.pigs.find(p => p.id === pigId);
+           if (!pig) return;
+           
+           // Populate form with pig data
+           document.getElementById('pigId').value = pig.id;
+           document.getElementById('pigGroup').value = pig.group;
+           document.getElementById('pigWeight').value = pig.weight;
+           document.getElementById('pigAge').value = pig.age;
+           document.getElementById('pigGender').value = pig.gender;
+           document.getElementById('pigBreed').value = pig.breed;
+           document.getElementById('pigCost').value = pig.cost;
+           document.getElementById('pigTargetWeight').value = pig.targetWeight;
+           
+           // Show pigs section
+           showSection('pigs');
+           
+           // Scroll to form
+           document.getElementById('pigForm').scrollIntoView({ behavior: 'smooth' });
        }
 
-       function formatNumber(number) {
-           return new Intl.NumberFormat('th-TH').format(number);
+       function deletePig(pigId) {
+           if (!confirm('คุณแน่ใจหรือไม่ที่จะลบข้อมูลสุกรนี้?')) return;
+           
+           appData.pigs = appData.pigs.filter(p => p.id !== pigId);
+           appData.feeding = appData.feeding.filter(f => f.pigId !== pigId);
+           appData.health = appData.health.filter(h => h.pigId !== pigId);
+           
+           saveData();
+           updateDashboard();
+           populateDropdowns();
+           populateTables();
+           
+           alert('ลบข้อมูลสุกรเรียบร้อยแล้ว');
        }
 
-       function getStageText(stage) {
-           const stages = {
-               'creep': 'Creep',
-               'starter': 'Starter',
-               'grower': 'Grower',
-               'finisher': 'Finisher'
-           };
-           return stages[stage] || stage;
+       // Report Generation
+       function generateReport() {
+           const reportType = document.getElementById('reportType').value;
+           const reportPeriod = document.getElementById('reportPeriod').value;
+           const startDate = document.getElementById('reportStartDate').value;
+           const endDate = document.getElementById('reportEndDate').value;
+           
+           let dateFilter = () => true;
+           
+           if (reportPeriod !== 'custom') {
+               const today = new Date();
+               let filterStartDate;
+               
+               switch (reportPeriod) {
+                   case 'today':
+                       filterStartDate = today.toISOString().split('T')[0];
+                       dateFilter = (date) => date === filterStartDate;
+                       break;
+                   case 'week':
+                       filterStartDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0];
+                       dateFilter = (date) => date >= filterStartDate;
+                       break;
+                   case 'month':
+                       filterStartDate = today.toISOString().slice(0, 7);
+                       dateFilter = (date) => date.startsWith(filterStartDate);
+                       break;
+                   case 'quarter':
+                       const quarterStart = new Date(today.getFullYear(), Math.floor(today.getMonth() / 3) * 3, 1);
+                       filterStartDate = quarterStart.toISOString().split('T')[0];
+                       dateFilter = (date) => date >= filterStartDate;
+                       break;
+                   case 'year':
+                       filterStartDate = today.getFullYear().toString();
+                       dateFilter = (date) => date.startsWith(filterStartDate);
+                       break;
+               }
+           } else if (startDate && endDate) {
+               dateFilter = (date) => date >= startDate && date <= endDate;
+           }
+           
+           let reportContent = '';
+           
+           switch (reportType) {
+               case 'performance':
+                   reportContent = generatePerformanceReport(dateFilter);
+                   break;
+               case 'financial':
+                   reportContent = generateFinancialReport(dateFilter);
+                   break;
+               case 'health':
+                   reportContent = generateHealthReport(dateFilter);
+                   break;
+               case 'feeding':
+                   reportContent = generateFeedingReport(dateFilter);
+                   break;
+               case 'growth':
+                   reportContent = generateGrowthReport(dateFilter);
+                   break;
+           }
+           
+           document.getElementById('reportContent').innerHTML = reportContent;
+           document.getElementById('reportResults').style.display = 'block';
+           document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth' });
        }
 
-       function getStatusText(status) {
-           const statuses = {
-               'active': 'ใช้งาน',
-               'sold': 'ขายแล้ว',
-               'dead': 'ตาย'
-           };
-           return statuses[status] || status;
+       function generatePerformanceReport(dateFilter) {
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const fcrs = activePigs.map(pig => calculateFCR(pig)).filter(fcr => fcr > 0);
+           const adgs = activePigs.map(pig => calculateADG(pig)).filter(adg => adg > 0);
+           
+           const avgFCR = fcrs.length > 0 ? fcrs.reduce((a, b) => a + b, 0) / fcrs.length : 0;
+           const avgADG = adgs.length > 0 ? adgs.reduce((a, b) => a + b, 0) / adgs.length : 0;
+           
+           const deadPigs = appData.pigs.filter(pig => pig.status === 'dead');
+           const mortalityRate = appData.pigs.length > 0 ? (deadPigs.length / appData.pigs.length) * 100 : 0;
+           
+           return `
+               <h4>รายงานประสิทธิภาพการผลิต</h4>
+               <div class="stats-grid">
+                   <div class="stat-card">
+                       <h3>FCR เฉลี่ย</h3>
+                       <div class="value">${avgFCR.toFixed(2)}</div>
+                       <div class="change">เป้าหมาย: ${appData.settings.fcrTarget}</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ADG เฉลี่ย (กรัม/วัน)</h3>
+                       <div class="value">${Math.round(avgADG)}</div>
+                       <div class="change">เป้าหมาย: ${appData.settings.adgTarget}</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>อัตราการตาย (%)</h3>
+                       <div class="value">${mortalityRate.toFixed(1)}</div>
+                       <div class="change">เป้าหมาย: < ${appData.settings.mortalityTarget}</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>จำนวนสุกรทั้งหมด</h3>
+                       <div class="value">${appData.pigs.length}</div>
+                       <div class="change">ใช้งาน: ${activePigs.length}</div>
+                   </div>
+               </div>
+               <h5 style="margin-top: 2rem;">การวิเคราะห์</h5>
+               <p><strong>ประสิทธิภาพ FCR:</strong> ${avgFCR <= appData.settings.fcrTarget ? 'ดีเยี่ยม' : 'ต้องปรับปรุง'}</p>
+               <p><strong>ประสิทธิภาพ ADG:</strong> ${avgADG >= appData.settings.adgTarget ? 'ดีเยี่ยม' : 'ต้องปรับปรุง'}</p>
+               <p><strong>การจัดการสุขภาพ:</strong> ${mortalityRate <= appData.settings.mortalityTarget ? 'ดีเยี่ยม' : 'ต้องปรับปรุง'}</p>
+           `;
        }
 
-       function getSexText(sex) {
-           const sexes = {
-               'male': 'ผู้',
-               'female': 'เมีย',
-               'castrated': 'ตอนแล้ว'
-           };
-           return sexes[sex] || sex;
+       function generateFinancialReport(dateFilter) {
+           const feedCosts = appData.feeding.filter(record => dateFilter(record.date))
+               .reduce((sum, record) => sum + record.cost, 0);
+           const healthCosts = appData.health.filter(record => dateFilter(record.date))
+               .reduce((sum, record) => sum + (record.cost || 0), 0);
+           
+           // Simulate revenue from sold pigs
+           const soldPigs = appData.pigs.filter(pig => pig.status === 'sold');
+           const avgSalePrice = 65; // 65 baht per kg
+           const revenue = soldPigs.reduce((sum, pig) => sum + (pig.weight * avgSalePrice), 0);
+           
+           const totalCosts = feedCosts + healthCosts;
+           const netProfit = revenue - totalCosts;
+           const roi = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
+           
+           return `
+               <h4>รายงานการเงิน</h4>
+               <div class="stats-grid">
+                   <div class="stat-card">
+                       <h3>รายได้</h3>
+                       <div class="value">${revenue.toLocaleString()}</div>
+                       <div class="change">บาท</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ต้นทุนอาหาร</h3>
+                       <div class="value">${feedCosts.toLocaleString()}</div>
+                       <div class="change">บาท</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ต้นทุนสุขภาพ</h3>
+                       <div class="value">${healthCosts.toLocaleString()}</div>
+                       <div class="change">บาท</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>กำไรสุทธิ</h3>
+                       <div class="value" style="color: ${netProfit >= 0 ? 'var(--success)' : 'var(--error)'}">${netProfit.toLocaleString()}</div>
+                       <div class="change">ROI: ${roi.toFixed(1)}%</div>
+                   </div>
+               </div>
+               <h5 style="margin-top: 2rem;">รายละเอียดต้นทุน</h5>
+               <p><strong>สัดส่วนต้นทุนอาหาร:</strong> ${totalCosts > 0 ? ((feedCosts / totalCosts) * 100).toFixed(1) : 0}%</p>
+               <p><strong>สัดส่วนต้นทุนสุขภาพ:</strong> ${totalCosts > 0 ? ((healthCosts / totalCosts) * 100).toFixed(1) : 0}%</p>
+               <p><strong>ต้นทุนต่อกิโลกรัม:</strong> ${appData.pigs.length > 0 ? (totalCosts / appData.pigs.reduce((sum, pig) => sum + pig.weight, 0)).toFixed(2) : 0} บาท/กก.</p>
+           `;
        }
 
-       function getFeedTypeText(type) {
-           const types = {
-               'creep': 'Creep Feed',
-               'starter': 'Starter Feed',
-               'grower': 'Grower Feed',
-               'finisher': 'Finisher Feed',
-               'sow': 'Sow Feed',
-               'boar': 'Boar Feed'
-           };
-           return types[type] || type;
+       function generateHealthReport(dateFilter) {
+           const healthRecords = appData.health.filter(record => dateFilter(record.date));
+           const vaccineRecords = healthRecords.filter(record => record.type === 'วัคซีน');
+           const treatmentRecords = healthRecords.filter(record => record.type === 'รักษาโรค');
+           const deathRecords = healthRecords.filter(record => record.type === 'การตาย');
+           
+           const totalHealthCost = healthRecords.reduce((sum, record) => sum + (record.cost || 0), 0);
+           
+           return `
+               <h4>รายงานสุขภาพ</h4>
+               <div class="stats-grid">
+                   <div class="stat-card">
+                       <h3>จำนวนวัคซีน</h3>
+                       <div class="value">${vaccineRecords.length}</div>
+                       <div class="change">ครั้ง</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>จำนวนการรักษา</h3>
+                       <div class="value">${treatmentRecords.length}</div>
+                       <div class="change">ครั้ง</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>จำนวนการตาย</h3>
+                       <div class="value">${deathRecords.length}</div>
+                       <div class="change">ตัว</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ค่าใช้จ่ายรวม</h3>
+                       <div class="value">${totalHealthCost.toLocaleString()}</div>
+                       <div class="change">บาท</div>
+                   </div>
+               </div>
+               <h5 style="margin-top: 2rem;">สรุปการดูแลสุขภาพ</h5>
+               <p><strong>อัตราการให้วัคซีน:</strong> ${appData.pigs.length > 0 ? ((vaccineRecords.length / appData.pigs.length) * 100).toFixed(1) : 0}%</p>
+               <p><strong>อัตราการเจ็บป่วย:</strong> ${appData.pigs.length > 0 ? ((treatmentRecords.length / appData.pigs.length) * 100).toFixed(1) : 0}%</p>
+               <p><strong>ค่าใช้จ่ายเฉลี่ยต่อตัว:</strong> ${appData.pigs.length > 0 ? (totalHealthCost / appData.pigs.length).toFixed(2) : 0} บาท</p>
+           `;
        }
 
-       function getBreedingMethodText(method) {
-           const methods = {
-               'natural': 'ธรรมชาติ',
-               'ai': 'ผสมเทียม'
-           };
-           return methods[method] || method;
+       function generateFeedingReport(dateFilter) {
+           const feedingRecords = appData.feeding.filter(record => dateFilter(record.date));
+           const totalFeed = feedingRecords.reduce((sum, record) => sum + record.amount, 0);
+           const totalFeedCost = feedingRecords.reduce((sum, record) => sum + record.cost, 0);
+           const avgFeedCost = totalFeed > 0 ? totalFeedCost / totalFeed : 0;
+           
+           // Group by feed type
+           const feedByType = {};
+           feedingRecords.forEach(record => {
+               if (!feedByType[record.type]) {
+                   feedByType[record.type] = { amount: 0, cost: 0 };
+               }
+               feedByType[record.type].amount += record.amount;
+               feedByType[record.type].cost += record.cost;
+           });
+           
+           return `
+               <h4>รายงานการให้อาหาร</h4>
+               <div class="stats-grid">
+                   <div class="stat-card">
+                       <h3>อาหารรวม</h3>
+                       <div class="value">${totalFeed.toLocaleString()}</div>
+                       <div class="change">กิโลกรัม</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ต้นทุนอาหาร</h3>
+                       <div class="value">${totalFeedCost.toLocaleString()}</div>
+                       <div class="change">บาท</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ราคาเฉลี่ย</h3>
+                       <div class="value">${avgFeedCost.toFixed(2)}</div>
+                       <div class="change">บาท/กก.</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>อาหารต่อวัน</h3>
+                       <div class="value">${feedingRecords.length > 0 ? (totalFeed / feedingRecords.length).toFixed(1) : 0}</div>
+                       <div class="change">กก./วัน</div>
+                   </div>
+               </div>
+               <h5 style="margin-top: 2rem;">รายละเอียดตามประเภทอาหาร</h5>
+               ${Object.entries(feedByType).map(([type, data]) => `
+                   <p><strong>${type}:</strong> ${data.amount.toFixed(1)} กก. (${data.cost.toFixed(2)} บาท)</p>
+               `).join('')}
+           `;
        }
 
-       function getBreedingStatusText(status) {
-           const statuses = {
-               'bred': 'ผสมแล้ว',
-               'farrowed': 'คลอดแล้ว',
-               'failed': 'ล้มเหลว'
-           };
-           return statuses[status] || status;
+       function generateGrowthReport(dateFilter) {
+           const activePigs = appData.pigs.filter(pig => pig.status === 'active');
+           const readyForSale = activePigs.filter(pig => pig.weight >= pig.targetWeight);
+           
+           // Calculate average weights by group
+           const weightsByGroup = {};
+           activePigs.forEach(pig => {
+               if (!weightsByGroup[pig.group]) {
+                   weightsByGroup[pig.group] = [];
+               }
+               weightsByGroup[pig.group].push(pig.weight);
+           });
+           
+           const avgWeightsByGroup = {};
+           Object.entries(weightsByGroup).forEach(([group, weights]) => {
+               avgWeightsByGroup[group] = weights.reduce((a, b) => a + b, 0) / weights.length;
+           });
+           
+           return `
+               <h4>รายงานการเจริญเติบโต</h4>
+               <div class="stats-grid">
+                   <div class="stat-card">
+                       <h3>สุกรพร้อมขาย</h3>
+                       <div class="value">${readyForSale.length}</div>
+                       <div class="change">ตัว</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>น้ำหนักเฉลี่ย</h3>
+                       <div class="value">${activePigs.length > 0 ? (activePigs.reduce((sum, pig) => sum + pig.weight, 0) / activePigs.length).toFixed(1) : 0}</div>
+                       <div class="change">กิโลกรัม</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>ADG เฉลี่ย</h3>
+                       <div class="value">${activePigs.length > 0 ? Math.round(activePigs.map(pig => calculateADG(pig)).filter(adg => adg > 0).reduce((a, b) => a + b, 0) / activePigs.filter(pig => calculateADG(pig) > 0).length || 0) : 0}</div>
+                       <div class="change">กรัม/วัน</div>
+                   </div>
+                   <div class="stat-card">
+                       <h3>เปอร์เซ็นต์พร้อมขาย</h3>
+                       <div class="value">${activePigs.length > 0 ? ((readyForSale.length / activePigs.length) * 100).toFixed(1) : 0}</div>
+                       <div class="change">%</div>
+                   </div>
+               </div>
+               <h5 style="margin-top: 2rem;">น้ำหนักเฉลี่ยตามกลุ่ม</h5>
+               ${Object.entries(avgWeightsByGroup).map(([group, avgWeight]) => `
+                   <p><strong>กลุ่ม${group}:</strong> ${avgWeight.toFixed(1)} กิโลกรัม</p>
+               `).join('')}
+           `;
        }
 
-       function deleteFeed(feedId) {
-           if (confirm('คุณต้องการลบอาหารนี้หรือไม่?')) {
-               farmData.feeds = farmData.feeds.filter(f => f.feedId !== feedId);
-               saveData();
-               updateFeedTable();
-               updateAllDropdowns();
+       function exportReport() {
+           const reportContent = document.getElementById('reportContent').innerHTML;
+           const reportType = document.getElementById('reportType').value;
+           
+           // Create a new window for printing
+           const printWindow = window.open('', '_blank');
+           printWindow.document.write(`
+               <!DOCTYPE html>
+               <html>
+               <head>
+                   <title>รายงานฟาร์มสุกร</title>
+                   <meta charset="UTF-8">
+                   <style>
+                       body { font-family: 'Niramit', sans-serif; margin: 20px; }
+                       .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+                       .stat-card { border: 1px solid #e5e7eb; padding: 1rem; border-radius: 8px; }
+                       .value { font-size: 1.5rem; font-weight: bold; color: #059669; }
+                       h4 { color: #1e293b; border-bottom: 2px solid #059669; padding-bottom: 0.5rem; }
+                       @media print { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+                   </style>
+               </head>
+               <body>
+                   <h2>รายงานฟาร์มสุกรอัจฉริยะ</h2>
+                   <p>วันที่สร้างรายงาน: ${new Date().toLocaleDateString('th-TH')}</p>
+                   ${reportContent}
+               </body>
+               </html>
+           `);
+           printWindow.document.close();
+           printWindow.print();
+       }
+
+       // PWA Functions
+       let deferredPrompt;
+
+       window.addEventListener('beforeinstallprompt', (e) => {
+           e.preventDefault();
+           deferredPrompt = e;
+           document.getElementById('installPrompt').classList.add('show');
+       });
+
+       function installPWA() {
+           if (deferredPrompt) {
+               deferredPrompt.prompt();
+               deferredPrompt.userChoice.then((choiceResult) => {
+                   if (choiceResult.outcome === 'accepted') {
+                       console.log('User accepted the install prompt');
+                   }
+                   deferredPrompt = null;
+                   dismissInstall();
+               });
            }
        }
 
-       // Initialize charts on window resize
-       window.addEventListener('resize', function() {
-           setTimeout(drawFCRChart, 100);
+       function dismissInstall() {
+           document.getElementById('installPrompt').classList.remove('show');
+       }
+
+       // Service Worker Registration
+       if ('serviceWorker' in navigator) {
+           navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
+               const CACHE_NAME = 'pig-farm-v1';
+               const urlsToCache = [
+                   '/',
+                   '/manifest.json'
+               ];
+
+               self.addEventListener('install', function(event) {
+                   event.waitUntil(
+                       caches.open(CACHE_NAME)
+                           .then(function(cache) {
+                               return cache.addAll(urlsToCache);
+                           })
+                   );
+               });
+
+               self.addEventListener('fetch', function(event) {
+                   event.respondWith(
+                       caches.match(event.request)
+                           .then(function(response) {
+                               if (response) {
+                                   return response;
+                               }
+                               return fetch(event.request);
+                           }
+                       )
+                   );
+               });
+           `)).then(function(registration) {
+               console.log('ServiceWorker registration successful');
+           }).catch(function(err) {
+               console.log('ServiceWorker registration failed: ', err);
+           });
+       }
+
+       // Initialize app
+       document.addEventListener('DOMContentLoaded', function() {
+           // Set default dates
+           const today = new Date().toISOString().split('T')[0];
+           document.getElementById('feedDate').value = today;
+           document.getElementById('healthDate').value = today;
+           document.getElementById('reportStartDate').value = today;
+           document.getElementById('reportEndDate').value = today;
+           
+           // Load saved data
+           loadData();
+           
+           // Show dashboard by default
+           showSection('dashboard');
+           
+           // Update data every minute
+           setInterval(updateDashboard, 60000);
+           
+           console.log('ระบบจัดการฟาร์มสุกรอัจฉริยะเริ่มทำงานแล้ว');
        });
+
+       // Demo data for testing
+       function loadDemoData() {
+           const demoData = {
+               pigs: [
+                   {
+                       id: 'P001',
+                       group: 'ขุน',
+                       weight: 95.5,
+                       age: 150,
+                       gender: 'ผู้',
+                       breed: 'ลาร์จไวท์',
+                       cost: 2700,
+                       targetWeight: 110,
+                       startWeight: 25,
+                       startDate: '2025-01-01',
+                       totalFeed: 180,
+                       status: 'active'
+                   },
+                   {
+                       id: 'P002',
+                       group: 'ขุน',
+                       weight: 102.3,
+                       age: 160,
+                       gender: 'เมีย',
+                       breed: 'แลนด์เรซ',
+                       cost: 2700,
+                       targetWeight: 110,
+                       startWeight: 25,
+                       startDate: '2024-12-25',
+                       totalFeed: 190,
+                       status: 'active'
+                   },
+                   {
+                       id: 'P003',
+                       group: 'รุ่น',
+                       weight: 45.2,
+                       age: 90,
+                       gender: 'ผู้',
+                       breed: 'ลาร์จไวท์',
+                       cost: 2700,
+                       targetWeight: 110,
+                       startWeight: 15,
+                       startDate: '2025-03-01',
+                       totalFeed: 85,
+                       status: 'active'
+                   }
+               ],
+               feeding: [
+                   {
+                       pigId: 'P001',
+                       type: 'อาหารหมูขุน',
+                       amount: 3.5,
+                       date: '2025-06-06',
+                       notes: 'ให้อาหารปกติ',
+                       cost: 56
+                   },
+                   {
+                       pigId: 'P002',
+                       type: 'อาหารหมูขุน',
+                       amount: 3.8,
+                       date: '2025-06-06',
+                       notes: 'ให้อาหารปกติ',
+                       cost: 60.8
+                   },
+                   {
+                       pigId: 'P003',
+                       type: 'อาหารหมูรุ่น',
+                       amount: 2.5,
+                       date: '2025-06-06',
+                       notes: 'ให้อาหารปกติ',
+                       cost: 45
+                   }
+               ],
+               health: [
+                   {
+                       pigId: 'P001',
+                       type: 'วัคซีน',
+                       vaccineType: 'วัคซีนป้องกันโรคปากและเท้าเปื่อย',
+                       date: '2025-05-15',
+                       nextVaccineDate: '2025-08-15',
+                       cost: 150,
+                       notes: 'ฉีดวัคซีนป้องกันโรคปากและเท้าเปื่อยตามกำหนด'
+                   },
+                   {
+                       pigId: 'P002',
+                       type: 'ตรวจสุขภาพ',
+                       vaccineType: 'ตรวจสุขภาพทั่วไป',
+                       date: '2025-06-01',
+                       nextVaccineDate: '',
+                       cost: 50,
+                       notes: 'สุขภาพแข็งแรงดี'
+                   }
+               ],
+               settings: {
+                   fcrTarget: 2.35,
+                   adgTarget: 700,
+                   mortalityTarget: 5.0
+               }
+           };
+           
+           appData = demoData;
+           saveData();
+           loadData();
+           alert('โหลดข้อมูลตัวอย่างเรียบร้อยแล้ว');
+       }
+
+       // Add demo data button (for testing)
+       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+           const demoButton = document.createElement('button');
+           demoButton.textContent = 'โหลดข้อมูลตัวอย่าง';
+           demoButton.className = 'btn btn-secondary';
+           demoButton.style.position = 'fixed';
+           demoButton.style.bottom = '20px';
+           demoButton.style.right = '20px';
+           demoButton.style.zIndex = '1000';
+           demoButton.onclick = loadDemoData;
+           document.body.appendChild(demoButton);
+       }
+
+       // Export functions for debugging
+       window.appDebug = {
+           appData,
+           loadDemoData,
+           calculateFCR,
+           calculateADG,
+           predictSaleDate
+       };
    </script>
 </body>
 </html>
-               

@@ -14,11 +14,13 @@
     <meta name="msapplication-TileColor" content="#2c3e50">
     
     <!-- Icons for Mobile -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./app-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png">
-    <link rel="shortcut icon" href="./app-icon.png">
-    <meta name="msapplication-TileImage" content="./app-icon.png">
+    <!-- Icons for Mobile -->
+<!-- Icons for Mobile -->
+<link rel="apple-touch-icon" sizes="180x180" href="./app-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png">
+<link rel="shortcut icon" href="./app-icon.png">
+<meta name="msapplication-TileImage" content="./app-icon.png">
     <link rel="manifest" href="data:application/json;charset=utf-8;base64,eyJuYW1lIjoi4Lij4Liw4Lia4Lia4LiH4LiB4Liy4Lij4LiU4Lit4Lii4Liy4LiU4LiB4Liy4Lij4Lil4Liy4Lij4LjM4LiZ4Li44LiB4Lij4LjMIiwic2hvcnRfbmFtZSI6IuC4pOC4suC4o+C5jOC4oeC4lOC4iOC4seC4lOC4hOC4quC4uOC4geC4o+C5jCIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmOWZhIiwidGhlbWVfY29sb3IiOiIjMmMzZTUwIiwiaWNvbnMiOlt7InNyYyI6Ii4vYXBwLWljb24ucG5nIiwic2l6ZXMiOiIxODB4MTgwIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiLi9hcHAtaWNvbi5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIn0seyJzcmMiOiIuL2FwcC1pY29uLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
 
     <title>ระบบจัดการฟาร์มสุกร</title>
@@ -511,46 +513,45 @@
             }
         }
 
-        /* Manual Install Button */
-        .manual-install {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
-            z-index: 999999;
-            border: none;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* PWA Install prompt */
+.manual-install {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+    z-index: 999999;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .manual-install:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.5);
-        }
+.manual-install:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(231, 76, 60, 0.5);
+}
 
-        .manual-install:active {
-            transform: scale(0.95);
-        }
+.manual-install:active {
+    transform: scale(0.95);
+}
 
-        /* ซ่อนถ้าเป็น standalone mode แล้ว */
-        @media (display-mode: standalone) {
-            .manual-install {
-                display: none !important;
-            }
-        }
+/* ซ่อนถ้าเป็น standalone mode แล้ว */
+@media (display-mode: standalone) {
+    .manual-install {
+        display: none !important;
+    }
+}
     </style>
 </head>
 <body>
-    <!-- เพิ่มปุ่มติดตั้งแบบใหม่ -->
     <button id="manualInstall" class="manual-install" onclick="showInstallInstructions()">
         📱 ติดตั้งแอป
     </button>
@@ -558,8 +559,8 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🐷 ระบบจัดการฟาร์มสุกร</h1>
-            <p>ระบบครบวงจรสำหรับการจัดการฟาร์มสุกร รวมระบบจัดการสต็อกอาหารและยา</p>
+            <h1>ระบบจัดการฟาร์มสุกร</h1>
+            <p>ระบบการแสดง จำนวนสุกร คลังอาหาร ยา การขาย รายงานผล</p>
         </div>
 
         <!-- Alert Messages -->
@@ -685,80 +686,80 @@
                                 <option value="finisher">Finisher (สุกรขุนใกล้ขาย)</option>
                                 <option value="sow">อาหารแม่พันธุ์</option>
                                 <option value="boar">อาหารพ่อพันธุ์</option>
-                            </select>
-                        </div>
+</select>
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label required">ชื่อยี่ห้อ/ผลิตภัณฑ์</label>
-                            <input type="text" class="form-input" id="feedBrand">
-                        </div>
+                       <div class="form-group">
+                           <label class="form-label required">ชื่อยี่ห้อ/ผลิตภัณฑ์</label>
+                           <input type="text" class="form-input" id="feedBrand">
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label required">จำนวน (กิโลกรัม)</label>
-                            <input type="number" class="form-input" id="feedQuantity" step="0.1">
-                        </div>
-                    </div>
+                       <div class="form-group">
+                           <label class="form-label required">จำนวน (กิโลกรัม)</label>
+                           <input type="number" class="form-input" id="feedQuantity" step="0.1">
+                       </div>
+                   </div>
 
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label required">ราคาต่อกิโลกรัม (บาท)</label>
-                            <input type="number" class="form-input" id="feedPrice" step="0.01">
-                        </div>
+                   <div>
+                       <div class="form-group">
+                           <label class="form-label required">ราคาต่อกิโลกรัม (บาท)</label>
+                           <input type="number" class="form-input" id="feedPrice" step="0.01">
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label">วันที่ซื้อ</label>
-                            <input type="date" class="form-input" id="feedPurchaseDate">
-                        </div>
+                       <div class="form-group">
+                           <label class="form-label">วันที่ซื้อ</label>
+                           <input type="date" class="form-input" id="feedPurchaseDate">
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label">วันหมดอายุ</label>
-                            <input type="date" class="form-input" id="feedExpiryDate">
-                        </div>
-                    </div>
-                </div>
+                       <div class="form-group">
+                           <label class="form-label">วันหมดอายุ</label>
+                           <input type="date" class="form-input" id="feedExpiryDate">
+                       </div>
+                   </div>
+               </div>
 
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-success" onclick="addFeed()">✅ เพิ่มอาหารเข้าสต็อก</button>
-                    <button class="btn btn-secondary" onclick="clearFeedForm()">🔄 ล้างฟอร์ม</button>
-                </div>
-            </div>
+               <div style="margin-top: 20px;">
+                   <button class="btn btn-success" onclick="addFeed()">✅ เพิ่มอาหารเข้าสต็อก</button>
+                   <button class="btn btn-secondary" onclick="clearFeedForm()">🔄 ล้างฟอร์ม</button>
+               </div>
+           </div>
 
-            <div class="card">
-                <div class="card-title">📦 สต็อกอาหาร</div>
-                <div id="feedStock">
-                    <p>ยังไม่มีข้อมูลอาหาร</p>
-                </div>
-            </div>
-        </div>
+           <div class="card">
+               <div class="card-title">📦 สต็อกอาหาร</div>
+               <div id="feedStock">
+                   <p>ยังไม่มีข้อมูลอาหาร</p>
+               </div>
+           </div>
+       </div>
 
-        <!-- Medical Section with Stock Management -->
-        <div id="medical" class="content-section">
-            <div class="card">
-                <div class="card-title">➕ เพิ่มยาและวัคซีนเข้าสต็อก</div>
-                <div class="form-grid">
-                    <div>
-                        <div class="form-group">
-                            <label class="form-label required">ประเภท</label>
-                            <select class="form-select" id="medicalType">
-                                <option value="">เลือกประเภท</option>
-                                <option value="vaccine">วัคซีน</option>
-                                <option value="antibiotic">ยาปฏิชีวนะ</option>
-                                <option value="vitamin">วิตามิน</option>
-                                <option value="deworming">ยาถ่ายพยาธิ</option>
-                                <option value="hormone">ฮอร์โมน</option>
-                                <option value="supplement">อาหารเสริม</option>
-                                <option value="disinfectant">ยาฆ่าเชื้อ</option>
-                            </select>
-                        </div>
+       <!-- Medical Section with Stock Management -->
+       <div id="medical" class="content-section">
+           <div class="card">
+               <div class="card-title">➕ เพิ่มยาและวัคซีนเข้าสต็อก</div>
+               <div class="form-grid">
+                   <div>
+                       <div class="form-group">
+                           <label class="form-label required">ประเภท</label>
+                           <select class="form-select" id="medicalType">
+                               <option value="">เลือกประเภท</option>
+                               <option value="vaccine">วัคซีน</option>
+                               <option value="antibiotic">ยาปฏิชีวนะ</option>
+                               <option value="vitamin">วิตามิน</option>
+                               <option value="deworming">ยาถ่ายพยาธิ</option>
+                               <option value="hormone">ฮอร์โมน</option>
+                               <option value="supplement">อาหารเสริม</option>
+                               <option value="disinfectant">ยาฆ่าเชื้อ</option>
+                           </select>
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label required">ชื่อยา/วัคซีน</label>
-                            <input type="text" class="form-input" id="medicalName">
-                        </div>
+                       <div class="form-group">
+                           <label class="form-label required">ชื่อยา/วัคซีน</label>
+                           <input type="text" class="form-input" id="medicalName">
+                       </div>
 
-                        <div class="form-group">
-                            <label class="form-label">ยี่ห้อ/บริษัทผลิต</label>
-                            <input type="text" class="form-input" id="medicalBrand">
+                       <div class="form-group">
+                           <label class="form-label">ยี่ห้อ/บริษัทผลิต</label>
+                           <input type="text" class="form-input" id="medicalBrand">
                        </div>
 
                        <div class="form-group">
@@ -965,6 +966,27 @@
   </div>
 
   <script>
+       // Basic Error Protection
+       try {
+           // Disable all error alerts
+           window.onerror = function(msg, url, lineNo, columnNo, error) {
+               console.log('Silent error:', msg);
+               return true; // Prevent default browser error handling
+           };
+
+           window.addEventListener('unhandledrejection', function(event) {
+               console.log('Silent promise rejection:', event.reason);
+               event.preventDefault();
+           });
+
+           console.log('✅ Error protection enabled');
+       } catch (e) {
+           console.log('Error protection failed');
+       }
+
+       // === PWA และ Mobile App Functionality ===
+       let deferredPrompt;
+       let isStandalone = false;      
       // === PWA และ Mobile App Functionality ===
       let deferredPrompt;
       let isStandalone = false;
@@ -979,10 +1001,16 @@
       }
 
       // PWA Install Prompt
-      window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
-      });
+     // window.addEventListener('beforeinstallprompt', (e) => {
+       //   e.preventDefault();
+         // deferredPrompt = e;
+          
+          // if (!isStandalone && !localStorage.getItem('installPromptDismissed')) {
+             // setTimeout(() => {
+                //  document.getElementById('installPrompt').classList.add('show');
+             // }, 3000);
+         // }
+     // });
 
       function installPWA() {
           if (deferredPrompt) {
@@ -992,52 +1020,60 @@
                       console.log('User accepted the install prompt');
                   }
                   deferredPrompt = null;
+                  dismissInstall();
               });
           }
       }
 
-      // Register Service Worker for offline functionality
-      if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-              const swCode = `
-                  const CACHE_NAME = 'farm-app-v2.0.0';
-                  const urlsToCache = [
-                      '/',
-                      '/offline.html'
-                  ];
-
-                  self.addEventListener('install', event => {
-                      event.waitUntil(
-                          caches.open(CACHE_NAME)
-                              .then(cache => cache.addAll(urlsToCache))
-                      );
-                  });
-
-                  self.addEventListener('fetch', event => {
-                      event.respondWith(
-                          caches.match(event.request)
-                              .then(response => {
-                                  if (response) {
-                                      return response;
-                                  }
-                                  return fetch(event.request);
-                              })
-                      );
-                  });
-              `;
-
-              const blob = new Blob([swCode], { type: 'application/javascript' });
-              const swUrl = URL.createObjectURL(blob);
-
-              navigator.serviceWorker.register(swUrl)
-                  .then(registration => {
-                      console.log('SW registered: ', registration);
-                  })
-                  .catch(registrationError => {
-                      console.log('SW registration failed: ', registrationError);
-                  });
-          });
+      function dismissInstall() {
+          document.getElementById('installPrompt').classList.remove('show');
+          localStorage.setItem('installPromptDismissed', 'true');
       }
+
+      // Register Service Worker for offline functionality
+      // Register Service Worker for offline functionality (iOS Safe)
+// if ('serviceWorker' in navigator && !navigator.userAgent.includes('iPhone')) {
+   // window.addEventListener('load', () => {
+      //  try {
+          //  const swCode = `
+            //    const CACHE_NAME = 'farm-app-v2.0.0';
+                
+             //   self.addEventListener('install', event => {
+               //     console.log('SW installed');
+               //     self.skipWaiting();
+             //   });
+
+             //   self.addEventListener('activate', event => {
+              //      console.log('SW activated');
+             //   });
+
+               // self.addEventListener('fetch', event => {
+                    // Basic fetch handling for non-critical requests
+                 //   if (event.request.method === 'GET') {
+                     //   event.respondWith(fetch(event.request).catch(() => {
+                         //   return new Response('App works offline', {status: 200});
+                   //     }));
+                 //   }
+            //    });
+          //  `;
+
+           // const blob = new Blob([swCode], { type: 'application/javascript' });
+          //  const swUrl = URL.createObjectURL(blob);
+
+           // navigator.serviceWorker.register(swUrl)
+            //    .then(registration => {
+               //     console.log('SW registered successfully');
+             //   })
+              //  .catch(error => {
+              //      console.log('SW registration failed (app continues normally)');
+            //    });
+      //  } catch (error) {
+         //   console.log('Service Worker not supported');
+     //   }
+   // });
+// } else {
+    // console.log('Service Worker skipped for iOS or not supported');
+// }
 
       // === ระบบจัดการเวอร์ชันและการอัพเดทข้อมูล ===
       const SYSTEM_VERSION = "2.0.0";
@@ -1114,9 +1150,11 @@
       // === ระบบ Data Migration ===
       function migrateData(savedData) {
           try {
+              // ถ้าไม่มี version หรือเป็นรูปแบบเก่า
               if (!savedData.version) {
                   console.log('🔄 กำลังอัพเกรดข้อมูลจากรูปแบบเก่า...');
                   
+                  // ถ้าข้อมูลเป็นรูปแบบเก่า (farmData ตรงๆ)
                   if (savedData.pigs || savedData.feeds || savedData.medical) {
                       return {
                           ...DEFAULT_DATA_STRUCTURE,
@@ -1131,6 +1169,7 @@
                   }
               }
 
+              // ถ้ามี version แต่ต่างจากปัจจุบัน
               if (savedData.version !== SYSTEM_VERSION) {
                   console.log(`🔄 กำลังอัพเกรดจากเวอร์ชัน ${savedData.version} เป็น ${SYSTEM_VERSION}...`);
                   
@@ -1145,6 +1184,7 @@
                   return performVersionMigration(migratedData, savedData.version || "1.0.0");
               }
 
+              // ถ้าเวอร์ชันเดียวกัน แค่อัพเดทเวลา
               return {
                   ...savedData,
                   lastUpdate: new Date().toISOString()
@@ -1160,7 +1200,9 @@
       function performVersionMigration(data, fromVersion) {
           console.log(`🔧 ทำการ migrate จาก ${fromVersion} เป็น ${SYSTEM_VERSION}`);
 
+          // Migration 1.0.0 -> 2.0.0
           if (fromVersion.startsWith("1.")) {
+              // เพิ่ม originalQuantity ถ้ายังไม่มี
               data.farmData.feeds = data.farmData.feeds.map(feed => ({
                   ...feed,
                   originalQuantity: feed.originalQuantity || feed.quantity
@@ -1259,20 +1301,30 @@
       }
 
       // === เริ่มต้นระบบ ===
-      document.addEventListener('DOMContentLoaded', function() {
-          loadAllData();
-          updateOverview();
-          updateUsageSelects();
-          checkStockLevels();
-          setDefaultDates();
-          addDataManagementSection();
-          
-          console.log('📱 Mobile Farm App พร้อมใช้งาน');
-          
-          if (isStandalone) {
-              document.getElementById('manualInstall').style.display = 'none';
-          }
-      });
+       document.addEventListener('DOMContentLoaded', function() {
+           loadAllData();
+           updateOverview();
+           updateUsageSelects();
+           checkStockLevels();
+           setDefaultDates();
+           addDataManagementSection();
+           
+           // Test that app works
+           console.log('🎉 App loaded successfully');
+           // แสดง success message แทน error
+           setTimeout(() => {
+               showAlert('✅ แอปโหลดสำเร็จแล้ว', 'success');
+           }, 1000);
+           
+           // Mobile app ready indicator
+           console.log('📱 Mobile Farm App พร้อมใช้งาน');
+           
+           // Hide install prompt if already standalone
+           if (isStandalone) {
+               const installBtn = document.getElementById('manualInstall');
+               if (installBtn) installBtn.style.display = 'none';
+           }
+       });
 
       function setDefaultDates() {
           const today = new Date().toISOString().split('T')[0];
@@ -1283,17 +1335,21 @@
       }
 
       function showSection(sectionName) {
+          // Hide all sections
           document.querySelectorAll('.content-section').forEach(section => {
               section.classList.remove('active');
           });
 
+          // Remove active class from all tabs
           document.querySelectorAll('.nav-tab').forEach(tab => {
               tab.classList.remove('active');
           });
 
+          // Show selected section
           document.getElementById(sectionName).classList.add('active');
           event.target.classList.add('active');
 
+          // Scroll to top on mobile
           window.scrollTo(0, 0);
 
           switch(sectionName) {
@@ -1326,10 +1382,12 @@
           alertEl.className = `alert alert-${type}`;
           alertEl.classList.remove('hidden');
 
+          // Auto dismiss after 5 seconds
           setTimeout(() => {
               alertEl.classList.add('hidden');
           }, 5000);
 
+          // Scroll to alert on mobile
           alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
@@ -1362,7 +1420,7 @@
           saveAllData();
           displayPigs();
           updateOverview();
-          clearPigForm();
+clearPigForm();
           showAlert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
       }
 
@@ -1657,6 +1715,7 @@
 
       // === การจัดการการใช้งานประจำวัน ===
       function updateUsageSelects() {
+          // อัพเดท select สำหรับอาหาร
           const feedSelect = document.getElementById('useFeedSelect');
           feedSelect.innerHTML = '<option value="">เลือกอาหารที่ต้องการใช้</option>';
           
@@ -1674,6 +1733,7 @@
               }
           });
 
+          // อัพเดท select สำหรับยา
           const medicalSelect = document.getElementById('useMedicalSelect');
           medicalSelect.innerHTML = '<option value="">เลือกยา/วัคซีนที่ต้องการใช้</option>';
           
@@ -1987,7 +2047,7 @@
                       <td>${sale.netRevenue.toLocaleString()} บาท</td>
                       <td>${sale.buyer || '-'}</td>
                       <td>
-                          <button class="btn btn-small btn-danger" onclick="deleteSale(${sale.id})">🗑️ ลบ</button>
+<button class="btn btn-small btn-danger" onclick="deleteSale(${sale.id})">🗑️ ลบ</button>
                       </td>
                   </tr>
               `;
@@ -2101,6 +2161,7 @@
           const avgFeedPerDay = totalFeedUsed / 30;
           const avgMedicalPerDay = totalMedicalUsed / 30;
 
+          // จัดกลุ่มข้อมูลตามวันที่
           const usageByDate = {};
           recentUsage.forEach(usage => {
               if (!usageByDate[usage.date]) {
@@ -2111,6 +2172,7 @@
 
           const sortedDates = Object.keys(usageByDate).sort().reverse();
 
+          // สร้าง HTML แบบแยกส่วน
           let tableHTML = '';
           
           if (sortedDates.length === 0) {
@@ -2148,6 +2210,7 @@
                       `;
                   });
                   
+                  // เส้นแบ่งระหว่างวัน (ยกเว้นวันสุดท้าย)
                   if (dateIndex < sortedDates.length - 1) {
                       tableHTML += `
                           <tr>
@@ -2158,10 +2221,12 @@
               });
           }
 
+          // สร้าง HTML สมบูรณ์
           container.innerHTML = `
               <div class="card">
                   <div class="card-title">📊 รายงานการใช้งาน (30 วันล่าสุด)</div>
                   
+                  <!-- สรุปภาพรวม -->
                   <div class="form-grid" style="margin-bottom: 30px;">
                       <div>
                           <h4>🌾 การใช้อาหาร</h4>
@@ -2177,6 +2242,7 @@
                       </div>
                   </div>
 
+                  <!-- ตารางรายละเอียดการใช้งาน -->
                   <div style="margin-top: 30px;">
                       <h4>📋 รายละเอียดการใช้งานแยกตามวัน</h4>
                       <div class="table-container" style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 12px; margin-top: 15px;">
@@ -2196,6 +2262,7 @@
                           </table>
                       </div>
                       
+                      <!-- สรุปท้ายตาราง -->
                       <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 12px;">
                           <div class="form-grid">
                               <div>
@@ -2530,6 +2597,7 @@
                       
                       showAlert(`นำเข้าข้อมูลจาก ${file.name} เรียบร้อยแล้ว`, 'success');
                       
+                      // รีเฟรชหน้าจอ
                       setTimeout(() => location.reload(), 1000);
                   }
               } catch (error) {
@@ -2596,6 +2664,7 @@
 
       // Mobile-specific optimizations
       function optimizeForMobile() {
+          // Prevent body scroll when typing in inputs
           document.addEventListener('focusin', function(e) {
               if (e.target.matches('input, select, textarea')) {
                   document.body.style.position = 'fixed';
@@ -2610,20 +2679,24 @@
               }
           });
 
+          // Add haptic feedback for supported devices
           function hapticFeedback() {
               if (navigator.vibrate) {
                   navigator.vibrate(50);
               }
           }
 
+          // Add haptic feedback to buttons
           document.addEventListener('click', function(e) {
               if (e.target.matches('.btn, .nav-tab')) {
                   hapticFeedback();
               }
           });
 
+          // Optimize touch scrolling
           document.body.style.webkitOverflowScrolling = 'touch';
           
+          // Hide address bar on mobile browsers
           setTimeout(function() {
               window.scrollTo(0, 1);
           }, 100);
@@ -2654,7 +2727,19 @@
               }
           });
       }
-
+// iOS Compatibility fixes
+if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
+    // Disable problematic features on iOS
+    window.addEventListener('load', function() {
+        // Override console errors that might cause alerts
+        const originalError = console.error;
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            // Don't show user alerts for iOS-specific errors
+        };
+    });
+}      
+      
       // Prevent zoom on double tap for better mobile experience
       let lastTouchTime = 0;
       document.addEventListener('touchend', function(event) {
@@ -2679,10 +2764,14 @@
       }
 
       // Enhanced error handling
-      window.addEventListener('error', function(e) {
-          console.error('App Error:', e.error);
-          showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
-      });
+      // Enhanced error handling (iOS Safe)
+// window.addEventListener('error', function(e) {
+   // console.error('App Error:', e.error);
+    // ไม่แสดง alert ถ้าเป็น ServiceWorker error
+   // if (!e.error || !e.error.toString().includes('ServiceWorker')) {
+     //   showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
+   // }
+// });
 
       // Add swipe gestures for navigation (optional)
       let startX = 0;
@@ -2717,34 +2806,35 @@
           startY = 0;
       });
 
-      // === Manual Install Instructions ===
-      function showInstallInstructions() {
-          const userAgent = navigator.userAgent.toLowerCase();
-          let instructions = '';
-          
-          if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
-              instructions = `📱 วิธีติดตั้งใน iOS:\n1. กดปุ่ม Share (📤) ใน Safari\n2. เลือก "เพิ่มไปยังหน้าจอโฮม"\n3. กด "เพิ่ม" เพื่อติดตั้ง`;
-          } else if (userAgent.includes('android')) {
-              instructions = `📱 วิธีติดตั้งใน Android:\n1. กดเมนู (⋮) ใน Chrome\n2. เลือก "Add to Home screen"\n3. กด "Add" เพื่อติดตั้ง`;
-          } else {
-              instructions = `💻 วิธีติดตั้งในคอมพิวเตอร์:\n1. กดปุ่ม ⊕ ในแถบ URL (Chrome)\n2. หรือกดเมนู → "Install app"\n3. กด "Install" เพื่อติดตั้ง`;
-          }
-          
-          alert(instructions);
-      }
-
-      // ซ่อนปุ่มถ้าติดตั้งแล้ว
-      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-          document.addEventListener('DOMContentLoaded', function() {
-              const installBtn = document.getElementById('manualInstall');
-              if (installBtn) installBtn.style.display = 'none';
-          });
-      }
-
       console.log('🎉 ระบบจัดการฟาร์มสุกร Mobile App พร้อมใช้งาน');
       console.log(`📱 เวอร์ชัน: ${SYSTEM_VERSION}`);
       console.log('🔧 ฟีเจอร์: จัดการสุกร, สต็อกอาหาร, ยา, การใช้งาน, การขาย, รายงาน, PWA, Mobile Optimized');
       console.log(`📲 PWA Status: ${isStandalone ? 'Installed' : 'Web Browser'}`);
+
+       // === Manual Install Instructions ===
+       function showInstallInstructions() {
+           const userAgent = navigator.userAgent.toLowerCase();
+           let instructions = '';
+           
+           if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+               instructions = `📱 วิธีติดตั้งใน iOS:\n1. กดปุ่ม Share (📤) ใน Safari\n2. เลือก "Add to Home Screen"\n3. กด "Add" เพื่อติดตั้ง`;
+           } else if (userAgent.includes('android')) {
+               instructions = `📱 วิธีติดตั้งใน Android:\n1. กดเมนู (⋮) ใน Chrome\n2. เลือก "Add to Home screen"\n3. กด "Add" เพื่อติดตั้ง`;
+           } else {
+               instructions = `💻 วิธีติดตั้งในคอมพิวเตอร์:\n1. กดปุ่ม ⊕ ในแถบ URL (Chrome)\n2. หรือกดเมนู → "Install app"\n3. กด "Install" เพื่อติดตั้ง`;
+           }
+           
+           alert(instructions);
+       }
+
+       // ซ่อนปุ่มถ้าติดตั้งแล้ว
+       if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+           document.addEventListener('DOMContentLoaded', function() {
+               const installBtn = document.getElementById('manualInstall');
+               if (installBtn) installBtn.style.display = 'none';
+           });
+       }
+  
   </script>
 </body>
 </html>

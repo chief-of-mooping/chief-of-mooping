@@ -4,22 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบจัดการฟาร์มสุกร</title>
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi8J+QtyDguKPguLDguJrguJrguIHguLLguKPguIjguLHguJTguIHguLLguKPguJ/guLLguKPguYzguKHguKrguLjguIHguKPiLCJzaG9ydF9uYW1lIjoi8J+QtyDguJ/guLLguKPguYzguKHguKrguLjguIHguKPiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsInN0YXJ0X3VybCI6Ii8iLCJ0aGVtZV9jb2xvciI6IiMyNzk2NGEiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzE2NTgzNCIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBNU5pQTVOaUlnWm1sc2JEMGlJekkzPWVGSGRGTVJpTGIxcmtwSDV3dFNmQmg2U2lFM3hGSjVhS2VLQWVoSmJNVXhDSWlCS0lRZUlLQmdJaUVLTVFoVGNKQ0pOSXhDRHdoNUtUTG9TOEtFZGNxSFY5ZVpuRHdoU1ZObHpDaWlRblU5aWRtYm1JbGRLWUhCVzFDaWNuVXZodXgzY0poSWxjdG1RUkVjSEJDaWNaelpnNWZzaWNkRGljRlJoOVh6SHB5SkpOJyJ9XX0=">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuC4o+C4sOC4muC4muC4iOC4seC4lOC4geC4suC4o+C4n+C4suC4o+C5jOC4oeC4quC4uOC4geC4oyIsCiAgInNob3J0X25hbWUiOiAi4Lit4Liy4Lij4LmM4Lit4Liq4Li44LiB4LiyIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiIzJlN2QzMiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1qUXdJaUJvWldsbmFIUTlJakk0TUNJaWRtbGxka0p2ZUQwaU1DQXdJakkwTUNBeU9EQWlQaUJlUEhCaGRHZ2dabWxzYkQwaVl5TmlaVGd5TlRjaUlHUTlJa0V4TWlBeU1UWkRNVEkzTGpjM0lERTFNall1TXpraUlERXpPUzR6TnlBeE5qRTJJREUxTmk0Mk15QXhOalUyV0c1bElGeDhYRzFaY2lCVWJHRXNPVnhkSUZzJTBBUEhCaGRHZ2dabWxzYkQwaUl6QTFjSEVhQ1dnNTFkbWQ0VTBOalpHWm1Za0E1TVhKVGN6WnpmM2x1UFNRaUlHUTlJazFvT1M0eE5pQXpNak13TVRCYWJXRnZiU0JqWlM0c1BUUkJiMjVqWVRNeU5EZFRNQ0E1TURBNUxsODVPVGd0TlRsZElDOTdNRzFsY2lCZFhGeGZYMXhkWGw5a1pTNUJQVGt4T1c1a0lEWnVMbXhPU1VCVDZ5VCIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI4MCIgdmlld0JveD0iMCAwIDI0MCAyODAiPl4KPHBhdGggZmlsbD0iI2JlODI1NyIgZD0iTTEyIDIxNkMxMjcuNzcgMTUyNi4zOSAxMzkuMzcgMTYxNiAxNTYuNjMgMTY1NlhuZSBGfHxHbVlyIFRsRXMsOVxdIFslCiAgPHBhdGggZmlsbD0iIzA1cHFaQ1dnOTFkbWQ0VTBOalZFWm1Za0E5MVJTc2Z6f3l1UFNRIiBkPSJNaDkuMTYgMzIzMDEwWmFvbSBjZS4sPTRBb25jYTMyNDdTdCA5MDQ5LjU5OC01OWQgLzc3MWVyXWRdWHl9ZGU1QT05MTluZCA2bi5sT1VCVDZ5VCIgLz4KPHBhdGggZmlsbD0iIzM0NDQzNCIgZD0iTTEyMCA4MEE1NiA1NiAwIDEgMSA2NCA4MEM2NCA2NiAyOCAyMCA4MCAyMFMxMjAgNjYgMTIwIDgwIi8+CjxjaXJjbGUgY3g9IjkyIiBjeT0iNjQiIHI9IjgiIGZpbGw9IiMwMDAiLz4KPGNpcmNsZSBjeD0iMTA4IiBjeT0iNjQiIHI9IjgiIGZpbGw9IiMwMDAiLz4KPHBhdGggZmlsbD0iIzAwMCIgZD0iTTcyIDk2QzcyIDEwNCAxMDQgMTA0IDEwNCA5NkM5NiA5NiA5NiA5NiA3MiA5NiIvPgo8L3N2Zz4=">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Niramit:wght@300;400;500;600;700&display=swap');
+        
         :root {
-            --primary: linear-gradient(135deg, #16a34a, #0ea5e9);
-            --primary-dark: #15803d;
-            --primary-light: #22c55e;
-            --secondary: #64748b;
-            --background: #f8fafc;
+            --primary: #2e7d32;
+            --primary-light: #4caf50;
+            --primary-dark: #1b5e20;
+            --secondary: #1976d2;
+            --secondary-light: #42a5f5;
+            --accent: #ff5722;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --info: #2196f3;
+            --bg: #f5f5f5;
             --surface: #ffffff;
-            --error: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --text: #212121;
+            --text-secondary: #757575;
+            --border: #e0e0e0;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
         }
 
         * {
@@ -29,92 +36,105 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background);
+            font-family: 'Niramit', sans-serif;
+            background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding-bottom: 80px;
         }
 
-        /* Header */
-        .header {
-            background: var(--primary);
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             padding: 1rem;
-            text-align: center;
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .header h1 {
-            font-size: 1.5rem;
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
         }
 
-        /* Navigation */
-        .nav {
-            background: white;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 60px;
-            z-index: 99;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .nav-container {
+        .tabs {
             display: flex;
-            gap: 0.5rem;
-            padding: 0 1rem;
-            min-width: max-content;
+            background: white;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .nav-btn {
-            padding: 0.75rem 1rem;
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
             border: none;
-            background: transparent;
-            color: var(--text-light);
-            border-radius: 0.5rem;
+            background: none;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            min-width: max-content;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
         }
 
-        .nav-btn.active {
-            background: var(--primary);
-            color: white;
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(46, 125, 50, 0.05);
         }
 
-        .nav-btn:hover:not(.active) {
-            background: var(--background);
+        .tab:hover:not(.active) {
+            background: rgba(0,0,0,0.05);
         }
 
-        /* Main Content */
-        .main {
+        main {
+            flex: 1;
             padding: 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         .section {
             display: none;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .section.active {
             display: block;
         }
 
-        /* Cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .card {
             background: var(--surface);
-            border-radius: 0.75rem;
+            border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
         }
@@ -122,64 +142,30 @@
         .card-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: between;
             margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Forms */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        label {
-            font-weight: 500;
             color: var(--text);
         }
 
-        input, select, textarea {
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-        }
-
-        /* Buttons */
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            min-height: 44px;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
 
         .btn-primary {
@@ -188,16 +174,12 @@
         }
 
         .btn-primary:hover {
-            opacity: 0.9;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
             background: var(--secondary);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--error);
             color: white;
         }
 
@@ -206,136 +188,255 @@
             color: white;
         }
 
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary-light));
+            transition: width 0.3s ease;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 1rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        th, td {
+        .table th,
+        .table td {
             padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid var(--border);
         }
 
-        th {
-            background: var(--background);
+        .table th {
+            background: var(--bg);
             font-weight: 600;
+            color: var(--text);
             position: sticky;
             top: 0;
         }
 
-        tr:hover {
-            background: var(--background);
+        .table tr:hover {
+            background: rgba(46, 125, 50, 0.05);
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .stat-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border: 1px solid var(--border);
+        .modal.show {
+            display: flex;
         }
 
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .stat-value {
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-dark);
+            cursor: pointer;
+            color: var(--text-secondary);
         }
 
-        .stat-label {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        /* Alerts */
         .alert {
             padding: 1rem;
-            border-radius: 0.5rem;
+            border-radius: 8px;
             margin-bottom: 1rem;
-            border: 1px solid;
-        }
-
-        .alert-warning {
-            background: #fef3c7;
-            border-color: #f59e0b;
-            color: #92400e;
-        }
-
-        .alert-danger {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #dc2626;
+            border-left: 4px solid;
         }
 
         .alert-success {
-            background: #d1fae5;
-            border-color: #10b981;
-            color: #047857;
+            background: rgba(76, 175, 80, 0.1);
+            border-color: var(--success);
+            color: #2e7d32;
         }
 
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .card {
-                padding: 1rem;
-                margin-bottom: 1rem;
-            }
-
-            .nav-container {
-                padding: 0 0.5rem;
-            }
-
-            .nav-btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.8rem;
-            }
-
-            table {
-                font-size: 0.8rem;
-            }
-
-            th, td {
-                padding: 0.5rem;
-            }
+        .alert-warning {
+            background: rgba(255, 152, 0, 0.1);
+            border-color: var(--warning);
+            color: #e65100;
         }
 
-        /* Loading */
-        .loading {
+        .alert-error {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: var(--error);
+            color: #c62828;
+        }
+
+        .badge {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary-dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
         }
 
         @keyframes spin {
@@ -343,1149 +444,865 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Hide elements */
-        .hidden {
-            display: none !important;
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
         }
 
-        /* Progress bar */
-        .progress {
-            width: 100%;
-            height: 8px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 0.5rem 0;
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
-        .progress-bar {
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                width: 95%;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
         }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                font-size: 0.7rem;
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        .chart-canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Additional Utility Classes */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-danger { color: var(--error); }
+        .text-muted { color: var(--text-secondary); }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .d-flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .w-100 { width: 100%; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>ระบบจัดการฟาร์มสุกร</h1>
-    </div>
-
-    <nav class="nav">
-        <div class="nav-container">
-            <button class="nav-btn active" onclick="showSection('overview')">📊 ภาพรวม</button>
-            <button class="nav-btn" onclick="showSection('pigs')">🐷 สุกร</button>
-            <button class="nav-btn" onclick="showSection('feeds')">🌾 อาหาร</button>
-            <button class="nav-btn" onclick="showSection('medical')">💊 ยา</button>
-            <button class="nav-btn" onclick="showSection('usage')">📝 ใช้งาน</button>
-            <button class="nav-btn" onclick="showSection('sales')">💰 ขาย</button>
-            <button class="nav-btn" onclick="showSection('reports')">📈 รายงาน</button>
-        </div>
-    </nav>
-
-    <main class="main">
-        <!-- Overview Section -->
-        <section id="overview" class="section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">🐷</div>
-                    <div class="stat-value" id="totalPigs">0</div>
-                    <div class="stat-label">สุกรทั้งหมด</div>
+    <div class="app">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    🐖 <span>ระบบจัดการฟาร์มสุกร</span>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🌾</div>
-                    <div class="stat-value" id="totalFeeds">0</div>
-                    <div class="stat-label">ชนิดอาหาร</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💊</div>
-                    <div class="stat-value" id="totalMedical">0</div>
-                    <div class="stat-label">ชนิดยา</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-value" id="monthlyRevenue">0</div>
-                    <div class="stat-label">รายได้เดือนนี้</div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="exportData()">📤 ส่งออกข้อมูล</button>
                 </div>
             </div>
+        </header>
 
-            <div id="alerts-container"></div>
+        <nav class="tabs">
+            <button class="tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="showSection('pigs')">🐖 สุกร</button>
+            <button class="tab" onclick="showSection('feeds')">🌾 อาหาร</button>
+            <button class="tab" onclick="showSection('medical')">💊 ยา</button>
+            <button class="tab" onclick="showSection('usage')">📝 ใช้งาน</button>
+            <button class="tab" onclick="showSection('sales')">💰 ขาย</button>
+            <button class="tab" onclick="showSection('breeding')">👶 การผสม</button>
+            <button class="tab" onclick="showSection('health')">🏥 สุขภาพ</button>
+            <button class="tab" onclick="showSection('reports')">📋 รายงาน</button>
+        </nav>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">⚙️ จัดการข้อมูล</h3>
+        <main>
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalPigs">0</div>
+                        <div class="stat-label">จำนวนสุกรทั้งหมด</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="monthlyRevenue">฿0</div>
+                        <div class="stat-label">รายได้เดือนนี้</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="lowStockCount">0</div>
+                        <div class="stat-label">สต็อกต่ำ</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="breedingCount">0</div>
+                        <div class="stat-label">การผสมพันธุ์</div>
+                    </div>
                 </div>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button class="btn btn-primary" onclick="exportData()">📤 ส่งออกข้อมูล</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 นำเข้าข้อมูล</button>
-                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
-                </div>
-            </div>
-        </section>
 
-        <!-- Pigs Section -->
-        <section id="pigs" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🐷 เพิ่มข้อมูลสุกร</h3>
-                </div>
-                <form id="pigForm" onsubmit="addPig(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ประเภทสุกร</label>
-                            <select id="pigType" required>
-                                <option value="">เลือกประเภท</option>
-                                <option value="แม่พันธุ์">แม่พันธุ์</option>
-                                <option value="พ่อพันธุ์">พ่อพันธุ์</option>
-                                <option value="ลูกสุกร">ลูกสุกร</option>
-                                <option value="สุกรรุ่น">สุกรรุ่น</option>
-                                <option value="สุกรขุน">สุกรขุน</option>
-                            </select>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">ยอดขายรายเดือน</h3>
                         </div>
-                        <div class="form-group">
-                            <label>จำนวน (ตัว)</label>
-                            <input type="number" id="pigQuantity" min="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label>น้ำหนักเฉลี่ย (กก.)</label>
-                            <input type="number" id="pigWeight" step="0.1" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>อายุ (วัน)</label>
-                            <input type="number" id="pigAge" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>วันที่เข้าฟาร์ม</label>
-                            <input type="date" id="pigEntryDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>หมายเหตุ</label>
-                            <input type="text" id="pigNotes">
+                        <div class="chart-container">
+                            <canvas id="salesChart" class="chart-canvas"></canvas>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">เพิ่มข้อมูลสุกร</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">📋 รายการสุกร</h3>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ประเภท</th>
-                                <th>จำนวน</th>
-                                <th>น้ำหนัก</th>
-                                <th>อายุ</th>
-                                <th>วันที่เข้า</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pigsTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Feeds Section -->
-        <section id="feeds" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🌾 เพิ่มสต็อกอาหาร</h3>
-                </div>
-                <form id="feedForm" onsubmit="addFeed(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ประเภทอาหาร</label>
-                            <select id="feedType" required>
-                                <option value="">เลือกประเภท</option>
-                                <option value="Pre-Starter">Pre-Starter</option>
-                                <option value="Starter">Starter</option>
-                                <option value="Grower">Grower</option>
-                                <option value="Finisher">Finisher</option>
-                                <option value="อาหารแม่พันธุ์">อาหารแม่พันธุ์</option>
-                                <option value="อาหารพ่อพันธุ์">อาหารพ่อพันธุ์</option>
-                            </select>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">สัดส่วนประเภทสุกร</h3>
                         </div>
-                        <div class="form-group">
-                            <label>ยี่ห้อ</label>
-                            <input type="text" id="feedBrand" required>
-                        </div>
-                        <div class="form-group">
-                            <label>จำนวน (กก.)</label>
-                            <input type="number" id="feedQuantity" step="0.1" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ราคา (บาท)</label>
-                            <input type="number" id="feedPrice" step="0.01" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>วันที่ซื้อ</label>
-                            <input type="date" id="feedPurchaseDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>วันหมดอายุ</label>
-                            <input type="date" id="feedExpiryDate">
+                        <div class="chart-container">
+                            <canvas id="pigTypeChart" class="chart-canvas"></canvas>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">เพิ่มสต็อกอาหาร</button>
-                </form>
-            </div>
+                </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">📦 สต็อกอาหาร</h3>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ประเภท</th>
-                                <th>ยี่ห้อ</th>
-                                <th>คงเหลือ</th>
-                                <th>ราคา</th>
-                                <th>วันซื้อ</th>
-                                <th>หมดอายุ</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="feedsTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Medical Section -->
-        <section id="medical" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">💊 เพิ่มสต็อกยา</h3>
-                </div>
-                <form id="medicalForm" onsubmit="addMedical(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ประเภทยา</label>
-                            <select id="medicalType" required>
-                                <option value="">เลือกประเภท</option>
-                                <option value="วัคซีน">วัคซีน</option>
-                                <option value="ยาปฏิชีวนะ">ยาปฏิชีวนะ</option>
-                                <option value="วิตามิน">วิตามิน</option>
-                                <option value="ยาถ่ายพยาธิ">ยาถ่ายพยาธิ</option>
-                                <option value="ฮอร์โมน">ฮอร์โมน</option>
-                                <option value="อาหารเสริม">อาหารเสริม</option>
-                                <option value="ยาฆ่าเชื้อ">ยาฆ่าเชื้อ</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ชื่อยา</label>
-                            <input type="text" id="medicalName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ยี่ห้อ</label>
-                            <input type="text" id="medicalBrand" required>
-                        </div>
-                        <div class="form-group">
-                            <label>จำนวน</label>
-                            <input type="number" id="medicalQuantity" step="0.1" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>หน่วย</label>
-                            <select id="medicalUnit" required>
-                                <option value="">เลือกหน่วย</option>
-                                <option value="ขวด">ขวด</option>
-                                <option value="กล่อง">กล่อง</option>
-                                <option value="ซอง">ซอง</option>
-                                <option value="กรัม">กรัม</option>
-                                <option value="มล.">มล.</option>
-                                <option value="เม็ด">เม็ด</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ราคา (บาท)</label>
-                            <input type="number" id="medicalPrice" step="0.01" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>วันที่ซื้อ</label>
-                            <input type="date" id="medicalPurchaseDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>วันหมดอายุ</label>
-                            <input type="date" id="medicalExpiryDate">
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🚨 แจ้งเตือนสำคัญ</h3>
                     </div>
-                    <button type="submit" class="btn btn-primary">เพิ่มสต็อกยา</button>
-                </form>
-            </div>
+                    <div id="alerts"></div>
+                </div>
+            </section>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">🏥 สต็อกยา</h3>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ประเภท</th>
-                                <th>ชื่อยา</th>
-                                <th>ยี่ห้อ</th>
-                                <th>คงเหลือ</th>
-                                <th>หน่วย</th>
-                                <th>ราคา</th>
-                                <th>วันซื้อ</th>
-                                <th>หมดอายุ</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="medicalTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Usage Section -->
-        <section id="usage" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">📝 บันทึกการใช้งาน</h3>
-                </div>
-                <form id="usageForm" onsubmit="addUsage(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ประเภท</label>
-                            <select id="usageType" required onchange="updateUsageItems()">
-                                <option value="">เลือกประเภท</option>
-                                <option value="อาหาร">อาหาร</option>
-                                <option value="ยา">ยา</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>รายการ</label>
-                            <select id="usageItem" required onchange="updateUsageUnit()">
-                                <option value="">เลือกรายการ</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>จำนวนที่ใช้</label>
-                            <input type="number" id="usageAmount" step="0.1" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>หน่วย</label>
-                            <input type="text" id="usageUnit" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>วันที่</label>
-                            <input type="date" id="usageDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>เวลา</label>
-                            <input type="time" id="usageTime" required>
-                        </div>
+            <!-- Pigs Section -->
+            <section id="pigs" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🐖 จัดการข้อมูลสุกร</h3>
+                        <button class="btn btn-primary" onclick="showModal('pigModal')">+ เพิ่มสุกร</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">บันทึกการใช้งาน</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">📊 ประวัติการใช้งาน</h3>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ประเภท</th>
+                                    <th>จำนวน</th>
+                                    <th>น้ำหนัก (กก.)</th>
+                                    <th>อายุ (วัน)</th>
+                                    <th>วันที่เข้าฟาร์ม</th>
+                                    <th>การจัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pigsTable">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>วันที่</th>
-                                <th>เวลา</th>
-                                <th>ประเภท</th>
-                                <th>รายการ</th>
-                                <th>จำนวน</th>
-                                <th>หน่วย</th>
-                                <th>การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usageTable"></tbody>
-                    </table>
+            </section>
+
+            <!-- Feeds Section -->
+            <section id="feeds" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🌾 จัดการสต็อกอาหาร</h3>
+                        <button class="btn btn-primary" onclick="showModal('feedModal')">+ เพิ่มอาหาร</button>
+                    </div>
+                    <div class="grid grid-2">
+                        <div id="feedsList"></div>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Sales Section -->
-        <section id="sales" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">💰 บันทึกการขาย</h3>
+            <!-- Medical Section -->
+            <section id="medical" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💊 จัดการสต็อกยา/วัคซีน</h3>
+                        <button class="btn btn-primary" onclick="showModal('medicalModal')">+ เพิ่มยา</button>
+                    </div>
+                    <div class="grid grid-2">
+                        <div id="medicalList"></div>
+                    </div>
                 </div>
-                <form id="salesForm" onsubmit="addSale(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>ประเภทสุกร</label>
-                            <select id="salesType" required>
-                                <option value="">เลือกประเภท</option>
-                                <option value="แม่พันธุ์">แม่พันธุ์</option>
-                                <option value="พ่อพันธุ์">พ่อพันธุ์</option>
-                                <option value="ลูกสุกร">ลูกสุกร</option>
-                                <option value="สุกรรุ่น">สุกรรุ่น</option>
-                                <option value="สุกรขุน">สุกรขุน</option>
-                           </select>
-                       </div>
-                       <div class="form-group">
-                           <label>จำนวน (ตัว)</label>
-                           <input type="number" id="salesQuantity" min="1" required>
-                       </div>
-                       <div class="form-group">
-                           <label>น้ำหนักรวม (กก.)</label>
-                           <input type="number" id="salesWeight" step="0.1" min="0" required>
-                       </div>
-                       <div class="form-group">
-                           <label>ราคาต่อกิโลกรัม (บาท)</label>
-                           <input type="number" id="salesPricePerKg" step="0.01" min="0" required>
-                       </div>
-                       <div class="form-group">
-                           <label>ค่าขนส่ง (บาท)</label>
-                           <input type="number" id="salesTransportCost" step="0.01" min="0" value="0">
-                       </div>
-                       <div class="form-group">
-                           <label>ผู้ซื้อ</label>
-                           <input type="text" id="salesBuyer">
-                       </div>
-                       <div class="form-group">
-                           <label>วันที่ขาย</label>
-                           <input type="date" id="salesDate" required>
-                       </div>
-                       <div class="form-group">
-                           <label>หมายเหตุ</label>
-                           <input type="text" id="salesNotes">
-                       </div>
-                   </div>
-                   <div class="card" style="background: #f0f9ff; border-color: #0ea5e9;">
-                       <h4>💵 สรุปการขาย</h4>
-                       <p>รายได้รวม: <span id="totalRevenue">0</span> บาท</p>
-                       <p>รายได้สุทธิ: <span id="netRevenue">0</span> บาท</p>
-                   </div>
-                   <button type="submit" class="btn btn-primary">บันทึกการขาย</button>
-               </form>
-           </div>
+            </section>
 
-           <div class="card">
-               <div class="card-header">
-                   <h3 class="card-title">📈 ประวัติการขาย</h3>
-               </div>
-               <div class="table-container">
-                   <table>
-                       <thead>
-                           <tr>
-                               <th>วันที่</th>
-                               <th>ประเภท</th>
-                               <th>จำนวน</th>
-                               <th>น้ำหนัก</th>
-                               <th>ราคา/กก.</th>
-                               <th>ค่าขนส่ง</th>
-                               <th>รายได้สุทธิ</th>
-                               <th>ผู้ซื้อ</th>
-                               <th>การจัดการ</th>
-                           </tr>
-                       </thead>
-                       <tbody id="salesTable"></tbody>
-                   </table>
-               </div>
-           </div>
-       </section>
+            <!-- Usage Section -->
+            <section id="usage" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📝 บันทึกการใช้งานประจำวัน</h3>
+                        <button class="btn btn-primary" onclick="showModal('usageModal')">+ บันทึกการใช้</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่</th>
+                                    <th>เวลา</th>
+                                    <th>ประเภท</th>
+                                    <th>รายการ</th>
+                                    <th>จำนวน</th>
+                                    <th>หน่วย</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usageTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-       <!-- Reports Section -->
-       <section id="reports" class="section">
-           <div class="card">
-               <div class="card-header">
-                   <h3 class="card-title">📊 รายงานภาพรวมฟาร์ม</h3>
-               </div>
-               <div class="stats-grid">
-                   <div class="stat-card">
-                       <div class="stat-icon">🐷</div>
-                       <div class="stat-value" id="reportTotalPigs">0</div>
-                       <div class="stat-label">สุกรทั้งหมด (ตัว)</div>
-                   </div>
-                   <div class="stat-card">
-                       <div class="stat-icon">⚖️</div>
-                       <div class="stat-value" id="reportTotalWeight">0</div>
-                       <div class="stat-label">น้ำหนักรวม (กก.)</div>
-                   </div>
-                   <div class="stat-card">
-                       <div class="stat-icon">💰</div>
-                       <div class="stat-value" id="reportTotalRevenue">0</div>
-                       <div class="stat-label">รายได้รวม (บาท)</div>
-                   </div>
-                   <div class="stat-card">
-                       <div class="stat-icon">📈</div>
-                       <div class="stat-value" id="reportAvgPrice">0</div>
-                       <div class="stat-label">ราคาเฉลี่ย (บาท/กก.)</div>
-                   </div>
-               </div>
-           </div>
+            <!-- Sales Section -->
+            <section id="sales" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💰 จัดการการขาย</h3>
+                        <button class="btn btn-primary" onclick="showModal('salesModal')">+ บันทึกการขาย</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่</th>
+                                    <th>ประเภท</th>
+                                    <th>จำนวน</th>
+                                    <th>น้ำหนัก</th>
+                                    <th>ราคา/กก.</th>
+                                    <th>รายได้สุทธิ</th>
+                                    <th>ผู้ซื้อ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salesTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-           <div class="card">
-               <div class="card-header">
-                   <h3 class="card-title">📦 รายงานสต็อก</h3>
-               </div>
-               <div id="stockReport"></div>
-           </div>
+            <!-- Breeding Section -->
+            <section id="breeding" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">👶 จัดการการผสมพันธุ์</h3>
+                        <button class="btn btn-primary" onclick="showModal('breedingModal')">+ บันทึกการผสม</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>วันที่ผสม</th>
+                                    <th>แม่พันธุ์</th>
+                                    <th>พ่อพันธุ์</th>
+                                    <th>คาดวันคลอด</th>
+                                    <th>วันที่คลอดจริง</th>
+                                    <th>จำนวนลูก</th>
+                                    <th>สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breedingTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-           <div class="card">
-               <div class="card-header">
-                   <h3 class="card-title">📊 รายงานการใช้งาน (7 วันล่าสุด)</h3>
+            <!-- Health Section -->
+            <section id="health" class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏥 บันทึกสุขภาพ</h3>
+                       <button class="btn btn-primary" onclick="showModal('healthModal')">+ บันทึกสุขภาพ</button>
+                   </div>
+                   <div class="table-container">
+                       <table class="table">
+                           <thead>
+                               <tr>
+                                   <th>วันที่</th>
+                                   <th>ประเภทสุกร</th>
+                                   <th>ประเภทการรักษา</th>
+                                   <th>รายละเอียด</th>
+                                   <th>การรักษา</th>
+                                   <th>ค่าใช้จ่าย</th>
+                               </tr>
+                           </thead>
+                           <tbody id="healthTable">
+                           </tbody>
+                       </table>
+                   </div>
                </div>
-               <div id="usageReport"></div>
-           </div>
+           </section>
 
-           <div class="card">
-               <div class="card-header">
-                   <h3 class="card-title">💵 รายงานการเงิน</h3>
-               </div>
-               <div class="form-grid">
-                   <div class="form-group">
-                       <label>เดือน</label>
-                       <select id="reportMonth">
-                           <option value="">ทั้งหมด</option>
-                           <option value="1">มกราคม</option>
-                           <option value="2">กุมภาพันธ์</option>
-                           <option value="3">มีนาคม</option>
-                           <option value="4">เมษายน</option>
-                           <option value="5">พฤษภาคม</option>
-                           <option value="6">มิถุนายน</option>
-                           <option value="7">กรกฎาคม</option>
-                           <option value="8">สิงหาคม</option>
-                           <option value="9">กันยายน</option>
-                           <option value="10">ตุลาคม</option>
-                           <option value="11">พฤศจิกายน</option>
-                           <option value="12">ธันวาคม</option>
-                       </select>
+           <!-- Reports Section -->
+           <section id="reports" class="section">
+               <div class="grid grid-2">
+                   <div class="card">
+                       <div class="card-header">
+                           <h3 class="card-title">📊 รายงานกำไร-ขาดทุน</h3>
+                       </div>
+                       <div id="profitReport"></div>
                    </div>
-                   <div class="form-group">
-                       <label>ปี</label>
-                       <select id="reportYear"></select>
-                   </div>
-                   <div class="form-group">
-                       <button class="btn btn-primary" onclick="generateFinancialReport()">สร้างรายงาน</button>
+                   
+                   <div class="card">
+                       <div class="card-header">
+                           <h3 class="card-title">📈 ประสิทธิภาพอาหาร (FCR)</h3>
+                       </div>
+                       <div id="fcrReport"></div>
                    </div>
                </div>
-               <div id="financialReport"></div>
+               
+               <div class="card">
+                   <div class="card-header">
+                       <h3 class="card-title">📋 รายงานสุขภาพสุกร</h3>
+                   </div>
+                   <div id="healthReport"></div>
+               </div>
+           </section>
+       </main>
+   </div>
+
+   <!-- Modals -->
+   <!-- Pig Modal -->
+   <div id="pigModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">เพิ่ม/แก้ไขข้อมูลสุกร</h3>
+               <button class="close-btn" onclick="hideModal('pigModal')">&times;</button>
            </div>
-       </section>
-   </main>
+           <form id="pigForm">
+               <div class="form-group">
+                   <label class="form-label">ประเภทสุกร</label>
+                   <select class="form-select" name="type" required>
+                       <option value="">เลือกประเภทสุกร</option>
+                       <option value="แม่พันธุ์">แม่พันธุ์ (Sow)</option>
+                       <option value="พ่อพันธุ์">พ่อพันธุ์ (Boar)</option>
+                       <option value="ลูกสุกร">ลูกสุกร (Piglet)</option>
+                       <option value="สุกรขุน">สุกรขุน (Finisher)</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวน (ตัว)</label>
+                   <input type="number" class="form-input" name="quantity" min="1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">น้ำหนักเฉลี่ย (กิโลกรัม)</label>
+                   <input type="number" class="form-input" name="weight" step="0.1" min="0" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">อายุ (วัน)</label>
+                   <input type="number" class="form-input" name="age" min="0" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันที่เข้าฟาร์ม</label>
+                   <input type="date" class="form-input" name="entryDate" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">หมายเหตุ</label>
+                   <textarea class="form-input" name="notes" rows="3"></textarea>
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('pigModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Feed Modal -->
+   <div id="feedModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">เพิ่ม/แก้ไขอาหาร</h3>
+               <button class="close-btn" onclick="hideModal('feedModal')">&times;</button>
+           </div>
+           <form id="feedForm">
+               <div class="form-group">
+                   <label class="form-label">ประเภทอาหาร</label>
+                   <select class="form-select" name="type" required>
+                       <option value="">เลือกประเภทอาหาร</option>
+                       <option value="Pre-Starter">Pre-Starter (พรี-สตาร์ทเตอร์)</option>
+                       <option value="Starter">Starter (สตาร์ทเตอร์)</option>
+                       <option value="Grower">Grower (โกรเวอร์)</option>
+                       <option value="Finisher">Finisher (ฟินิชเชอร์)</option>
+                       <option value="Sow Feed">Sow Feed (อาหารแม่พันธุ์)</option>
+                       <option value="Boar Feed">Boar Feed (อาหารพ่อพันธุ์)</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ยี่ห้อ</label>
+                   <input type="text" class="form-input" name="brand" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวน (กิโลกรัม)</label>
+                   <input type="number" class="form-input" name="quantity" min="0" step="0.1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ราคา (บาท)</label>
+                   <input type="number" class="form-input" name="price" min="0" step="0.01" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันที่ซื้อ</label>
+                   <input type="date" class="form-input" name="purchaseDate" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันหมดอายุ</label>
+                   <input type="date" class="form-input" name="expiryDate">
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('feedModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Medical Modal -->
+   <div id="medicalModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">เพิ่ม/แก้ไขยา/วัคซีน</h3>
+               <button class="close-btn" onclick="hideModal('medicalModal')">&times;</button>
+           </div>
+           <form id="medicalForm">
+               <div class="form-group">
+                   <label class="form-label">ประเภท</label>
+                   <select class="form-select" name="type" required>
+                       <option value="">เลือกประเภท</option>
+                       <option value="Vaccine">Vaccine (วัคซีน)</option>
+                       <option value="Antibiotic">Antibiotic (ยาปฏิชีวนะ)</option>
+                       <option value="Vitamin">Vitamin (วิตามิน)</option>
+                       <option value="Dewormer">Dewormer (ยาถ่ายพยาธิ)</option>
+                       <option value="Hormone">Hormone (ฮอร์โมน)</option>
+                       <option value="Feed Supplement">Feed Supplement (อาหารเสริม)</option>
+                       <option value="Disinfectant">Disinfectant (ยาฆ่าเชื้อ)</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ชื่อยา</label>
+                   <input type="text" class="form-input" name="name" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ยี่ห้อ</label>
+                   <input type="text" class="form-input" name="brand" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวน</label>
+                   <input type="number" class="form-input" name="quantity" min="0" step="0.1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">หน่วย</label>
+                   <select class="form-select" name="unit" required>
+                       <option value="">เลือกหน่วย</option>
+                       <option value="ml">มิลลิลิตร (ml)</option>
+                       <option value="กรัม">กรัม (g)</option>
+                       <option value="เม็ด">เม็ด</option>
+                       <option value="ขวด">ขวด</option>
+                       <option value="กล่อง">กล่อง</option>
+                       <option value="แผง">แผง</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ราคา (บาท)</label>
+                   <input type="number" class="form-input" name="price" min="0" step="0.01" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันที่ซื้อ</label>
+                   <input type="date" class="form-input" name="purchaseDate" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันหมดอายุ</label>
+                   <input type="date" class="form-input" name="expiryDate">
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('medicalModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Usage Modal -->
+   <div id="usageModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">บันทึกการใช้งาน</h3>
+               <button class="close-btn" onclick="hideModal('usageModal')">&times;</button>
+           </div>
+           <form id="usageForm">
+               <div class="form-group">
+                   <label class="form-label">ประเภท</label>
+                   <select class="form-select" name="type" onchange="updateUsageItems()" required>
+                       <option value="">เลือกประเภท</option>
+                       <option value="อาหาร">อาหาร</option>
+                       <option value="ยา">ยา/วัคซีน</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">รายการ</label>
+                   <select class="form-select" name="itemId" id="usageItems" required>
+                       <option value="">เลือกรายการ</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวนที่ใช้</label>
+                   <input type="number" class="form-input" name="amount" min="0" step="0.1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันที่</label>
+                   <input type="date" class="form-input" name="date" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">เวลา</label>
+                   <input type="time" class="form-input" name="time" required>
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('usageModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Sales Modal -->
+   <div id="salesModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">บันทึกการขาย</h3>
+               <button class="close-btn" onclick="hideModal('salesModal')">&times;</button>
+           </div>
+           <form id="salesForm">
+               <div class="form-group">
+                   <label class="form-label">วันที่ขาย</label>
+                   <input type="date" class="form-input" name="date" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ประเภทสุกร</label>
+                   <select class="form-select" name="type" required>
+                       <option value="">เลือกประเภทสุกร</option>
+                       <option value="แม่พันธุ์">แม่พันธุ์</option>
+                       <option value="พ่อพันธุ์">พ่อพันธุ์</option>
+                       <option value="ลูกสุกร">ลูกสุกร</option>
+                       <option value="สุกรขุน">สุกรขุน</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวน (ตัว)</label>
+                   <input type="number" class="form-input" name="quantity" min="1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">น้ำหนักรวม (กิโลกรัม)</label>
+                   <input type="number" class="form-input" name="weight" min="0" step="0.1" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ราคาต่อกิโลกรัม (บาท)</label>
+                   <input type="number" class="form-input" name="pricePerKg" min="0" step="0.01" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ค่าขนส่ง (บาท)</label>
+                   <input type="number" class="form-input" name="transportCost" min="0" step="0.01" value="0">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ผู้ซื้อ</label>
+                   <input type="text" class="form-input" name="buyer" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">หมายเหตุ</label>
+                   <textarea class="form-input" name="notes" rows="3"></textarea>
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('salesModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Breeding Modal -->
+   <div id="breedingModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">บันทึกการผสมพันธุ์</h3>
+               <button class="close-btn" onclick="hideModal('breedingModal')">&times;</button>
+           </div>
+           <form id="breedingForm">
+               <div class="form-group">
+                   <label class="form-label">วันที่ผสม</label>
+                   <input type="date" class="form-input" name="matingDate" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">รหัสแม่พันธุ์</label>
+                   <input type="text" class="form-input" name="sowId" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">รหัสพ่อพันธุ์</label>
+                   <input type="text" class="form-input" name="boarId" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">วันที่คลอดจริง (ถ้าคลอดแล้ว)</label>
+                   <input type="date" class="form-input" name="actualDate">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">จำนวนลูกที่เกิด</label>
+                   <input type="number" class="form-input" name="piglets" min="0">
+               </div>
+               <div class="form-group">
+                   <label class="form-label">หมายเหตุ</label>
+                   <textarea class="form-input" name="notes" rows="3"></textarea>
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('breedingModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
+
+   <!-- Health Modal -->
+   <div id="healthModal" class="modal">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title">บันทึกสุขภาพ</h3>
+               <button class="close-btn" onclick="hideModal('healthModal')">&times;</button>
+           </div>
+           <form id="healthForm">
+               <div class="form-group">
+                   <label class="form-label">วันที่</label>
+                   <input type="date" class="form-input" name="date" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">รหัสสุกร</label>
+                   <input type="text" class="form-input" name="pigId" required>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ประเภทสุกร</label>
+                   <select class="form-select" name="pigType" required>
+                       <option value="">เลือกประเภทสุกร</option>
+                       <option value="แม่พันธุ์">แม่พันธุ์</option>
+                       <option value="พ่อพันธุ์">พ่อพันธุ์</option>
+                       <option value="ลูกสุกร">ลูกสุกร</option>
+                       <option value="สุกรขุน">สุกรขุน</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ประเภทการรักษา</label>
+                   <select class="form-select" name="type" required>
+                       <option value="">เลือกประเภท</option>
+                       <option value="วัคซีน">วัคซีน</option>
+                       <option value="รักษาป่วย">รักษาป่วย</option>
+                       <option value="ตาย">ตาย</option>
+                       <option value="ตรวจสุขภาพ">ตรวจสุขภาพ</option>
+                       <option value="อื่นๆ">อื่นๆ</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">รายละเอียด</label>
+                   <textarea class="form-input" name="description" rows="3" required></textarea>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">การรักษา</label>
+                   <textarea class="form-input" name="treatment" rows="3"></textarea>
+               </div>
+               <div class="form-group">
+                   <label class="form-label">ค่าใช้จ่าย (บาท)</label>
+                   <input type="number" class="form-input" name="cost" min="0" step="0.01" value="0">
+               </div>
+               <div class="d-flex gap-2">
+                   <button type="submit" class="btn btn-primary">บันทึก</button>
+                   <button type="button" class="btn btn-outline" onclick="hideModal('healthModal')">ยกเลิก</button>
+               </div>
+           </form>
+       </div>
+   </div>
 
    <script>
-       // Global Variables
+       // Global variables
        let farmData = {
-           version: "2.0.0",
+           version: "3.0.0",
            pigs: [],
            feeds: [],
            medical: [],
            sales: [],
-           usage: []
+           usage: [],
+           breeding: [],
+           health: [],
+           photos: []
        };
 
-       // Initialize App
+       // Initialize app
        document.addEventListener('DOMContentLoaded', function() {
            loadData();
-           initializeDates();
-           updateOverview();
-           updateAllTables();
-           checkLowStock();
-           generateReports();
+           updateDashboard();
+           renderAllSections();
            
-           // Auto-save every 30 seconds
-           setInterval(saveData, 30000);
+           // Set current date as default for date inputs
+           const today = new Date().toISOString().split('T')[0];
+           document.querySelectorAll('input[type="date"]').forEach(input => {
+               if (!input.value) input.value = today;
+           });
            
-           // Register service worker for PWA
-           if ('serviceWorker' in navigator) {
-               navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKGV2ZW50KSA9PiB7CiAgZXZlbnQud2FpdFVudGlsKAogICAgY2FjaGVzLm9wZW4oJ2Zhcm0tdjEnKS50aGVuKChjYWNoZSkgPT4gewogICAgICByZXR1cm4gY2FjaGUuYWRkQWxsKFsnLyddKTsKICAgIH0pCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgKGV2ZW50KSA9PiB7CiAgZXZlbnQucmVzcG9uZFdpdGgoCiAgICBjYWNoZXMubWF0Y2goZXZlbnQucmVxdWVzdCkudGhlbigocmVzcG9uc2UpID0+IHsKICAgICAgcmV0dXJuIHJlc3BvbnNlIHx8IGZldGNoKGV2ZW50LnJlcXVlc3QpOwogICAgfSkKICApOwp9KTs=');
-           }
+           // Set current time as default for time inputs
+           const now = new Date();
+           const currentTime = now.getHours().toString().padStart(2, '0') + ':' + 
+                             now.getMinutes().toString().padStart(2, '0');
+           document.querySelectorAll('input[type="time"]').forEach(input => {
+               if (!input.value) input.value = currentTime;
+           });
        });
 
-       // Navigation
-       function showSection(sectionId) {
-           // Hide all sections
-           document.querySelectorAll('.section').forEach(section => {
-               section.classList.remove('active');
-           });
-           
-           // Remove active class from all nav buttons
-           document.querySelectorAll('.nav-btn').forEach(btn => {
-               btn.classList.remove('active');
-           });
-           
-           // Show selected section
-           document.getElementById(sectionId).classList.add('active');
-           
-           // Add active class to clicked nav button
-           event.target.classList.add('active');
-           
-           // Update data for specific sections
-           if (sectionId === 'overview') {
-               updateOverview();
-               checkLowStock();
-           } else if (sectionId === 'reports') {
-               generateReports();
-           }
-       }
-
-       // Data Management
+       // Data management
        function loadData() {
-           try {
-               const saved = localStorage.getItem('farmData');
-               if (saved) {
-                   const data = JSON.parse(saved);
-                   
-                   // Check version and migrate if needed
-                   if (!data.version || data.version !== farmData.version) {
-                       farmData = migrateData(data);
-                   } else {
-                       farmData = data;
-                   }
+           const stored = localStorage.getItem('farmData');
+           if (stored) {
+               try {
+                   farmData = JSON.parse(stored);
+                   // Ensure all arrays exist
+                   if (!farmData.pigs) farmData.pigs = [];
+                   if (!farmData.feeds) farmData.feeds = [];
+                   if (!farmData.medical) farmData.medical = [];
+                   if (!farmData.sales) farmData.sales = [];
+                   if (!farmData.usage) farmData.usage = [];
+                   if (!farmData.breeding) farmData.breeding = [];
+                   if (!farmData.health) farmData.health = [];
+                   if (!farmData.photos) farmData.photos = [];
+               } catch (e) {
+                   console.error('Error loading data:', e);
                }
-           } catch (error) {
-               console.error('Error loading data:', error);
-               showAlert('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'danger');
            }
        }
 
        function saveData() {
            try {
                localStorage.setItem('farmData', JSON.stringify(farmData));
-           } catch (error) {
-               console.error('Error saving data:', error);
-               showAlert('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'danger');
+               showAlert('บันทึกข้อมูลสำเร็จ', 'success');
+           } catch (e) {
+               console.error('Error saving data:', e);
+               showAlert('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
            }
        }
 
-       function migrateData(oldData) {
-           // Handle data migration for different versions
-           const newData = {
-               version: "2.0.0",
-               pigs: oldData.pigs || [],
-               feeds: oldData.feeds || [],
-               medical: oldData.medical || [],
-               sales: oldData.sales || [],
-               usage: oldData.usage || []
-           };
-           
-           // Add missing properties to existing records
-           newData.feeds.forEach(feed => {
-               if (!feed.originalQuantity) {
-                   feed.originalQuantity = feed.quantity;
-               }
-           });
-           
-           newData.medical.forEach(med => {
-               if (!med.originalQuantity) {
-                   med.originalQuantity = med.quantity;
-               }
-           });
-           
-           showAlert('ข้อมูลได้รับการอัพเกรดเรียบร้อยแล้ว', 'success');
-           return newData;
-       }
-
-       function exportData() {
-           try {
-               const dataStr = JSON.stringify(farmData, null, 2);
-               const dataBlob = new Blob([dataStr], {type: 'application/json'});
-               const url = URL.createObjectURL(dataBlob);
-               const link = document.createElement('a');
-               link.href = url;
-               link.download = `farm-data-${new Date().toISOString().split('T')[0]}.json`;
-               link.click();
-               URL.revokeObjectURL(url);
-               showAlert('ส่งออกข้อมูลเรียบร้อยแล้ว', 'success');
-           } catch (error) {
-               console.error('Error exporting data:', error);
-               showAlert('เกิดข้อผิดพลาดในการส่งออกข้อมูล', 'danger');
-           }
-       }
-
-       function importData(event) {
-           const file = event.target.files[0];
-           if (!file) return;
-           
-           const reader = new FileReader();
-           reader.onload = function(e) {
-               try {
-                   const data = JSON.parse(e.target.result);
-                   farmData = migrateData(data);
-                   saveData();
-                   updateOverview();
-                   updateAllTables();
-                   checkLowStock();
-                   generateReports();
-                   showAlert('นำเข้าข้อมูลเรียบร้อยแล้ว', 'success');
-               } catch (error) {
-                   console.error('Error importing data:', error);
-                   showAlert('ไฟล์ข้อมูลไม่ถูกต้อง', 'danger');
-               }
-           };
-           reader.readAsText(file);
-       }
-
-       // Utility Functions
        function generateId() {
            return Date.now().toString(36) + Math.random().toString(36).substr(2);
        }
 
-       function formatDate(date) {
-           return new Date(date).toLocaleDateString('th-TH');
-       }
-
-       function formatCurrency(amount) {
-           return new Intl.NumberFormat('th-TH').format(amount);
-       }
-
-       function initializeDates() {
-           const today = new Date().toISOString().split('T')[0];
-           const now = new Date().toTimeString().split(' ')[0].substr(0, 5);
+       // UI functions
+       function showSection(sectionId) {
+           // Hide all sections
+           document.querySelectorAll('.section').forEach(section => {
+               section.classList.remove('active');
+           });
            
-           // Set default dates
-           document.getElementById('pigEntryDate').value = today;
-           document.getElementById('feedPurchaseDate').value = today;
-           document.getElementById('medicalPurchaseDate').value = today;
-           document.getElementById('usageDate').value = today;
-           document.getElementById('usageTime').value = now;
-           document.getElementById('salesDate').value = today;
+           // Remove active class from all tabs
+           document.querySelectorAll('.tab').forEach(tab => {
+               tab.classList.remove('active');
+           });
            
-           // Populate year dropdown for reports
-           const yearSelect = document.getElementById('reportYear');
-           const currentYear = new Date().getFullYear();
-           yearSelect.innerHTML = '<option value="">ทั้งหมด</option>';
-           for (let year = currentYear - 2; year <= currentYear + 1; year++) {
-               yearSelect.innerHTML += `<option value="${year}" ${year === currentYear ? 'selected' : ''}>${year + 543}</option>`;
+           // Show selected section
+           document.getElementById(sectionId).classList.add('active');
+           
+           // Add active class to clicked tab
+           event.target.classList.add('active');
+           
+           // Update content based on section
+           switch(sectionId) {
+               case 'dashboard':
+                   updateDashboard();
+                   break;
+               case 'pigs':
+                   renderPigsTable();
+                   break;
+               case 'feeds':
+                   renderFeedsList();
+                   break;
+               case 'medical':
+                   renderMedicalList();
+                   break;
+               case 'usage':
+                   renderUsageTable();
+                   break;
+               case 'sales':
+                   renderSalesTable();
+                   break;
+               case 'breeding':
+                   renderBreedingTable();
+                   break;
+               case 'health':
+                   renderHealthTable();
+                   break;
+               case 'reports':
+                   renderReports();
+                   break;
            }
        }
 
-       function showAlert(message, type = 'success') {
-           const alertsContainer = document.getElementById('alerts-container');
-           const alert = document.createElement('div');
-           alert.className = `alert alert-${type}`;
-           alert.innerHTML = `
-               <span>${message}</span>
-               <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
-           `;
-           alertsContainer.appendChild(alert);
+       function showModal(modalId) {
+           document.getElementById(modalId).classList.add('show');
+       }
+
+       function hideModal(modalId) {
+           document.getElementById(modalId).classList.remove('show');
+           // Reset form
+           const form = document.querySelector(`#${modalId} form`);
+           if (form) form.reset();
+       }
+
+       function showAlert(message, type = 'info', duration = 3000) {
+           const alertsContainer = document.getElementById('alerts');
+           if (!alertsContainer) return;
            
-           // Auto remove after 5 seconds
+           const alertDiv = document.createElement('div');
+           alertDiv.className = `alert alert-${type}`;
+           alertDiv.textContent = message;
+           
+           alertsContainer.appendChild(alertDiv);
+           
            setTimeout(() => {
-               if (alert.parentElement) {
-                   alert.remove();
-               }
-           }, 5000);
+               alertDiv.remove();
+           }, duration);
        }
 
-       // Pig Management
-       function addPig(event) {
-           event.preventDefault();
-           
-           const pig = {
-               id: generateId(),
-               type: document.getElementById('pigType').value,
-               quantity: parseInt(document.getElementById('pigQuantity').value),
-               weight: parseFloat(document.getElementById('pigWeight').value) || 0,
-               age: parseInt(document.getElementById('pigAge').value) || 0,
-               entryDate: document.getElementById('pigEntryDate').value,
-               notes: document.getElementById('pigNotes').value
-           };
-           
-           farmData.pigs.push(pig);
-           saveData();
-           updatePigsTable();
-           updateOverview();
-           document.getElementById('pigForm').reset();
-           initializeDates();
-           showAlert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
+       // Dashboard functions
+       function updateDashboard() {
+           updateStats();
+           updateCharts();
+           updateAlerts();
        }
 
-       function deletePig(id) {
-           if (confirm('ต้องการลบข้อมูลสุกรนี้หรือไม่?')) {
-               farmData.pigs = farmData.pigs.filter(pig => pig.id !== id);
-               saveData();
-               updatePigsTable();
-               updateOverview();
-               showAlert('ลบข้อมูลสุกรเรียบร้อยแล้ว');
-           }
-       }
-
-       function updatePigsTable() {
-           const tbody = document.getElementById('pigsTable');
-           tbody.innerHTML = '';
-           
-           farmData.pigs.forEach(pig => {
-               const row = tbody.insertRow();
-               row.innerHTML = `
-                   <td>${pig.type}</td>
-                   <td>${pig.quantity} ตัว</td>
-                   <td>${pig.weight} กก.</td>
-                   <td>${pig.age} วัน</td>
-                   <td>${formatDate(pig.entryDate)}</td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deletePig('${pig.id}')">ลบ</button>
-                   </td>
-               `;
-           });
-       }
-
-       // Feed Management
-       function addFeed(event) {
-           event.preventDefault();
-           
-           const quantity = parseFloat(document.getElementById('feedQuantity').value);
-           const feed = {
-               id: generateId(),
-               type: document.getElementById('feedType').value,
-               brand: document.getElementById('feedBrand').value,
-               quantity: quantity,
-               originalQuantity: quantity,
-               price: parseFloat(document.getElementById('feedPrice').value),
-               purchaseDate: document.getElementById('feedPurchaseDate').value,
-               expiryDate: document.getElementById('feedExpiryDate').value
-           };
-           
-           farmData.feeds.push(feed);
-           saveData();
-           updateFeedsTable();
-           updateOverview();
-           updateUsageItems();
-           checkLowStock();
-           document.getElementById('feedForm').reset();
-           initializeDates();
-           showAlert('เพิ่มสต็อกอาหารเรียบร้อยแล้ว');
-       }
-
-       function deleteFeed(id) {
-           if (confirm('ต้องการลบสต็อกอาหารนี้หรือไม่?')) {
-               farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
-               saveData();
-               updateFeedsTable();
-               updateOverview();
-               updateUsageItems();
-               checkLowStock();
-               showAlert('ลบสต็อกอาหารเรียบร้อยแล้ว');
-           }
-       }
-
-       function updateFeedsTable() {
-           const tbody = document.getElementById('feedsTable');
-           tbody.innerHTML = '';
-           
-           farmData.feeds.forEach(feed => {
-               const row = tbody.insertRow();
-               const lowStock = feed.quantity < 50;
-               if (lowStock) row.style.backgroundColor = '#fee2e2';
-               
-               row.innerHTML = `
-                   <td>${feed.type}</td>
-                   <td>${feed.brand}</td>
-                   <td>${feed.quantity} กก. ${lowStock ? '⚠️' : ''}</td>
-                   <td>${formatCurrency(feed.price)} บาท</td>
-                   <td>${formatDate(feed.purchaseDate)}</td>
-                   <td>${feed.expiryDate ? formatDate(feed.expiryDate) : '-'}</td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteFeed('${feed.id}')">ลบ</button>
-                   </td>
-               `;
-           });
-       }
-
-       // Medical Management
-       function addMedical(event) {
-           event.preventDefault();
-           
-           const quantity = parseFloat(document.getElementById('medicalQuantity').value);
-           const medical = {
-               id: generateId(),
-               type: document.getElementById('medicalType').value,
-               name: document.getElementById('medicalName').value,
-               brand: document.getElementById('medicalBrand').value,
-               quantity: quantity,
-               originalQuantity: quantity,
-               unit: document.getElementById('medicalUnit').value,
-               price: parseFloat(document.getElementById('medicalPrice').value),
-               purchaseDate: document.getElementById('medicalPurchaseDate').value,
-               expiryDate: document.getElementById('medicalExpiryDate').value
-           };
-           
-           farmData.medical.push(medical);
-           saveData();
-           updateMedicalTable();
-           updateOverview();
-           updateUsageItems();
-           checkLowStock();
-           document.getElementById('medicalForm').reset();
-           initializeDates();
-           showAlert('เพิ่มสต็อกยาเรียบร้อยแล้ว');
-       }
-
-       function deleteMedical(id) {
-           if (confirm('ต้องการลบสต็อกยานี้หรือไม่?')) {
-               farmData.medical = farmData.medical.filter(med => med.id !== id);
-               saveData();
-               updateMedicalTable();
-               updateOverview();
-               updateUsageItems();
-               checkLowStock();
-               showAlert('ลบสต็อกยาเรียบร้อยแล้ว');
-           }
-       }
-
-       function updateMedicalTable() {
-           const tbody = document.getElementById('medicalTable');
-           tbody.innerHTML = '';
-           
-           farmData.medical.forEach(med => {
-               const row = tbody.insertRow();
-               const lowStock = med.quantity < 5;
-               if (lowStock) row.style.backgroundColor = '#fee2e2';
-               
-               row.innerHTML = `
-                   <td>${med.type}</td>
-                   <td>${med.name}</td>
-                   <td>${med.brand}</td>
-                   <td>${med.quantity} ${lowStock ? '⚠️' : ''}</td>
-                   <td>${med.unit}</td>
-                   <td>${formatCurrency(med.price)} บาท</td>
-                   <td>${formatDate(med.purchaseDate)}</td>
-                   <td>${med.expiryDate ? formatDate(med.expiryDate) : '-'}</td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteMedical('${med.id}')">ลบ</button>
-                   </td>
-               `;
-           });
-       }
-
-       // Usage Management
-       function updateUsageItems() {
-           const type = document.getElementById('usageType').value;
-           const select = document.getElementById('usageItem');
-           select.innerHTML = '<option value="">เลือกรายการ</option>';
-           
-           if (type === 'อาหาร') {
-               farmData.feeds.forEach(feed => {
-                   if (feed.quantity > 0) {
-                       select.innerHTML += `<option value="${feed.id}" data-unit="กก.">${feed.type} - ${feed.brand}</option>`;
-                   }
-               });
-           } else if (type === 'ยา') {
-               farmData.medical.forEach(med => {
-                   if (med.quantity > 0) {
-                       select.innerHTML += `<option value="${med.id}" data-unit="${med.unit}">${med.type} - ${med.name}</option>`;
-                   }
-               });
-           }
-       }
-
-       function updateUsageUnit() {
-           const select = document.getElementById('usageItem');
-           const unit = select.options[select.selectedIndex]?.dataset.unit || '';
-           document.getElementById('usageUnit').value = unit;
-       }
-
-       function addUsage(event) {
-           event.preventDefault();
-           
-           const type = document.getElementById('usageType').value;
-           const itemId = document.getElementById('usageItem').value;
-           const amount = parseFloat(document.getElementById('usageAmount').value);
-           
-           // Find the item and check stock
-           let item, itemName;
-           if (type === 'อาหาร') {
-               item = farmData.feeds.find(f => f.id === itemId);
-               itemName = `${item.type} - ${item.brand}`;
-           } else {
-               item = farmData.medical.find(m => m.id === itemId);
-               itemName = `${item.type} - ${item.name}`;
-           }
-           
-           if (!item || item.quantity < amount) {
-               showAlert('สต็อกไม่เพียงพอ', 'danger');
-               return;
-           }
-           
-           // Record usage
-           const usage = {
-               id: generateId(),
-               type: type,
-               itemId: itemId,
-               itemName: itemName,
-               amount: amount,
-               unit: document.getElementById('usageUnit').value,
-               date: document.getElementById('usageDate').value,
-               time: document.getElementById('usageTime').value
-           };
-           
-           farmData.usage.push(usage);
-           
-           // Update stock
-           item.quantity -= amount;
-           
-           saveData();
-           updateUsageTable();
-           updateFeedsTable();
-           updateMedicalTable();
-           updateUsageItems();
-           checkLowStock();
-           document.getElementById('usageForm').reset();
-           initializeDates();
-           showAlert('บันทึกการใช้งานเรียบร้อยแล้ว');
-       }
-
-       function deleteUsage(id) {
-           if (confirm('ต้องการลบรายการการใช้งานนี้หรือไม่?')) {
-               const usage = farmData.usage.find(u => u.id === id);
-               if (usage) {
-                   // Restore stock
-                   if (usage.type === 'อาหาร') {
-                       const item = farmData.feeds.find(f => f.id === usage.itemId);
-                       if (item) item.quantity += usage.amount;
-                   } else {
-                       const item = farmData.medical.find(m => m.id === usage.itemId);
-                       if (item) item.quantity += usage.amount;
-                   }
-                   
-                   farmData.usage = farmData.usage.filter(u => u.id !== id);
-                   saveData();
-                   updateUsageTable();
-                   updateFeedsTable();
-                   updateMedicalTable();
-                   updateUsageItems();
-                   checkLowStock();
-                   showAlert('ลบรายการการใช้งานเรียบร้อยแล้ว');
-               }
-           }
-       }
-
-       function updateUsageTable() {
-           const tbody = document.getElementById('usageTable');
-           tbody.innerHTML = '';
-           
-           // Sort by date and time (newest first)
-           const sortedUsage = [...farmData.usage].sort((a, b) => {
-               const dateTimeA = new Date(`${a.date}T${a.time}`);
-               const dateTimeB = new Date(`${b.date}T${b.time}`);
-               return dateTimeB - dateTimeA;
-           });
-           
-           sortedUsage.forEach(usage => {
-               const row = tbody.insertRow();
-               row.innerHTML = `
-                   <td>${formatDate(usage.date)}</td>
-                   <td>${usage.time}</td>
-                   <td>${usage.type}</td>
-                   <td>${usage.itemName}</td>
-                   <td>${usage.amount}</td>
-                   <td>${usage.unit}</td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteUsage('${usage.id}')">ลบ</button>
-                   </td>
-               `;
-           });
-       }
-
-       // Sales Management
-       function addSale(event) {
-           event.preventDefault();
-           
-           const quantity = parseInt(document.getElementById('salesQuantity').value);
-           const weight = parseFloat(document.getElementById('salesWeight').value);
-           const pricePerKg = parseFloat(document.getElementById('salesPricePerKg').value);
-           const transportCost = parseFloat(document.getElementById('salesTransportCost').value) || 0;
-           
-           const totalRevenue = weight * pricePerKg;
-           const netRevenue = totalRevenue - transportCost;
-           
-           const sale = {
-               id: generateId(),
-               date: document.getElementById('salesDate').value,
-               type: document.getElementById('salesType').value,
-               quantity: quantity,
-               weight: weight,
-               pricePerKg: pricePerKg,
-               transportCost: transportCost,
-               totalRevenue: totalRevenue,
-               netRevenue: netRevenue,
-               buyer: document.getElementById('salesBuyer').value,
-               notes: document.getElementById('salesNotes').value
-           };
-           
-           farmData.sales.push(sale);
-           saveData();
-           updateSalesTable();
-           updateOverview();
-           document.getElementById('salesForm').reset();
-           initializeDates();
-           showAlert('บันทึกการขายเรียบร้อยแล้ว');
-       }
-
-       function deleteSale(id) {
-           if (confirm('ต้องการลบรายการการขายนี้หรือไม่?')) {
-               farmData.sales = farmData.sales.filter(sale => sale.id !== id);
-               saveData();
-               updateSalesTable();
-               updateOverview();
-               showAlert('ลบรายการการขายเรียบร้อยแล้ว');
-           }
-       }
-
-       function updateSalesTable() {
-           const tbody = document.getElementById('salesTable');
-           tbody.innerHTML = '';
-           
-           // Sort by date (newest first)
-           const sortedSales = [...farmData.sales].sort((a, b) => new Date(b.date) - new Date(a.date));
-           
-           sortedSales.forEach(sale => {
-               const row = tbody.insertRow();
-               row.innerHTML = `
-                   <td>${formatDate(sale.date)}</td>
-                   <td>${sale.type}</td>
-                   <td>${sale.quantity} ตัว</td>
-                   <td>${sale.weight} กก.</td>
-                   <td>${formatCurrency(sale.pricePerKg)} บาท</td>
-                   <td>${formatCurrency(sale.transportCost)} บาท</td>
-                   <td>${formatCurrency(sale.netRevenue)} บาท</td>
-                   <td>${sale.buyer || '-'}</td>
-                   <td>
-                       <button class="btn btn-danger" onclick="deleteSale('${sale.id}')">ลบ</button>
-                   </td>
-               `;
-           });
-       }
-
-       // Calculate sales revenue in real-time
-       function calculateRevenue() {
-           const weight = parseFloat(document.getElementById('salesWeight').value) || 0;
-           const pricePerKg = parseFloat(document.getElementById('salesPricePerKg').value) || 0;
-           const transportCost = parseFloat(document.getElementById('salesTransportCost').value) || 0;
-           
-           const totalRevenue = weight * pricePerKg;
-           const netRevenue = totalRevenue - transportCost;
-           
-           document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
-           document.getElementById('netRevenue').textContent = formatCurrency(netRevenue);
-       }
-
-       // Add event listeners for real-time calculation
-       document.addEventListener('DOMContentLoaded', function() {
-           ['salesWeight', 'salesPricePerKg', 'salesTransportCost'].forEach(id => {
-               document.getElementById(id).addEventListener('input', calculateRevenue);
-           });
-       });
-
-       // Overview and Statistics
-       function updateOverview() {
+       function updateStats() {
            // Total pigs
            const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
-           document.getElementById('totalPigs').textContent = totalPigs;
-           
-           // Total feed types
-           document.getElementById('totalFeeds').textContent = farmData.feeds.length;
-           
-           // Total medical types
-           document.getElementById('totalMedical').textContent = farmData.medical.length;
+           document.getElementById('totalPigs').textContent = totalPigs.toLocaleString();
            
            // Monthly revenue
            const currentMonth = new Date().getMonth();
@@ -1496,288 +1313,933 @@
                    return saleDate.getMonth() === currentMonth && saleDate.getFullYear() === currentYear;
                })
                .reduce((sum, sale) => sum + sale.netRevenue, 0);
+           document.getElementById('monthlyRevenue').textContent = '฿' + monthlyRevenue.toLocaleString();
            
-           document.getElementById('monthlyRevenue').textContent = formatCurrency(monthlyRevenue);
+           // Low stock count
+           const lowStockFeeds = farmData.feeds.filter(feed => {
+               const percentage = (feed.quantity / feed.originalQuantity) * 100;
+               return percentage < 20;
+           }).length;
+           const lowStockMedical = farmData.medical.filter(med => {
+               const percentage = (med.quantity / med.originalQuantity) * 100;
+               return percentage < 20;
+           }).length;
+           document.getElementById('lowStockCount').textContent = lowStockFeeds + lowStockMedical;
+           
+           // Breeding count (pregnant sows)
+           const pregnantSows = farmData.breeding.filter(breeding => {
+               return !breeding.actualDate; // Not yet given birth
+           }).length;
+           document.getElementById('breedingCount').textContent = pregnantSows;
        }
 
-       function updateAllTables() {
-           updatePigsTable();
-           updateFeedsTable();
-           updateMedicalTable();
-           updateUsageTable();
-           updateSalesTable();
-       }
-
-       // Low Stock Alerts
-       function checkLowStock() {
-           const alertsContainer = document.getElementById('alerts-container');
+       function updateCharts() {
+           // Sales chart
+           const salesChart = document.getElementById('salesChart');
+           if (salesChart) {
+               drawSalesChart(salesChart);
+           }
            
-           // Remove existing low stock alerts
-           alertsContainer.querySelectorAll('.alert-warning').forEach(alert => {
-               if (alert.textContent.includes('สต็อกต่ำ')) {
-                   alert.remove();
-               }
-           });
-           
-           const alerts = [];
-           
-           // Check feed stock
-           farmData.feeds.forEach(feed => {
-               if (feed.quantity < 50) {
-                   const daysLeft = calculateDaysLeft(feed, 'อาหาร');
-                   alerts.push(`🌾 ${feed.type} - ${feed.brand} เหลือ ${feed.quantity} กก. (ประมาณ ${daysLeft} วัน)`);
-               }
-           });
-           
-           // Check medical stock
-           farmData.medical.forEach(med => {
-               if (med.quantity < 5) {
-                   const daysLeft = calculateDaysLeft(med, 'ยา');
-                   alerts.push(`💊 ${med.type} - ${med.name} เหลือ ${med.quantity} ${med.unit} (ประมาณ ${daysLeft} วัน)`);
-               }
-           });
-           
-           if (alerts.length > 0) {
-               const alertDiv = document.createElement('div');
-               alertDiv.className = 'alert alert-warning';
-               alertDiv.innerHTML = `
-                   <strong>⚠️ แจ้งเตือนสต็อกต่ำ:</strong><br>
-                   ${alerts.join('<br>')}
-               `;
-               alertsContainer.appendChild(alertDiv);
+           // Pig type chart
+           const pigTypeChart = document.getElementById('pigTypeChart');
+           if (pigTypeChart) {
+               drawPigTypeChart(pigTypeChart);
            }
        }
 
-       function calculateDaysLeft(item, type) {
-           // Calculate average daily usage from last 7 days
-           const sevenDaysAgo = new Date();
-           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+       function drawSalesChart(canvas) {
+           const ctx = canvas.getContext('2d');
+           const width = canvas.width = canvas.offsetWidth;
+           const height = canvas.height = 300;
            
-           const recentUsage = farmData.usage.filter(usage => {
-               return usage.itemId === item.id && 
-                      usage.type === type && 
-                      new Date(usage.date) >= sevenDaysAgo;
-           });
+           // Clear canvas
+           ctx.clearRect(0, 0, width, height);
            
-           if (recentUsage.length === 0) return '∞';
+           // Get last 6 months data
+           const months = [];
+           const revenues = [];
            
-           const totalUsed = recentUsage.reduce((sum, usage) => sum + usage.amount, 0);
-           const avgDailyUsage = totalUsed / 7;
+           for (let i = 5; i >= 0; i--) {
+               const date = new Date();
+               date.setMonth(date.getMonth() - i);
+               const month = date.getMonth();
+               const year = date.getFullYear();
+               
+               const monthRevenue = farmData.sales
+                   .filter(sale => {
+                       const saleDate = new Date(sale.date);
+                       return saleDate.getMonth() === month && saleDate.getFullYear() === year;
+                   })
+                   .reduce((sum, sale) => sum + sale.netRevenue, 0);
+               
+               months.push(date.toLocaleDateString('th-TH', { month: 'short' }));
+               revenues.push(monthRevenue);
+           }
            
-           if (avgDailyUsage === 0) return '∞';
-           
-           return Math.floor(item.quantity / avgDailyUsage);
-       }
-
-       // Reports
-       function generateReports() {
-           generateOverviewReport();
-           generateStockReport();
-           generateUsageReport();
-           generateFinancialReport();
-       }
-
-       function generateOverviewReport() {
-           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
-           const totalWeight = farmData.pigs.reduce((sum, pig) => sum + (pig.quantity * pig.weight), 0);
-           const totalRevenue = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
-           const avgPrice = farmData.sales.length > 0 ? 
-               farmData.sales.reduce((sum, sale) => sum + sale.pricePerKg, 0) / farmData.sales.length : 0;
-           
-           document.getElementById('reportTotalPigs').textContent = totalPigs;
-           document.getElementById('reportTotalWeight').textContent = formatCurrency(totalWeight);
-           document.getElementById('reportTotalRevenue').textContent = formatCurrency(totalRevenue);
-           document.getElementById('reportAvgPrice').textContent = formatCurrency(avgPrice);
-       }
-
-       function generateStockReport() {
-           const container = document.getElementById('stockReport');
-           let html = '<h4>📦 สต็อกอาหาร</h4><div class="table-container"><table><thead><tr><th>ประเภท</th><th>ยี่ห้อ</th><th>คงเหลือ</th><th>ใช้ไป</th><th>เปอร์เซ็นต์คงเหลือ</th></tr></thead><tbody>';
-           
-           farmData.feeds.forEach(feed => {
-               const used = feed.originalQuantity - feed.quantity;
-               const percentage = feed.originalQuantity > 0 ? (feed.quantity / feed.originalQuantity * 100).toFixed(1) : 0;
-               html += `
-                   <tr>
-                       <td>${feed.type}</td>
-                       <td>${feed.brand}</td>
-                       <td>${feed.quantity} กก.</td>
-                       <td>${used.toFixed(1)} กก.</td>
-                       <td>
-                           <div class="progress">
-                               <div class="progress-bar" style="width: ${percentage}%"></div>
-                           </div>
-                           ${percentage}%
-                       </td>
-                   </tr>
-               `;
-           });
-           
-           html += '</tbody></table></div>';
-           html += '<h4>💊 สต็อกยา</h4><div class="table-container"><table><thead><tr><th>ประเภท</th><th>ชื่อยา</th><th>คงเหลือ</th><th>ใช้ไป</th><th>เปอร์เซ็นต์คงเหลือ</th></tr></thead><tbody>';
-           
-           farmData.medical.forEach(med => {
-               const used = med.originalQuantity - med.quantity;
-               const percentage = med.originalQuantity > 0 ? (med.quantity / med.originalQuantity * 100).toFixed(1) : 0;
-               html += `
-                   <tr>
-                       <td>${med.type}</td>
-                       <td>${med.name}</td>
-                       <td>${med.quantity} ${med.unit}</td>
-                       <td>${used.toFixed(1)} ${med.unit}</td>
-                       <td>
-                           <div class="progress">
-                               <div class="progress-bar" style="width: ${percentage}%"></div>
-                           </div>
-                           ${percentage}%
-                       </td>
-                   </tr>
-               `;
-           });
-           
-           html += '</tbody></table></div>';
-           container.innerHTML = html;
-       }
-
-       function generateUsageReport() {
-           const container = document.getElementById('usageReport');
-           const sevenDaysAgo = new Date();
-           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-           
-           const recentUsage = farmData.usage.filter(usage => new Date(usage.date) >= sevenDaysAgo);
-           
-           // Group by type and item
-           const grouped = {};
-           recentUsage.forEach(usage => {
-               const key = `${usage.type}-${usage.itemName}`;
-               if (!grouped[key]) {
-                   grouped[key] = {
-                       type: usage.type,
-                       itemName: usage.itemName,
-                       unit: usage.unit,
-                       totalAmount: 0,
-                       count: 0
-                   };
-               }
-               grouped[key].totalAmount += usage.amount;
-               grouped[key].count += 1;
-           });
-           
-           let html = '<div class="table-container"><table><thead><tr><th>ประเภท</th><th>รายการ</th><th>จำนวนรวม</th><th>หน่วย</th><th>ครั้ง</th><th>เฉลี่ย/วัน</th></tr></thead><tbody>';
-           
-           Object.values(grouped).forEach(item => {
-               const avgPerDay = (item.totalAmount / 7).toFixed(2);
-               html += `
-                   <tr>
-                       <td>${item.type}</td>
-                       <td>${item.itemName}</td>
-                       <td>${item.totalAmount}</td>
-                       <td>${item.unit}</td>
-                       <td>${item.count}</td>
-                       <td>${avgPerDay}</td>
-                   </tr>
-               `;
-           });
-           
-           html += '</tbody></table></div>';
-           container.innerHTML = html;
-       }
-
-       function generateFinancialReport() {
-           const container = document.getElementById('financialReport');
-           const month = document.getElementById('reportMonth').value;
-           const year = document.getElementById('reportYear').value;
-           
-           let filteredSales = farmData.sales;
-           
-           if (month || year) {
-               filteredSales = farmData.sales.filter(sale => {
-                   const saleDate = new Date(sale.date);
-                   const matchMonth = !month || saleDate.getMonth() + 1 == month;
-                   const matchYear = !year || saleDate.getFullYear() == year;
-                   return matchMonth && matchYear;
+           // Draw chart
+           if (revenues.length > 0) {
+               const maxRevenue = Math.max(...revenues, 1);
+               const padding = 40;
+               const chartWidth = width - padding * 2;
+               const chartHeight = height - padding * 2;
+               
+               // Draw axes
+               ctx.strokeStyle = '#e0e0e0';
+               ctx.lineWidth = 1;
+               ctx.beginPath();
+               ctx.moveTo(padding, padding);
+               ctx.lineTo(padding, height - padding);
+               ctx.lineTo(width - padding, height - padding);
+               ctx.stroke();
+               
+               // Draw line
+               ctx.strokeStyle = '#2e7d32';
+               ctx.lineWidth = 3;
+               ctx.beginPath();
+               
+               revenues.forEach((revenue, index) => {
+                   const x = padding + (index * chartWidth) / (revenues.length - 1);
+                   const y = height - padding - (revenue / maxRevenue) * chartHeight;
+                   
+                   if (index === 0) {
+                       ctx.moveTo(x, y);
+                   } else {
+                       ctx.lineTo(x, y);
+                   }
+                   
+                   // Draw points
+                   ctx.fillStyle = '#2e7d32';
+                   ctx.beginPath();
+                   ctx.arc(x, y, 4, 0, Math.PI * 2);
+                   ctx.fill();
+               });
+               ctx.stroke();
+               
+               // Draw labels
+               ctx.fillStyle = '#757575';
+               ctx.font = '12px Niramit';
+               ctx.textAlign = 'center';
+               
+               months.forEach((month, index) => {
+                   const x = padding + (index * chartWidth) / (months.length - 1);
+                   ctx.fillText(month, x, height - 10);
                });
            }
+       }
+
+       function drawPigTypeChart(canvas) {
+           const ctx = canvas.getContext('2d');
+           const width = canvas.width = canvas.offsetWidth;
+           const height = canvas.height = 300;
            
-           // Group by type
-           const grouped = {};
-           filteredSales.forEach(sale => {
-               if (!grouped[sale.type]) {
-                   grouped[sale.type] = {
-                       quantity: 0,
-                       weight: 0,
-                       totalRevenue: 0,
-                       netRevenue: 0,
-                       transportCost: 0,
-                       count: 0
-                   };
-               }
-               grouped[sale.type].quantity += sale.quantity;
-               grouped[sale.type].weight += sale.weight;
-               grouped[sale.type].totalRevenue += sale.totalRevenue;
-               grouped[sale.type].netRevenue += sale.netRevenue;
-               grouped[sale.type].transportCost += sale.transportCost;
-               grouped[sale.type].count += 1;
+           // Clear canvas
+           ctx.clearRect(0, 0, width, height);
+           
+           // Get pig type data
+           const pigTypes = {};
+           farmData.pigs.forEach(pig => {
+               pigTypes[pig.type] = (pigTypes[pig.type] || 0) + pig.quantity;
            });
            
-           let html = '<div class="stats-grid">';
+           const data = Object.entries(pigTypes);
+           if (data.length === 0) return;
            
-           const totalRevenue = filteredSales.reduce((sum, sale) => sum + sale.totalRevenue, 0);
-           const totalNetRevenue = filteredSales.reduce((sum, sale) => sum + sale.netRevenue, 0);
-           const totalTransportCost = filteredSales.reduce((sum, sale) => sum + sale.transportCost, 0);
-           const totalQuantity = filteredSales.reduce((sum, sale) => sum + sale.quantity, 0);
+           const total = data.reduce((sum, [, quantity]) => sum + quantity, 0);
+           const centerX = width / 2;
+           const centerY = height / 2;
+           const radius = Math.min(width, height) / 3;
            
-           html += `
-               <div class="stat-card">
-                   <div class="stat-icon">💰</div>
-                   <div class="stat-value">${formatCurrency(totalRevenue)}</div>
-                   <div class="stat-label">รายได้รวม (บาท)</div>
+           const colors = ['#2e7d32', '#4caf50', '#66bb6a', '#81c784'];
+           
+           let currentAngle = -Math.PI / 2;
+           
+           data.forEach(([type, quantity], index) => {
+               const sliceAngle = (quantity / total) * Math.PI * 2;
+               
+               // Draw slice
+               ctx.fillStyle = colors[index % colors.length];
+               ctx.beginPath();
+               ctx.moveTo(centerX, centerY);
+               ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+               ctx.closePath();
+               ctx.fill();
+               
+               // Draw label
+               const labelAngle = currentAngle + sliceAngle / 2;
+               const labelX = centerX + Math.cos(labelAngle) * (radius + 30);
+               const labelY = centerY + Math.sin(labelAngle) * (radius + 30);
+               
+               ctx.fillStyle = '#212121';
+               ctx.font = '12px Niramit';
+               ctx.textAlign = 'center';
+               ctx.fillText(`${type} (${quantity})`, labelX, labelY);
+               
+               currentAngle += sliceAngle;
+           });
+       }
+
+       function updateAlerts() {
+           const alertsContainer = document.getElementById('alerts');
+           alertsContainer.innerHTML = '';
+           
+           // Check low stock feeds
+           farmData.feeds.forEach(feed => {
+               const percentage = (feed.quantity / feed.originalQuantity) * 100;
+               if (percentage < 20) {
+                   const alert = document.createElement('div');
+                   alert.className = 'alert alert-warning';
+                   alert.textContent = `🌾 อาหาร ${feed.type} เหลือน้อย (${percentage.toFixed(1)}%)`;
+                   alertsContainer.appendChild(alert);
+               }
+           });
+           
+           // Check low stock medical
+           farmData.medical.forEach(med => {
+               const percentage = (med.quantity / med.originalQuantity) * 100;
+               if (percentage < 20) {
+                   const alert = document.createElement('div');
+                   alert.className = 'alert alert-warning';
+                   alert.textContent = `💊 ${med.name} เหลือน้อย (${percentage.toFixed(1)}%)`;
+                   alertsContainer.appendChild(alert);
+               }
+           });
+           
+           // Check breeding due dates
+           farmData.breeding.forEach(breeding => {
+               if (!breeding.actualDate) {
+                   const expectedDate = new Date(breeding.matingDate);
+                   expectedDate.setDate(expectedDate.getDate() + 114);
+                   const today = new Date();
+                   const daysLeft = Math.ceil((expectedDate - today) / (1000 * 60 * 60 * 24));
+                   
+                   if (daysLeft <= 7 && daysLeft >= 0) {
+                       const alert = document.createElement('div');
+                       alert.className = 'alert alert-info';
+                       alert.textContent = `👶 แม่พันธุ์ ${breeding.sowId} คาดว่าจะคลอดใน ${daysLeft} วัน`;
+                       alertsContainer.appendChild(alert);
+                   }
+               }
+           });
+           
+           if (alertsContainer.children.length === 0) {
+               const alert = document.createElement('div');
+               alert.className = 'alert alert-success';
+               alert.textContent = '✅ ไม่มีแจ้งเตือนในขณะนี้';
+               alertsContainer.appendChild(alert);
+           }
+       }
+
+       // Render functions
+       function renderAllSections() {
+           renderPigsTable();
+           renderFeedsList();
+           renderMedicalList();
+           renderUsageTable();
+           renderSalesTable();
+           renderBreedingTable();
+           renderHealthTable();
+           renderReports();
+       }
+
+       function renderPigsTable() {
+           const tbody = document.getElementById('pigsTable');
+           tbody.innerHTML = '';
+           
+           farmData.pigs.forEach(pig => {
+               const row = tbody.insertRow();
+               row.innerHTML = `
+                   <td>${pig.type}</td>
+                   <td>${pig.quantity}</td>
+                   <td>${pig.weight}</td>
+                   <td>${pig.age}</td>
+                   <td>${new Date(pig.entryDate).toLocaleDateString('th-TH')}</td>
+                   <td>
+                       <button class="btn btn-warning btn-sm" onclick="editPig('${pig.id}')">แก้ไข</button>
+                       <button class="btn btn-danger btn-sm" onclick="deletePig('${pig.id}')">ลบ</button>
+                   </td>
+               `;
+           });
+       }
+
+       function renderFeedsList() {
+           const container = document.getElementById('feedsList');
+           container.innerHTML = '';
+           
+           farmData.feeds.forEach(feed => {
+               const percentage = (feed.quantity / feed.originalQuantity) * 100;
+               const card = document.createElement('div');
+               card.className = 'card';
+               card.innerHTML = `
+                   <div class="card-header">
+                       <h4>${feed.type}</h4>
+                       <span class="badge ${percentage < 20 ? 'badge-danger' : percentage < 50 ? 'badge-warning' : 'badge-success'}">
+                           ${percentage.toFixed(1)}%
+                       </span>
+                   </div>
+                   <p><strong>ยี่ห้อ:</strong> ${feed.brand}</p>
+                   <p><strong>คงเหลือ:</strong> ${feed.quantity.toFixed(1)} / ${feed.originalQuantity.toFixed(1)} กก.</p>
+                   <div class="progress-bar">
+                       <div class="progress-fill" style="width: ${percentage}%"></div>
+                   </div>
+                   <p><strong>ราคา:</strong> ฿${feed.price.toLocaleString()}</p>
+                   <p><strong>วันที่ซื้อ:</strong> ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')}</p>
+                   <div class="d-flex gap-1 mt-2">
+                       <button class="btn btn-warning btn-sm" onclick="editFeed('${feed.id}')">แก้ไข</button>
+                       <button class="btn btn-danger btn-sm" onclick="deleteFeed('${feed.id}')">ลบ</button>
+                   </div>
+               `;
+               container.appendChild(card);
+           });
+       }
+
+       function renderMedicalList() {
+           const container = document.getElementById('medicalList');
+           container.innerHTML = '';
+           
+           farmData.medical.forEach(med => {
+               const percentage = (med.quantity / med.originalQuantity) * 100;
+               const card = document.createElement('div');
+               card.className = 'card';
+               card.innerHTML = `
+                   <div class="card-header">
+                       <h4>${med.name}</h4>
+                       <span class="badge ${percentage < 20 ? 'badge-danger' : percentage < 50 ? 'badge-warning' : 'badge-success'}">
+                           ${percentage.toFixed(1)}%
+                       </span>
+                   </div>
+                   <p><strong>ประเภท:</strong> ${med.type}</p>
+                   <p><strong>ยี่ห้อ:</strong> ${med.brand}</p>
+                   <p><strong>คงเหลือ:</strong> ${med.quantity.toFixed(1)} / ${med.originalQuantity.toFixed(1)} ${med.unit}</p>
+                   <div class="progress-bar">
+                       <div class="progress-fill" style="width: ${percentage}%"></div>
+                   </div>
+                   <p><strong>ราคา:</strong> ฿${med.price.toLocaleString()}</p>
+                   <div class="d-flex gap-1 mt-2">
+                       <button class="btn btn-warning btn-sm" onclick="editMedical('${med.id}')">แก้ไข</button>
+                       <button class="btn btn-danger btn-sm" onclick="deleteMedical('${med.id}')">ลบ</button>
+                   </div>
+               `;
+               container.appendChild(card);
+           });
+       }
+
+       function renderUsageTable() {
+           const tbody = document.getElementById('usageTable');
+           tbody.innerHTML = '';
+           
+           farmData.usage.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time));
+           
+           farmData.usage.forEach(usage => {
+               const row = tbody.insertRow();
+               row.innerHTML = `
+                   <td>${new Date(usage.date).toLocaleDateString('th-TH')}</td>
+                   <td>${usage.time}</td>
+                   <td>${usage.type}</td>
+                   <td>${usage.itemName}</td>
+                   <td>${usage.amount}</td>
+                   <td>${usage.unit}</td>
+               `;
+           });
+       }
+
+       function renderSalesTable() {
+           const tbody = document.getElementById('salesTable');
+           tbody.innerHTML = '';
+           
+           farmData.sales.sort((a, b) => new Date(b.date) - new Date(a.date));
+           
+           farmData.sales.forEach(sale => {
+               const row = tbody.insertRow();
+               row.innerHTML = `
+                   <td>${new Date(sale.date).toLocaleDateString('th-TH')}</td>
+                   <td>${sale.type}</td>
+                   <td>${sale.quantity}</td>
+                   <td>${sale.weight}</td>
+                   <td>฿${sale.pricePerKg.toLocaleString()}</td>
+                   <td>฿${sale.netRevenue.toLocaleString()}</td>
+                   <td>${sale.buyer}</td>
+               `;
+           });
+       }
+
+       function renderBreedingTable() {
+           const tbody = document.getElementById('breedingTable');
+           tbody.innerHTML = '';
+           
+           farmData.breeding.sort((a, b) => new Date(b.matingDate) - new Date(a.matingDate));
+           
+           farmData.breeding.forEach(breeding => {
+               const expectedDate = new Date(breeding.matingDate);
+               expectedDate.setDate(expectedDate.getDate() + 114);
+               
+               let status = 'รอคลอด';
+               if (breeding.actualDate) {
+                   status = 'คลอดแล้ว';
+               } else {
+                   const today = new Date();
+                   if (expectedDate < today) {
+                       status = 'เกินกำหนด';
+                   }
+               }
+               
+               const row = tbody.insertRow();
+               row.innerHTML = `
+                   <td>${new Date(breeding.matingDate).toLocaleDateString('th-TH')}</td>
+                   <td>${breeding.sowId}</td>
+                   <td>${breeding.boarId}</td>
+                   <td>${expectedDate.toLocaleDateString('th-TH')}</td>
+                   <td>${breeding.actualDate ? new Date(breeding.actualDate).toLocaleDateString('th-TH') : '-'}</td>
+                   <td>${breeding.piglets || '-'}</td>
+                   <td><span class="badge ${status === 'คลอดแล้ว' ? 'badge-success' : status === 'เกินกำหนด' ? 'badge-danger' : 'badge-warning'}">${status}</span></td>
+               `;
+           });
+       }
+
+       function renderHealthTable() {
+           const tbody = document.getElementById('healthTable');
+           tbody.innerHTML = '';
+           
+           farmData.health.sort((a, b) => new Date(b.date) - new Date(a.date));
+           
+           farmData.health.forEach(health => {
+               const row = tbody.insertRow();
+               row.innerHTML = `
+                   <td>${new Date(health.date).toLocaleDateString('th-TH')}</td>
+                   <td>${health.pigType}</td>
+                   <td>${health.type}</td>
+                   <td>${health.description}</td>
+                   <td>${health.treatment || '-'}</td>
+                   <td>฿${health.cost.toLocaleString()}</td>
+               `;
+           });
+       }
+
+       function renderReports() {
+           renderProfitReport();
+           renderFCRReport();
+           renderHealthReport();
+       }
+
+       function renderProfitReport() {
+           const container = document.getElementById('profitReport');
+           
+           const totalRevenue = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           const totalFeedCost = farmData.feeds.reduce((sum, feed) => sum + feed.price, 0);
+           const totalMedicalCost = farmData.medical.reduce((sum, med) => sum + med.price, 0);
+           const totalHealthCost = farmData.health.reduce((sum, health) => sum + health.cost, 0);
+           const totalCost = totalFeedCost + totalMedicalCost + totalHealthCost;
+           const profit = totalRevenue - totalCost;
+           
+           container.innerHTML = `
+               <div class="grid grid-2">
+                   <div class="stat-card ${profit >= 0 ? '' : 'bg-danger'}">
+                       <div class="stat-value">฿${totalRevenue.toLocaleString()}</div>
+                       <div class="stat-label">รายได้รวม</div>
+                   </div>
+                   <div class="stat-card">
+                       <div class="stat-value">฿${totalCost.toLocaleString()}</div>
+                       <div class="stat-label">ต้นทุนรวม</div>
+                   </div>
                </div>
-               <div class="stat-card">
-                   <div class="stat-icon">💵</div>
-                   <div class="stat-value">${formatCurrency(totalNetRevenue)}</div>
-                   <div class="stat-label">รายได้สุทธิ (บาท)</div>
-               </div>
-               <div class="stat-card">
-                   <div class="stat-icon">🚚</div>
-                   <div class="stat-value">${formatCurrency(totalTransportCost)}</div>
-                   <div class="stat-label">ค่าขนส่งรวม (บาท)</div>
-               </div>
-               <div class="stat-card">
-                   <div class="stat-icon">🐷</div>
-                   <div class="stat-value">${totalQuantity}</div>
-                   <div class="stat-label">จำนวนขาย (ตัว)</div>
+               <div class="stat-card ${profit >= 0 ? 'bg-success' : 'bg-danger'}" style="margin-top: 1rem;">
+                   <div class="stat-value">฿${profit.toLocaleString()}</div>
+                   <div class="stat-label">${profit >= 0 ? 'กำไร' : 'ขาดทุน'}</div>
                </div>
            `;
-           
-           html += '</div>';
-           
-           if (Object.keys(grouped).length > 0) {
-               html += '<div class="table-container"><table><thead><tr><th>ประเภทสุกร</th><th>จำนวน</th><th>น้ำหนัก</th><th>รายได้รวม</th><th>รายได้สุทธิ</th><th>ค่าขนส่ง</th><th>ครั้ง</th></tr></thead><tbody>';
-               
-               Object.entries(grouped).forEach(([type, data]) => {
-                   html += `
-                       <tr>
-                           <td>${type}</td>
-                           <td>${data.quantity} ตัว</td>
-                           <td>${data.weight.toFixed(1)} กก.</td>
-                           <td>${formatCurrency(data.totalRevenue)} บาท</td>
-                           <td>${formatCurrency(data.netRevenue)} บาท</td>
-                           <td>${formatCurrency(data.transportCost)} บาท</td>
-                           <td>${data.count}</td>
-                       </tr>
-                   `;
-               });
-               
-               html += '</tbody></table></div>';
-           } else {
-               html += '<p>ไม่มีข้อมูลการขายในช่วงเวลาที่เลือก</p>';
-           }
-           
-           container.innerHTML = html;
        }
 
-       // PWA Installation
+       function renderFCRReport() {
+           const container = document.getElementById('fcrReport');
+           
+           const totalFeedUsed = farmData.usage
+               .filter(usage => usage.type === 'อาหาร')
+               .reduce((sum, usage) => sum + usage.amount, 0);
+           
+           const totalWeight = farmData.sales.reduce((sum, sale) => sum + sale.weight, 0);
+           const fcr = totalWeight > 0 ? totalFeedUsed / totalWeight : 0;
+           
+           container.innerHTML = `
+               <p><strong>อาหารที่ใช้ทั้งหมด:</strong> ${totalFeedUsed.toFixed(1)} กก.</p>
+               <p><strong>น้ำหนักที่ขายได้:</strong> ${totalWeight.toFixed(1)} กก.</p>
+               <p><strong>FCR:</strong> ${fcr.toFixed(2)}</p>
+               <div class="alert ${fcr <= 3 ? 'alert-success' : fcr <= 3.5 ? 'alert-warning' : 'alert-error'}">
+                   ประสิทธิภาพ: ${fcr <= 3 ? 'ดีเยี่ยม' : fcr <= 3.5 ? 'ปานกลาง' : 'ต้องปรับปรุง'}
+               </div>
+           `;
+       }
+
+       function renderHealthReport() {
+           const container = document.getElementById('healthReport');
+           
+           const totalHealthRecords = farmData.health.length;
+           const deathRecords = farmData.health.filter(h => h.type === 'ตาย').length;
+           const vaccineRecords = farmData.health.filter(h => h.type === 'วัคซีน').length;
+           const treatmentRecords = farmData.health.filter(h => h.type === 'รักษาป่วย').length;
+           
+           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+           const mortalityRate = totalPigs > 0 ? (deathRecords / totalPigs) * 100 : 0;
+           
+           container.innerHTML = `
+               <div class="grid grid-4">
+                   <div class="text-center">
+                       <div class="stat-value text-info">${totalHealthRecords}</div>
+                       <div class="stat-label">บันทึกทั้งหมด</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="stat-value text-success">${vaccineRecords}</div>
+                       <div class="stat-label">วัคซีน</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="stat-value text-warning">${treatmentRecords}</div>
+                       <div class="stat-label">รักษาป่วย</div>
+                   </div>
+                   <div class="text-center">
+                       <div class="stat-value text-danger">${deathRecords}</div>
+                       <div class="stat-label">ตาย</div>
+                   </div>
+               </div>
+               <div class="mt-2">
+                   <p><strong>อัตราการตาย:</strong> ${mortalityRate.toFixed(2)}%</p>
+                   <div class="alert ${mortalityRate <= 5 ? 'alert-success' : mortalityRate <= 10 ? 'alert-warning' : 'alert-error'}">
+                       สถานะ: ${mortalityRate <= 5 ? 'ดี' : mortalityRate <= 10 ? 'ปานกลาง' : 'ต้องปรับปรุง'}
+                   </div>
+               </div>
+           `;
+       }
+
+       // Form handlers
+       document.getElementById('pigForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const pig = {
+               id: generateId(),
+               type: formData.get('type'),
+               quantity: parseInt(formData.get('quantity')),
+               weight: parseFloat(formData.get('weight')),
+               age: parseInt(formData.get('age')),
+               entryDate: formData.get('entryDate'),
+               notes: formData.get('notes')
+           };
+           
+           farmData.pigs.push(pig);
+           saveData();
+           renderPigsTable();
+           updateDashboard();
+           hideModal('pigModal');
+       });
+
+       document.getElementById('feedForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const quantity = parseFloat(formData.get('quantity'));
+           const feed = {
+               id: generateId(),
+               type: formData.get('type'),
+               brand: formData.get('brand'),
+               quantity: quantity,
+               originalQuantity: quantity,
+               price: parseFloat(formData.get('price')),
+               purchaseDate: formData.get('purchaseDate'),
+               expiryDate: formData.get('expiryDate')
+           };
+           
+           farmData.feeds.push(feed);
+           saveData();
+           renderFeedsList();
+           updateDashboard();
+           hideModal('feedModal');
+       });
+
+       document.getElementById('medicalForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const quantity = parseFloat(formData.get('quantity'));
+           const medical = {
+               id: generateId(),
+               type: formData.get('type'),
+               name: formData.get('name'),
+               brand: formData.get('brand'),
+               quantity: quantity,
+               originalQuantity: quantity,
+               unit: formData.get('unit'),
+               price: parseFloat(formData.get('price')),
+               purchaseDate: formData.get('purchaseDate'),
+               expiryDate: formData.get('expiryDate')
+           };
+           
+           farmData.medical.push(medical);
+           saveData();
+           renderMedicalList();
+           updateDashboard();
+           hideModal('medicalModal');
+       });
+
+       document.getElementById('usageForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const type = formData.get('type');
+           const itemId = formData.get('itemId');
+           const amount = parseFloat(formData.get('amount'));
+           
+           // Find item and update stock
+           let item = null;
+           let itemName = '';
+           let unit = '';
+           
+           if (type === 'อาหาร') {
+               item = farmData.feeds.find(f => f.id === itemId);
+               if (item) {
+                   itemName = `${item.type} (${item.brand})`;
+                   unit = 'กก.';
+                   item.quantity = Math.max(0, item.quantity - amount);
+               }
+           } else if (type === 'ยา') {
+               item = farmData.medical.find(m => m.id === itemId);
+               if (item) {
+                   itemName = `${item.name} (${item.brand})`;
+                   unit = item.unit;
+                   item.quantity = Math.max(0, item.quantity - amount);
+               }
+           }
+           
+           if (item) {
+               const usage = {
+                   id: generateId(),
+                   type: type,
+                   itemId: itemId,
+                   itemName: itemName,
+                   amount: amount,
+                   unit: unit,
+                   date: formData.get('date'),
+                   time: formData.get('time')
+               };
+               
+               farmData.usage.push(usage);
+               saveData();
+               renderUsageTable();
+               renderFeedsList();
+               renderMedicalList();
+               updateDashboard();
+               hideModal('usageModal');
+           } else {
+               showAlert('ไม่พบรายการที่เลือก', 'error');
+           }
+       });
+
+       document.getElementById('salesForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const quantity = parseInt(formData.get('quantity'));
+           const weight = parseFloat(formData.get('weight'));
+           const pricePerKg = parseFloat(formData.get('pricePerKg'));
+           const transportCost = parseFloat(formData.get('transportCost')) || 0;
+           const totalRevenue = weight * pricePerKg;
+           const netRevenue = totalRevenue - transportCost;
+           
+           const sale = {
+               id: generateId(),
+               date: formData.get('date'),
+               type: formData.get('type'),
+               quantity: quantity,
+               weight: weight,
+               pricePerKg: pricePerKg,
+               transportCost: transportCost,
+               totalRevenue: totalRevenue,
+               netRevenue: netRevenue,
+               buyer: formData.get('buyer'),
+               notes: formData.get('notes')
+           };
+           
+           farmData.sales.push(sale);
+           
+           // Reduce pig count
+           const pigType = formData.get('type');
+           const pig = farmData.pigs.find(p => p.type === pigType && p.quantity >= quantity);
+           if (pig) {
+               pig.quantity -= quantity;
+               if (pig.quantity <= 0) {
+                   farmData.pigs = farmData.pigs.filter(p => p.id !== pig.id);
+               }
+           }
+           
+           saveData();
+           renderSalesTable();
+           renderPigsTable();
+           updateDashboard();
+           hideModal('salesModal');
+       });
+
+       document.getElementById('breedingForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const breeding = {
+               id: generateId(),
+               matingDate: formData.get('matingDate'),
+               sowId: formData.get('sowId'),
+               boarId: formData.get('boarId'),
+               actualDate: formData.get('actualDate'),
+               piglets: formData.get('piglets') ? parseInt(formData.get('piglets')) : null,
+               notes: formData.get('notes')
+           };
+           
+           farmData.breeding.push(breeding);
+           saveData();
+           renderBreedingTable();
+           updateDashboard();
+           hideModal('breedingModal');
+       });
+
+       document.getElementById('healthForm').addEventListener('submit', function(e) {
+           e.preventDefault();
+           
+           const formData = new FormData(e.target);
+           const health = {
+               id: generateId(),
+               date: formData.get('date'),
+               pigId: formData.get('pigId'),
+               pigType: formData.get('pigType'),
+               type: formData.get('type'),
+               description: formData.get('description'),
+               treatment: formData.get('treatment'),
+               cost: parseFloat(formData.get('cost')) || 0
+           };
+           
+           farmData.health.push(health);
+           saveData();
+           renderHealthTable();
+           updateDashboard();
+           hideModal('healthModal');
+       });
+
+       // Utility functions
+       function updateUsageItems() {
+           const typeSelect = document.querySelector('#usageForm select[name="type"]');
+           const itemsSelect = document.getElementById('usageItems');
+           
+           itemsSelect.innerHTML = '<option value="">เลือกรายการ</option>';
+           
+           if (typeSelect.value === 'อาหาร') {
+               farmData.feeds.forEach(feed => {
+                   if (feed.quantity > 0) {
+                       const option = document.createElement('option');
+                       option.value = feed.id;
+                       option.textContent = `${feed.type} (${feed.brand}) - คงเหลือ ${feed.quantity.toFixed(1)} กก.`;
+                       itemsSelect.appendChild(option);
+                   }
+               });
+           } else if (typeSelect.value === 'ยา') {
+               farmData.medical.forEach(med => {
+                   if (med.quantity > 0) {
+                       const option = document.createElement('option');
+                       option.value = med.id;
+                       option.textContent = `${med.name} (${med.brand}) - คงเหลือ ${med.quantity.toFixed(1)} ${med.unit}`;
+                       itemsSelect.appendChild(option);
+                   }
+               });
+           }
+       }
+
+       function exportData() {
+           const dataStr = JSON.stringify(farmData, null, 2);
+           const dataBlob = new Blob([dataStr], {type: 'application/json'});
+           
+           const link = document.createElement('a');
+           link.href = URL.createObjectURL(dataBlob);
+           link.download = `farm-data-${new Date().toISOString().split('T')[0]}.json`;
+           link.click();
+           
+           showAlert('ส่งออกข้อมูลสำเร็จ', 'success');
+       }
+
+       // Delete functions
+       function deletePig(id) {
+           if (confirm('ยืนยันการลบข้อมูลสุกร?')) {
+               farmData.pigs = farmData.pigs.filter(pig => pig.id !== id);
+               saveData();
+               renderPigsTable();
+               updateDashboard();
+           }
+       }
+
+       function deleteFeed(id) {
+           if (confirm('ยืนยันการลบข้อมูลอาหาร?')) {
+               farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
+               saveData();
+               renderFeedsList();
+               updateDashboard();
+           }
+       }
+
+       function deleteMedical(id) {
+           if (confirm('ยืนยันการลบข้อมูลยา?')) {
+               farmData.medical = farmData.medical.filter(med => med.id !== id);
+               saveData();
+               renderMedicalList();
+               updateDashboard();
+           }
+       }
+
+       // Edit functions (simplified for space)
+       function editPig(id) {
+           const pig = farmData.pigs.find(p => p.id === id);
+           if (pig) {
+               // Fill form with pig data
+               const form = document.getElementById('pigForm');
+               form.elements.type.value = pig.type;
+               form.elements.quantity.value = pig.quantity;
+               form.elements.weight.value = pig.weight;
+               form.elements.age.value = pig.age;
+               form.elements.entryDate.value = pig.entryDate;
+               form.elements.notes.value = pig.notes || '';
+               
+               // Change form submission to update mode
+               form.onsubmit = function(e) {
+                   e.preventDefault();
+                   const formData = new FormData(e.target);
+                   
+                   pig.type = formData.get('type');
+                   pig.quantity = parseInt(formData.get('quantity'));
+                   pig.weight = parseFloat(formData.get('weight'));
+                   pig.age = parseInt(formData.get('age'));
+                   pig.entryDate = formData.get('entryDate');
+                   pig.notes = formData.get('notes');
+                   
+                   saveData();
+                   renderPigsTable();
+                   updateDashboard();
+                   hideModal('pigModal');
+                   
+                   // Reset form submission
+                   form.onsubmit = null;
+               };
+               
+               showModal('pigModal');
+           }
+       }
+
+       function editFeed(id) {
+           const feed = farmData.feeds.find(f => f.id === id);
+           if (feed) {
+               const form = document.getElementById('feedForm');
+               form.elements.type.value = feed.type;
+               form.elements.brand.value = feed.brand;
+               form.elements.quantity.value = feed.quantity;
+               form.elements.price.value = feed.price;
+               form.elements.purchaseDate.value = feed.purchaseDate;
+               form.elements.expiryDate.value = feed.expiryDate || '';
+               
+               form.onsubmit = function(e) {
+                   e.preventDefault();
+                   const formData = new FormData(e.target);
+                   
+                   feed.type = formData.get('type');
+                   feed.brand = formData.get('brand');
+                   feed.quantity = parseFloat(formData.get('quantity'));
+                   feed.price = parseFloat(formData.get('price'));
+                   feed.purchaseDate = formData.get('purchaseDate');
+                   feed.expiryDate = formData.get('expiryDate');
+                   
+                   saveData();
+                   renderFeedsList();
+                   updateDashboard();
+                   hideModal('feedModal');
+                   
+                   form.onsubmit = null;
+               };
+               
+               showModal('feedModal');
+           }
+       }
+
+       function editMedical(id) {
+           const medical = farmData.medical.find(m => m.id === id);
+           if (medical) {
+               const form = document.getElementById('medicalForm');
+               form.elements.type.value = medical.type;
+               form.elements.name.value = medical.name;
+               form.elements.brand.value = medical.brand;
+               form.elements.quantity.value = medical.quantity;
+               form.elements.unit.value = medical.unit;
+               form.elements.price.value = medical.price;
+               form.elements.purchaseDate.value = medical.purchaseDate;
+               form.elements.expiryDate.value = medical.expiryDate || '';
+               
+               form.onsubmit = function(e) {
+                   e.preventDefault();
+                   const formData = new FormData(e.target);
+                   
+                   medical.type = formData.get('type');
+                   medical.name = formData.get('name');
+                   medical.brand = formData.get('brand');
+                   medical.quantity = parseFloat(formData.get('quantity'));
+                   medical.unit = formData.get('unit');
+                   medical.price = parseFloat(formData.get('price'));
+                   medical.purchaseDate = formData.get('purchaseDate');
+                   medical.expiryDate = formData.get('expiryDate');
+                   
+                   saveData();
+                   renderMedicalList();
+                   updateDashboard();
+                   hideModal('medicalModal');
+                   
+                   form.onsubmit = null;
+               };
+               
+               showModal('medicalModal');
+           }
+       }
+
+       // PWA Service Worker Registration
+       if ('serviceWorker' in navigator) {
+           const swCode = `
+               const CACHE_NAME = 'farm-management-v1';
+               const urlsToCache = [
+                   '/',
+                   'https://fonts.googleapis.com/css2?family=Niramit:wght@300;400;500;600;700&display=swap'
+               ];
+
+               self.addEventListener('install', function(event) {
+                   event.waitUntil(
+                       caches.open(CACHE_NAME)
+                           .then(function(cache) {
+                               return cache.addAll(urlsToCache);
+                           })
+                   );
+               });
+
+               self.addEventListener('fetch', function(event) {
+                   event.respondWith(
+                       caches.match(event.request)
+                           .then(function(response) {
+                               if (response) {
+                                   return response;
+                               }
+                               return fetch(event.request);
+                           }
+                       )
+                   );
+               });
+           `;
+           
+           const blob = new Blob([swCode], { type: 'application/javascript' });
+           const swUrl = URL.createObjectURL(blob);
+           
+           navigator.serviceWorker.register(swUrl)
+               .then(function(registration) {
+                   console.log('ServiceWorker registration successful');
+               })
+               .catch(function(err) {
+                   console.log('ServiceWorker registration failed: ', err);
+               });
+       }
+
+       // Add to home screen prompt
        let deferredPrompt;
        
        window.addEventListener('beforeinstallprompt', (e) => {
@@ -1785,209 +2247,347 @@
            deferredPrompt = e;
            
            // Show install button
-           const installAlert = document.createElement('div');
-           installAlert.className = 'alert alert-success';
-           installAlert.innerHTML = `
-               <strong>📱 ติดตั้งเป็นแอป:</strong> คุณสามารถติดตั้งระบบนี้เป็นแอปบนมือถือได้
-               <button onclick="installApp()" class="btn btn-primary" style="margin-left: 1rem;">ติดตั้ง</button>
-               <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
-           `;
-           document.getElementById('alerts-container').appendChild(installAlert);
-       });
-       
-       function installApp() {
-           if (deferredPrompt) {
+           const installButton = document.createElement('button');
+           installButton.className = 'btn btn-primary';
+           installButton.textContent = '📱 ติดตั้งแอป';
+           installButton.onclick = () => {
                deferredPrompt.prompt();
                deferredPrompt.userChoice.then((choiceResult) => {
                    if (choiceResult.outcome === 'accepted') {
-                       showAlert('ติดตั้งแอปเรียบร้อยแล้ว', 'success');
+                       console.log('User accepted the A2HS prompt');
                    }
                    deferredPrompt = null;
+                   installButton.remove();
                });
-           }
+           };
+           
+           document.querySelector('.header-actions').appendChild(installButton);
+       });
+
+       // Handle offline/online status
+       window.addEventListener('online', () => {
+           showAlert('🌐 เชื่อมต่ออินเทอร์เน็ตแล้ว', 'success');
+       });
+
+       window.addEventListener('offline', () => {
+           showAlert('📴 ไม่มีการเชื่อมต่ออินเทอร์เน็ต - ใช้งานออฟไลน์', 'warning');
+       });
+
+       // Auto-save every 30 seconds
+       setInterval(() => {
+           saveData();
+       }, 30000);
+
+       // Import data functionality
+       function importData() {
+           const input = document.createElement('input');
+           input.type = 'file';
+           input.accept = '.json';
+           input.onchange = function(e) {
+               const file = e.target.files[0];
+               if (file) {
+                   const reader = new FileReader();
+                   reader.onload = function(e) {
+                       try {
+                           const imported = JSON.parse(e.target.result);
+                           if (confirm('ยืนยันการนำเข้าข้อมูล? ข้อมูลเดิมจะถูกแทนที่')) {
+                               farmData = imported;
+                               saveData();
+                               updateDashboard();
+                               renderAllSections();
+                               showAlert('นำเข้าข้อมูลสำเร็จ', 'success');
+                           }
+                       } catch (err) {
+                           showAlert('ไฟล์ข้อมูลไม่ถูกต้อง', 'error');
+                       }
+                   };
+                   reader.readAsText(file);
+               }
+           };
+           input.click();
        }
 
-       // Keyboard Shortcuts
+       // Add import button to header
+       document.querySelector('.header-actions').innerHTML += `
+           <button class="btn btn-outline" onclick="importData()">📥 นำเข้าข้อมูล</button>
+       `;
+
+       // Keyboard shortcuts
        document.addEventListener('keydown', function(e) {
-           if (e.ctrlKey || e.metaKey) {
-               switch(e.key) {
-                   case 's':
-                       e.preventDefault();
-                       saveData();
-                       showAlert('บันทึกข้อมูลแล้ว', 'success');
-                       break;
-                   case 'e':
-                       e.preventDefault();
-                       exportData();
-                       break;
-               }
+           // Ctrl/Cmd + S to save (export)
+           if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+               e.preventDefault();
+               exportData();
+           }
+           
+           // Escape to close modals
+           if (e.key === 'Escape') {
+               document.querySelectorAll('.modal.show').forEach(modal => {
+                   modal.classList.remove('show');
+               });
            }
        });
 
-       // Touch Gestures for Mobile
-       let touchStartX = 0;
-       let touchEndX = 0;
+       // Touch events for mobile optimization
+       let touchStartY = 0;
        
        document.addEventListener('touchstart', function(e) {
-           touchStartX = e.changedTouches[0].screenX;
+           touchStartY = e.touches[0].clientY;
        });
-       
-       document.addEventListener('touchend', function(e) {
-           touchEndX = e.changedTouches[0].screenX;
-           handleSwipe();
-       });
-       
-       function handleSwipe() {
-           const swipeThreshold = 50;
-           const diff = touchStartX - touchEndX;
+
+       document.addEventListener('touchmove', function(e) {
+           const touchY = e.touches[0].clientY;
+           const touchDiff = touchStartY - touchY;
            
-           if (Math.abs(diff) > swipeThreshold) {
-               const currentSection = document.querySelector('.section.active').id;
-               const sections = ['overview', 'pigs', 'feeds', 'medical', 'usage', 'sales', 'reports'];
-               const currentIndex = sections.indexOf(currentSection);
-               
-               if (diff > 0 && currentIndex < sections.length - 1) {
-                   // Swipe left - next section
-                   showSection(sections[currentIndex + 1]);
-                   document.querySelector(`button[onclick="showSection('${sections[currentIndex + 1]}')"]`).click();
-               } else if (diff < 0 && currentIndex > 0) {
-                   // Swipe right - previous section
-                   showSection(sections[currentIndex - 1]);
-                   document.querySelector(`button[onclick="showSection('${sections[currentIndex - 1]}')"]`).click();
-               }
+           // Prevent overscroll
+           if (touchDiff > 0 && window.scrollY === 0) {
+               e.preventDefault();
            }
-       }
-
-       // Responsive table handling
-       function makeTablesResponsive() {
-           const tables = document.querySelectorAll('table');
-           tables.forEach(table => {
-               if (window.innerWidth < 768) {
-                   table.style.fontSize = '0.8rem';
-               } else {
-                   table.style.fontSize = '0.9rem';
-               }
-           });
-       }
-       
-       window.addEventListener('resize', makeTablesResponsive);
-       document.addEventListener('DOMContentLoaded', makeTablesResponsive);
-
-       // Offline detection
-       window.addEventListener('online', function() {
-           showAlert('เชื่อมต่ออินเทอร์เน็ตแล้ว', 'success');
-       });
-       
-       window.addEventListener('offline', function() {
-           showAlert('ไม่มีการเชื่อมต่ออินเทอร์เน็ต - ใช้งานออฟไลน์', 'warning');
        });
 
-       // Form validation
-       function validateForm(formId) {
-           const form = document.getElementById(formId);
-           const inputs = form.querySelectorAll('input[required], select[required]');
-           let isValid = true;
+       // Performance optimization - lazy loading for tables
+       function createLazyTable(data, renderRow, containerId) {
+           const container = document.getElementById(containerId);
+           const itemsPerPage = 20;
+           let currentPage = 0;
            
-           inputs.forEach(input => {
-               if (!input.value.trim()) {
-                   input.style.borderColor = 'var(--error)';
-                   isValid = false;
-               } else {
-                   input.style.borderColor = 'var(--border)';
-               }
-           });
-           
-           return isValid;
-       }
-
-       // Auto-complete for buyer names
-       function setupAutoComplete() {
-           const buyerInput = document.getElementById('salesBuyer');
-           const uniqueBuyers = [...new Set(farmData.sales.map(sale => sale.buyer).filter(buyer => buyer))];
-           
-           if (uniqueBuyers.length > 0) {
-               const datalist = document.createElement('datalist');
-               datalist.id = 'buyersList';
-               uniqueBuyers.forEach(buyer => {
-                   const option = document.createElement('option');
-                   option.value = buyer;
-                   datalist.appendChild(option);
+           function renderPage() {
+               const start = currentPage * itemsPerPage;
+               const end = start + itemsPerPage;
+               const pageData = data.slice(start, end);
+               
+               pageData.forEach(item => {
+                   container.appendChild(renderRow(item));
                });
                
-               buyerInput.setAttribute('list', 'buyersList');
-               document.body.appendChild(datalist);
+               if (end < data.length) {
+                   const loadMoreBtn = document.createElement('button');
+                   loadMoreBtn.className = 'btn btn-outline w-100 mt-2';
+                   loadMoreBtn.textContent = 'โหลดเพิ่มเติม';
+                   loadMoreBtn.onclick = () => {
+                       currentPage++;
+                       loadMoreBtn.remove();
+                       renderPage();
+                   };
+                   container.appendChild(loadMoreBtn);
+               }
+           }
+           
+           container.innerHTML = '';
+           renderPage();
+       }
+
+       // Add search functionality
+       function addSearchToTable(tableId, searchInputId) {
+           const searchInput = document.getElementById(searchInputId);
+           const table = document.getElementById(tableId);
+           
+           if (searchInput && table) {
+               searchInput.addEventListener('input', function() {
+                   const filter = this.value.toLowerCase();
+                   const rows = table.getElementsByTagName('tr');
+                   
+                   for (let i = 1; i < rows.length; i++) {
+                       const row = rows[i];
+                       const text = row.textContent.toLowerCase();
+                       row.style.display = text.includes(filter) ? '' : 'none';
+                   }
+               });
            }
        }
 
-       // Initialize auto-complete when sales data changes
-       document.addEventListener('DOMContentLoaded', setupAutoComplete);
+       // Initialize search inputs (you can add search inputs to your tables)
+       // addSearchToTable('pigsTable', 'pigsSearch');
+
+       // Data validation functions
+       function validatePigData(pig) {
+           return pig.type && pig.quantity > 0 && pig.weight > 0 && pig.age >= 0;
+       }
+
+       function validateFeedData(feed) {
+           return feed.type && feed.brand && feed.quantity > 0 && feed.price > 0;
+       }
+
+       function validateMedicalData(medical) {
+           return medical.type && medical.name && medical.brand && 
+                  medical.quantity > 0 && medical.price > 0 && medical.unit;
+       }
+
+       // Analytics functions
+       function calculateGrowthRate() {
+           // Calculate average daily gain for pigs
+           const growthData = farmData.pigs.map(pig => {
+               const entryDate = new Date(pig.entryDate);
+               const daysPassed = Math.ceil((new Date() - entryDate) / (1000 * 60 * 60 * 24));
+               return daysPassed > 0 ? pig.weight / daysPassed : 0;
+           });
+           
+           return growthData.reduce((sum, rate) => sum + rate, 0) / growthData.length || 0;
+       }
+
+       function calculateFeedConversionRatio() {
+           const totalFeedUsed = farmData.usage
+               .filter(usage => usage.type === 'อาหาร')
+               .reduce((sum, usage) => sum + usage.amount, 0);
+               
+           const totalWeightGain = farmData.sales
+               .reduce((sum, sale) => sum + sale.weight, 0);
+               
+           return totalWeightGain > 0 ? totalFeedUsed / totalWeightGain : 0;
+       }
+
+       function generateMonthlyReport() {
+           const currentMonth = new Date().getMonth();
+           const currentYear = new Date().getFullYear();
+           
+           const monthlyData = {
+               sales: farmData.sales.filter(sale => {
+                   const saleDate = new Date(sale.date);
+                   return saleDate.getMonth() === currentMonth && 
+                          saleDate.getFullYear() === currentYear;
+               }),
+               usage: farmData.usage.filter(usage => {
+                   const usageDate = new Date(usage.date);
+                   return usageDate.getMonth() === currentMonth && 
+                          usageDate.getFullYear() === currentYear;
+               }),
+               health: farmData.health.filter(health => {
+                   const healthDate = new Date(health.date);
+                   return healthDate.getMonth() === currentMonth && 
+                          healthDate.getFullYear() === currentYear;
+               })
+           };
+           
+           return monthlyData;
+       }
+
+       // Backup to cloud storage (placeholder for future implementation)
+       function backupToCloud() {
+           // This would integrate with cloud storage services
+           showAlert('การสำรองข้อมูลออนไลน์จะพัฒนาในเวอร์ชันถัดไป', 'info');
+       }
 
        // Print functionality
-       function printReport(sectionId) {
-           const section = document.getElementById(sectionId);
+       function printReport(reportType) {
            const printWindow = window.open('', '_blank');
+           let content = '';
+           
+           switch(reportType) {
+               case 'inventory':
+                   content = generateInventoryReport();
+                   break;
+               case 'sales':
+                   content = generateSalesReport();
+                   break;
+               case 'health':
+                   content = generateHealthSummary();
+                   break;
+           }
+           
            printWindow.document.write(`
                <html>
-                   <head>
-                       <title>รายงานฟาร์มสุกร</title>
-                       <style>
-                           body { font-family: Arial, sans-serif; padding: 20px; }
-                           table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                           th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                           th { background-color: #f2f2f2; }
-                           .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
-                           .stat-card { border: 1px solid #ddd; padding: 20px; text-align: center; }
-                           .stat-value { font-size: 24px; font-weight: bold; color: #16a34a; }
-                           @media print { .no-print { display: none; } }
-                       </style>
-                   </head>
-                   <body>
-                       <h1>ระบบจัดการฟาร์มสุกร</h1>
+               <head>
+                   <title>รายงานฟาร์มสุกร</title>
+                   <style>
+                       body { font-family: 'Sarabun', sans-serif; margin: 20px; }
+                       table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                       th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                       th { background-color: #f5f5f5; }
+                       .header { text-align: center; margin-bottom: 30px; }
+                       @media print { body { margin: 0; } }
+                   </style>
+               </head>
+               <body>
+                   <div class="header">
+                       <h1>🐖 ระบบจัดการฟาร์มสุกร</h1>
                        <p>วันที่พิมพ์: ${new Date().toLocaleDateString('th-TH')}</p>
-                       ${section.innerHTML}
-                   </body>
+                   </div>
+                   ${content}
+               </body>
                </html>
            `);
+           
            printWindow.document.close();
            printWindow.print();
        }
 
-       // Data validation and cleanup
-       function cleanupData() {
-           // Remove invalid entries
-           farmData.pigs = farmData.pigs.filter(pig => pig.quantity > 0);
-           farmData.feeds = farmData.feeds.filter(feed => feed.quantity >= 0);
-           farmData.medical = farmData.medical.filter(med => med.quantity >= 0);
+       function generateInventoryReport() {
+           let html = '<h2>รายงานสต็อกคงเหลือ</h2>';
            
-           // Fix negative quantities
+           // Feeds
+           html += '<h3>อาหาร</h3><table><tr><th>ประเภท</th><th>ยี่ห้อ</th><th>คงเหลือ</th><th>เปอร์เซ็นต์</th></tr>';
            farmData.feeds.forEach(feed => {
-               if (feed.quantity < 0) feed.quantity = 0;
+               const percentage = (feed.quantity / feed.originalQuantity) * 100;
+               html += `<tr><td>${feed.type}</td><td>${feed.brand}</td><td>${feed.quantity.toFixed(1)} กก.</td><td>${percentage.toFixed(1)}%</td></tr>`;
            });
+           html += '</table>';
+           
+           // Medical
+           html += '<h3>ยา/วัคซีน</h3><table><tr><th>ชื่อ</th><th>ประเภท</th><th>คงเหลือ</th><th>เปอร์เซ็นต์</th></tr>';
            farmData.medical.forEach(med => {
-               if (med.quantity < 0) med.quantity = 0;
+               const percentage = (med.quantity / med.originalQuantity) * 100;
+               html += `<tr><td>${med.name}</td><td>${med.type}</td><td>${med.quantity.toFixed(1)} ${med.unit}</td><td>${percentage.toFixed(1)}%</td></tr>`;
+           });
+           html += '</table>';
+           
+           return html;
+       }
+
+       function generateSalesReport() {
+           let html = '<h2>รายงานการขาย</h2>';
+           html += '<table><tr><th>วันที่</th><th>ประเภท</th><th>จำนวน</th><th>น้ำหนัก</th><th>รายได้สุทธิ</th></tr>';
+           
+           farmData.sales.forEach(sale => {
+               html += `<tr>
+                   <td>${new Date(sale.date).toLocaleDateString('th-TH')}</td>
+                   <td>${sale.type}</td>
+                   <td>${sale.quantity}</td>
+                   <td>${sale.weight} กก.</td>
+                   <td>฿${sale.netRevenue.toLocaleString()}</td>
+               </tr>`;
            });
            
-           saveData();
-       }
-
-       // Performance monitoring
-       function measurePerformance() {
-           const start = performance.now();
-           updateAllTables();
-           const end = performance.now();
-           console.log(`Table update took ${end - start} milliseconds`);
-       }
-
-       // Initialize app
-       window.addEventListener('load', function() {
-           cleanupData();
-           setupAutoComplete();
+           const totalRevenue = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+           html += `</table><p><strong>รายได้รวม: ฿${totalRevenue.toLocaleString()}</strong></p>`;
            
-           // Show app ready message
-           setTimeout(() => {
-               showAlert('ระบบจัดการฟาร์มสุกรพร้อมใช้งาน!', 'success');
-           }, 1000);
+           return html;
+       }
+
+       function generateHealthSummary() {
+           let html = '<h2>สรุปสุขภาพสุกร</h2>';
+           html += '<table><tr><th>วันที่</th><th>ประเภทสุกร</th><th>การรักษา</th><th>ค่าใช้จ่าย</th></tr>';
+           
+           farmData.health.forEach(health => {
+               html += `<tr>
+                   <td>${new Date(health.date).toLocaleDateString('th-TH')}</td>
+                   <td>${health.pigType}</td>
+                   <td>${health.type}</td>
+                   <td>฿${health.cost.toLocaleString()}</td>
+               </tr>`;
+           });
+           
+           const totalCost = farmData.health.reduce((sum, health) => sum + health.cost, 0);
+           html += `</table><p><strong>ค่าใช้จ่ายรวม: ฿${totalCost.toLocaleString()}</strong></p>`;
+           
+           return html;
+       }
+
+       // Error handling and logging
+       window.addEventListener('error', function(e) {
+           console.error('Application error:', e.error);
+           showAlert('เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
        });
+
+       window.addEventListener('unhandledrejection', function(e) {
+           console.error('Unhandled promise rejection:', e.reason);
+           showAlert('เกิดข้อผิดพลาดในการประมวลผล', 'error');
+       });
+
+       // Final initialization check
+       console.log('🐖 ระบบจัดการฟาร์มสุกร - พร้อมใช้งาน');
+       console.log('Version:', farmData.version);
+       console.log('Data loaded:', Object.keys(farmData).filter(key => Array.isArray(farmData[key])).map(key => `${key}: ${farmData[key].length} items`));
    </script>
 </body>
 </html>
+                   

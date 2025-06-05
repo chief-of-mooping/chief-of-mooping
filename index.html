@@ -90,6 +90,11 @@
             color: #f1c40f;
         }
 
+        .sync-status.error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
         .nav-tabs {
             display: flex;
             background: white;
@@ -583,7 +588,7 @@
             <h1>🐷 ระบบจัดการฟาร์มสุกร</h1>
             <p>ระบบครบวงจรสำหรับการจัดการฟาร์มสุกร รวมระบบจัดการสต็อกอาหารและยา</p>
             <div id="syncStatus" class="sync-status">
-                🔄 กำลังเชื่อมต่อ...
+                🔄 กำลังเริ่มระบบ...
             </div>
         </div>
 
@@ -754,8 +759,8 @@
                             <label class="form-label required">ประเภท</label>
                             <select class="form-select" id="medicalType">
                                 <option value="">เลือกประเภท</option>
-                                <option value="vaccine">วัคซีน</option>
-                                <option value="antibiotic">ยาปฏิชีวนะ</option>
+                               <option value="vaccine">วัคซีน</option>
+                               <option value="antibiotic">ยาปฏิชีวนะ</option>
                                <option value="vitamin">วิตามิน</option>
                                <option value="deworming">ยาถ่ายพยาธิ</option>
                                <option value="hormone">ฮอร์โมน</option>
@@ -959,7 +964,14 @@
    </div>
 
    <script>
-       // === Firebase Configuration ===
+       // === ROBUST SYSTEM WITH FIREBASE FAILSAFE ===
+       console.log('🚀 Starting Farm Management System...');
+
+       // === System Variables ===
+       const SYSTEM_VERSION = "2.1.1";
+       const STORAGE_KEY = "farmManagementSystem";
+       
+       // Firebase configuration
        const firebaseConfig = {
            apiKey: "AIzaSyDuBGCUMzApQFKtqeuoF1Me9uGUw0qUuDo",
            authDomain: "pig-farm-management-beea7.firebaseapp.com",
@@ -970,16 +982,10 @@
            appId: "1:44044257509:web:8ebfae8c7a36783747ac0c"
        };
 
-       // Initialize Firebase
-       firebase.initializeApp(firebaseConfig);
-       const database = firebase.database();
-
-       // === System Variables ===
-       const SYSTEM_VERSION = "2.1.0";
-       const STORAGE_KEY = "farmManagementSystem";
-
-       // Firebase sync status
+       // System state
+       let isFirebaseEnabled = true;
        let isFirebaseConnected = false;
+       let database = null;
        let syncRetryCount = 0;
        const MAX_SYNC_RETRIES = 3;
 
@@ -1013,14 +1019,267 @@
        };
 
        // Main data variables
-       let farmSystemData = DEFAULT_DATA_STRUCTURE;
+       let farmSystemData = JSON.parse(JSON.stringify(DEFAULT_DATA_STRUCTURE));
        let farmData = farmSystemData.farmData;
 
-       // === PWA and Mobile App Functionality ===
+       // === FIREBASE INITIALIZATION WITH ROBUST ERROR HANDLING ===
+       function initializeFirebase() {
+           try {
+               updateSyncStatus('offline', 'กำลังเชื่อมต่อ Firebase...');
+               
+               firebase.initializeApp(firebaseConfig);
+               database = firebase.database();
+               
+               // Test connection
+               testFirebaseConnection();
+               
+           } catch (error) {
+               console.error('❌ Firebase initialization failed:', error);
+               handleFirebaseError(error, 'init');
+           }
+       }
+
+       function testFirebaseConnection() {
+           try {
+               const testRef = database.ref('.info/connected');
+               testRef.on('value', function(snapshot) {
+                   if (snapshot.val() === true) {
+                       console.log('✅ Firebase connected successfully');
+                       isFirebaseConnected = true;
+                       isFirebaseEnabled = true;
+                       updateSyncStatus('online', 'Firebase เชื่อมต่อแล้ว');
+                       startFirebaseSync();
+                   } else {
+                       console.log('⚠️ Firebase disconnected');
+                       isFirebaseConnected = false;
+                       updateSyncStatus('offline', 'Firebase ขาดการเชื่อมต่อ');
+                   }
+               });
+           } catch (error) {
+               console.error('❌ Firebase connection test failed:', error);
+               handleFirebaseError(error, 'connect');
+           }
+       }
+
+       function handleFirebaseError(error, context) {
+           console.error(`Firebase Error (${context}):`, error);
+           isFirebaseEnabled = false;
+           isFirebaseConnected = false;
+           
+           if (error.code === 'auth/invalid-api-key') {
+               updateSyncStatus('error', 'Firebase API Key ผิด');
+           } else if (error.code === 'permission-denied') {
+               updateSyncStatus('error', 'Firebase Rules หมดอายุ');
+           } else {
+               updateSyncStatus('error', `Firebase Error: ${error.message || 'เชื่อมต่อไม่ได้'}`);
+           }
+           
+           // Continue with localStorage only
+           console.log('📱 Switching to localStorage-only mode');
+           farmSystemData.settings.firebaseSync = false;
+           showAlert('⚠️ Firebase มีปัญหา ระบบใช้งาน localStorage เท่านั้น', 'warning');
+       }
+
+       // === FIREBASE SYNC FUNCTIONS WITH FAILSAFE ===
+       function startFirebaseSync() {
+           if (!isFirebaseEnabled || !isFirebaseConnected) return;
+           
+           try {
+               // Listen for changes
+               database.ref('farmData').on('value', 
+                   (snapshot) => {
+                       if (snapshot.exists()) {
+                           const cloudData = snapshot.val();
+                           
+                           // Check if cloud data is newer
+                           if (cloudData.lastSyncTime && 
+                               cloudData.lastSyncTime > farmSystemData.lastSyncTime) {
+                               
+                               console.log('📥 Updating from Firebase...');
+                               farmSystemData = cloudData;
+                               farmData = cloudData.farmData;
+                               
+                               // Update localStorage backup
+                               saveToLocalStorage();
+                               
+                               // Update UI
+                               updateOverview();
+                               updateUsageSelects();
+                               checkStockLevels();
+                               
+                               showAlert('🔄 ข้อมูลอัพเดทจาก Cloud', 'success');
+                           }
+                       }
+                   },
+                   (error) => {
+                       console.error('❌ Firebase listener error:', error);
+                       handleFirebaseError(error, 'listener');
+                   }
+               );
+               
+           } catch (error) {
+               console.error('❌ Firebase sync error:', error);
+               handleFirebaseError(error, 'sync');
+           }
+       }
+
+       async function syncToFirebase() {
+           if (!isFirebaseEnabled || !isFirebaseConnected || !farmSystemData.settings.firebaseSync) {
+               return saveToLocalStorage(); // Fallback to localStorage
+           }
+
+           try {
+               farmSystemData.lastSyncTime = new Date().toISOString();
+               
+               await database.ref('farmData').set(farmSystemData);
+               
+               console.log('✅ Firebase sync successful');
+               updateSyncStatus('online', 'ซิงค์สำเร็จ');
+               syncRetryCount = 0;
+               
+               // Also save to localStorage as backup
+               saveToLocalStorage();
+               
+           } catch (error) {
+               console.error('❌ Firebase sync failed:', error);
+               
+               // Retry mechanism
+               syncRetryCount++;
+               if (syncRetryCount <= MAX_SYNC_RETRIES) {
+                   console.log(`🔄 Retrying Firebase sync (${syncRetryCount}/${MAX_SYNC_RETRIES})`);
+                   setTimeout(() => syncToFirebase(), 5000 * syncRetryCount);
+               } else {
+                   handleFirebaseError(error, 'sync');
+               }
+               
+               // Always save to localStorage as fallback
+               saveToLocalStorage();
+           }
+       }
+
+       // === ROBUST DATA MANAGEMENT ===
+       function saveAllData() {
+           try {
+               farmSystemData.farmData = farmData;
+               farmSystemData.lastUpdate = new Date().toISOString();
+               
+               console.log('💾 Saving data...');
+               
+               // Primary: Try Firebase
+               if (isFirebaseEnabled && farmSystemData.settings.firebaseSync) {
+                   syncToFirebase();
+               } else {
+                   // Fallback: localStorage only
+                   saveToLocalStorage();
+               }
+               
+           } catch (error) {
+               console.error('❌ Save failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่', 'error');
+               
+               // Emergency fallback
+               try {
+                   saveToLocalStorage();
+                   showAlert('บันทึกใน localStorage เรียบร้อย', 'warning');
+               } catch (localError) {
+                   console.error('❌ localStorage save failed:', localError);
+                   showAlert('ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบ storage', 'error');
+               }
+           }
+       }
+
+       function saveToLocalStorage() {
+           try {
+               const dataToSave = JSON.stringify(farmSystemData);
+               localStorage.setItem(STORAGE_KEY, dataToSave);
+               console.log('✅ localStorage save successful');
+               return true;
+           } catch (error) {
+               console.error('❌ localStorage save failed:', error);
+               
+               // Handle quota exceeded
+               if (error.name === 'QuotaExceededError') {
+                   showAlert('Storage เต็ม กรุณาล้างข้อมูลเบราว์เซอร์', 'error');
+               }
+               return false;
+           }
+       }
+
+       function loadAllData() {
+           try {
+               const savedData = localStorage.getItem(STORAGE_KEY);
+               if (savedData) {
+                   const parsedData = JSON.parse(savedData);
+                   farmSystemData = migrateData(parsedData);
+                   farmData = farmSystemData.farmData;
+                   console.log(`✅ Loaded data version ${farmSystemData.version}`);
+               } else {
+                   console.log('ℹ️ No saved data found, using defaults');
+                   farmSystemData = JSON.parse(JSON.stringify(DEFAULT_DATA_STRUCTURE));
+                   farmData = farmSystemData.farmData;
+               }
+           } catch (error) {
+               console.error('❌ Data loading failed:', error);
+               farmSystemData = JSON.parse(JSON.stringify(DEFAULT_DATA_STRUCTURE));
+               farmData = farmSystemData.farmData;
+               showAlert('เกิดข้อผิดพลาดในการโหลดข้อมูล เริ่มต้นใหม่', 'error');
+           }
+       }
+
+       function migrateData(savedData) {
+           try {
+               // Handle old format
+               if (!savedData.version) {
+                   console.log('🔄 Migrating from old format...');
+                   return {
+                       ...DEFAULT_DATA_STRUCTURE,
+                       farmData: {
+                           pigs: savedData.pigs || [],
+                           feeds: savedData.feeds || [],
+                           medical: savedData.medical || [],
+                           sales: savedData.sales || [],
+                           usage: savedData.usage || []
+                       }
+                   };
+               }
+
+               // Handle version mismatch
+               if (savedData.version !== SYSTEM_VERSION) {
+                   console.log(`🔄 Migrating from version ${savedData.version} to ${SYSTEM_VERSION}`);
+                   return {
+                       ...DEFAULT_DATA_STRUCTURE,
+                       farmData: savedData.farmData || savedData,
+                       previousVersion: savedData.version
+                   };
+               }
+
+               return savedData;
+           } catch (error) {
+               console.error('❌ Data migration failed:', error);
+               return JSON.parse(JSON.stringify(DEFAULT_DATA_STRUCTURE));
+           }
+       }
+
+       // === SYNC STATUS MANAGEMENT ===
+       function updateSyncStatus(status, message) {
+           const syncStatusEl = document.getElementById('syncStatus');
+           if (!syncStatusEl) return;
+           
+           syncStatusEl.className = `sync-status ${status}`;
+           
+           const icons = {
+               'online': '🟢',
+               'offline': '🟡',
+               'error': '🔴'
+           };
+           
+           syncStatusEl.innerHTML = `${icons[status] || '🔄'} ${message}`;
+       }
+
+       // === PWA AND MOBILE FUNCTIONALITY ===
        let deferredPrompt;
        let isStandalone = false;
 
-       // Check if PWA standalone mode
        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
            isStandalone = true;
        }
@@ -1028,29 +1287,16 @@
            isStandalone = true;
        }
 
-       // PWA Install Prompt
        window.addEventListener('beforeinstallprompt', (e) => {
            e.preventDefault();
            deferredPrompt = e;
        });
 
-       function installPWA() {
-           if (deferredPrompt) {
-               deferredPrompt.prompt();
-               deferredPrompt.userChoice.then((choiceResult) => {
-                   if (choiceResult.outcome === 'accepted') {
-                       console.log('User accepted the install prompt');
-                   }
-                   deferredPrompt = null;
-               });
-           }
-       }
-
-       // Register Service Worker for offline functionality
+       // Register Service Worker
        if ('serviceWorker' in navigator) {
            window.addEventListener('load', () => {
                const swCode = `
-               const CACHE_NAME = 'farm-app-v2.1.0';
+               const CACHE_NAME = 'farm-app-v2.1.1';
                const urlsToCache = [
                    '/',
                    '/offline.html'
@@ -1080,182 +1326,12 @@
                const swUrl = URL.createObjectURL(blob);
 
                navigator.serviceWorker.register(swUrl)
-                   .then(registration => {
-                       console.log('SW registered: ', registration);
-                   })
-                   .catch(registrationError => {
-                       console.log('SW registration failed: ', registrationError);
-                   });
+                   .then(registration => console.log('SW registered'))
+                   .catch(error => console.log('SW registration failed'));
            });
        }
 
-       // === Firebase Sync Functions ===
-       function updateSyncStatus(status, message) {
-           const syncStatusEl = document.getElementById('syncStatus');
-           syncStatusEl.className = `sync-status ${status}`;
-           
-           switch(status) {
-               case 'online':
-                   syncStatusEl.innerHTML = `🔄 ${message || 'ซิงค์แล้ว'}`;
-                   break;
-               case 'offline':
-                   syncStatusEl.innerHTML = `📴 ${message || 'ออฟไลน์'}`;
-                   break;
-               default:
-                   syncStatusEl.innerHTML = `🔄 ${message || 'กำลังเชื่อมต่อ...'}`;
-           }
-       }
-
-       async function syncToFirebase() {
-           if (!farmSystemData.settings.firebaseSync) return;
-
-           try {
-               farmSystemData.lastSyncTime = new Date().toISOString();
-               await database.ref('farmData').set(farmSystemData);
-               
-               isFirebaseConnected = true;
-               syncRetryCount = 0;
-               updateSyncStatus('online', 'ซิงค์แล้ว');
-               console.log('✅ Firebase sync successful');
-               
-           } catch (error) {
-               console.error('❌ Firebase sync failed:', error);
-               isFirebaseConnected = false;
-               syncRetryCount++;
-               
-               if (syncRetryCount <= MAX_SYNC_RETRIES) {
-                   setTimeout(() => syncToFirebase(), 5000 * syncRetryCount);
-               }
-               
-               updateSyncStatus('offline', 'ซิงค์ไม่สำเร็จ');
-           }
-       }
-
-       function startFirebaseListener() {
-           database.ref('farmData').on('value', 
-               (snapshot) => {
-                   if (snapshot.exists()) {
-                       const cloudData = snapshot.val();
-                       
-                       // Check if cloud data is newer
-                       if (cloudData.lastSyncTime && 
-                           cloudData.lastSyncTime > farmSystemData.lastSyncTime) {
-                           
-                           farmSystemData = cloudData;
-                           farmData = cloudData.farmData;
-                           
-                           // Update localStorage
-                           localStorage.setItem(STORAGE_KEY, JSON.stringify(farmSystemData));
-                           
-                           // Update UI
-                           updateOverview();
-                           updateUsageSelects();
-                           checkStockLevels();
-                           
-                           showAlert('🔄 ข้อมูลอัพเดทจาก Cloud', 'success');
-                           console.log('📥 Data updated from Firebase');
-                       }
-                       
-                       isFirebaseConnected = true;
-                       updateSyncStatus('online', 'เชื่อมต่อแล้ว');
-                   }
-               },
-               (error) => {
-                   console.error('❌ Firebase listener error:', error);
-                   isFirebaseConnected = false;
-                   
-                   if (error.code === 'PERMISSION_DENIED') {
-                       updateSyncStatus('offline', 'ต้องแก้ Security Rules');
-                       showAlert('⚠️ Firebase Rules หมดอายุ กรุณาติดต่อผู้ดูแลระบบ', 'warning');
-                   } else {
-                       updateSyncStatus('offline', 'เชื่อมต่อไม่ได้');
-                   }
-               }
-           );
-       }
-
-       // === Data Management Functions ===
-       function saveAllData() {
-           try {
-               farmSystemData.farmData = farmData;
-               farmSystemData.lastUpdate = new Date().toISOString();
-               
-               // Save to localStorage (primary)
-               const dataToSave = JSON.stringify(farmSystemData);
-               localStorage.setItem(STORAGE_KEY, dataToSave);
-               
-               // Sync to Firebase (secondary)
-               syncToFirebase();
-               
-               console.log(`💾 บันทึกข้อมูลเวอร์ชัน ${SYSTEM_VERSION} เรียบร้อย`);
-               
-           } catch (error) {
-               console.error('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล:', error);
-               showAlert('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
-           }
-       }
-
-       function loadAllData() {
-           try {
-               const savedData = localStorage.getItem(STORAGE_KEY);
-               if (savedData) {
-                   const parsedData = JSON.parse(savedData);
-                   farmSystemData = migrateData(parsedData);
-                   farmData = farmSystemData.farmData;
-                   console.log(`✅ โหลดข้อมูลเวอร์ชัน ${farmSystemData.version} เรียบร้อย`);
-               } else {
-                   console.log('ℹ️ ไม่พบข้อมูลที่บันทึกไว้ เริ่มต้นใหม่');
-                   farmSystemData = DEFAULT_DATA_STRUCTURE;
-                   farmData = farmSystemData.farmData;
-               }
-           } catch (error) {
-               console.error('❌ เกิดข้อผิดพลาดในการโหลดข้อมูล:', error);
-               farmSystemData = DEFAULT_DATA_STRUCTURE;
-               farmData = farmSystemData.farmData;
-               showAlert('เกิดข้อผิดพลาดในการโหลดข้อมูล ระบบจะเริ่มต้นใหม่', 'error');
-           }
-       }
-
-       function migrateData(savedData) {
-           try {
-               if (!savedData.version) {
-                   console.log('🔄 กำลังอัพเกรดข้อมูลจากรูปแบบเก่า...');
-                   if (savedData.pigs || savedData.feeds || savedData.medical) {
-                       return {
-                           ...DEFAULT_DATA_STRUCTURE,
-                           farmData: {
-                               pigs: savedData.pigs || [],
-                               feeds: savedData.feeds || [],
-                               medical: savedData.medical || [],
-                               sales: savedData.sales || [],
-                               usage: savedData.usage || []
-                           }
-                       };
-                   }
-               }
-
-               if (savedData.version !== SYSTEM_VERSION) {
-                   console.log(`🔄 กำลังอัพเกรดจากเวอร์ชัน ${savedData.version} เป็น ${SYSTEM_VERSION}...`);
-                   return {
-                       ...DEFAULT_DATA_STRUCTURE,
-                       farmData: savedData.farmData || savedData,
-                       version: SYSTEM_VERSION,
-                       lastUpdate: new Date().toISOString(),
-                       previousVersion: savedData.version || "1.0.0"
-                   };
-               }
-
-               return {
-                   ...savedData,
-                   lastUpdate: new Date().toISOString()
-               };
-           } catch (error) {
-               console.error('❌ เกิดข้อผิดพลาดในการอัพเกรดข้อมูล:', error);
-               return DEFAULT_DATA_STRUCTURE;
-           }
-       }
-
-       // === Mobile Optimizations ===
+       // === MOBILE OPTIMIZATIONS ===
        let lastTouchEnd = 0;
        document.addEventListener('touchend', function (event) {
            const now = (new Date()).getTime();
@@ -1274,7 +1350,7 @@
        window.addEventListener('orientationchange', handleViewportChange);
        handleViewportChange();
 
-       // Touch feedback for buttons
+       // Touch feedback
        document.addEventListener('touchstart', function(e) {
            if (e.target.classList.contains('btn') || e.target.classList.contains('nav-tab')) {
                e.target.style.transform = 'scale(0.98)';
@@ -1289,37 +1365,47 @@
            }
        });
 
-       // === System Initialization ===
+       // === SYSTEM INITIALIZATION ===
        document.addEventListener('DOMContentLoaded', function() {
+           console.log('🚀 Initializing system...');
+           
+           // Load data first
            loadAllData();
+           
+           // Update UI
            updateOverview();
            updateUsageSelects();
            checkStockLevels();
            setDefaultDates();
            addDataManagementSection();
            
-           // Start Firebase sync
+           // Initialize Firebase with delay to ensure DOM is ready
            setTimeout(() => {
-               startFirebaseListener();
-               syncToFirebase();
+               if (farmSystemData.settings.firebaseSync) {
+                   initializeFirebase();
+               } else {
+                   updateSyncStatus('offline', 'Firebase ปิดใช้งาน');
+               }
            }, 1000);
            
-           console.log('📱 Mobile Farm App with Firebase พร้อมใช้งาน');
+           console.log('✅ System initialized successfully');
            
            if (isStandalone) {
-               document.getElementById('manualInstall').style.display = 'none';
+               const installBtn = document.getElementById('manualInstall');
+               if (installBtn) installBtn.style.display = 'none';
            }
        });
 
        function setDefaultDates() {
            const today = new Date().toISOString().split('T')[0];
-           document.getElementById('pigEntryDate').value = today;
-           document.getElementById('feedPurchaseDate').value = today;
-           document.getElementById('medicalPurchaseDate').value = today;
-           document.getElementById('saleDate').value = today;
+           const dateInputs = ['pigEntryDate', 'feedPurchaseDate', 'medicalPurchaseDate', 'saleDate'];
+           dateInputs.forEach(id => {
+               const element = document.getElementById(id);
+               if (element) element.value = today;
+           });
        }
 
-       // === Navigation Functions ===
+       // === NAVIGATION FUNCTIONS ===
        function showSection(sectionName) {
            document.querySelectorAll('.content-section').forEach(section => {
                section.classList.remove('active');
@@ -1328,11 +1414,18 @@
                tab.classList.remove('active');
            });
 
-           document.getElementById(sectionName).classList.add('active');
-           event.target.classList.add('active');
+           const targetSection = document.getElementById(sectionName);
+           if (targetSection) {
+               targetSection.classList.add('active');
+           }
+           
+           if (event && event.target) {
+               event.target.classList.add('active');
+           }
 
            window.scrollTo(0, 0);
 
+           // Section-specific updates
            switch(sectionName) {
                case 'overview':
                    updateOverview();
@@ -1359,6 +1452,8 @@
 
        function showAlert(message, type = 'success') {
            const alertEl = document.getElementById('alertMessage');
+           if (!alertEl) return;
+           
            alertEl.textContent = message;
            alertEl.className = `alert alert-${type}`;
            alertEl.classList.remove('hidden');
@@ -1370,662 +1465,726 @@
            alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
        }
 
-       // Online/offline status handlers
-       window.addEventListener('online', function() {
-           showAlert('🌐 เชื่อมต่ออินเทอร์เน็ตแล้ว', 'success');
-           setTimeout(() => {
-               startFirebaseListener();
-               syncToFirebase();
-           }, 1000);
-       });
-
-       window.addEventListener('offline', function() {
-           showAlert('📴 ไม่มีการเชื่อมต่ออินเทอร์เน็ต แต่แอปยังใช้งานได้', 'warning');
-           updateSyncStatus('offline', 'ออฟไลน์');
-       });
-
-       // Auto-save every 30 seconds
-       setInterval(saveAllData, 30000);
-       // === Pig Management Functions ===
-        function addPig() {
-            const pigType = document.getElementById('pigType').value;
-            const quantity = parseInt(document.getElementById('pigQuantity').value);
-            const entryDate = document.getElementById('pigEntryDate').value;
-            const weight = parseFloat(document.getElementById('pigWeight').value) || 0;
-            const age = parseInt(document.getElementById('pigAge').value) || 0;
-            const notes = document.getElementById('pigNotes').value;
-
-            if (!pigType || !quantity || !entryDate) {
-                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
-                return;
-            }
-
-            const newPig = {
-                id: Date.now(),
-                type: pigType,
-                quantity: quantity,
-                entryDate: entryDate,
-                weight: weight,
-                age: age,
-                notes: notes,
-                createdDate: new Date().toISOString()
-            };
-
-            farmData.pigs.push(newPig);
-            saveAllData();
-            displayPigs();
-            updateOverview();
-            clearPigForm();
-            showAlert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
-        }
-
-        function clearPigForm() {
-            document.getElementById('pigType').value = '';
-            document.getElementById('pigQuantity').value = '';
-            document.getElementById('pigWeight').value = '';
-            document.getElementById('pigAge').value = '';
-            document.getElementById('pigNotes').value = '';
-            document.getElementById('pigEntryDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function displayPigs() {
-            const container = document.getElementById('pigsList');
-            if (farmData.pigs.length === 0) {
-                container.innerHTML = '<p>ยังไม่มีข้อมูลสุกร</p>';
-                return;
-            }
-
-            const typeNames = {
-                'sow': 'แม่พันธุ์',
-                'boar': 'พ่อพันธุ์',
-                'piglet': 'ลูกสุกร',
-                'grower': 'สุกรรุ่น',
-                'finisher': 'สุกรขุน'
-            };
-
-            let html = '<div class="table-container"><table class="table"><thead><tr><th>ประเภท</th><th>จำนวน</th><th>น้ำหนัก</th><th>อายุ</th><th>วันที่เข้าฟาร์ม</th><th>การจัดการ</th></tr></thead><tbody>';
-
-            farmData.pigs.forEach(pig => {
-                html += `
-                <tr>
-                    <td>${typeNames[pig.type]}</td>
-                    <td>${pig.quantity} ตัว</td>
-                    <td>${pig.weight > 0 ? pig.weight + ' กก.' : '-'}</td>
-                    <td>${pig.age > 0 ? pig.age + ' วัน' : '-'}</td>
-                    <td>${new Date(pig.entryDate).toLocaleDateString('th-TH')}</td>
-                    <td>
-                        <button class="btn btn-small btn-danger" onclick="deletePig(${pig.id})">🗑️ ลบ</button>
-                    </td>
-                </tr>
-                `;
-            });
-
-            html += '</tbody></table></div>';
-            container.innerHTML = html;
-        }
-
-        function deletePig(id) {
-            if (confirm('ต้องการลบข้อมูลสุกรนี้หรือไม่?')) {
-                farmData.pigs = farmData.pigs.filter(pig => pig.id !== id);
-                saveAllData();
-                displayPigs();
-                updateOverview();
-                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
-            }
-        }
-
-        // === Feed Management Functions ===
-        function addFeed() {
-            const feedType = document.getElementById('feedType').value;
-            const brand = document.getElementById('feedBrand').value;
-            const quantity = parseFloat(document.getElementById('feedQuantity').value);
-            const price = parseFloat(document.getElementById('feedPrice').value);
-            const purchaseDate = document.getElementById('feedPurchaseDate').value;
-            const expiryDate = document.getElementById('feedExpiryDate').value;
-
-            if (!feedType || !brand || !quantity || !price || !purchaseDate) {
-                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
-                return;
-            }
-
-            const newFeed = {
-                id: Date.now(),
-                type: feedType,
-                brand: brand,
-                quantity: quantity,
-                originalQuantity: quantity,
-                price: price,
-                purchaseDate: purchaseDate,
-                expiryDate: expiryDate,
-                createdDate: new Date().toISOString()
-            };
-
-            farmData.feeds.push(newFeed);
-            saveAllData();
-            displayFeeds();
-            updateUsageSelects();
-            checkStockLevels();
-            clearFeedForm();
-            showAlert('เพิ่มอาหารเข้าสต็อกเรียบร้อยแล้ว');
-        }
-
-        function clearFeedForm() {
-            document.getElementById('feedType').value = '';
-            document.getElementById('feedBrand').value = '';
-            document.getElementById('feedQuantity').value = '';
-            document.getElementById('feedPrice').value = '';
-            document.getElementById('feedExpiryDate').value = '';
-            document.getElementById('feedPurchaseDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function displayFeeds() {
-            const container = document.getElementById('feedStock');
-            if (farmData.feeds.length === 0) {
-                container.innerHTML = '<p>ยังไม่มีข้อมูลอาหาร</p>';
-                return;
-            }
-
-            const feedTypes = {
-                'prestarter': 'Pre-Starter',
-                'starter': 'Starter',
-                'grower': 'Grower',
-                'finisher': 'Finisher',
-                'sow': 'อาหารแม่พันธุ์',
-                'boar': 'อาหารพ่อพันธุ์'
-            };
-
-            let html = '';
-            farmData.feeds.forEach(feed => {
-                const totalValue = feed.quantity * feed.price;
-                const stockStatus = getStockStatus(feed.quantity, 'feed');
-                const daysRemaining = calculateDaysRemaining(feed.quantity, 'feed');
-
-                html += `
-                <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
-                    <div class="stock-info">
-                        <div class="stock-name">🌾 ${feedTypes[feed.type]} - ${feed.brand}</div>
-                        <div class="stock-details">คงเหลือ: ${feed.quantity} กก. จาก ${feed.originalQuantity} กก.</div>
-                        <div class="stock-details">💰 ราคา: ${feed.price} บาท/กก. | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
-                        <div class="stock-details">📅 วันที่ซื้อ: ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')} ${feed.expiryDate ? '| หมดอายุ: ' + new Date(feed.expiryDate).toLocaleDateString('th-TH') : ''}</div>
-                        <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
-                    </div>
-                    <div class="stock-actions">
-                        <button class="btn btn-small btn-warning" onclick="restockFeed(${feed.id})">➕ เติมสต็อก</button>
-                        <button class="btn btn-small btn-danger" onclick="deleteFeed(${feed.id})">🗑️ ลบ</button>
-                    </div>
-                </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function restockFeed(id) {
-            const feed = farmData.feeds.find(f => f.id === id);
-            if (feed) {
-                const additionalStock = prompt('เพิ่มสต็อกเท่าไหร่ (กิโลกรัม)?');
-                if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
-                    feed.quantity += parseFloat(additionalStock);
-                    feed.originalQuantity += parseFloat(additionalStock);
-                    saveAllData();
-                    displayFeeds();
-                    checkStockLevels();
-                    showAlert('เติมสต็อกอาหารเรียบร้อยแล้ว');
-                }
-            }
-        }
-
-        function deleteFeed(id) {
-            if (confirm('ต้องการลบอาหารนี้หรือไม่?')) {
-                farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
-                saveAllData();
-                displayFeeds();
-                updateUsageSelects();
-                checkStockLevels();
-                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
-            }
-        }
-
-        // === Medical Management Functions ===
-        function addMedical() {
-            const type = document.getElementById('medicalType').value;
-            const name = document.getElementById('medicalName').value;
-            const brand = document.getElementById('medicalBrand').value;
-            const quantity = parseInt(document.getElementById('medicalQuantity').value);
-            const unit = document.getElementById('medicalUnit').value;
-            const price = parseFloat(document.getElementById('medicalPrice').value);
-            const purchaseDate = document.getElementById('medicalPurchaseDate').value;
-            const expiryDate = document.getElementById('medicalExpiryDate').value;
-
-            if (!type || !name || !quantity || !unit || !price || !purchaseDate) {
-                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
-                return;
-            }
-
-            const newMedical = {
-                id: Date.now(),
-                type: type,
-                name: name,
-                brand: brand,
-                quantity: quantity,
-                originalQuantity: quantity,
-                unit: unit,
-                price: price,
-                purchaseDate: purchaseDate,
-                expiryDate: expiryDate,
-                createdDate: new Date().toISOString()
-            };
-
-            farmData.medical.push(newMedical);
-            saveAllData();
-            displayMedical();
-            updateUsageSelects();
-            checkStockLevels();
-            clearMedicalForm();
-            showAlert('เพิ่มยา/วัคซีนเข้าสต็อกเรียบร้อยแล้ว');
-        }
-
-        function clearMedicalForm() {
-            document.getElementById('medicalType').value = '';
-            document.getElementById('medicalName').value = '';
-            document.getElementById('medicalBrand').value = '';
-            document.getElementById('medicalQuantity').value = '';
-            document.getElementById('medicalUnit').value = '';
-            document.getElementById('medicalPrice').value = '';
-            document.getElementById('medicalExpiryDate').value = '';
-            document.getElementById('medicalPurchaseDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function displayMedical() {
-            const container = document.getElementById('medicalStock');
-            if (farmData.medical.length === 0) {
-                container.innerHTML = '<p>ยังไม่มีข้อมูลยาและวัคซีน</p>';
-                return;
-            }
-
-            const medicalTypes = {
-                'vaccine': 'วัคซีน',
-                'antibiotic': 'ยาปฏิชีวนะ',
-                'vitamin': 'วิตามิน',
-                'deworming': 'ยาถ่ายพยาธิ',
-                'hormone': 'ฮอร์โมน',
-                'supplement': 'อาหารเสริม',
-                'disinfectant': 'ยาฆ่าเชื้อ'
-            };
-
-            let html = '';
-            farmData.medical.forEach(med => {
-                const totalValue = med.quantity * med.price;
-                const stockStatus = getStockStatus(med.quantity, 'medical');
-                const daysRemaining = calculateDaysRemaining(med.quantity, 'medical');
-
-                html += `
-                <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
-                    <div class="stock-info">
-                        <div class="stock-name">💊 ${medicalTypes[med.type]} - ${med.name}</div>
-                        <div class="stock-details">${med.brand ? 'ยี่ห้อ: ' + med.brand + ' | ' : ''}คงเหลือ: ${med.quantity} ${med.unit} จาก ${med.originalQuantity} ${med.unit}</div>
-                        <div class="stock-details">💰 ราคา: ${med.price} บาท/${med.unit} | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
-                        <div class="stock-details">📅 วันที่ซื้อ: ${new Date(med.purchaseDate).toLocaleDateString('th-TH')} ${med.expiryDate ? '| หมดอายุ: ' + new Date(med.expiryDate).toLocaleDateString('th-TH') : ''}</div>
-                        <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
-                    </div>
-                    <div class="stock-actions">
-                        <button class="btn btn-small btn-warning" onclick="restockMedical(${med.id})">➕ เติมสต็อก</button>
-                        <button class="btn btn-small btn-danger" onclick="deleteMedical(${med.id})">🗑️ ลบ</button>
-                    </div>
-                </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function restockMedical(id) {
-            const medical = farmData.medical.find(m => m.id === id);
-            if (medical) {
-                const additionalStock = prompt(`เพิ่มสต็อกเท่าไหร่ (${medical.unit})?`);
-                if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
-                    medical.quantity += parseFloat(additionalStock);
-                    medical.originalQuantity += parseFloat(additionalStock);
-                    saveAllData();
-                    displayMedical();
-                    checkStockLevels();
-                    showAlert('เติมสต็อกยา/วัคซีนเรียบร้อยแล้ว');
-                }
-            }
-        }
-
-        function deleteMedical(id) {
-            if (confirm('ต้องการลบยา/วัคซีนนี้หรือไม่?')) {
-                farmData.medical = farmData.medical.filter(med => med.id !== id);
-                saveAllData();
-                displayMedical();
-                updateUsageSelects();
-                checkStockLevels();
-                showAlert('ลบข้อมูลเรียบร้อยแล้ว');
-            }
-        }
-
-        // === Daily Usage Management ===
-        function updateUsageSelects() {
-            const feedSelect = document.getElementById('useFeedSelect');
-            feedSelect.innerHTML = '<option value="">เลือกอาหารที่ต้องการใช้</option>';
-
-            farmData.feeds.forEach(feed => {
-                if (feed.quantity > 0) {
-                    const feedTypes = {
-                        'prestarter': 'Pre-Starter',
-                        'starter': 'Starter',
-                        'grower': 'Grower',
-                        'finisher': 'Finisher',
-                        'sow': 'อาหารแม่พันธุ์',
-                        'boar': 'อาหารพ่อพันธุ์'
-                    };
-                    feedSelect.innerHTML += `<option value="${feed.id}">${feedTypes[feed.type]} - ${feed.brand} (คงเหลือ: ${feed.quantity} กก.)</option>`;
-                }
-            });
-
-            const medicalSelect = document.getElementById('useMedicalSelect');
-            medicalSelect.innerHTML = '<option value="">เลือกยา/วัคซีนที่ต้องการใช้</option>';
-
-            farmData.medical.forEach(med => {
-                if (med.quantity > 0) {
-                    const medicalTypes = {
-                        'vaccine': 'วัคซีน',
-                        'antibiotic': 'ยาปฏิชีวนะ',
-                        'vitamin': 'วิตามิน',
-                        'deworming': 'ยาถ่ายพยาธิ',
-                        'hormone': 'ฮอร์โมน',
-                        'supplement': 'อาหารเสริม',
-                        'disinfectant': 'ยาฆ่าเชื้อ'
-                    };
-                    medicalSelect.innerHTML += `<option value="${med.id}">${medicalTypes[med.type]} - ${med.name} (คงเหลือ: ${med.quantity} ${med.unit})</option>`;
-                }
-            });
-        }
-
-        function useFeed() {
-            const feedId = document.getElementById('useFeedSelect').value;
-            const amount = parseFloat(document.getElementById('useFeedAmount').value);
-
-            if (!feedId || !amount || amount <= 0) {
-                showAlert('กรุณาเลือกอาหารและระบุจำนวนที่ถูกต้อง', 'error');
-                return;
-            }
-
-            const feed = farmData.feeds.find(f => f.id == feedId);
-            if (!feed) {
-                showAlert('ไม่พบอาหารที่เลือก', 'error');
-                return;
-            }
-
-            if (amount > feed.quantity) {
-                showAlert(`อาหารคงเหลือไม่เพียงพอ (คงเหลือ: ${feed.quantity} กก.)`, 'error');
-                return;
-            }
-
-            const usage = {
-                id: Date.now(),
-                type: 'feed',
-                itemId: feedId,
-                itemName: `${feed.type} - ${feed.brand}`,
-                amount: amount,
-                unit: 'กก.',
-                date: new Date().toISOString().split('T')[0],
-                time: new Date().toISOString()
-            };
-
-            farmData.usage.push(usage);
-            feed.quantity -= amount;
-            saveAllData();
-            updateUsageSelects();
-            displayFeeds();
-            displayTodayUsage();
-            checkStockLevels();
-
-            document.getElementById('useFeedSelect').value = '';
-            document.getElementById('useFeedAmount').value = '';
-            showAlert(`ใช้อาหาร ${amount} กก. เรียบร้อยแล้ว`);
-        }
-
-        function useMedical() {
-            const medicalId = document.getElementById('useMedicalSelect').value;
-            const amount = parseFloat(document.getElementById('useMedicalAmount').value);
-
-            if (!medicalId || !amount || amount <= 0) {
-                showAlert('กรุณาเลือกยา/วัคซีนและระบุจำนวนที่ถูกต้อง', 'error');
-                return;
-            }
-
-            const medical = farmData.medical.find(m => m.id == medicalId);
-            if (!medical) {
-                showAlert('ไม่พบยา/วัคซีนที่เลือก', 'error');
-                return;
-            }
-
-            if (amount > medical.quantity) {
-                showAlert(`ยา/วัคซีนคงเหลือไม่เพียงพอ (คงเหลือ: ${medical.quantity} ${medical.unit})`, 'error');
-                return;
-            }
-
-            const usage = {
-                id: Date.now(),
-                type: 'medical',
-                itemId: medicalId,
-                itemName: `${medical.type} - ${medical.name}`,
-                amount: amount,
-                unit: medical.unit,
-                date: new Date().toISOString().split('T')[0],
-                time: new Date().toISOString()
-            };
-
-            farmData.usage.push(usage);
-            medical.quantity -= amount;
-            saveAllData();
-            updateUsageSelects();
-            displayMedical();
-            displayTodayUsage();
-            checkStockLevels();
-
-            document.getElementById('useMedicalSelect').value = '';
-            document.getElementById('useMedicalAmount').value = '';
-            showAlert(`ใช้ยา/วัคซีน ${amount} ${medical.unit} เรียบร้อยแล้ว`);
-        }
-
-        function displayTodayUsage() {
-            const container = document.getElementById('todayUsage');
-            const today = new Date().toISOString().split('T')[0];
-            const todayUsage = farmData.usage.filter(usage => usage.date === today);
-
-            if (todayUsage.length === 0) {
-                container.innerHTML = '<p>ยังไม่มีการใช้งานวันนี้</p>';
-                return;
-            }
-
-            let html = '<div class="table-container"><table class="table"><thead><tr><th>⏰ เวลา</th><th>📋 ประเภท</th><th>📦 รายการ</th><th>🔢 จำนวน</th></tr></thead><tbody>';
-
-            todayUsage.forEach(usage => {
-                const time = new Date(usage.time).toLocaleTimeString('th-TH');
-                const typeText = usage.type === 'feed' ? '🌾 อาหาร' : '💊 ยา/วัคซีน';
-
-                html += `
-                <tr>
-                    <td>${time}</td>
-                    <td>${typeText}</td>
-                    <td>${usage.itemName}</td>
-                    <td>${usage.amount} ${usage.unit}</td>
-                </tr>
-                `;
-            });
-
-            html += '</tbody></table></div>';
-            container.innerHTML = html;
-        }
-
-        // === Stock Warning System ===
-        function getStockStatus(quantity, type) {
-            const threshold = LOW_STOCK_THRESHOLD[type === 'feed' ? 'feeds' : 'medical'];
-            if (quantity <= 0) return 'empty';
-            if (quantity <= threshold) return 'low';
-            return 'normal';
-        }
-
-        function getStockStatusText(status, daysRemaining) {
-            switch(status) {
-                case 'empty':
-                    return '🔴 สินค้าหมด';
-                case 'low':
-                    return `🟡 สต็อกต่ำ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
-                case 'normal':
-                    return `🟢 สต็อกปกติ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
-                default:
-                    return '❓ ไม่ทราบสถานะ';
-            }
-        }
-
-        function calculateDaysRemaining(quantity, type) {
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-            const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
-
-            const recentUsage = farmData.usage.filter(usage =>
-                usage.type === type && usage.date >= sevenDaysAgoStr
-            );
-
-            const totalUsed = recentUsage.reduce((sum, usage) => sum + usage.amount, 0);
-            const dailyAverage = totalUsed / 7;
-
-            if (dailyAverage <= 0) return null;
-            return Math.floor(quantity / dailyAverage);
-        }
-
-        function checkStockLevels() {
-            const warnings = [];
-
-            farmData.feeds.forEach(feed => {
-                const status = getStockStatus(feed.quantity, 'feed');
-                if (status === 'low' || status === 'empty') {
-                    const feedTypes = {
-                        'prestarter': 'Pre-Starter',
-                        'starter': 'Starter',
-                        'grower': 'Grower',
-                        'finisher': 'Finisher',
-                        'sow': 'อาหารแม่พันธุ์',
-                        'boar': 'อาหารพ่อพันธุ์'
-                    };
-                    warnings.push({
-                        type: 'warning',
-                        message: `🌾 ${feedTypes[feed.type]} - ${feed.brand} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${feed.quantity} กก.)`
-                    });
-                }
-            });
-
-            farmData.medical.forEach(med => {
-                const status = getStockStatus(med.quantity, 'medical');
-                if (status === 'low' || status === 'empty') {
-                    const medicalTypes = {
-                        'vaccine': 'วัคซีน',
-                        'antibiotic': 'ยาปฏิชีวนะ',
-                        'vitamin': 'วิตามิน',
-                        'deworming': 'ยาถ่ายพยาธิ',
-                        'hormone': 'ฮอร์โมน',
-                        'supplement': 'อาหารเสริม',
-                        'disinfectant': 'ยาฆ่าเชื้อ'
-                    };
-                    warnings.push({
-                        type: 'warning',
-                        message: `💊 ${medicalTypes[med.type]} - ${med.name} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${med.quantity} ${med.unit})`
-                    });
-                }
-            });
-
-            const warningsContainer = document.getElementById('stockWarnings');
-            if (warnings.length > 0) {
-                let html = '<div class="alert alert-warning"><strong>⚠️ แจ้งเตือนสต็อก:</strong><ul style="margin: 10px 0; padding-left: 20px;">';
-                warnings.forEach(warning => {
-                    html += `<li>${warning.message}</li>`;
-                });
-                html += '</ul></div>';
-                warningsContainer.innerHTML = html;
-            } else {
-                warningsContainer.innerHTML = '';
-            }
-        }
-
-        // === Sales Management ===
-        function addSale() {
-            const date = document.getElementById('saleDate').value;
-            const type = document.getElementById('saleType').value;
-            const quantity = parseInt(document.getElementById('saleQuantity').value);
-            const weight = parseFloat(document.getElementById('saleWeight').value) || 0;
-            const pricePerKg = parseFloat(document.getElementById('salePricePerKg').value);
-            const transportCost = parseFloat(document.getElementById('saleTransportCost').value) || 0;
-            const buyer = document.getElementById('saleBuyer').value;
-            const notes = document.getElementById('saleNotes').value;
-
-            if (!date || !type || !quantity || !pricePerKg) {
-                showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
-                return;
-            }
-
-            const totalRevenue = weight * pricePerKg;
-            const netRevenue = totalRevenue - transportCost;
-
-            const newSale = {
-                id: Date.now(),
-                date: date,
-                type: type,
-                quantity: quantity,
-                weight: weight,
-                pricePerKg: pricePerKg,
-                transportCost: transportCost,
-                totalRevenue: totalRevenue,
-                netRevenue: netRevenue,
-                buyer: buyer,
-                notes: notes,
-                createdDate: new Date().toISOString()
-            };
-
-            farmData.sales.push(newSale);
-            saveAllData();
-            displaySales();
-            updateOverview();
-            clearSaleForm();
-            showAlert('บันทึกการขายเรียบร้อยแล้ว');
-        }
-
-        function clearSaleForm() {
-            document.getElementById('saleType').value = '';
-            document.getElementById('saleQuantity').value = '';
-            document.getElementById('saleWeight').value = '';
-            document.getElementById('salePricePerKg').value = '';
-            document.getElementById('saleTransportCost').value = '';
-            document.getElementById('saleBuyer').value = '';
-            document.getElementById('saleNotes').value = '';
-            document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
-        }
-
-        function displaySales() {
-            const container = document.getElementById('salesHistory');
-            if (farmData.sales.length === 0) {
-                container.innerHTML = '<p>ยังไม่มีข้อมูลการขาย</p>';
-                return;
-            }
-
-            const saleTypes = {
-                'piglet': 'ลูกสุกร',
-                'grower': 'สุกรรุ่น',
-                'finisher': 'สุกรขุน',
-                'sow': 'แม่พันธุ์',
-                'boar': 'พ่อพันธุ์'
-            };
-
-            let html = '<table class="table"><thead><tr><th>📅 วันที่</th><th>🐷 ประเภท</th><th>🔢 จำนวน</th><th>⚖️ น้ำหนัก</th><th>💰 รายได้สุทธิ</th><th>👤 ผู้ซื้อ</th><th>🔧 การจัดการ</th></tr></thead><tbody>';
+       // === PIG MANAGEMENT FUNCTIONS ===
+       function addPig() {
+           try {
+               const pigType = document.getElementById('pigType').value;
+               const quantity = parseInt(document.getElementById('pigQuantity').value);
+               const entryDate = document.getElementById('pigEntryDate').value;
+               const weight = parseFloat(document.getElementById('pigWeight').value) || 0;
+               const age = parseInt(document.getElementById('pigAge').value) || 0;
+               const notes = document.getElementById('pigNotes').value;
+
+               if (!pigType || !quantity || !entryDate) {
+                   showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+                   return;
+               }
+
+               const newPig = {
+                   id: Date.now(),
+                   type: pigType,
+                   quantity: quantity,
+                   entryDate: entryDate,
+                   weight: weight,
+                   age: age,
+                   notes: notes,
+                   createdDate: new Date().toISOString()
+               };
+
+               farmData.pigs.push(newPig);
+               saveAllData();
+               displayPigs();
+               updateOverview();
+               clearPigForm();
+               showAlert('เพิ่มข้อมูลสุกรเรียบร้อยแล้ว');
+               
+           } catch (error) {
+               console.error('❌ Add pig failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการเพิ่มสุกร กรุณาลองใหม่', 'error');
+           }
+       }
+
+       function clearPigForm() {
+           const fields = ['pigType', 'pigQuantity', 'pigWeight', 'pigAge', 'pigNotes'];
+           fields.forEach(id => {
+               const element = document.getElementById(id);
+               if (element) element.value = '';
+           });
+           const today = new Date().toISOString().split('T')[0];
+           const dateField = document.getElementById('pigEntryDate');
+           if (dateField) dateField.value = today;
+       }
+
+       function displayPigs() {
+           const container = document.getElementById('pigsList');
+           if (!container) return;
+           
+           if (farmData.pigs.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลสุกร</p>';
+               return;
+           }
+
+           const typeNames = {
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์',
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน'
+           };
+
+           let html = '<div class="table-container"><table class="table"><thead><tr><th>ประเภท</th><th>จำนวน</th><th>น้ำหนัก</th><th>อายุ</th><th>วันที่เข้าฟาร์ม</th><th>การจัดการ</th></tr></thead><tbody>';
+
+           farmData.pigs.forEach(pig => {
+               html += `
+               <tr>
+                   <td>${typeNames[pig.type] || pig.type}</td>
+                   <td>${pig.quantity} ตัว</td>
+                   <td>${pig.weight > 0 ? pig.weight + ' กก.' : '-'}</td>
+                   <td>${pig.age > 0 ? pig.age + ' วัน' : '-'}</td>
+                   <td>${new Date(pig.entryDate).toLocaleDateString('th-TH')}</td>
+                   <td>
+                       <button class="btn btn-small btn-danger" onclick="deletePig(${pig.id})">🗑️ ลบ</button>
+                   </td>
+               </tr>
+               `;
+           });
+
+           html += '</tbody></table></div>';
+           container.innerHTML = html;
+       }
+
+       function deletePig(id) {
+           if (confirm('ต้องการลบข้อมูลสุกรนี้หรือไม่?')) {
+               try {
+                   farmData.pigs = farmData.pigs.filter(pig => pig.id !== id);
+                   saveAllData();
+                   displayPigs();
+                   updateOverview();
+                   showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+               } catch (error) {
+                   console.error('❌ Delete pig failed:', error);
+                   showAlert('เกิดข้อผิดพลาดในการลบข้อมูล', 'error');
+               }
+           }
+       }
+
+       // === FEED MANAGEMENT FUNCTIONS ===
+       function addFeed() {
+           try {
+               const feedType = document.getElementById('feedType').value;
+               const brand = document.getElementById('feedBrand').value;
+               const quantity = parseFloat(document.getElementById('feedQuantity').value);
+               const price = parseFloat(document.getElementById('feedPrice').value);
+               const purchaseDate = document.getElementById('feedPurchaseDate').value;
+               const expiryDate = document.getElementById('feedExpiryDate').value;
+
+               if (!feedType || !brand || !quantity || !price || !purchaseDate) {
+                   showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+                   return;
+               }
+
+               const newFeed = {
+                   id: Date.now(),
+                   type: feedType,
+                   brand: brand,
+                   quantity: quantity,
+                   originalQuantity: quantity,
+                   price: price,
+                   purchaseDate: purchaseDate,
+                   expiryDate: expiryDate,
+                   createdDate: new Date().toISOString()
+               };
+
+               farmData.feeds.push(newFeed);
+               saveAllData();
+               displayFeeds();
+               updateUsageSelects();
+               checkStockLevels();
+               clearFeedForm();
+               showAlert('เพิ่มอาหารเข้าสต็อกเรียบร้อยแล้ว');
+               
+           } catch (error) {
+               console.error('❌ Add feed failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการเพิ่มอาหาร กรุณาลองใหม่', 'error');
+           }
+       }
+
+       function clearFeedForm() {
+           const fields = ['feedType', 'feedBrand', 'feedQuantity', 'feedPrice', 'feedExpiryDate'];
+           fields.forEach(id => {
+               const element = document.getElementById(id);
+               if (element) element.value = '';
+           });
+           const today = new Date().toISOString().split('T')[0];
+           const dateField = document.getElementById('feedPurchaseDate');
+           if (dateField) dateField.value = today;
+       }
+
+       function displayFeeds() {
+           const container = document.getElementById('feedStock');
+           if (!container) return;
+           
+           if (farmData.feeds.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลอาหาร</p>';
+               return;
+           }
+
+           const feedTypes = {
+               'prestarter': 'Pre-Starter',
+               'starter': 'Starter',
+               'grower': 'Grower',
+               'finisher': 'Finisher',
+               'sow': 'อาหารแม่พันธุ์',
+               'boar': 'อาหารพ่อพันธุ์'
+           };
+
+           let html = '';
+           farmData.feeds.forEach(feed => {
+               const totalValue = feed.quantity * feed.price;
+               const stockStatus = getStockStatus(feed.quantity, 'feed');
+               const daysRemaining = calculateDaysRemaining(feed.quantity, 'feed');
+
+               html += `
+               <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
+                   <div class="stock-info">
+                       <div class="stock-name">🌾 ${feedTypes[feed.type] || feed.type} - ${feed.brand}</div>
+                       <div class="stock-details">คงเหลือ: ${feed.quantity} กก. จาก ${feed.originalQuantity} กก.</div>
+                       <div class="stock-details">💰 ราคา: ${feed.price} บาท/กก. | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
+                       <div class="stock-details">📅 วันที่ซื้อ: ${new Date(feed.purchaseDate).toLocaleDateString('th-TH')} ${feed.expiryDate ? '| หมดอายุ: ' + new Date(feed.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                       <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
+                   </div>
+                   <div class="stock-actions">
+                       <button class="btn btn-small btn-warning" onclick="restockFeed(${feed.id})">➕ เติมสต็อก</button>
+                       <button class="btn btn-small btn-danger" onclick="deleteFeed(${feed.id})">🗑️ ลบ</button>
+                   </div>
+               </div>
+               `;
+           });
+
+           container.innerHTML = html;
+       }
+
+       function restockFeed(id) {
+           const feed = farmData.feeds.find(f => f.id === id);
+           if (feed) {
+               const additionalStock = prompt('เพิ่มสต็อกเท่าไหร่ (กิโลกรัม)?');
+               if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
+                   try {
+                       feed.quantity += parseFloat(additionalStock);
+                       feed.originalQuantity += parseFloat(additionalStock);
+                       saveAllData();
+                       displayFeeds();
+                       checkStockLevels();
+                       showAlert('เติมสต็อกอาหารเรียบร้อยแล้ว');
+                   } catch (error) {
+                       console.error('❌ Restock feed failed:', error);
+                       showAlert('เกิดข้อผิดพลาดในการเติมสต็อก', 'error');
+                   }
+               }
+           }
+       }
+
+       function deleteFeed(id) {
+           if (confirm('ต้องการลบอาหารนี้หรือไม่?')) {
+               try {
+                   farmData.feeds = farmData.feeds.filter(feed => feed.id !== id);
+                   saveAllData();
+                   displayFeeds();
+                   updateUsageSelects();
+                   checkStockLevels();
+                   showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+               } catch (error) {
+                   console.error('❌ Delete feed failed:', error);
+                   showAlert('เกิดข้อผิดพลาดในการลบข้อมูล', 'error');
+               }
+           }
+       }
+
+       // === MEDICAL MANAGEMENT FUNCTIONS ===
+       function addMedical() {
+           try {
+               const type = document.getElementById('medicalType').value;
+               const name = document.getElementById('medicalName').value;
+               const brand = document.getElementById('medicalBrand').value;
+               const quantity = parseInt(document.getElementById('medicalQuantity').value);
+               const unit = document.getElementById('medicalUnit').value;
+               const price = parseFloat(document.getElementById('medicalPrice').value);
+               const purchaseDate = document.getElementById('medicalPurchaseDate').value;
+               const expiryDate = document.getElementById('medicalExpiryDate').value;
+
+               if (!type || !name || !quantity || !unit || !price || !purchaseDate) {
+                   showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+                   return;
+               }
+
+               const newMedical = {
+                   id: Date.now(),
+                   type: type,
+                   name: name,
+                   brand: brand,
+                   quantity: quantity,
+                   originalQuantity: quantity,
+                   unit: unit,
+                   price: price,
+                   purchaseDate: purchaseDate,
+                   expiryDate: expiryDate,
+                   createdDate: new Date().toISOString()
+               };
+
+               farmData.medical.push(newMedical);
+               saveAllData();
+               displayMedical();
+               updateUsageSelects();
+               checkStockLevels();
+               clearMedicalForm();
+               showAlert('เพิ่มยา/วัคซีนเข้าสต็อกเรียบร้อยแล้ว');
+               
+           } catch (error) {
+               console.error('❌ Add medical failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการเพิ่มยา กรุณาลองใหม่', 'error');
+           }
+       }
+
+       function clearMedicalForm() {
+           const fields = ['medicalType', 'medicalName', 'medicalBrand', 'medicalQuantity', 'medicalUnit', 'medicalPrice', 'medicalExpiryDate'];
+           fields.forEach(id => {
+               const element = document.getElementById(id);
+               if (element) element.value = '';
+           });
+           const today = new Date().toISOString().split('T')[0];
+           const dateField = document.getElementById('medicalPurchaseDate');
+           if (dateField) dateField.value = today;
+       }
+
+       function displayMedical() {
+           const container = document.getElementById('medicalStock');
+           if (!container) return;
+           
+           if (farmData.medical.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลยาและวัคซีน</p>';
+               return;
+           }
+
+           const medicalTypes = {
+               'vaccine': 'วัคซีน',
+               'antibiotic': 'ยาปฏิชีวนะ',
+               'vitamin': 'วิตามิน',
+               'deworming': 'ยาถ่ายพยาธิ',
+               'hormone': 'ฮอร์โมน',
+               'supplement': 'อาหารเสริม',
+               'disinfectant': 'ยาฆ่าเชื้อ'
+           };
+
+           let html = '';
+           farmData.medical.forEach(med => {
+               const totalValue = med.quantity * med.price;
+               const stockStatus = getStockStatus(med.quantity, 'medical');
+               const daysRemaining = calculateDaysRemaining(med.quantity, 'medical');
+
+               html += `
+               <div class="stock-item ${stockStatus === 'empty' ? 'out-of-stock' : stockStatus === 'low' ? 'low-stock' : ''}">
+                   <div class="stock-info">
+                       <div class="stock-name">💊 ${medicalTypes[med.type] || med.type} - ${med.name}</div>
+                       <div class="stock-details">${med.brand ? 'ยี่ห้อ: ' + med.brand + ' | ' : ''}คงเหลือ: ${med.quantity} ${med.unit} จาก ${med.originalQuantity} ${med.unit}</div>
+                       <div class="stock-details">💰 ราคา: ${med.price} บาท/${med.unit} | มูลค่าคงเหลือ: ${totalValue.toLocaleString()} บาท</div>
+                       <div class="stock-details">📅 วันที่ซื้อ: ${new Date(med.purchaseDate).toLocaleDateString('th-TH')} ${med.expiryDate ? '| หมดอายุ: ' + new Date(med.expiryDate).toLocaleDateString('th-TH') : ''}</div>
+                       <div class="stock-status ${stockStatus}">${getStockStatusText(stockStatus, daysRemaining)}</div>
+                   </div>
+                   <div class="stock-actions">
+                       <button class="btn btn-small btn-warning" onclick="restockMedical(${med.id})">➕ เติมสต็อก</button>
+                       <button class="btn btn-small btn-danger" onclick="deleteMedical(${med.id})">🗑️ ลบ</button>
+                   </div>
+               </div>
+               `;
+           });
+
+           container.innerHTML = html;
+       }
+
+       function restockMedical(id) {
+           const medical = farmData.medical.find(m => m.id === id);
+           if (medical) {
+               const additionalStock = prompt(`เพิ่มสต็อกเท่าไหร่ (${medical.unit})?`);
+               if (additionalStock && !isNaN(additionalStock) && parseFloat(additionalStock) > 0) {
+                   try {
+                       medical.quantity += parseFloat(additionalStock);
+                       medical.originalQuantity += parseFloat(additionalStock);
+                       saveAllData();
+                       displayMedical();
+                       checkStockLevels();
+                       showAlert('เติมสต็อกยา/วัคซีนเรียบร้อยแล้ว');
+                   } catch (error) {
+                       console.error('❌ Restock medical failed:', error);
+                       showAlert('เกิดข้อผิดพลาดในการเติมสต็อก', 'error');
+                   }
+               }
+           }
+       }
+
+       function deleteMedical(id) {
+           if (confirm('ต้องการลบยา/วัคซีนนี้หรือไม่?')) {
+               try {
+                   farmData.medical = farmData.medical.filter(med => med.id !== id);
+                   saveAllData();
+                   displayMedical();
+                   updateUsageSelects();
+                   checkStockLevels();
+                   showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+               } catch (error) {
+                   console.error('❌ Delete medical failed:', error);
+                   showAlert('เกิดข้อผิดพลาดในการลบข้อมูล', 'error');
+               }
+           }
+       }
+
+       // === USAGE MANAGEMENT ===
+       function updateUsageSelects() {
+           const feedSelect = document.getElementById('useFeedSelect');
+           const medicalSelect = document.getElementById('useMedicalSelect');
+           
+           if (feedSelect) {
+               feedSelect.innerHTML = '<option value="">เลือกอาหารที่ต้องการใช้</option>';
+               farmData.feeds.forEach(feed => {
+                   if (feed.quantity > 0) {
+                       const feedTypes = {
+                           'prestarter': 'Pre-Starter',
+                           'starter': 'Starter',
+                           'grower': 'Grower',
+                           'finisher': 'Finisher',
+                           'sow': 'อาหารแม่พันธุ์',
+                           'boar': 'อาหารพ่อพันธุ์'
+                       };
+                       feedSelect.innerHTML += `<option value="${feed.id}">${feedTypes[feed.type] || feed.type} - ${feed.brand} (คงเหลือ: ${feed.quantity} กก.)</option>`;
+                   }
+               });
+           }
+
+           if (medicalSelect) {
+               medicalSelect.innerHTML = '<option value="">เลือกยา/วัคซีนที่ต้องการใช้</option>';
+               farmData.medical.forEach(med => {
+                   if (med.quantity > 0) {
+                       const medicalTypes = {
+                           'vaccine': 'วัคซีน',
+                           'antibiotic': 'ยาปฏิชีวนะ',
+                           'vitamin': 'วิตามิน',
+                           'deworming': 'ยาถ่ายพยาธิ',
+                           'hormone': 'ฮอร์โมน',
+                           'supplement': 'อาหารเสริม',
+                           'disinfectant': 'ยาฆ่าเชื้อ'
+                       };
+                       medicalSelect.innerHTML += `<option value="${med.id}">${medicalTypes[med.type] || med.type} - ${med.name} (คงเหลือ: ${med.quantity} ${med.unit})</option>`;
+                   }
+               });
+           }
+       }
+
+       function useFeed() {
+           try {
+               const feedId = document.getElementById('useFeedSelect').value;
+               const amount = parseFloat(document.getElementById('useFeedAmount').value);
+
+               if (!feedId || !amount || amount <= 0) {
+                   showAlert('กรุณาเลือกอาหารและระบุจำนวนที่ถูกต้อง', 'error');
+                   return;
+               }
+
+               const feed = farmData.feeds.find(f => f.id == feedId);
+               if (!feed) {
+                   showAlert('ไม่พบอาหารที่เลือก', 'error');
+                   return;
+               }
+
+               if (amount > feed.quantity) {
+                   showAlert(`อาหารคงเหลือไม่เพียงพอ (คงเหลือ: ${feed.quantity} กก.)`, 'error');
+                   return;
+               }
+
+               const usage = {
+                   id: Date.now(),
+                   type: 'feed',
+                   itemId: feedId,
+                   itemName: `${feed.type} - ${feed.brand}`,
+                   amount: amount,
+                   unit: 'กก.',
+                   date: new Date().toISOString().split('T')[0],
+                   time: new Date().toISOString()
+               };
+
+               farmData.usage.push(usage);
+               feed.quantity -= amount;
+               saveAllData();
+               updateUsageSelects();
+               displayFeeds();
+               displayTodayUsage();
+               checkStockLevels();
+
+               document.getElementById('useFeedSelect').value = '';
+               document.getElementById('useFeedAmount').value = '';
+               showAlert(`ใช้อาหาร ${amount} กก. เรียบร้อยแล้ว`);
+               
+           } catch (error) {
+               console.error('❌ Use feed failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการใช้อาหาร', 'error');
+           }
+       }
+
+       function useMedical() {
+           try {
+               const medicalId = document.getElementById('useMedicalSelect').value;
+               const amount = parseFloat(document.getElementById('useMedicalAmount').value);
+
+               if (!medicalId || !amount || amount <= 0) {
+                   showAlert('กรุณาเลือกยา/วัคซีนและระบุจำนวนที่ถูกต้อง', 'error');
+                   return;
+               }
+
+               const medical = farmData.medical.find(m => m.id == medicalId);
+               if (!medical) {
+                   showAlert('ไม่พบยา/วัคซีนที่เลือก', 'error');
+                   return;
+               }
+
+               if (amount > medical.quantity) {
+                   showAlert(`ยา/วัคซีนคงเหลือไม่เพียงพอ (คงเหลือ: ${medical.quantity} ${medical.unit})`, 'error');
+                   return;
+               }
+
+               const usage = {
+                   id: Date.now(),
+                   type: 'medical',
+                   itemId: medicalId,
+                   itemName: `${medical.type} - ${medical.name}`,
+                   amount: amount,
+                   unit: medical.unit,
+                   date: new Date().toISOString().split('T')[0],
+                   time: new Date().toISOString()
+               };
+
+               farmData.usage.push(usage);
+               medical.quantity -= amount;
+               saveAllData();
+               updateUsageSelects();
+               displayMedical();
+               displayTodayUsage();
+               checkStockLevels();
+
+               document.getElementById('useMedicalSelect').value = '';
+               document.getElementById('useMedicalAmount').value = '';
+               showAlert(`ใช้ยา/วัคซีน ${amount} ${medical.unit} เรียบร้อยแล้ว`);
+               
+           } catch (error) {
+               console.error('❌ Use medical failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการใช้ยา', 'error');
+           }
+       }
+
+       function displayTodayUsage() {
+           const container = document.getElementById('todayUsage');
+           if (!container) return;
+           
+           const today = new Date().toISOString().split('T')[0];
+           const todayUsage = farmData.usage.filter(usage => usage.date === today);
+
+           if (todayUsage.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีการใช้งานวันนี้</p>';
+               return;
+           }
+
+           let html = '<div class="table-container"><table class="table"><thead><tr><th>⏰ เวลา</th><th>📋 ประเภท</th><th>📦 รายการ</th><th>🔢 จำนวน</th></tr></thead><tbody>';
+
+           todayUsage.forEach(usage => {
+               const time = new Date(usage.time).toLocaleTimeString('th-TH');
+               const typeText = usage.type === 'feed' ? '🌾 อาหาร' : '💊 ยา/วัคซีน';
+
+               html += `
+               <tr>
+                   <td>${time}</td>
+                   <td>${typeText}</td>
+                   <td>${usage.itemName}</td>
+                   <td>${usage.amount} ${usage.unit}</td>
+               </tr>
+               `;
+           });
+
+           html += '</tbody></table></div>';
+           container.innerHTML = html;
+       }
+
+       // === STOCK WARNING SYSTEM ===
+       function getStockStatus(quantity, type) {
+           const threshold = LOW_STOCK_THRESHOLD[type === 'feed' ? 'feeds' : 'medical'];
+           if (quantity <= 0) return 'empty';
+           if (quantity <= threshold) return 'low';
+           return 'normal';
+       }
+
+       function getStockStatusText(status, daysRemaining) {
+           switch(status) {
+               case 'empty':
+                   return '🔴 สินค้าหมด';
+               case 'low':
+                   return `🟡 สต็อกต่ำ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
+               case 'normal':
+                   return `🟢 สต็อกปกติ ${daysRemaining ? '(พอใช้ ' + daysRemaining + ' วัน)' : ''}`;
+               default:
+                   return '❓ ไม่ทราบสถานะ';
+           }
+       }
+
+       function calculateDaysRemaining(quantity, type) {
+           const sevenDaysAgo = new Date();
+           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+           const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
+
+           const recentUsage = farmData.usage.filter(usage =>
+               usage.type === type && usage.date >= sevenDaysAgoStr
+           );
+
+           const totalUsed = recentUsage.reduce((sum, usage) => sum + usage.amount, 0);
+           const dailyAverage = totalUsed / 7;
+
+           if (dailyAverage <= 0) return null;
+           return Math.floor(quantity / dailyAverage);
+       }
+
+       function checkStockLevels() {
+           const warnings = [];
+
+           farmData.feeds.forEach(feed => {
+               const status = getStockStatus(feed.quantity, 'feed');
+               if (status === 'low' || status === 'empty') {
+                   const feedTypes = {
+                       'prestarter': 'Pre-Starter',
+                       'starter': 'Starter',
+                       'grower': 'Grower',
+                       'finisher': 'Finisher',
+                       'sow': 'อาหารแม่พันธุ์',
+                       'boar': 'อาหารพ่อพันธุ์'
+                   };
+                   warnings.push({
+                       type: 'warning',
+                       message: `🌾 ${feedTypes[feed.type] || feed.type} - ${feed.brand} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${feed.quantity} กก.)`
+                   });
+               }
+           });
+
+           farmData.medical.forEach(med => {
+               const status = getStockStatus(med.quantity, 'medical');
+               if (status === 'low' || status === 'empty') {
+                   const medicalTypes = {
+                       'vaccine': 'วัคซีน',
+                       'antibiotic': 'ยาปฏิชีวนะ',
+                       'vitamin': 'วิตามิน',
+                       'deworming': 'ยาถ่ายพยาธิ',
+                       'hormone': 'ฮอร์โมน',
+                       'supplement': 'อาหารเสริม',
+                       'disinfectant': 'ยาฆ่าเชื้อ'
+                   };
+                   warnings.push({
+                       type: 'warning',
+                       message: `💊 ${medicalTypes[med.type] || med.type} - ${med.name} ${status === 'empty' ? 'หมด' : 'เหลือน้อย'} (${med.quantity} ${med.unit})`
+                   });
+               }
+           });
+
+           const warningsContainer = document.getElementById('stockWarnings');
+           if (warningsContainer) {
+               if (warnings.length > 0) {
+                   let html = '<div class="alert alert-warning"><strong>⚠️ แจ้งเตือนสต็อก:</strong><ul style="margin: 10px 0; padding-left: 20px;">';
+                   warnings.forEach(warning => {
+                       html += `<li>${warning.message}</li>`;
+                   });
+                   html += '</ul></div>';
+                   warningsContainer.innerHTML = html;
+               } else {
+                   warningsContainer.innerHTML = '';
+               }
+           }
+       }
+
+       // === SALES MANAGEMENT ===
+       function addSale() {
+           try {
+               const date = document.getElementById('saleDate').value;
+               const type = document.getElementById('saleType').value;
+               const quantity = parseInt(document.getElementById('saleQuantity').value);
+               const weight = parseFloat(document.getElementById('saleWeight').value) || 0;
+               const pricePerKg = parseFloat(document.getElementById('salePricePerKg').value);
+               const transportCost = parseFloat(document.getElementById('saleTransportCost').value) || 0;
+               const buyer = document.getElementById('saleBuyer').value;
+               const notes = document.getElementById('saleNotes').value;
+
+               if (!date || !type || !quantity || !pricePerKg) {
+                   showAlert('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 'error');
+                   return;
+               }
+
+               const totalRevenue = weight * pricePerKg;
+               const netRevenue = totalRevenue - transportCost;
+
+               const newSale = {
+                   id: Date.now(),
+                   date: date,
+                   type: type,
+                   quantity: quantity,
+                   weight: weight,
+                   pricePerKg: pricePerKg,
+                   transportCost: transportCost,
+                   totalRevenue: totalRevenue,
+                   netRevenue: netRevenue,
+                   buyer: buyer,
+                   notes: notes,
+                   createdDate: new Date().toISOString()
+               };
+
+               farmData.sales.push(newSale);
+               saveAllData();
+               displaySales();
+               updateOverview();
+               clearSaleForm();
+               showAlert('บันทึกการขายเรียบร้อยแล้ว');
+               
+           } catch (error) {
+               console.error('❌ Add sale failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการบันทึกการขาย', 'error');
+           }
+       }
+
+       function clearSaleForm() {
+           const fields = ['saleType', 'saleQuantity', 'saleWeight', 'salePricePerKg', 'saleTransportCost', 'saleBuyer', 'saleNotes'];
+           fields.forEach(id => {
+               const element = document.getElementById(id);
+               if (element) element.value = '';
+           });
+           const today = new Date().toISOString().split('T')[0];
+           const dateField = document.getElementById('saleDate');
+           if (dateField) dateField.value = today;
+       }
+
+       function displaySales() {
+           const container = document.getElementById('salesHistory');
+           if (!container) return;
+           
+           if (farmData.sales.length === 0) {
+               container.innerHTML = '<p>ยังไม่มีข้อมูลการขาย</p>';
+               return;
+           }
+
+           const saleTypes = {
+               'piglet': 'ลูกสุกร',
+               'grower': 'สุกรรุ่น',
+               'finisher': 'สุกรขุน',
+               'sow': 'แม่พันธุ์',
+               'boar': 'พ่อพันธุ์'
+           };
+
+           let html = '<table class="table"><thead><tr><th>📅 วันที่</th><th>🐷 ประเภท</th><th>🔢 จำนวน</th><th>⚖️ น้ำหนัก</th><th>💰 รายได้สุทธิ</th><th>👤 ผู้ซื้อ</th><th>🔧 การจัดการ</th></tr></thead><tbody>';
 
            farmData.sales.forEach(sale => {
                html += `
                <tr>
                    <td>${new Date(sale.date).toLocaleDateString('th-TH')}</td>
-                   <td>${saleTypes[sale.type]}</td>
+                   <td>${saleTypes[sale.type] || sale.type}</td>
                    <td>${sale.quantity} ตัว</td>
                    <td>${sale.weight > 0 ? sale.weight + ' กก.' : '-'}</td>
                    <td>${sale.netRevenue.toLocaleString()} บาท</td>
@@ -2043,91 +2202,120 @@
 
        function deleteSale(id) {
            if (confirm('ต้องการลบข้อมูลการขายนี้หรือไม่?')) {
-               farmData.sales = farmData.sales.filter(sale => sale.id !== id);
-               saveAllData();
-               displaySales();
-               updateOverview();
-               showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+               try {
+                   farmData.sales = farmData.sales.filter(sale => sale.id !== id);
+                   saveAllData();
+                   displaySales();
+                   updateOverview();
+                   showAlert('ลบข้อมูลเรียบร้อยแล้ว');
+               } catch (error) {
+                   console.error('❌ Delete sale failed:', error);
+                   showAlert('เกิดข้อผิดพลาดในการลบข้อมูล', 'error');
+               }
            }
        }
 
-       // === Overview Update ===
+       // === OVERVIEW UPDATE ===
        function updateOverview() {
-           const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
-           const feedItems = farmData.feeds.length;
-           const medicalItems = farmData.medical.length;
-           const lowStockFeeds = farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal');
-           const lowStockMedical = farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal');
-           const lowStockTotal = lowStockFeeds.length + lowStockMedical.length;
+           try {
+               const totalPigs = farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0);
+               const feedItems = farmData.feeds.length;
+               const medicalItems = farmData.medical.length;
+               const lowStockFeeds = farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal');
+               const lowStockMedical = farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal');
+               const lowStockTotal = lowStockFeeds.length + lowStockMedical.length;
 
-           document.getElementById('totalPigs').textContent = totalPigs || '-';
-           document.getElementById('feedItems').textContent = feedItems || '-';
-           document.getElementById('medicalItems').textContent = medicalItems || '-';
-           document.getElementById('lowStockItems').textContent = lowStockTotal || '-';
+               // Update stat cards
+               const statElements = {
+                   'totalPigs': totalPigs || '-',
+                   'feedItems': feedItems || '-',
+                   'medicalItems': medicalItems || '-',
+                   'lowStockItems': lowStockTotal || '-'
+               };
 
-           const summaryContainer = document.getElementById('stockSummary');
-           if (farmData.feeds.length > 0 || farmData.medical.length > 0 || farmData.usage.length > 0) {
-               const totalFeedValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
-               const totalMedicalValue = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
-               const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
+               Object.keys(statElements).forEach(id => {
+                   const element = document.getElementById(id);
+                   if (element) element.textContent = statElements[id];
+               });
 
-               const today = new Date().toISOString().split('T')[0];
-               const todayUsage = farmData.usage.filter(usage => usage.date === today);
-               const todayFeedUsage = todayUsage.filter(u => u.type === 'feed').reduce((sum, u) => sum + u.amount, 0);
-               const todayMedicalUsage = todayUsage.filter(u => u.type === 'medical').reduce((sum, u) => sum + u.amount, 0);
+               // Update summary
+               const summaryContainer = document.getElementById('stockSummary');
+               if (summaryContainer) {
+                   if (farmData.feeds.length > 0 || farmData.medical.length > 0 || farmData.usage.length > 0) {
+                       const totalFeedValue = farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0);
+                       const totalMedicalValue = farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0);
+                       const totalSales = farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0);
 
-               summaryContainer.innerHTML = `
-               <div class="form-grid">
-                   <div>
-                       <h4>💰 มูลค่าสต็อกคงเหลือ</h4>
-                       <p><strong>🌾 อาหาร:</strong> ${totalFeedValue.toLocaleString()} บาท</p>
-                       <p><strong>💊 ยาและวัคซีน:</strong> ${totalMedicalValue.toLocaleString()} บาท</p>
-                       <p><strong>💵 รวมทั้งหมด:</strong> ${(totalFeedValue + totalMedicalValue).toLocaleString()} บาท</p>
-                   </div>
-                   <div>
-                       <h4>📊 การใช้งานวันนี้</h4>
-                       <p><strong>🌾 อาหารที่ใช้:</strong> ${todayFeedUsage.toLocaleString()} กก.</p>
-                       <p><strong>💊 ยาที่ใช้:</strong> ${todayMedicalUsage} หน่วย</p>
-                       <p><strong>💰 รายได้รวม:</strong> ${totalSales.toLocaleString()} บาท</p>
-                   </div>
-               </div>
-               <div style="margin-top: 20px;">
-                   <h4>📈 สถิติการใช้งาน</h4>
-                   <p><strong>📝 จำนวนรายการใช้งาน:</strong> ${farmData.usage.length} รายการ</p>
-                   <p><strong>⚠️ รายการที่ต้องเติมสต็อก:</strong> ${lowStockTotal} รายการ</p>
-                   <p><strong>🔄 Firebase Status:</strong> ${isFirebaseConnected ? '🟢 เชื่อมต่อแล้ว' : '🔴 ออฟไลน์'}</p>
-                   <p><strong>🕐 อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
-               </div>
-               `;
-           } else {
-               summaryContainer.innerHTML = '<p>🚀 ระบบพร้อมใช้งาน กรุณาเริ่มบันทึกข้อมูล</p>';
+                       const today = new Date().toISOString().split('T')[0];
+                       const todayUsage = farmData.usage.filter(usage => usage.date === today);
+                       const todayFeedUsage = todayUsage.filter(u => u.type === 'feed').reduce((sum, u) => sum + u.amount, 0);
+                       const todayMedicalUsage = todayUsage.filter(u => u.type === 'medical').reduce((sum, u) => sum + u.amount, 0);
+
+                       summaryContainer.innerHTML = `
+                       <div class="form-grid">
+                           <div>
+                               <h4>💰 มูลค่าสต็อกคงเหลือ</h4>
+                               <p><strong>🌾 อาหาร:</strong> ${totalFeedValue.toLocaleString()} บาท</p>
+                               <p><strong>💊 ยาและวัคซีน:</strong> ${totalMedicalValue.toLocaleString()} บาท</p>
+                               <p><strong>💵 รวมทั้งหมด:</strong> ${(totalFeedValue + totalMedicalValue).toLocaleString()} บาท</p>
+                           </div>
+                           <div>
+                               <h4>📊 การใช้งานวันนี้</h4>
+                               <p><strong>🌾 อาหารที่ใช้:</strong> ${todayFeedUsage.toLocaleString()} กก.</p>
+                               <p><strong>💊 ยาที่ใช้:</strong> ${todayMedicalUsage} หน่วย</p>
+                               <p><strong>💰 รายได้รวม:</strong> ${totalSales.toLocaleString()} บาท</p>
+                           </div>
+                       </div>
+                       <div style="margin-top: 20px;">
+                           <h4>📈 สถิติการใช้งาน</h4>
+                           <p><strong>📝 จำนวนรายการใช้งาน:</strong> ${farmData.usage.length} รายการ</p>
+                           <p><strong>⚠️ รายการที่ต้องเติมสต็อก:</strong> ${lowStockTotal} รายการ</p>
+                           <p><strong>🔄 ระบบ:</strong> ${isFirebaseConnected ? '🟢 Firebase เชื่อมต่อ' : '🟡 localStorage เท่านั้น'}</p>
+                           <p><strong>🕐 อัพเดทล่าสุด:</strong> ${new Date().toLocaleString('th-TH')}</p>
+                       </div>
+                       `;
+                   } else {
+                       summaryContainer.innerHTML = '<p>🚀 ระบบพร้อมใช้งาน กรุณาเริ่มบันทึกข้อมูล</p>';
+                   }
+               }
+           } catch (error) {
+               console.error('❌ Update overview failed:', error);
            }
        }
 
-       // === Report Generation ===
+       // === REPORT GENERATION ===
        function generateReport() {
-           const type = document.getElementById('reportType').value;
-           const container = document.getElementById('reportResults');
+           try {
+               const type = document.getElementById('reportType').value;
+               const container = document.getElementById('reportResults');
 
-           switch(type) {
-               case 'overview':
-                   generateOverviewReport(container);
-                   break;
-               case 'stock':
-                   generateStockReport(container);
-                   break;
-               case 'usage':
-                   generateUsageReport(container);
-                   break;
-               case 'financial':
-                   generateFinancialReport(container);
-                   break;
-               case 'livestock':
-                   generateLivestockReport(container);
-                   break;
-               case 'sales':
-                   generateSalesReport(container);
-                   break;
+               if (!container) return;
+
+               switch(type) {
+                   case 'overview':
+                       generateOverviewReport(container);
+                       break;
+                   case 'stock':
+                       generateStockReport(container);
+                       break;
+                   case 'usage':
+                       generateUsageReport(container);
+                       break;
+                   case 'financial':
+                       generateFinancialReport(container);
+                       break;
+                   case 'livestock':
+                       generateLivestockReport(container);
+                       break;
+                   case 'sales':
+                       generateSalesReport(container);
+                       break;
+                   default:
+                       container.innerHTML = '<p>กรุณาเลือกประเภทรายงาน</p>';
+               }
+           } catch (error) {
+               console.error('❌ Generate report failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการสร้างรายงาน', 'error');
            }
        }
 
@@ -2145,7 +2333,7 @@
                        <h4>🐷 สถิติสุกร</h4>
                        <p>🔢 จำนวนสุกรทั้งหมด: ${totalPigs} ตัว</p>
                        <p>👥 จำนวนกลุ่ม: ${farmData.pigs.length} กลุ่ม</p>
-                       <p>🔄 Firebase Status: ${isFirebaseConnected ? '🟢 เชื่อมต่อ' : '🔴 ออฟไลน์'}</p>
+                       <p>🔄 สถานะระบบ: ${isFirebaseConnected ? '🟢 Firebase' : '🟡 localStorage'}</p>
                    </div>
                    <div>
                        <h4>💰 สถิติการเงิน</h4>
@@ -2189,40 +2377,9 @@
                        <p>⚠️ รายการที่ต้องเติม: ${lowStockItems.length} รายการ</p>
                    </div>
                </div>
+           </div>
            `;
 
-           if (lowStockItems.length > 0) {
-               html += `
-               <div style="margin-top: 20px;">
-                   <h4>⚠️ รายการที่ต้องเติมสต็อก</h4>
-                   <div class="table-container">
-                       <table class="table">
-                           <thead>
-                               <tr><th>📋 ประเภท</th><th>📦 ชื่อ</th><th>🔢 คงเหลือ</th><th>⚠️ สถานะ</th></tr>
-                           </thead>
-                           <tbody>
-               `;
-
-               lowStockItems.forEach(item => {
-                   const isFood = item.hasOwnProperty('brand');
-                   const status = getStockStatus(item.quantity, isFood ? 'feed' : 'medical');
-                   const statusText = status === 'empty' ? '🔴 หมด' : '🟡 ต่ำ';
-                   const typeIcon = isFood ? '🌾' : '💊';
-
-                   html += `
-                   <tr>
-                       <td>${typeIcon} ${isFood ? 'อาหาร' : 'ยา/วัคซีน'}</td>
-                       <td>${isFood ? item.brand : item.name}</td>
-                       <td>${item.quantity} ${isFood ? 'กก.' : item.unit}</td>
-                       <td>${statusText}</td>
-                   </tr>
-                   `;
-               });
-
-               html += '</tbody></table></div>';
-           }
-
-           html += '</div>';
            container.innerHTML = html;
        }
 
@@ -2240,65 +2397,10 @@
            const avgFeedPerDay = totalFeedUsed / 30;
            const avgMedicalPerDay = totalMedicalUsed / 30;
 
-           const usageByDate = {};
-           recentUsage.forEach(usage => {
-               if (!usageByDate[usage.date]) {
-                   usageByDate[usage.date] = [];
-               }
-               usageByDate[usage.date].push(usage);
-           });
-
-           const sortedDates = Object.keys(usageByDate).sort().reverse();
-           let tableHTML = '';
-
-           if (sortedDates.length === 0) {
-               tableHTML = `
-               <tr>
-                   <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
-                       ไม่มีข้อมูลการใช้งานใน 30 วันล่าสุด
-                   </td>
-               </tr>
-               `;
-           } else {
-               sortedDates.forEach((date, dateIndex) => {
-                   const dateUsage = usageByDate[date];
-                   const formattedDate = new Date(date).toLocaleDateString('th-TH');
-
-                   dateUsage.forEach((usage, usageIndex) => {
-                       const typeText = usage.type === 'feed' ? '🌾 อาหาร' : '💊 ยา/วัคซีน';
-                       const timeText = new Date(usage.time).toLocaleTimeString('th-TH', {
-                           hour: '2-digit',
-                           minute: '2-digit'
-                       });
-                       const isFirstRowOfDate = usageIndex === 0;
-
-                       tableHTML += `
-                       <tr style="border-bottom: 1px solid #f0f0f0;">
-                           <td style="${isFirstRowOfDate ? 'border-left: 4px solid #3498db; font-weight: 600;' : 'padding-left: 20px; color: #999;'}">${isFirstRowOfDate ? formattedDate : ''}</td>
-                           <td>
-                               <span style="display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; ${usage.type === 'feed' ? 'background: #e8f5e8; color: #27ae60;' : 'background: #fef9e7; color: #f39c12;'}">${typeText}</span>
-                           </td>
-                           <td style="font-weight: 500;">${usage.itemName}</td>
-                           <td style="text-align: right; font-weight: 600;">${usage.amount} ${usage.unit}</td>
-                           <td style="color: #666; font-size: 14px;">${timeText}</td>
-                       </tr>
-                       `;
-                   });
-
-                   if (dateIndex < sortedDates.length - 1) {
-                       tableHTML += `
-                       <tr>
-                           <td colspan="5" style="height: 8px; background: #f8f9fa; border: none;"></td>
-                       </tr>
-                       `;
-                   }
-               });
-           }
-
            container.innerHTML = `
            <div class="card">
                <div class="card-title">📊 รายงานการใช้งาน (30 วันล่าสุด)</div>
-               <div class="form-grid" style="margin-bottom: 30px;">
+               <div class="form-grid">
                    <div>
                        <h4>🌾 การใช้อาหาร</h4>
                        <p><strong>ใช้รวม:</strong> ${totalFeedUsed.toLocaleString()} กก.</p>
@@ -2310,25 +2412,6 @@
                        <p><strong>ใช้รวม:</strong> ${totalMedicalUsed.toLocaleString()} หน่วย</p>
                        <p><strong>เฉลี่ยต่อวัน:</strong> ${avgMedicalPerDay.toFixed(1)} หน่วย</p>
                        <p><strong>จำนวนครั้ง:</strong> ${medicalUsage.length} ครั้ง</p>
-                   </div>
-               </div>
-               <div style="margin-top: 30px;">
-                   <h4>📋 รายละเอียดการใช้งานแยกตามวัน</h4>
-                   <div class="table-container" style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 12px; margin-top: 15px;">
-                       <table class="table" style="margin: 0;">
-                           <thead style="position: sticky; top: 0; background: #34495e; z-index: 10;">
-                               <tr>
-                                   <th style="width: 120px; color: white;">📅 วันที่</th>
-                                   <th style="width: 120px; color: white;">📋 ประเภท</th>
-                                   <th style="min-width: 250px; color: white;">📦 รายการ</th>
-                                   <th style="width: 100px; color: white;">🔢 จำนวน</th>
-                                   <th style="width: 80px; color: white;">⏰ เวลา</th>
-                               </tr>
-                           </thead>
-                           <tbody>
-                               ${tableHTML}
-                           </tbody>
-                       </table>
                    </div>
                </div>
            </div>
@@ -2363,7 +2446,6 @@
                    <p><strong>💎 กำไร/ขาดทุนสุทธิ: ${profit.toLocaleString()} บาท</strong></p>
                    <p>📊 อัตรากำไร: ${totalSales > 0 ? (profit / totalSales * 100).toFixed(2) : 0}%</p>
                    <p>📋 ต้นทุนต่อรายได้: ${totalSales > 0 ? (totalCosts / totalSales * 100).toFixed(2) : 0}%</p>
-                   <p>🔄 Firebase Sync: ${isFirebaseConnected ? '✅ เชื่อมต่อ' : '❌ ออฟไลน์'}</p>
                </div>
            </div>
            `;
@@ -2389,7 +2471,20 @@
                'finisher': '🥩 สุกรขุน'
            };
 
-           let html = `
+           let tableHtml = '';
+           Object.keys(pigsByType).forEach(type => {
+               const percentage = totalPigs > 0 ? (pigsByType[type].total / totalPigs * 100).toFixed(1) : 0;
+               tableHtml += `
+               <tr>
+                   <td>${typeNames[type] || type}</td>
+                   <td>${pigsByType[type].count}</td>
+                   <td>${pigsByType[type].total}</td>
+                   <td>${percentage}%</td>
+               </tr>
+               `;
+           });
+
+           container.innerHTML = `
            <div class="card">
                <div class="card-title">🐷 รายงานสุกร</div>
                <div class="table-container">
@@ -2398,21 +2493,7 @@
                            <tr><th>🐷 ประเภทสุกร</th><th>👥 จำนวนกลุ่ม</th><th>🔢 จำนวนตัว</th><th>📊 เปอร์เซ็นต์</th></tr>
                        </thead>
                        <tbody>
-           `;
-
-           Object.keys(pigsByType).forEach(type => {
-               const percentage = totalPigs > 0 ? (pigsByType[type].total / totalPigs * 100).toFixed(1) : 0;
-               html += `
-               <tr>
-                   <td>${typeNames[type]}</td>
-                   <td>${pigsByType[type].count}</td>
-                   <td>${pigsByType[type].total}</td>
-                   <td>${percentage}%</td>
-               </tr>
-               `;
-           });
-
-           html += `
+                           ${tableHtml}
                        </tbody>
                    </table>
                </div>
@@ -2422,8 +2503,6 @@
                </div>
            </div>
            `;
-
-           container.innerHTML = html;
        }
 
        function generateSalesReport(container) {
@@ -2450,7 +2529,20 @@
                'boar': '🐗 พ่อพันธุ์'
            };
 
-           let html = `
+           let tableHtml = '';
+           Object.keys(salesByType).forEach(type => {
+               const percentage = totalRevenue > 0 ? (salesByType[type].revenue / totalRevenue * 100).toFixed(1) : 0;
+               tableHtml += `
+               <tr>
+                   <td>${saleTypes[type] || type}</td>
+                   <td>${salesByType[type].quantity}</td>
+                   <td>${salesByType[type].revenue.toLocaleString()}</td>
+                   <td>${percentage}%</td>
+               </tr>
+               `;
+           });
+
+           container.innerHTML = `
            <div class="card">
                <div class="card-title">💰 รายงานการขาย</div>
                <div class="table-container">
@@ -2459,21 +2551,7 @@
                            <tr><th>🐷 ประเภทสุกร</th><th>🔢 จำนวนตัว</th><th>💰 รายได้ (บาท)</th><th>📊 เปอร์เซ็นต์</th></tr>
                        </thead>
                        <tbody>
-           `;
-
-           Object.keys(salesByType).forEach(type => {
-               const percentage = totalRevenue > 0 ? (salesByType[type].revenue / totalRevenue * 100).toFixed(1) : 0;
-               html += `
-               <tr>
-                   <td>${saleTypes[type]}</td>
-                   <td>${salesByType[type].quantity}</td>
-                   <td>${salesByType[type].revenue.toLocaleString()}</td>
-                   <td>${percentage}%</td>
-               </tr>
-               `;
-           });
-
-           html += `
+                           ${tableHtml}
                        </tbody>
                    </table>
                </div>
@@ -2485,55 +2563,63 @@
                </div>
            </div>
            `;
-
-           container.innerHTML = html;
        }
 
        function exportReport() {
-           const reportData = {
-               exportDate: new Date().toISOString(),
-               version: SYSTEM_VERSION,
-               firebaseConnected: isFirebaseConnected,
-               farmData: farmData,
-               summary: {
-                   totalPigs: farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0),
-                   totalSales: farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0),
-                   totalStockValue: farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
-                                    farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0),
-                   lowStockItems: [
-                       ...farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal'),
-                       ...farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal')
-                   ].length
-               }
-           };
+           try {
+               const reportData = {
+                   exportDate: new Date().toISOString(),
+                   version: SYSTEM_VERSION,
+                   firebaseConnected: isFirebaseConnected,
+                   farmData: farmData,
+                   summary: {
+                       totalPigs: farmData.pigs.reduce((sum, pig) => sum + pig.quantity, 0),
+                       totalSales: farmData.sales.reduce((sum, sale) => sum + sale.netRevenue, 0),
+                       totalStockValue: farmData.feeds.reduce((sum, feed) => sum + (feed.quantity * feed.price), 0) +
+                                        farmData.medical.reduce((sum, med) => sum + (med.quantity * med.price), 0),
+                       lowStockItems: [
+                           ...farmData.feeds.filter(feed => getStockStatus(feed.quantity, 'feed') !== 'normal'),
+                           ...farmData.medical.filter(med => getStockStatus(med.quantity, 'medical') !== 'normal')
+                       ].length
+                   }
+               };
 
-           const blob = new Blob([JSON.stringify(reportData, null, 2)], {type: 'application/json'});
-           const url = URL.createObjectURL(blob);
-           const a = document.createElement('a');
-           a.href = url;
-           a.download = `farm-report-${new Date().toISOString().split('T')[0]}.json`;
-           a.click();
-           URL.revokeObjectURL(url);
-           showAlert('ส่งออกรายงานเรียบร้อยแล้ว');
+               const blob = new Blob([JSON.stringify(reportData, null, 2)], {type: 'application/json'});
+               const url = URL.createObjectURL(blob);
+               const a = document.createElement('a');
+               a.href = url;
+               a.download = `farm-report-${new Date().toISOString().split('T')[0]}.json`;
+               a.click();
+               URL.revokeObjectURL(url);
+               showAlert('ส่งออกรายงานเรียบร้อยแล้ว');
+           } catch (error) {
+               console.error('❌ Export report failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการส่งออกรายงาน', 'error');
+           }
        }
 
-       // === Data Management Functions ===
+       // === DATA MANAGEMENT FUNCTIONS ===
        function exportSystemData() {
-           const exportData = {
-               ...farmSystemData,
-               exportDate: new Date().toISOString(),
-               exportVersion: SYSTEM_VERSION,
-               firebaseConnected: isFirebaseConnected
-           };
+           try {
+               const exportData = {
+                   ...farmSystemData,
+                   exportDate: new Date().toISOString(),
+                   exportVersion: SYSTEM_VERSION,
+                   firebaseConnected: isFirebaseConnected
+               };
 
-           const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
-           const url = URL.createObjectURL(blob);
-           const a = document.createElement('a');
-           a.href = url;
-           a.download = `farm-data-v${SYSTEM_VERSION}-${new Date().toISOString().split('T')[0]}.json`;
-           a.click();
-           URL.revokeObjectURL(url);
-           showAlert('ส่งออกข้อมูลพร้อมข้อมูลเวอร์ชันเรียบร้อย', 'success');
+               const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
+               const url = URL.createObjectURL(blob);
+               const a = document.createElement('a');
+               a.href = url;
+               a.download = `farm-data-v${SYSTEM_VERSION}-${new Date().toISOString().split('T')[0]}.json`;
+               a.click();
+               URL.revokeObjectURL(url);
+               showAlert('ส่งออกข้อมูลเรียบร้อยแล้ว', 'success');
+           } catch (error) {
+               console.error('❌ Export data failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการส่งออกข้อมูล', 'error');
+           }
        }
 
        function importBackupData(fileInput) {
@@ -2557,8 +2643,8 @@
                        setTimeout(() => location.reload(), 1000);
                    }
                } catch (error) {
+                   console.error('❌ Import failed:', error);
                    showAlert('ไม่สามารถอ่านไฟล์ได้ กรุณาตรวจสอบรูปแบบไฟล์', 'error');
-                   console.error('Import error:', error);
                }
            };
            reader.readAsText(file);
@@ -2566,9 +2652,11 @@
 
        function addDataManagementSection() {
            const overviewSection = document.getElementById('overview');
+           if (!overviewSection) return;
+           
            const dataManagementHTML = `
            <div class="card">
-               <div class="card-title">⚙️ จัดการข้อมูลและสำรอง</div>
+               <div class="card-title">⚙️ จัดการข้อมูลและระบบ</div>
                <div class="form-grid">
                    <div>
                        <h4>ℹ️ ข้อมูลระบบ</h4>
@@ -2580,11 +2668,11 @@
                    </div>
                    <div>
                        <h4>🔧 การจัดการข้อมูล</h4>
-                       <button class="btn btn-primary" onclick="exportSystemData()">📤 ส่งออกข้อมูล + เวอร์ชัน</button>
+                       <button class="btn btn-primary" onclick="exportSystemData()">📤 ส่งออกข้อมูล</button>
                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupData(this)">
                        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 นำเข้าข้อมูล</button>
-                       <button class="btn btn-warning" onclick="syncToFirebase()">🔄 ซิงค์ Firebase</button>
-                       <button class="btn btn-danger" onclick="toggleFirebaseSync()">⚡ ${farmSystemData.settings.firebaseSync ? 'ปิด' : 'เปิด'} Firebase</button>
+                       <button class="btn btn-warning" onclick="forceSyncNow()">🔄 ซิงค์ทันที</button>
+                       <button class="btn ${farmSystemData.settings.firebaseSync ? 'btn-danger' : 'btn-success'}" onclick="toggleFirebaseSync()">${farmSystemData.settings.firebaseSync ? '⚡ ปิด Firebase' : '⚡ เปิด Firebase'}</button>
                    </div>
                </div>
            </div>
@@ -2592,89 +2680,52 @@
 
            const statsGrid = overviewSection.querySelector('.stats-grid');
            if (statsGrid) {
+               // Remove existing management section if any
+               const existingSection = overviewSection.querySelector('.card:last-child');
+               if (existingSection && existingSection.innerHTML.includes('จัดการข้อมูลและระบบ')) {
+                   existingSection.remove();
+               }
                statsGrid.insertAdjacentHTML('afterend', dataManagementHTML);
            }
        }
 
        function toggleFirebaseSync() {
-           farmSystemData.settings.firebaseSync = !farmSystemData.settings.firebaseSync;
-           saveAllData();
-           
-           if (farmSystemData.settings.firebaseSync) {
-               showAlert('เปิด Firebase Sync แล้ว', 'success');
-               startFirebaseListener();
-               syncToFirebase();
-           } else {
-               showAlert('ปิด Firebase Sync แล้ว', 'warning');
-               updateSyncStatus('offline', 'ปิด Firebase');
+           try {
+               farmSystemData.settings.firebaseSync = !farmSystemData.settings.firebaseSync;
+               
+               if (farmSystemData.settings.firebaseSync) {
+                   showAlert('🔄 เปิด Firebase Sync แล้ว กำลังเชื่อมต่อ...', 'success');
+                   isFirebaseEnabled = true;
+                   setTimeout(() => {
+                       initializeFirebase();
+                   }, 1000);
+               } else {
+                   showAlert('⚠️ ปิด Firebase Sync แล้ว ใช้ localStorage เท่านั้น', 'warning');
+                   isFirebaseEnabled = false;
+                   isFirebaseConnected = false;
+                   updateSyncStatus('offline', 'Firebase ปิดใช้งาน');
+               }
+               
+               saveAllData();
+               addDataManagementSection(); // Refresh the UI
+               
+           } catch (error) {
+               console.error('❌ Toggle Firebase failed:', error);
+               showAlert('เกิดข้อผิดพลาดในการเปลี่ยนแปลงการตั้งค่า', 'error');
+           }
+       }
+
+       function forceSyncNow() {
+           if (!isFirebaseEnabled) {
+               showAlert('Firebase ไม่ได้เปิดใช้งาน', 'warning');
+               return;
            }
            
-           // Refresh the management section
-           addDataManagementSection();
+           showAlert('🔄 กำลังซิงค์ข้อมูล...', 'success');
+           syncToFirebase();
        }
 
-       // === Mobile Optimizations ===
-       function optimizeForMobile() {
-           document.addEventListener('focusin', function(e) {
-               if (e.target.matches('input, select, textarea')) {
-                   document.body.style.position = 'fixed';
-                   document.body.style.width = '100%';
-               }
-           });
-
-           document.addEventListener('focusout', function(e) {
-               if (e.target.matches('input, select, textarea')) {
-                   document.body.style.position = '';
-                   document.body.style.width = '';
-               }
-           });
-
-           function hapticFeedback() {
-               if (navigator.vibrate) {
-                   navigator.vibrate(50);
-               }
-           }
-
-           document.addEventListener('click', function(e) {
-               if (e.target.matches('.btn, .nav-tab')) {
-                   hapticFeedback();
-               }
-           });
-
-           document.body.style.webkitOverflowScrolling = 'touch';
-
-           setTimeout(function() {
-               window.scrollTo(0, 1);
-           }, 100);
-       }
-
-       // === PWA Update Detection ===
-       if ('serviceWorker' in navigator) {
-           navigator.serviceWorker.addEventListener('controllerchange', function() {
-               if (confirm('🔄 มีการอัพเดทแอปใหม่ ต้องการรีเฟรชเพื่อใช้เวอร์ชันล่าสุดหรือไม่?')) {
-                   window.location.reload();
-               }
-           });
-       }
-
-       // Prevent zoom on double tap for better mobile experience
-       let lastTouchTime = 0;
-       document.addEventListener('touchend', function(event) {
-           const currentTime = new Date().getTime();
-           const tapLength = currentTime - lastTouchTime;
-           if (tapLength < 500 && tapLength > 0) {
-               event.preventDefault();
-           }
-           lastTouchTime = currentTime;
-       });
-
-       // Enhanced error handling
-       window.addEventListener('error', function(e) {
-           console.error('App Error:', e.error);
-           showAlert('เกิดข้อผิดพลาดในแอป กรุณาลองใหม่อีกครั้ง', 'error');
-       });
-
-       // === Manual Install Instructions ===
+       // === INSTALL INSTRUCTIONS ===
        function showInstallInstructions() {
            const userAgent = navigator.userAgent.toLowerCase();
            let instructions = '';
@@ -2690,15 +2741,43 @@
            alert(instructions);
        }
 
-       // ซ่อนปุ่มถ้าติดตั้งแล้ว
-       if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-           document.addEventListener('DOMContentLoaded', function() {
-               const installBtn = document.getElementById('manualInstall');
-               if (installBtn) installBtn.style.display = 'none';
-           });
-       }
+       // === ONLINE/OFFLINE HANDLERS ===
+       window.addEventListener('online', function() {
+           showAlert('🌐 เชื่อมต่ออินเทอร์เน็ตแล้ว', 'success');
+           if (farmSystemData.settings.firebaseSync && !isFirebaseConnected) {
+               setTimeout(() => {
+                   initializeFirebase();
+               }, 2000);
+           }
+       });
 
-       // === Swipe Gestures (Optional) ===
+       window.addEventListener('offline', function() {
+           showAlert('📴 ไม่มีการเชื่อมต่ออินเทอร์เน็ต แต่แอปยังใช้งานได้', 'warning');
+           isFirebaseConnected = false;
+           updateSyncStatus('offline', 'ออฟไลน์');
+       });
+
+       // === ERROR HANDLING ===
+       window.addEventListener('error', function(e) {
+           console.error('Global Error:', e.error);
+           showAlert('เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
+       });
+
+       window.addEventListener('unhandledrejection', function(e) {
+           console.error('Unhandled Promise Rejection:', e.reason);
+           showAlert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', 'error');
+       });
+
+       // === AUTO-SAVE ===
+       setInterval(() => {
+           try {
+               saveAllData();
+           } catch (error) {
+               console.error('❌ Auto-save failed:', error);
+           }
+       }, 30000);
+
+       // === SWIPE NAVIGATION (OPTIONAL) ===
        let startX = 0;
        let startY = 0;
 
@@ -2715,7 +2794,7 @@
            const diffX = startX - endX;
            const diffY = startY - endY;
 
-           // Horizontal swipe for navigation
+           // Only handle horizontal swipes
            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 100) {
                const tabs = document.querySelectorAll('.nav-tab');
                const activeTab = document.querySelector('.nav-tab.active');
@@ -2734,35 +2813,13 @@
            startY = 0;
        });
 
-       // === Initialize Mobile Optimizations ===
-       document.addEventListener('DOMContentLoaded', function() {
-           optimizeForMobile();
-       });
-
-       // === Firebase Connection Monitoring ===
-       function monitorFirebaseConnection() {
-           database.ref('.info/connected').on('value', function(snapshot) {
-               if (snapshot.val() === true) {
-                   isFirebaseConnected = true;
-                   updateSyncStatus('online', 'เชื่อมต่อแล้ว');
-               } else {
-                   isFirebaseConnected = false;
-                   updateSyncStatus('offline', 'การเชื่อมต่อขาดหาย');
-               }
-           });
-       }
-
-       // Start monitoring Firebase connection
-       setTimeout(() => {
-           monitorFirebaseConnection();
-       }, 2000);
-
-       // === System Status Logging ===
-       console.log('🎉 ระบบจัดการฟาร์มสุกร Mobile App with Firebase พร้อมใช้งาน');
+       // === SYSTEM STATUS LOGGING ===
+       console.log('🎉 ระบบจัดการฟาร์มสุกร พร้อมใช้งาน');
        console.log(`📱 เวอร์ชัน: ${SYSTEM_VERSION}`);
-       console.log('🔧 ฟีเจอร์: จัดการสุกร, สต็อกอาหาร, ยา, การใช้งาน, การขาย, รายงาน, PWA, Mobile Optimized, Firebase Real-time Sync');
-       console.log(`📲 PWA Status: ${isStandalone ? 'Installed' : 'Web Browser'}`);
+       console.log('🔧 ฟีเจอร์: จัดการสุกร, สต็อกอาหาร, ยา, การใช้งาน, การขาย, รายงาน, PWA, Firebase Real-time Sync');
+       console.log(`📲 PWA Status: ${isStandalone ? 'Installed App' : 'Web Browser'}`);
        console.log(`🔥 Firebase: ${firebaseConfig.projectId}`);
+       console.log('✅ All error handling and fallbacks are in place');
 
    </script>
 </body>

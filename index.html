@@ -565,13 +565,13 @@
                 <button class="hamburger" onclick="toggleNav()" aria-label="เมนู">☰</button>
                 <nav class="nav" id="nav">
                     <ul class="nav-list">
-                        <li><a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">🏠 แผงควบคุม</a></li>
-                        <li><a href="#pigs" class="nav-link" onclick="showSection('pigs')">🐷 จัดการสุกร</a></li>
-                        <li><a href="#feeding" class="nav-link" onclick="showSection('feeding')">🥗 การให้อาหาร</a></li>
-                        <li><a href="#health" class="nav-link" onclick="showSection('health')">💊 สุขภาพ</a></li>
-                        <li><a href="#stock" class="nav-link" onclick="showSection('stock')">📦 สต็อก</a></li>
-                        <li><a href="#reports" class="nav-link" onclick="showSection('reports')">📊 รายงาน</a></li>
-                        <li><a href="#references" class="nav-link" onclick="showSection('references')">📚 แหล่งข้อมูล</a></li>
+                        <li><a href="#dashboard" class="nav-link active" onclick="showSection('dashboard')">แผงควบคุม</a></li>
+                        <li><a href="#pigs" class="nav-link" onclick="showSection('pigs')">จัดการสุกร</a></li>
+                        <li><a href="#feeding" class="nav-link" onclick="showSection('feeding')">การให้อาหาร</a></li>
+                        <li><a href="#health" class="nav-link" onclick="showSection('health')">สุขภาพ</a></li>
+                        <li><a href="#stock" class="nav-link" onclick="showSection('stock')">สต็อก</a></li>
+                        <li><a href="#reports" class="nav-link" onclick="showSection('reports')">รายงาน</a></li>
+                        <li><a href="#references" class="nav-link" onclick="showSection('references')">แหล่งข้อมูล</a></li>
                     </ul>
                 </nav>
             </div>
@@ -637,7 +637,7 @@
                 <div class="dashboard-grid">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">🕷️ สุขภาพฟาร์มโดยรวม</h3>
+                            <h3 class="card-title">สถานการณ์ฟาร์มโดยรวม</h3>
                         </div>
                         <div class="chart-container">
                             <canvas id="radarChart" class="chart-canvas"></canvas>
@@ -649,7 +649,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">🥧 สัดส่วนสุกร</h3>
+                            <h3 class="card-title">สัดส่วนสุกร</h3>
                         </div>
                         <div class="chart-container">
                             <canvas id="pieChart" class="chart-canvas"></canvas>
@@ -804,15 +804,15 @@
             <section id="health" class="section">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">การจัดการสุขภาพ</h2>
+                        <h2 class="card-title">การจัดการสุขภาพสุกร</h2>
                         <button class="btn btn-primary" onclick="openModal('healthModal')">
-                            💊 บันทึกการรักษา/วัคซีน
+                            บันทึกการรักษา/วัคซีน
                         </button>
                     </div>
 
                     <div class="dashboard-grid">
                         <div class="card">
-                            <h3 class="card-title">📅 วัคซีนครบกำหนด</h3>
+                            <h3 class="card-title">วัคซีนครบกำหนด</h3>
                             <div id="vaccine-alerts">
                                 <div class="alert alert-warning">
                                     <strong>วันนี้:</strong> ไม่มีวัคซีนครบกำหนด
@@ -821,7 +821,7 @@
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">📊 สถิติสุขภาพ</h3>
+                            <h3 class="card-title">สถิติสุขภาพสุกร</h3>
                             <div class="kpi-grid">
                                 <div class="kpi-card">
                                     <div class="kpi-label">อัตราการตาย</div>
@@ -838,7 +838,7 @@
                     </div>
 
                     <div class="card">
-                        <h3 class="card-title">ประวัติสุขภาพ</h3>
+                        <h3 class="card-title">ประวัติสุขภาพสุกร</h3>
                         <div class="table-container">
                             <table class="table" id="healthTable">
                                 <thead>
@@ -866,27 +866,27 @@
                     <div class="card-header">
                         <h2 class="card-title">จัดการสต็อก</h2>
                         <button class="btn btn-primary" onclick="openModal('stockModal')">
-                            📦 อัพเดทสต็อก
+                            อัพเดทสต็อก
                         </button>
                     </div>
 
                     <div class="dashboard-grid">
                         <div class="card">
-                            <h3 class="card-title">🥗 สต็อกอาหาร</h3>
+                            <h3 class="card-title">สต็อกอาหาร</h3>
                             <div class="space-y-4" id="feed-stock-list">
                                 <!-- Feed stock items will be inserted here -->
                             </div>
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">💊 สต็อกยาและวัคซีน</h3>
+                            <h3 class="card-title">สต็อกยาและวัคซีน</h3>
                             <div class="space-y-4" id="medicine-stock-list">
                                 <!-- Medicine stock items will be inserted here -->
                             </div>
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">💰 มูลค่าสต็อก</h3>
+                            <h3 class="card-title">มูลค่าสต็อก</h3>
                             <div class="kpi-grid">
                                 <div class="kpi-card">
                                     <div class="kpi-label">อาหาร</div>
@@ -916,14 +916,14 @@
 
                     <div class="dashboard-grid">
                         <div class="card">
-                            <h3 class="card-title">📊 ประสิทธิภาพการผลิต</h3>
+                            <h3 class="card-title">ประสิทธิภาพการผลิต</h3>
                             <div class="chart-container">
                                 <canvas id="performanceChart" class="chart-canvas"></canvas>
                             </div>
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">💰 รายงานการเงิน</h3>
+                            <h3 class="card-title">รายงานการเงิน</h3>
                             <div class="kpi-grid">
                                 <div class="kpi-card">
                                     <div class="kpi-label">รายได้รวม</div>
@@ -949,7 +949,7 @@
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">📈 แนวโน้มรายเดือน</h3>
+                            <h3 class="card-title">แนวโน้มรายเดือน</h3>
                             <div class="chart-container">
                                 <canvas id="monthlyTrendChart" class="chart-canvas"></canvas>
                             </div>
@@ -967,7 +967,7 @@
 
                     <div class="dashboard-grid">
                         <div class="card">
-                            <h3 class="card-title">📚 แหล่งข้อมูลอ้างอิง</h3>
+                            <h3 class="card-title">แหล่งข้อมูลอ้างอิง</h3>
                             <div class="space-y-3">
                                 <div class="p-3 border border-gray-200 rounded-lg">
                                     <h4 class="font-semibold">กรมปศุสัตว์</h4>
@@ -988,7 +988,7 @@
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">📊 มาตรฐานทางวิชาการ</h3>
+                            <h3 class="card-title">มาตรฐานทางวิชาการ</h3>
                             <div class="space-y-3">
                                 <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
                                     <h4 class="font-semibold text-green-800">FCR เป้าหมาย: 2.35</h4>
@@ -1006,7 +1006,7 @@
                         </div>
 
                         <div class="card">
-                            <h3 class="card-title">💰 ข้อมูลต้นทุน</h3>
+                            <h3 class="card-title">ข้อมูลต้นทุน</h3>
                             <div class="space-y-3">
                                 <div class="p-3 border border-gray-200 rounded-lg">
                                     <h4 class="font-semibold">ลูกพันธุ์สุกร</h4>
@@ -1025,7 +1025,7 @@
                     </div>
 
                     <div class="card">
-                        <h3 class="card-title">🧮 สูตรการคำนวณ</h3>
+                        <h3 class="card-title">สูตรการคำนวณ</h3>
                         <div class="space-y-4">
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h4 class="font-semibold mb-2">FCR (Feed Conversion Ratio)</h4>
@@ -1040,7 +1040,7 @@
                                 </code>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h4 class="font-semibold mb-2">คะแนนสุขภาพฟาร์ม (Radar Chart)</h4>
+                                <h4 class="font-semibold mb-2">คะแนนสถานการณ์ของฟาร์ม (Radar Chart)</h4>
                                 <div class="text-sm space-y-1">
                                     <div>• FCR Score = min(100, (2.35 / currentFCR) × 100)</div>
                                     <div>• ADG Score = min(100, (currentADG / 700) × 100)</div>
@@ -1054,7 +1054,7 @@
                     </div>
 
                     <div class="card">
-                        <h3 class="card-title">👨‍💻 เครดิตผู้พัฒนา</h3>
+                        <h3 class="card-title">เครดิตผู้พัฒนา</h3>
                         <div class="text-center p-6">
                             <div class="text-lg font-semibold mb-2">ระบบจัดการฟาร์มสุกรอัจฉริยะ</div>
                             <div class="text-sm text-gray-600 mb-4">
@@ -1185,7 +1185,7 @@
     <div id="healthModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">บันทึกสุขภาพ/วัคซีน</h3>
+                <h3 class="modal-title">บันทึกสุขภาพสุกร/วัคซีน</h3>
                 <button class="modal-close" onclick="closeModal('healthModal')">&times;</button>
             </div>
             <form id="healthForm">
@@ -1207,7 +1207,7 @@
                             <option value="">เลือกประเภท</option>
                             <option value="วัคซีน">วัคซีน</option>
                             <option value="รักษา">รักษา</option>
-                            <option value="ตรวจสุขภาพ">ตรวจสุขภาพ</option>
+                            <option value="ตรวจสุขภาพสุกร">ตรวจสุขภาพสุกร</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1517,7 +1517,7 @@
            charts.radar = new Chart(ctx, {
                type: 'radar',
                data: {
-                   labels: ['FCR', 'ADG', 'สุขภาพ', 'การเงิน', 'สต็อก', 'ความพร้อมผลิต'],
+                   labels: ['FCR', 'ADG', 'สุขภาพสุกร', 'การเงิน', 'สต็อก', 'ความพร้อมผลิต'],
                    datasets: [{
                        label: 'คะแนนปัจจุบัน',
                        data: scores,
@@ -2462,7 +2462,7 @@
        }
 
        function deleteHealth(index) {
-           if (confirm('คุณแน่ใจหรือไม่ที่จะลบข้อมูลสุขภาพนี้?')) {
+           if (confirm('คุณแน่ใจหรือไม่ที่จะลบข้อมูลสุขภาพสุกรนี้?')) {
                farmData.health.splice(index, 1);
                saveData();
                updateDashboard();

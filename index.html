@@ -1,1 +1,2893 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบปรึกษาการวิจัยเชิงปริมาณ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
 
+        .animated-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-3d {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .domain-btn {
+            transition: all 0.3s ease;
+        }
+
+        .domain-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .domain-btn.selected {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #fbbf24;
+            ring: 2px;
+            ring-color: #f59e0b;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .tab-inactive {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tab-inactive:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .step-card {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .success-message {
+            background: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen">
+    <div id="app" class="min-h-screen">
+        <!-- Loading state -->
+        <div class="loading">
+            <div class="text-center text-white">
+                <div class="spinner mx-auto mb-4"></div>
+                <p>กำลังโหลดระบบ...</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+// Global State Management
+window.AppState = {
+    currentPage: 'landing',
+    topic: '',
+    level: null,
+    theory: null,
+    selectedDomain: null,
+    activeTab: 'theory',
+    isLoading: false,
+    error: null
+};
+
+// Domain Information Database
+window.DomainData = {
+    'digital_marketing': {
+        name: 'การตลาดดิจิทัล',
+        icon: '📱',
+        description: 'การตลาด Social Media, E-commerce, Digital Transformation',
+        examples: [
+            'ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา',
+            'ผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค',
+            'การยอมรับแอปพลิเคชันธนาคารมือถือของผู้สูงอายุ'
+        ]
+    },
+    'social_capital': {
+        name: 'ทุนทางสังคม',
+        icon: '🤝',
+        description: 'เครือข่ายทางสังคม, ความสัมพันธ์, ชุมชน',
+        examples: [
+            'วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน',
+            'ผลกระทบของเครือข่ายทางสังคมต่อการสร้างนวัตกรรม',
+            'บทบาทของทุนทางสังคมในการพัฒนาชุมชน'
+        ]
+    },
+    'management': {
+        name: 'การบริหาร',
+        icon: '🏢',
+        description: 'การจัดการองค์กร, ภาวะผู้นำ, กลยุทธ์',
+        examples: [
+            'วิเคราะห์ความได้เปรียบทางการแข่งขันของทรัพยากรองค์กร',
+            'ผลกระทบของภาวะผู้นำต่อประสิทธิภาพทีม',
+            'การจัดการความรู้ในองค์กรยุคดิจิทัล'
+        ]
+    },
+    'finance': {
+        name: 'การเงิน',
+        icon: '💰',
+        description: 'การลงทุน, การเงินองค์กร, ตลาดทุน',
+        examples: [
+            'ปัจจัยที่ส่งผลต่อการตัดสินใจลงทุนในตลาดหุ้น',
+            'ความสัมพันธ์ระหว่างโครงสร้างเงินทุนกับผลตอบแทน',
+            'การจัดการความเสี่ยงทางการเงินในธุรกิจ SME'
+        ]
+    },
+    'hr': {
+        name: 'ทรัพยากรมนุษย์',
+        icon: '👥',
+        description: 'การจัดการคน, แรงจูงใจ, ความพึงพอใจ',
+        examples: [
+            'ศึกษาแรงจูงใจและความพึงพอใจในการทำงานของพนักงาน',
+            'ผลกระทบของการทำงานจากที่บ้านต่อประสิทธิภาพพนักงาน',
+            'ปัจจัยที่ส่งผลต่อความผูกพันของพนักงานต่อองค์กร'
+        ]
+    },
+    'supply_chain': {
+        name: 'ห่วงโซ่อุปทาน',
+        icon: '🚚',
+        description: 'การจัดการโลจิสติกส์, การจัดส่ง, คลังสินค้า',
+        examples: [
+            'ปัจจัยความสำเร็จของการจัดการห่วงโซ่อุปทานในยุค COVID-19',
+            'ผลกระทบของเทคโนโลยี IoT ต่อประสิทธิภาพโลจิสติกส์',
+            'การบูรณาการห่วงโซ่อุปทานเพื่อความยั่งยืน'
+        ]
+    },
+    'international_trade': {
+        name: 'การค้าระหว่างประเทศ',
+        icon: '🌍',
+        description: 'การส่งออก-นำเข้า, การค้าโลก, FTA',
+        examples: [
+            'ผลกระทบของ FTA ต่อการส่งออกสินค้าเกษตรไทย',
+            'ปัจจัยที่ส่งผลต่อความสามารถในการแข่งขันของผู้ส่งออก',
+            'บทบาทของ E-commerce ในการค้าข้ามพรมแดน'
+        ]
+    },
+    'strategy': {
+        name: 'กลยุทธ์',
+        icon: '🎯',
+        description: 'การวางแผนกลยุทธ์, การแข่งขัน, นวัตกรรม',
+        examples: [
+            'กลยุทธ์การแข่งขันของธุรกิจ Startup ในตลาดไทย',
+            'ปัจจัยความสำเร็จของการเปลี่ยนผ่านสู่ดิจิทัล',
+            'กลยุทธ์การสร้างนวัตกรรมในธุรกิจดั้งเดิม'
+        ]
+    },
+    'sustainability': {
+        name: 'ความยั่งยืน',
+        icon: '🌱',
+        description: 'CSR, Green Business, สิ่งแวดล้อม',
+        examples: [
+            'ผลกระทบของ CSR ต่อภาพลักษณ์และผลตอบแทนของบริษัท',
+            'ปัจจัยที่ส่งผลต่อการยอมรับผลิตภัณฑ์เป็นมิตรกับสิ่งแวดล้อม',
+            'กลยุทธ์การดำเนินธุรกิจเพื่อความยั่งยืน'
+        ]
+    },
+    'risk_management': {
+        name: 'บริหารความเสี่ยง',
+        icon: '⚠️',
+        description: 'การจัดการความเสี่ยง, ความไม่แน่นอน, ประกัน',
+        examples: [
+            'ระบบการบริหารความเสี่ยงในธนาคารพาณิชย์',
+            'ปัจจัยที่ส่งผลต่อการจัดการความเสี่ยงในธุรกิจ SME',
+            'ผลกระทบของความไม่แน่นอนต่อการตัดสินใจลงทุน'
+        ]
+    },
+    'project_management': {
+    name: 'บริหารโครงการ',
+    icon: '📊',
+    description: 'การจัดการโครงการ, Agile, Scrum, Risk Management, Quality Management',
+    examples: [
+        'วิเคราะห์ปัจจัยความสำเร็จของการบริหารโครงการตามมาตรฐาน PMBOK',
+        'ผลกระทบของ Agile Methodology ต่อประสิทธิภาพและความพึงพอใจของทีมโครงการ',
+        'การจัดการความเสี่ยงในโครงการพัฒนาซอฟต์แวร์ด้วยหลัก Risk Management',
+        'การจัดการความเสี่ยงในโครงการพัฒนาซอฟต์แวร์ด้วยหลัก Risk Management',
+       'ศึกษาผลกระทบของภาวะผู้นำแบบ Transformational ต่อประสิทธิภาพทีมโครงการ',
+       'การประยุกต์ใช้ Earned Value Management (EVM) ในการควบคุมโครงการก่อสร้าง',
+       'ปัจจัยที่ส่งผลต่อการยอมรับการเปลี่ยนแปลงในโครงการดิจิทัลทรานส์ฟอร์เมชัน',
+       'การจัดการความรู้และการเรียนรู้จากบทเรียนในโครงการขนาดใหญ่' 
+    ]
+    },
+    'business_analytics': {
+    name: 'วิเคราะห์ธุรกิจ',
+    icon: '📈',
+    description: 'Big Data, BI, Data Science, AI, Customer Analytics',
+    examples: [
+        'การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ',
+        'ปัจจัยความสำเร็จของการนำ Big Data มาใช้ในองค์กร',
+        'ผลกระทบของ AI ต่อการวิเคราะห์ลูกค้าและการตัดสินใจซื้อ',
+        'การวิเคราะห์การเดินทางของลูกค้า (Customer Journey) ด้วย Data Analytics',
+        'การแบ่งกลุ่มลูกค้าด้วย Machine Learning เพื่อการตลาดเป็นรายบุคคล',
+        'การพยากรณ์ยอดขายด้วย Time Series Analysis และ AI',
+        'ปัจจัยที่ส่งผลต่อการยอมรับระบบ Business Intelligence ในองค์กร'
+    ]
+}
+};
+
+// Research Level Information
+window.LevelData = {
+     1: {
+        name: 'ระดับพื้นฐาน',
+        steps: 8,
+        duration: '2-3 เดือน',
+        description: 'เหมาะสำหรับนักศึกษาปริญญาตรีหรือผู้เริ่มต้น',
+        target: 'นักศึกษาปริญญาตรี',
+        methods: 'สถิติเบื้องต้น + การวิเคราะห์เชิงอธิบาย',
+        steps_detail: [
+            'Data Preparation',
+            'Descriptive Statistics',
+            'Reliability Analysis',
+            'Normality Testing',
+            'T-test/ANOVA',
+            'Correlation Analysis',
+            'Simple Regression',
+            'Cluster Analysis (Basic)'
+        ]
+    },
+    2: {
+        name: 'ระดับกลาง',
+        steps: 12,
+        duration: '4-6 เดือน',
+        description: 'เหมาะสำหรับนักศึกษาปริญญาโทหรือมีประสบการณ์บ้าง',
+        target: 'นักศึกษาปริญญาโท',
+        methods: 'EFA + Multiple Regression + การวิเคราะห์เชิงลึก',
+        steps_detail: [
+            'Data Screening',
+            'Descriptive Statistics',
+            'Reliability Analysis',
+            'Validity Testing',
+            'Exploratory Factor Analysis (EFA)',
+            'Assumption Testing',
+            'Multiple Regression Analysis',
+            'Logistic Regression',
+            'Cluster Analysis (Advanced)',
+            'Discriminant Analysis',
+            'Mediation Analysis',
+            'Model Interpretation'
+        ]
+    },
+    3: {
+        name: 'ระดับสูง',
+        steps: 16,
+        duration: '8-12 เดือน',
+        description: 'เหมาะสำหรับนักศึกษาปริญญาเอกหรือมืออาชีพ',
+        target: 'นักศึกษาปริญญาเอก',
+        methods: 'CFA + SEM + การวิเคราะห์ขั้นสูง',
+        steps_detail: [
+            'Data Screening & Cleaning',
+            'Missing Data Analysis',
+            'Common Method Bias Testing',
+            'Descriptive & Preliminary Analysis',
+            'Reliability & Validity Assessment',
+            'Exploratory Factor Analysis (EFA)',
+            'Confirmatory Factor Analysis (CFA)',
+            'Measurement Model Evaluation',
+            'Structural Equation Modeling (SEM)',
+            'MANOVA/MANCOVA Analysis',
+            'Hierarchical Linear Modeling (HLM)',
+            'Time Series Analysis',
+            'Latent Class Analysis (LCA)',
+            'Conjoint Analysis',
+            'Mediation & Moderation Analysis',
+            'Results Interpretation & Reporting'
+        ]
+    }
+};
+
+
+        // Theory Database (ตัวอย่าง 10 ทฤษฎีแรก - จะขยายเพิ่มเติม)
+window.TheoryDatabase = {
+    // บริหารโครงการ (ขยายเป็น 25 ทฤษฎี)
+
+// กลุ่มทฤษฎีบริหารจัดการและโครงการ (8 ทฤษฎี)
+'pmbok_theory': {
+    id: 'pmbok_theory',
+    name: 'Project Management Body of Knowledge (PMBOK)',
+    author: 'PMI (2021)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Scope Management', 'Time Management', 'Cost Management', 'Quality Management', 'Resource Management', 'Communication Management', 'Risk Management', 'Procurement Management', 'Stakeholder Management', 'Integration Management'],
+    relationships: '10 Knowledge Areas → Project Processes → Project Success → Stakeholder Satisfaction',
+    prediction: 'การปฏิบัติตามมาตรฐาน PMBOK จะเพิ่มโอกาสความสำเร็จของโครงการ',
+    keywords: ['PMBOK', 'project', 'management', 'scope', 'time', 'cost', 'quality', 'โครงการ', 'การจัดการ', 'ขอบเขต'],
+    statistics: ['Descriptive Statistics', 'Performance Measurement', 'Success Factor Analysis', 'Maturity Assessment'],
+    description: 'มาตรฐานการบริหารโครงการสากลที่ครอบคลุม 10 สาขาความรู้และ 5 กลุ่มกระบวนการ'
+},
+'agile_theory': {
+    id: 'agile_theory',
+    name: 'Agile Project Management Theory',
+    author: 'Beck et al. (2001)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Iterative Development', 'Customer Collaboration', 'Responding to Change', 'Working Product', 'Team Empowerment'],
+    relationships: 'Agile Principles → Iterative Delivery → Customer Feedback → Continuous Improvement → Project Success',
+    prediction: 'การพัฒนาแบบ Agile จะเพิ่มความยืดหยุ่นและการตอบสนองต่อการเปลี่ยนแปลง',
+    keywords: ['agile', 'iterative', 'collaboration', 'change', 'flexibility', 'คล่องตัว', 'ทำซ้ำ', 'ความร่วมมือ'],
+    statistics: ['Descriptive Statistics', 'Performance Metrics', 'Velocity Analysis', 'Sprint Retrospective Analysis'],
+    description: 'วิธีการบริหารโครงการที่เน้นความยืดหยุ่น การทำงานแบบวนซ้ำ และการตอบสนองการเปลี่ยนแปลง'
+},
+'scrum_theory': {
+    id: 'scrum_theory',
+    name: 'Scrum Theory',
+    author: 'Schwaber & Sutherland (2020)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Sprint Planning', 'Daily Scrum', 'Sprint Review', 'Sprint Retrospective', 'Product Backlog', 'Scrum Team'],
+    relationships: 'Scrum Events + Artifacts + Roles → Empirical Process → Transparency → Adaptation → Value Delivery',
+    prediction: 'การใช้ Scrum Framework จะเพิ่มประสิทธิภาพการทำงานเป็นทีมและการส่งมอบคุณค่า',
+    keywords: ['scrum', 'sprint', 'backlog', 'team', 'empirical', 'สกรัม', 'สปรินต์', 'ทีม'],
+    statistics: ['Sprint Metrics', 'Velocity Tracking', 'Burndown Analysis', 'Team Performance Analysis'],
+    description: 'กรอบการทำงานแบบ Agile ที่เน้นการทำงานเป็นทีม การตรวจสอบ และการปรับตัว'
+},
+'theory_of_constraints': {
+    id: 'theory_of_constraints',
+    name: 'Theory of Constraints (TOC)',
+    author: 'Goldratt (1984)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Constraint Identification', 'Constraint Exploitation', 'Subordination', 'Constraint Elevation', 'Process Iteration'],
+    relationships: 'Constraint Identification → Optimization → System Improvement → Performance Enhancement',
+    prediction: 'การจัดการข้อจำกัดอย่างเป็นระบบจะเพิ่มประสิทธิภาพโดยรวมของโครงการ',
+    keywords: ['constraints', 'bottleneck', 'optimization', 'throughput', 'ข้อจำกัด', 'คอขวด', 'การเพิ่มประสิทธิภาพ'],
+    statistics: ['Bottleneck Analysis', 'Throughput Measurement', 'Performance Optimization'],
+    description: 'ทฤษฎีที่มุ่งเน้นการระบุและจัดการข้อจำกัดที่สำคัญที่สุดในระบบ'
+},
+'critical_chain_theory': {
+    id: 'critical_chain_theory',
+    name: 'Critical Chain Theory',
+    author: 'Goldratt (1997)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Critical Chain', 'Resource Constraints', 'Project Buffer', 'Feeding Buffer', 'Multitasking Elimination'],
+    relationships: 'Resource Constraints → Critical Chain → Buffer Management → Project Completion → Time Optimization',
+    prediction: 'การจัดการ Critical Chain และ Buffer จะช่วยลดเวลาโครงการและเพิ่มความน่าเชื่อถือ',
+    keywords: ['critical', 'chain', 'buffer', 'resource', 'constraints', 'มิติวิกฤต', 'ทรัพยากร', 'ข้อจำกัด'],
+    statistics: ['Critical Path Analysis', 'Resource Utilization', 'Buffer Management Analysis'],
+    description: 'การบริหารโครงการที่เน้นการจัดการทรัพยากรและเวลาผ่าน Critical Chain และ Buffer'
+},
+'earned_value_management': {
+    id: 'earned_value_management',
+    name: 'Earned Value Management Theory (EVM)',
+    author: 'Fleming & Koppelman (2010)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Planned Value (PV)', 'Earned Value (EV)', 'Actual Cost (AC)', 'Schedule Performance Index (SPI)', 'Cost Performance Index (CPI)'],
+    relationships: 'PV + EV + AC → Performance Indices → Variance Analysis → Corrective Actions → Project Control',
+    prediction: 'การใช้ EVM จะช่วยติดตามและควบคุมประสิทธิภาพโครงการด้านเวลาและต้นทุนได้แม่นยำ',
+    keywords: ['earned', 'value', 'performance', 'cost', 'schedule', 'control', 'ค่าที่ได้รับ', 'ประสิทธิภาพ'],
+    statistics: ['Performance Measurement', 'Variance Analysis', 'Forecasting Models', 'Trend Analysis'],
+    description: 'วิธีการวัดและควบคุมประสิทธิภาพโครงการด้านเวลา ต้นทุน และขอบเขตงาน'
+},
+'systems_theory_pm': {
+    id: 'systems_theory_pm',
+    name: 'Systems Theory in Project Management',
+    author: 'Bertalanffy (1968)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['System Components', 'Interactions', 'Environment', 'Feedback Loops', 'Emergent Properties'],
+    relationships: 'System Components → Interactions → Emergent Behavior → Project Outcomes → System Optimization',
+    prediction: 'การมองโครงการเป็นระบบจะช่วยเข้าใจความซับซ้อนและปฏิสัมพันธ์ต่างๆ',
+    keywords: ['systems', 'theory', 'components', 'interactions', 'holistic', 'ระบบ', 'องค์ประกอบ', 'ปฏิสัมพันธ์'],
+    statistics: ['Systems Analysis', 'Network Analysis', 'Complexity Measurement'],
+    description: 'การมองโครงการเป็นระบบที่ประกอบด้วยองค์ประกอบที่เชื่อมโยงและมีปฏิสัมพันธ์กัน'
+},
+'contingency_theory_pm': {
+    id: 'contingency_theory_pm',
+    name: 'Contingency Theory in Project Management',
+    author: 'Fiedler (1967)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Project Context', 'Environmental Factors', 'Management Approach', 'Situational Variables', 'Adaptive Strategy'],
+    relationships: 'Project Context → Situational Analysis → Management Approach → Performance Outcomes',
+    prediction: 'การเลือกวิธีการบริหารโครงการต้องเหมาะสมกับสถานการณ์และบริบทเฉพาะ',
+    keywords: ['contingency', 'situational', 'context', 'adaptive', 'environment', 'สถานการณ์', 'บริบท', 'การปรับตัว'],
+    statistics: ['Situational Analysis', 'Context Assessment', 'Adaptive Management Metrics'],
+    description: 'ทฤษฎีที่เน้นการปรับวิธีการบริหารโครงการให้เหมาะสมกับสถานการณ์และบริบท'
+},
+
+// กลุ่มทฤษฎีด้านพฤติกรรมองค์การและภาวะผู้นำ (6 ทฤษฎี)
+'transformational_leadership_pm': {
+    id: 'transformational_leadership_pm',
+    name: 'Transformational Leadership in Projects',
+    author: 'Bass (1985)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Idealized Influence', 'Inspirational Motivation', 'Intellectual Stimulation', 'Individual Consideration'],
+    relationships: 'Transformational Leadership → Team Motivation → Innovation → Project Performance → Success',
+    prediction: 'ภาวะผู้นำการเปลี่ยนแปลงจะเพิ่มแรงจูงใจและประสิทธิภาพของทีมโครงการ',
+    keywords: ['transformational', 'leadership', 'motivation', 'innovation', 'influence', 'ภาวะผู้นำ', 'แรงจูงใจ'],
+    statistics: ['Leadership Assessment', 'Team Performance Metrics', 'Motivation Analysis'],
+    description: 'การประยุกต์ภาวะผู้นำการเปลี่ยนแปลงในการบริหารทีมโครงการ'
+},
+'transactional_leadership_pm': {
+    id: 'transactional_leadership_pm',
+    name: 'Transactional Leadership in Projects',
+    author: 'Burns (1978)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Contingent Reward', 'Management by Exception', 'Corrective Actions', 'Performance Monitoring'],
+    relationships: 'Clear Expectations → Performance Monitoring → Rewards/Corrections → Goal Achievement',
+    prediction: 'ภาวะผู้นำแบบแลกเปลี่ยนจะช่วยควบคุมและรักษามาตรฐานการปฏิบัติงานในโครงการ',
+    keywords: ['transactional', 'leadership', 'reward', 'monitoring', 'control', 'การแลกเปลี่ยน', 'รางวัล', 'การควบคุม'],
+    statistics: ['Performance Monitoring', 'Reward System Analysis', 'Control Metrics'],
+    description: 'การนำภาวะผู้นำแบบแลกเปลี่ยนมาใช้ในการควบคุมและจูงใจทีมโครงการ'
+},
+'situational_leadership_pm': {
+    id: 'situational_leadership_pm',
+    name: 'Situational Leadership in Projects',
+    author: 'Hersey & Blanchard (1969)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Task Behavior', 'Relationship Behavior', 'Follower Readiness', 'Leadership Style Adaptation'],
+    relationships: 'Follower Readiness → Leadership Style Selection → Appropriate Guidance → Performance Improvement',
+    prediction: 'การปรับรูปแบบภาวะผู้นำตามความพร้อมของทีมจะเพิ่มประสิทธิภาพการทำงาน',
+    keywords: ['situational', 'leadership', 'readiness', 'adaptation', 'style', 'สถานการณ์', 'ความพร้อม', 'การปรับตัว'],
+    statistics: ['Readiness Assessment', 'Leadership Style Analysis', 'Performance Correlation'],
+    description: 'การปรับรูปแบบภาวะผู้นำให้เหมาะสมกับระดับความพร้อมของสมาชิกทีม'
+},
+'team_development_model': {
+    id: 'team_development_model',
+    name: "Tuckman's Team Development Model",
+    author: 'Tuckman (1965)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Forming', 'Storming', 'Norming', 'Performing', 'Adjourning'],
+    relationships: 'Forming → Storming → Norming → Performing → Team Effectiveness → Project Success',
+    prediction: 'การเข้าใจและจัดการขั้นตอนการพัฒนาทีมจะเพิ่มประสิทธิภาพการทำงานร่วมกัน',
+    keywords: ['team', 'development', 'forming', 'storming', 'norming', 'performing', 'ทีม', 'การพัฒนา'],
+    statistics: ['Team Development Assessment', 'Stage Analysis', 'Performance Tracking'],
+    description: 'แบบจำลองการพัฒนาทีมงาน 5 ขั้นตอนที่อธิบายวิวัฒนาการของทีมโครงการ'
+},
+'stakeholder_theory_pm': {
+    id: 'stakeholder_theory_pm',
+    name: 'Stakeholder Theory in Projects',
+    author: 'Freeman (1984)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Stakeholder Identification', 'Power Analysis', 'Interest Assessment', 'Engagement Strategy', 'Relationship Management'],
+    relationships: 'Stakeholder Analysis → Engagement Strategy → Relationship Building → Support → Project Success',
+    prediction: 'การจัดการผู้มีส่วนได้ส่วนเสียอย่างมีประสิทธิภาพจะเพิ่มโอกาสความสำเร็จของโครงการ',
+    keywords: ['stakeholder', 'engagement', 'power', 'interest', 'relationship', 'ผู้มีส่วนได้ส่วนเสีย', 'การมีส่วนร่วม'],
+    statistics: ['Stakeholder Analysis', 'Engagement Metrics', 'Influence Network Analysis'],
+    description: 'การระบุ วิเคราะห์ และจัดการความสัมพันธ์กับผู้มีส่วนได้ส่วนเสียในโครงการ'
+},
+'emotional_intelligence_pm': {
+    id: 'emotional_intelligence_pm',
+    name: 'Emotional Intelligence in Project Management',
+    author: 'Goleman (1995)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Self-Awareness', 'Self-Regulation', 'Motivation', 'Empathy', 'Social Skills'],
+    relationships: 'EI Components → Better Communication → Team Relationships → Conflict Resolution → Project Success',
+    prediction: 'ผู้บริหารโครงการที่มี EQ สูงจะสามารถจัดการทีมและความขัดแย้งได้ดีขึ้น',
+    keywords: ['emotional', 'intelligence', 'EQ', 'communication', 'relationship', 'ปัญญาอารมณ์', 'การสื่อสาร'],
+    statistics: ['EQ Assessment', 'Communication Effectiveness', 'Team Relationship Analysis'],
+    description: 'การประยุกต์ใช้ปัญญาอารมณ์ในการบริหารโครงการและจัดการทีมงาน'
+},
+
+// กลุ่มทฤษฎีการจัดการความเสี่ยง การเปลี่ยนแปลง และคุณภาพ (5 ทฤษฎี)
+'risk_management_theory_pm': {
+    id: 'risk_management_theory_pm',
+    name: 'Risk Management Theory in Projects',
+    author: 'PMI (2019)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Risk Identification', 'Risk Analysis', 'Risk Response', 'Risk Monitoring', 'Risk Culture'],
+    relationships: 'Risk Identification → Analysis → Response Planning → Implementation → Monitoring → Control',
+    prediction: 'การบริหารความเสี่ยงอย่างเป็นระบบจะลดผลกระทบและเพิ่มโอกาสความสำเร็จ',
+    keywords: ['risk', 'management', 'identification', 'analysis', 'response', 'ความเสี่ยง', 'การจัดการ'],
+    statistics: ['Risk Assessment', 'Probability Analysis', 'Impact Assessment', 'Monte Carlo Simulation'],
+    description: 'กระบวนการระบุ วิเคราะห์ ตอบสนอง และควบคุมความเสี่ยงในโครงการ'
+},
+'kotter_8_step': {
+    id: 'kotter_8_step',
+    name: "Kotter's 8-Step Change Theory",
+    author: 'Kotter (1995)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Urgency', 'Coalition', 'Vision', 'Communication', 'Empowerment', 'Quick Wins', 'Sustaining', 'Anchoring'],
+    relationships: '8 Steps → Change Implementation → Organizational Transformation → Sustainable Change',
+    prediction: 'การปฏิบัติตาม 8 ขั้นตอนจะเพิ่มโอกาสความสำเร็จของการเปลี่ยนแปลง',
+    keywords: ['change', 'management', 'transformation', 'kotter', '8step', 'การเปลี่ยนแปลง', 'การจัดการ'],
+    statistics: ['Change Readiness Assessment', 'Implementation Tracking', 'Success Metrics'],
+    description: 'แบบจำลอง 8 ขั้นตอนสำหรับการบริหารการเปลี่ยนแปลงในองค์กร'
+},
+'lewin_change_theory': {
+    id: 'lewin_change_theory',
+    name: "Lewin's Change Management Theory",
+    author: 'Lewin (1951)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Unfreezing', 'Moving', 'Refreezing', 'Force Field Analysis', 'Change Resistance'],
+    relationships: 'Unfreezing → Moving (Change) → Refreezing → Sustainable New State',
+    prediction: 'การจัดการการเปลี่ยนแปลงใน 3 ขั้นตอนจะช่วยลดความต้านทานและสร้างความยั่งยืน',
+    keywords: ['lewin', 'change', 'unfreezing', 'moving', 'refreezing', 'การละลาย', 'การเคลื่อนไหว'],
+    statistics: ['Force Field Analysis', 'Resistance Measurement', 'Change Effectiveness'],
+    description: 'แบบจำลองการเปลี่ยนแปลง 3 ขั้นตอน: การละลาย การเคลื่อนไหว และการแข็งตัวใหม่'
+},
+'tqm_theory': {
+    id: 'tqm_theory',
+    name: 'Total Quality Management (TQM) Theory',
+    author: 'Deming (1986)',
+    domain: 'project_management',
+    level: 2,
+    factors: ['Customer Focus', 'Continuous Improvement', 'Employee Involvement', 'Process Approach', 'Strategic Approach'],
+    relationships: 'TQM Principles → Quality Culture → Process Improvement → Customer Satisfaction → Business Excellence',
+    prediction: 'การประยุกต์หลัก TQM จะเพิ่มคุณภาพผลผลิตและประสิทธิภาพโครงการ',
+    keywords: ['TQM', 'quality', 'continuous', 'improvement', 'customer', 'คุณภาพ', 'การปรับปรุง', 'ลูกค้า'],
+    statistics: ['Quality Metrics', 'Customer Satisfaction', 'Process Performance', 'Improvement Tracking'],
+    description: 'แนวทางการจัดการคุณภาพแบบองค์รวมที่เน้นการปรับปรุงอย่างต่อเนื่อง'
+},
+'six_sigma_theory': {
+    id: 'six_sigma_theory',
+    name: 'Six Sigma Theory',
+    author: 'Motorola (1986)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['DMAIC Process', 'Statistical Methods', 'Defect Reduction', 'Process Variation', 'Data-Driven Decisions'],
+    relationships: 'DMAIC → Statistical Analysis → Process Improvement → Defect Reduction → Quality Excellence',
+    prediction: 'การใช้วิธีการ Six Sigma จะลดข้อบกพร่องและเพิ่มคุณภาพกระบวนการ',
+    keywords: ['six', 'sigma', 'DMAIC', 'quality', 'defect', 'statistical', 'สิกซ์ซิกม่า', 'คุณภาพ'],
+    statistics: ['Statistical Process Control', 'Defect Analysis', 'Process Capability', 'DMAIC Metrics'],
+    description: 'วิธีการปรับปรุงคุณภาพที่ใช้เครื่องมือทางสถิติเพื่อลดความผันแปรและข้อบกพร่อง'
+},
+
+// กลุ่มทฤษฎีองค์ความรู้และการเรียนรู้ในองค์กร (4 ทฤษฎี)
+'knowledge_management_pm': {
+    id: 'knowledge_management_pm',
+    name: 'Knowledge Management Theory in Projects',
+    author: 'Nonaka & Takeuchi (1995)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Knowledge Creation', 'Knowledge Capture', 'Knowledge Sharing', 'Knowledge Application', 'Lessons Learned'],
+    relationships: 'Knowledge Creation → Capture → Sharing → Application → Organizational Learning → Project Improvement',
+    prediction: 'การจัดการความรู้จะช่วยเพิ่มประสิทธิภาพและลดความผิดพลาดในโครงการ',
+    keywords: ['knowledge', 'management', 'sharing', 'learning', 'lessons', 'ความรู้', 'การจัดการ', 'การแบ่งปัน'],
+    statistics: ['Knowledge Audit', 'Sharing Effectiveness', 'Learning Metrics', 'Knowledge Application'],
+    description: 'การจัดการความรู้ในโครงการเพื่อการเรียนรู้และปรับปรุงอย่างต่อเนื่อง'
+},
+'organizational_learning_pm': {
+    id: 'organizational_learning_pm',
+    name: 'Organizational Learning Theory in Projects',
+    author: 'Argyris & Schön (1978)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Single-loop Learning', 'Double-loop Learning', 'Deutero Learning', 'Mental Models', 'Shared Vision'],
+    relationships: 'Experience → Reflection → Learning → Knowledge → Improved Performance → Capability Building',
+    prediction: 'การเรียนรู้ระดับองค์กรจะเพิ่มขีดความสามารถในการบริหารโครงการ',
+    keywords: ['organizational', 'learning', 'reflection', 'mental', 'models', 'องค์กร', 'การเรียนรู้', 'การสะท้อน'],
+    statistics: ['Learning Assessment', 'Capability Measurement', 'Knowledge Transfer Analysis'],
+    description: 'การเรียนรู้ระดับองค์กรผ่านประสบการณ์และการสะท้อนผลจากโครงการ'
+},
+'dynamic_capabilities_pm': {
+    id: 'dynamic_capabilities_pm',
+    name: 'Dynamic Capabilities Theory in Projects',
+    author: 'Teece et al. (1997)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Sensing Capabilities', 'Seizing Capabilities', 'Transforming Capabilities', 'Learning Orientation', 'Innovation Capability'],
+    relationships: 'Dynamic Capabilities → Adaptation → Innovation → Competitive Advantage → Superior Performance',
+    prediction: 'ความสามารถพลวัตรจะช่วยให้องค์กรปรับตัวและจัดการโครงการในสภาพแวดล้อมที่เปลี่ยนแปลง',
+    keywords: ['dynamic', 'capabilities', 'adaptation', 'innovation', 'transformation', 'ความสามารถพลวัตร'],
+    statistics: ['Capability Assessment', 'Adaptation Metrics', 'Innovation Measurement'],
+    description: 'ความสามารถในการรับรู้ จับโอกาส และปรับเปลี่ยนเพื่อรักษาความได้เปรียบ'
+},
+'absorptive_capacity_pm': {
+    id: 'absorptive_capacity_pm',
+    name: 'Absorptive Capacity Theory in Projects',
+    author: 'Cohen & Levinthal (1990)',
+    domain: 'project_management',
+    level: 3,
+    factors: ['Prior Knowledge', 'Acquisition', 'Assimilation', 'Transformation', 'Exploitation'],
+    relationships: 'Prior Knowledge → Knowledge Acquisition → Assimilation → Transformation → Innovation → Performance',
+    prediction: 'ความสามารถในการดูดซับความรู้จะเพิ่มนวัตกรรมและประสิทธิภาพโครงการ',
+    keywords: ['absorptive', 'capacity', 'knowledge', 'acquisition', 'innovation', 'การดูดซับ', 'ความรู้', 'นวัตกรรม'],
+    statistics: ['Knowledge Absorption Metrics', 'Innovation Output', 'Learning Efficiency'],
+    description: 'ความสามารถในการรับรู้ ดูดซับ และประยุกต์ความรู้ภายนอกเพื่อสร้างนวัตกรรม'
+},      
+    // การตลาดดิจิทัล
+    'tam': {
+        id: 'tam',
+        name: 'Technology Acceptance Model (TAM)',
+        author: 'Davis (1989)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Perceived Usefulness (PU)', 'Perceived Ease of Use (PEOU)', 'Attitude Toward Using', 'Behavioral Intention'],
+        relationships: 'PU + PEOU → Attitude → Behavioral Intention → Actual Use',
+        prediction: 'การรับรู้ประโยชน์และความง่ายในการใช้งานจะส่งผลต่อทัศนคติและความตั้งใจในการใช้เทคโนโลยี',
+        keywords: ['technology', 'acceptance', 'digital', 'adoption', 'system', 'user', 'เทคโนโลยี', 'ยอมรับ', 'ระบบ', 'ดิจิทัล'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน เหมาะสำหรับศึกษาการยอมรับระบบสารสนเทศ แอปพลิเคชัน และเทคโนโลยีใหม่ๆ'
+    },
+    'utaut': {
+        id: 'utaut',
+        name: 'Unified Theory of Acceptance and Use of Technology (UTAUT)',
+        author: 'Venkatesh et al. (2003)',
+        domain: 'digital_marketing',
+        level: 3,
+        factors: ['Performance Expectancy', 'Effort Expectancy', 'Social Influence', 'Facilitating Conditions', 'Behavioral Intention'],
+        relationships: 'PE + EE + SI + FC → Behavioral Intention → Use Behavior',
+        prediction: 'ความคาดหวังในประสิทธิภาพ ความง่าย อิทธิพลทางสังคม และสภาพแวดล้อมที่สนับสนุนจะส่งผลต่อการใช้เทคโนโลยี',
+        keywords: ['technology', 'acceptance', 'performance', 'effort', 'social', 'เทคโนโลยี', 'ประสิทธิภาพ', 'ความคาดหวัง'],
+        statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+        description: 'ทฤษฎีที่พัฒนามาจาก TAM โดยรวมทฤษฎีต่างๆ 8 ทฤษฎีเข้าด้วยกัน เน้นปัจจัยที่หลากหลายในการยอมรับเทคโนโลยี'
+    },
+    'tpb': {
+        id: 'tpb',
+        name: 'Theory of Planned Behavior (TPB)',
+        author: 'Ajzen (1991)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Attitude Toward Behavior', 'Subjective Norm', 'Perceived Behavioral Control', 'Behavioral Intention'],
+        relationships: 'Attitude + Subjective Norm + PBC → Behavioral Intention → Behavior',
+        prediction: 'ทัศนคติ บรรทัดฐานทางสังคม และการควบคุมพฤติกรรมที่รับรู้จะส่งผลต่อความตั้งใจและพฤติกรรม',
+        keywords: ['behavior', 'intention', 'attitude', 'norm', 'control', 'พฤติกรรม', 'ความตั้งใจ', 'ทัศนคติ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'SEM'],
+        description: 'ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐาน และการควบคุมที่รับรู้ เหมาะสำหรับศึกษาพฤติกรรมผู้บริโภคออนไลน์'
+    },
+    'customer_journey': {
+        id: 'customer_journey',
+        name: 'Customer Journey Theory',
+        author: 'Lemon & Verhoef (2016)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Awareness Stage', 'Consideration Stage', 'Purchase Stage', 'Retention Stage', 'Advocacy Stage'],
+        relationships: 'Awareness → Consideration → Purchase → Retention → Advocacy → Customer Lifetime Value',
+        prediction: 'การเข้าใจและปรับปรุงจุดสัมผัสในแต่ละขั้นตอนของการเดินทางของลูกค้าจะเพิ่มประสบการณ์และความพึงพอใจ',
+        keywords: ['customer', 'journey', 'touchpoint', 'experience', 'awareness', 'consideration', 'ลูกค้า', 'การเดินทาง', 'ประสบการณ์', 'จุดสัมผัส'],
+        statistics: ['Descriptive Statistics', 'Path Analysis', 'Customer Journey Mapping', 'Touchpoint Analysis'],
+        description: 'ทฤษฎีที่อธิบายกระบวนการและขั้นตอนต่างๆ ที่ลูกค้าผ่านตั้งแต่รู้จักแบรนด์จนกลายเป็นลูกค้าที่ภักดี รวมถึงจุดสัมผัสและประสบการณ์ในแต่ละขั้นตอน'
+    },
+    'marketing_mix_4p': {
+        id: 'marketing_mix_4p',
+        name: 'Marketing Mix 4P Theory',
+        author: 'McCarthy (1960)',
+        domain: 'digital_marketing',
+        level: 1,
+        factors: ['Product', 'Price', 'Place', 'Promotion'],
+        relationships: 'Product + Price + Place + Promotion → Marketing Strategy → Customer Satisfaction → Sales Performance',
+        prediction: 'การผสมผสานส่วนประกอบการตลาด 4 องค์ประกอบอย่างเหมาะสมจะส่งผลต่อความสำเร็จทางการตลาด',
+        keywords: ['marketing', 'mix', '4P', 'product', 'price', 'place', 'promotion', 'การตลาด', 'ผลิตภัณฑ์', 'ราคา', 'การส่งเสริม'],
+        statistics: ['Descriptive Statistics', 'Factor Analysis', 'Multiple Regression', 'ANOVA'],
+        description: 'ทฤษฎีการตลาดพื้นฐานที่อธิบายการใช้เครื่องมือการตลาด 4 องค์ประกอบหลัก เป็นรากฐานสำคัญของการวางแผนกลยุทธ์การตลาด'
+    },
+    'marketing_mix_7p': {
+        id: 'marketing_mix_7p',
+        name: 'Marketing Mix 7P Theory (Services Marketing)',
+        author: 'Booms & Bitner (1981)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Product', 'Price', 'Place', 'Promotion', 'People', 'Process', 'Physical Evidence'],
+        relationships: '4P + People + Process + Physical Evidence → Service Quality → Customer Experience → Loyalty',
+        prediction: 'การเพิ่ม 3P สำหรับธุรกิจบริการจะช่วยเพิ่มคุณภาพการบริการและประสบการณ์ลูกค้า',
+        keywords: ['marketing', 'mix', '7P', 'service', 'people', 'process', 'physical', 'evidence', 'การตลาด', 'บริการ', 'บุคลากร', 'กระบวนการ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Service Quality Analysis'],
+        description: 'ทฤษฎีการตลาดบริการที่ขยายจาก 4P โดยเพิ่มองค์ประกอบ People, Process และ Physical Evidence เพื่อให้เหมาะสมกับลักษณะของธุรกิจบริการ'
+    },
+    'brand_management': {
+        id: 'brand_management',
+        name: 'Brand Management Theory',
+        author: 'Keller (2013)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Brand Awareness', 'Brand Image', 'Brand Equity', 'Brand Loyalty', 'Brand Performance'],
+        relationships: 'Brand Awareness + Brand Image → Brand Equity → Brand Loyalty → Brand Performance → Financial Performance',
+        prediction: 'การสร้างและจัดการแบรนด์อย่างเป็นระบบจะส่งผลต่อคุณค่าแบรนด์และความภักดีของลูกค้า',
+        keywords: ['brand', 'management', 'awareness', 'image', 'equity', 'loyalty', 'แบรนด์', 'การจัดการ', 'ความรู้จัก', 'ภาพลักษณ์', 'ความภักดี'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Brand Equity Analysis', 'SEM'],
+        description: 'ทฤษฎีการจัดการแบรนด์ที่อธิบายการสร้างคุณค่าแบรนด์ผ่านการพัฒนาความรู้จัก ภาพลักษณ์ และความภักดีของลูกค้า'
+    },
+    'stp': {
+        id: 'stp',
+        name: 'STP Theory (Segmentation, Targeting, Positioning)',
+        author: 'Kotler & Keller (2016)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Market Segmentation', 'Target Market Selection', 'Market Positioning', 'Differentiation Strategy'],
+        relationships: 'Segmentation → Targeting → Positioning → Competitive Advantage → Market Performance',
+        prediction: 'การแบ่งกลุ่มตลาด เลือกกลุ่มเป้าหมาย และกำหนดตำแหน่งทางการตลาดที่ชัดเจนจะสร้างความได้เปรียบการแข่งขัน',
+        keywords: ['STP', 'segmentation', 'targeting', 'positioning', 'market', 'competitive', 'การแบ่งกลุ่ม', 'กลุ่มเป้าหมาย', 'ตำแหน่ง', 'ตลาด'],
+        statistics: ['Cluster Analysis', 'Discriminant Analysis', 'Perceptual Mapping', 'Market Segmentation Analysis'],
+        description: 'ทฤษฎีกลยุทธ์การตลาดที่อธิบายกระบวนการแบ่งกลุ่มตลาด การเลือกกลุ่มเป้าหมาย และการสร้างตำแหน่งทางการตลาดที่แตกต่าง'
+    },
+    'diffusion_innovation': {
+        id: 'diffusion_innovation',
+        name: 'Diffusion of Innovation Theory',
+        author: 'Rogers (2003)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Relative Advantage', 'Compatibility', 'Complexity', 'Trialability', 'Observability'],
+        relationships: 'Innovation Attributes → Adoption Decision → Implementation → Diffusion Process',
+        prediction: 'คุณลักษณะของนวัตกรรมจะส่งผลต่อความเร็วและระดับการยอมรับในสังคม',
+        keywords: ['innovation', 'diffusion', 'adoption', 'technology', 'spread', 'นวัตกรรม', 'การแพร่กระจาย', 'การยอมรับ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression', 'Adoption Analysis'],
+        description: 'ทฤษฎีที่อธิบายกระบวนการแพร่กระจายของนวัตกรรมในสังคม เหมาะสำหรับศึกษาการยอมรับเทคโนโลยีใหม่และผลิตภัณฑ์ดิจิทัล'
+    },
+    'trust_digital': {
+        id: 'trust_digital',
+        name: 'Trust Theory in Digital Environment',
+        author: 'McKnight et al. (2002)',
+        domain: 'digital_marketing',
+        level: 2,
+        factors: ['Trust Propensity', 'Institution-Based Trust', 'Trusting Beliefs', 'Trusting Intentions'],
+        relationships: 'Trust Propensity + Institution Trust → Trusting Beliefs → Trusting Intentions → Risk-Taking Behavior',
+        prediction: 'ความไว้วางใจในสภาพแวดล้อมดิจิทัลจะส่งผลต่อพฤติกรรมการเสี่ยงและการตัดสินใจซื้อออนไลน์',
+        keywords: ['trust', 'digital', 'online', 'security', 'confidence', 'ความไว้วางใจ', 'ออนไลน์', 'ความปลอดภัย'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีที่อธิบายความไว้วางใจในสภาพแวดล้อมดิจิทัล เหมาะสำหรับศึกษาการซื้อขายออนไลน์และบริการดิจิทัล'
+    },
+    'ecommerce_adoption': {
+        id: 'ecommerce_adoption',
+        name: 'E-commerce Adoption Model',
+        author: 'Gefen & Straub (2000)',
+        domain: 'digital_marketing',
+        level: 3,
+        factors: ['Perceived Risk', 'Trust', 'Perceived Usefulness', 'Perceived Ease of Use', 'Purchase Intention'],
+        relationships: 'Trust + PU + PEOU - Perceived Risk → Purchase Intention → Purchase Behavior',
+        prediction: 'ความไว้วางใจ ประโยชน์ที่รับรู้ ความง่าย และความเสี่ยงที่รับรู้จะส่งผลต่อการซื้อขายออนไลน์',
+        keywords: ['ecommerce', 'adoption', 'online', 'purchase', 'trust', 'อีคอมเมิร์ซ', 'การซื้อขาย', 'ออนไลน์'],
+        statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM'],
+        description: 'ทฤษฎีที่อธิบายการยอมรับและการใช้งานระบบอีคอมเมิร์ซ โดยเน้นความไว้วางใจและความเสี่ยงที่รับรู้'
+    },
+    'social_commerce': {
+        id: 'social_commerce',
+        name: 'Social Commerce Theory',
+        author: 'Liang & Turban (2011)',
+        domain: 'digital_marketing',
+        level: 3,
+        factors: ['Social Support', 'Social Presence', 'Trust', 'Relationship Quality', 'Purchase Intention'],
+        relationships: 'Social Support + Social Presence → Trust + Relationship Quality → Purchase Intention',
+        prediction: 'การสนับสนุนทางสังคมและการรับรู้การมีอยู่ทางสังคมจะส่งผลต่อความไว้วางใจและความตั้งใจซื้อ',
+        keywords: ['social', 'commerce', 'media', 'community', 'relationship', 'สังคม', 'การค้า', 'ชุมชน', 'ความสัมพันธ์'],
+        statistics: ['Data Screening', 'Reliability Analysis', 'EFA', 'CFA', 'SEM', 'Mediation Analysis'],
+        description: 'ทฤษฎีที่อธิบายการซื้อขายผ่านสื่อสังคมออนไลน์ โดยเน้นอิทธิพลของเครือข่ายสังคมต่อพฤติกรรมการซื้อ'
+    },
+
+    // ทุนทางสังคม (เก็บเดิม)
+    'social_capital': {
+        id: 'social_capital',
+        name: 'Social Capital Theory',
+        author: 'Coleman (1988), Bourdieu (1986)',
+        domain: 'social_capital',
+        level: 2,
+        factors: ['Structural Capital', 'Relational Capital', 'Cognitive Capital', 'Social Networks'],
+        relationships: 'Structural + Relational + Cognitive → Social Capital → Performance Outcomes',
+        prediction: 'ทุนทางสังคมในรูปแบบต่างๆ จะส่งผลต่อประสิทธิภาพและผลลัพธ์ขององค์กรและบุคคล',
+        keywords: ['social', 'capital', 'network', 'relationship', 'trust', 'สังคม', 'ทุน', 'เครือข่าย', 'ความสัมพันธ์'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ'
+    },
+
+    // สาขาอื่นๆ (เก็บเดิม)
+    'rbv': {
+        id: 'rbv',
+        name: 'Resource-Based View (RBV)',
+        author: 'Barney (1991)',
+        domain: 'management',
+        level: 2,
+        factors: ['Valuable Resources', 'Rare Resources', 'Inimitable Resources', 'Organized Resources'],
+        relationships: 'VRIO Resources → Competitive Advantage → Superior Performance',
+        prediction: 'ทรัพยากรที่มีคุณค่า หายาก เลียนแบบยาก และจัดการได้ดีจะสร้างความได้เปรียบทางการแข่งขัน',
+        keywords: ['resource', 'competitive', 'advantage', 'valuable', 'rare', 'ทรัพยากร', 'การแข่งขัน', 'ความได้เปรียบ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน'
+    },
+    'capm': {
+        id: 'capm',
+        name: 'Capital Asset Pricing Model (CAPM)',
+        author: 'Sharpe (1964)',
+        domain: 'finance',
+        level: 2,
+        factors: ['Risk-Free Rate', 'Market Risk Premium', 'Beta', 'Expected Return'],
+        relationships: 'Risk-Free Rate + Beta × Market Risk Premium → Expected Return',
+        prediction: 'ผลตอบแทนที่คาดหวังจะขึ้นอยู่กับความเสี่ยงระบบที่วัดด้วยค่าเบต้า',
+        keywords: ['asset', 'pricing', 'risk', 'return', 'beta', 'สินทรัพย์', 'ราคา', 'ความเสี่ยง', 'ผลตอบแทน'],
+        statistics: ['Descriptive Statistics', 'Correlation Analysis', 'Regression Analysis'],
+        description: 'แบบจำลองการตั้งราคาสินทรัพย์ทุนที่อธิบายความสัมพันธ์ระหว่างความเสี่ยงและผลตอบแทน'
+    },
+    'expectancy_theory': {
+        id: 'expectancy_theory',
+        name: 'Expectancy Theory',
+        author: 'Vroom (1964)',
+        domain: 'hr',
+        level: 2,
+        factors: ['Expectancy', 'Instrumentality', 'Valence', 'Motivation'],
+        relationships: 'Expectancy × Instrumentality × Valence → Motivation → Performance',
+        prediction: 'แรงจูงใจจะขึ้นอยู่กับความคาดหวัง ความเชื่อมโยง และคุณค่าของผลลัพธ์',
+        keywords: ['expectancy', 'motivation', 'performance', 'valence', 'instrumentality', 'แรงจูงใจ', 'ประสิทธิภาพ'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'Multiple Regression'],
+        description: 'ทฤษฎีแรงจูงใจที่อธิบายการตัดสินใจของบุคคลในการทำงาน'
+    },
+    'supply_chain_management': {
+        id: 'supply_chain_management',
+        name: 'Supply Chain Management Theory',
+        author: 'Christopher (1992)',
+        domain: 'supply_chain',
+        level: 2,
+        factors: ['Integration', 'Coordination', 'Collaboration', 'Information Sharing', 'Trust'],
+        relationships: 'Integration + Coordination → Collaboration → Information Sharing → Performance',
+        prediction: 'การบูรณาการและประสานงานในห่วงโซ่อุปทานจะส่งผลต่อประสิทธิภาพโดยรวม',
+        keywords: ['supply', 'chain', 'integration', 'coordination', 'collaboration', 'ห่วงโซ่อุปทาน', 'การบูรณาการ', 'ประสานงาน'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีการจัดการห่วงโซ่อุปทานที่เน้นการบูรณาการและความร่วมมือระหว่างคู่ค้า'
+    },
+    'porters_five_forces': {
+        id: 'porters_five_forces',
+        name: "Porter's Five Forces Model",
+        author: 'Porter (1980)',
+        domain: 'strategy',
+        level: 2,
+        factors: ['Threat of New Entrants', 'Bargaining Power of Suppliers', 'Bargaining Power of Buyers', 'Threat of Substitutes', 'Competitive Rivalry'],
+        relationships: 'Five Forces → Industry Attractiveness → Profitability → Strategic Positioning',
+        prediction: 'ห้าแรงที่มีอิทธิพลต่ออุตสาหกรรมจะกำหนดความน่าสนใจและผลกำไรของธุรกิจ',
+        keywords: ['forces', 'competition', 'strategy', 'industry', 'rivalry', 'แรง', 'การแข่งขัน', 'กลยุทธ์', 'อุตสาหกรรม'],
+        statistics: ['Descriptive Statistics', 'Industry Analysis', 'Competitive Analysis'],
+        description: 'แบบจำลองห้าแรงของพอร์เตอร์ที่วิเคราะห์แรงขับเคลื่อนการแข่งขันในอุตสาหกรรม'
+    },
+    'triple_bottom_line': {
+        id: 'triple_bottom_line',
+        name: 'Triple Bottom Line Theory',
+        author: 'Elkington (1997)',
+        domain: 'sustainability',
+        level: 2,
+        factors: ['Economic Performance', 'Environmental Performance', 'Social Performance', 'Stakeholder Value'],
+        relationships: 'Economic + Environmental + Social → Sustainable Performance → Long-term Value',
+        prediction: 'ความสำเร็จที่ยั่งยืนต้องสร้างคุณค่าในด้านเศรษฐกิจ สิ่งแวดล้อม และสังคม',
+        keywords: ['triple', 'bottom', 'line', 'sustainability', 'economic', 'environmental', 'social', 'ยั่งยืน', 'สิ่งแวดล้อม'],
+        statistics: ['Descriptive Statistics', 'Reliability Analysis', 'EFA', 'Multiple Regression'],
+        description: 'ทฤษฎีผลตอบแทนสามด้านที่เน้นการสร้างคุณค่าอย่างยั่งยืนใน 3 มิติ'
+    },
+    'business_intelligence': {
+    id: 'business_intelligence',
+    name: 'Business Intelligence Theory',
+    author: 'Watson & Wixom (2007)',
+    domain: 'business_analytics',
+    level: 2,
+    factors: ['Data Integration', 'Data Warehousing', 'OLAP', 'Reporting', 'Decision Support'],
+    relationships: 'Data Integration → Information Processing → Business Insights → Decision Making',
+    prediction: 'ระบบ BI จะช่วยเปลี่ยนข้อมูลเป็นข้อมูลเชิงลึกเพื่อการตัดสินใจที่ดีขึ้น',
+    keywords: ['business', 'intelligence', 'data', 'analytics', 'decision', 'ธุรกิจ', 'ข้อมูล', 'การวิเคราะห์'],
+    statistics: ['Descriptive Statistics', 'Data Mining', 'Trend Analysis', 'Reporting'],
+    description: 'ทฤษฎีระบบสารสนเทศเพื่อการตัดสินใจที่เปลี่ยนข้อมูลเป็นความรู้'
+},
+'big_data_analytics': {
+    id: 'big_data_analytics',
+    name: 'Big Data Analytics Theory',
+    author: 'Chen et al. (2012)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Volume', 'Velocity', 'Variety', 'Veracity', 'Value Creation'],
+    relationships: '5Vs of Big Data → Analytics Capabilities → Business Insights → Competitive Advantage',
+    prediction: 'การวิเคราะห์ข้อมูลขนาดใหญ่จะสร้างความได้เปรียบการแข่งขันและคุณค่าทางธุรกิจ',
+    keywords: ['big', 'data', 'analytics', 'volume', 'velocity', 'variety', 'ข้อมูลขนาดใหญ่', 'การวิเคราะห์'],
+    statistics: ['Machine Learning', 'Predictive Analytics', 'Text Mining', 'Network Analysis'],
+    description: 'ทฤษฎีการวิเคราะห์ข้อมูลขนาดใหญ่ที่มีความหลากหลายและความเร็วสูง'
+},
+'predictive_analytics': {
+    id: 'predictive_analytics',
+    name: 'Predictive Analytics Theory',
+    author: 'Shmueli & Koppius (2011)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Historical Data', 'Statistical Models', 'Machine Learning', 'Predictive Models', 'Forecasting Accuracy'],
+    relationships: 'Historical Data → Model Building → Prediction → Business Decisions → Performance Improvement',
+    prediction: 'การวิเคราะห์เชิงพยากรณ์จะช่วยคาดการณ์แนวโน้มและรูปแบบในอนาคต',
+    keywords: ['predictive', 'analytics', 'forecasting', 'models', 'machine', 'learning', 'พยากรณ์', 'แบบจำลอง'],
+    statistics: ['Time Series Analysis', 'Regression Models', 'Machine Learning', 'Model Validation'],
+    description: 'ทฤษฎีการวิเคราะห์เชิงพยากรณ์เพื่อคาดการณ์เหตุการณ์ในอนาคต'
+},
+'customer_analytics': {
+    id: 'customer_analytics',
+    name: 'Customer Analytics Theory',
+    author: 'Kumar & Reinartz (2016)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Customer Segmentation', 'Customer Lifetime Value', 'Churn Prediction', 'Cross-selling', 'Customer Journey'],
+    relationships: 'Customer Data → Analytics → Customer Insights → Marketing Strategy → Customer Value',
+    prediction: 'การวิเคราะห์ลูกค้าจะช่วยเข้าใจพฤติกรรมและสร้างกลยุทธ์การตลาดที่มีประสิทธิภาพ',
+    keywords: ['customer', 'analytics', 'segmentation', 'lifetime', 'value', 'churn', 'ลูกค้า', 'การแบ่งกลุ่ม', 'คุณค่า'],
+    statistics: ['Cluster Analysis', 'Survival Analysis', 'RFM Analysis', 'Cohort Analysis'],
+    description: 'ทฤษฎีการวิเคราะห์ลูกค้าเพื่อเข้าใจพฤติกรรมและสร้างคุณค่า'
+},
+'digital_transformation': {
+    id: 'digital_transformation',
+    name: 'Digital Transformation Theory',
+    author: 'Westerman et al. (2014)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['Digital Strategy', 'Technology Adoption', 'Process Innovation', 'Organizational Change', 'Digital Capabilities'],
+    relationships: 'Digital Strategy → Technology Implementation → Process Transformation → Business Value',
+    prediction: 'การเปลี่ยนผ่านสู่ดิจิทัลจะสร้างความสามารถใหม่และคุณค่าทางธุรกิจ',
+    keywords: ['digital', 'transformation', 'technology', 'innovation', 'capabilities', 'ดิจิทัล', 'เทคโนโลยี', 'นวัตกรรม'],
+    statistics: ['Digital Maturity Assessment', 'Technology Adoption Models', 'Change Management Metrics'],
+    description: 'ทฤษฎีการเปลี่ยนผ่านสู่ดิจิทัลเพื่อสร้างความสามารถในการแข่งขันใหม่'
+},
+'ai_adoption': {
+    id: 'ai_adoption',
+    name: 'Artificial Intelligence Adoption Theory',
+    author: 'Davenport & Ronanki (2018)',
+    domain: 'business_analytics',
+    level: 3,
+    factors: ['AI Readiness', 'Data Quality', 'Technical Infrastructure', 'Organizational Culture', 'AI Capabilities'],
+    relationships: 'AI Readiness → Implementation → AI Capabilities → Business Performance → Competitive Advantage',
+    prediction: 'การนำ AI มาใช้จะเพิ่มประสิทธิภาพและสร้างความได้เปรียบการแข่งขัน',
+    keywords: ['artificial', 'intelligence', 'AI', 'automation', 'machine', 'learning', 'ปัญญาประดิษฐ์', 'อัตโนมัติ'],
+    statistics: ['AI Maturity Assessment', 'Performance Measurement', 'Impact Analysis', 'ROI Calculation'],
+    description: 'ทฤษฎีการนำปัญญาประดิษฐ์มาใช้ในองค์กรเพื่อเพิ่มประสิทธิภาพ'
+},
+'data_driven_decision': {
+    id: 'data_driven_decision',
+    name: 'Data-Driven Decision Making Theory',
+    author: 'Brynjolfsson et al. (2011)',
+    domain: 'business_analytics',
+    level: 2,
+    factors: ['Data Quality', 'Analytics Capabilities', 'Decision Process', 'Organizational Culture', 'Performance Outcomes'],
+    relationships: 'Data Quality + Analytics Capabilities → Data-Driven Culture → Better Decisions → Superior Performance',
+    prediction: 'องค์กรที่ใช้ข้อมูลในการตัดสินใจจะมีประสิทธิภาพที่ดีกว่าองค์กรที่ใช้สัญชาตญาณ',
+    keywords: ['data', 'driven', 'decision', 'making', 'analytics', 'performance', 'ข้อมูล', 'การตัดสินใจ', 'ประสิทธิภาพ'],
+    statistics: ['Descriptive Statistics', 'Performance Metrics', 'Decision Analysis', 'Impact Assessment'],
+    description: 'ทฤษฎีการตัดสินใจที่อิงข้อมูลเพื่อเพิ่มประสิทธิภาพและความแม่นยำ'
+},
+    // 1. Comparative Advantage Theory
+'comparative_advantage': {
+    id: 'comparative_advantage',
+    name: 'Comparative Advantage Theory',
+    author: 'David Ricardo (1817)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Opportunity Cost', 'Production Efficiency', 'Resource Allocation', 'Trade Specialization', 'Economic Gains'],
+    relationships: 'Opportunity Cost Differences → Specialization → Trade → Mutual Economic Gains → Increased Welfare',
+    prediction: 'ประเทศที่มีต้นทุนเสียโอกาสต่ำกว่าในการผลิตสินค้าใดสินค้าหนึ่งควรเชี่ยวชาญผลิตสินค้านั้นเพื่อการค้าที่มีประสิทธิภาพ',
+    keywords: ['comparative', 'advantage', 'trade', 'specialization', 'opportunity', 'cost', 'ความได้เปรียบ', 'การค้า', 'การเชี่ยวชาญ', 'ต้นทุนเสียโอกาส'],
+    statistics: ['Descriptive Statistics', 'Comparative Analysis', 'Trade Performance Metrics', 'Export-Import Ratio Analysis'],
+    description: 'ทฤษฎีพื้นฐานการค้าระหว่างประเทศที่อธิบายว่าประเทศควรเชี่ยวชาญผลิตสินค้าที่มีความได้เปรียบเชิงเปรียบเทียบ แม้จะไม่มีความได้เปรียบสัมบูรณ์'
+},
+
+// 2. Heckscher-Ohlin Theory (H-O Model)
+'heckscher_ohlin': {
+    id: 'heckscher_ohlin',
+    name: 'Heckscher-Ohlin Theory (H-O Model)',
+    author: 'Eli Heckscher & Bertil Ohlin (1919-1933)',
+    domain: 'international_trade',
+    level: 3,
+    factors: ['Factor Endowments', 'Capital Intensity', 'Labor Intensity', 'Technology Level', 'Factor Price Equalization'],
+    relationships: 'Factor Endowments → Production Patterns → Trade Patterns → Factor Price Convergence → Economic Efficiency',
+    prediction: 'ประเทศจะส่งออกสินค้าที่ใช้ปัจจัยการผลิตที่ตนมีในปริมาณมากและมีราคาถูก และนำเข้าสินค้าที่ใช้ปัจจัยการผลิตที่ตนมีน้อย',
+    keywords: ['heckscher', 'ohlin', 'factor', 'endowments', 'capital', 'labor', 'intensive', 'ปัจจัยการผลิต', 'เงินทุน', 'แรงงาน'],
+    statistics: ['Factor Analysis', 'Correlation Analysis', 'Multiple Regression', 'Comparative Economics Analysis', 'Trade Pattern Analysis'],
+    description: 'ทฤษฎีที่อธิบายรูปแบบการค้าระหว่างประเทศโดยอิงจากความแตกต่างของปัจจัยการผลิต (เงินทุน แรงงาน ทรัพยากรธรรมชาติ) ที่แต่ละประเทศมี'
+},
+
+// 3. Eclectic Paradigm (OLI Framework)
+'eclectic_paradigm': {
+    id: 'eclectic_paradigm',
+    name: 'Eclectic Paradigm (OLI Framework)',
+    author: 'John Dunning (1977)',
+    domain: 'international_trade',
+    level: 3,
+    factors: ['Ownership Advantages', 'Location Advantages', 'Internalization Advantages', 'FDI Decision', 'Market Entry Mode'],
+    relationships: 'O + L + I Advantages → FDI Decision → Entry Mode Selection → International Business Performance',
+    prediction: 'บริษัทจะลงทุนโดยตรงในต่างประเทศเมื่อมีความได้เปรียบด้านเจ้าของ สถานที่ และการควบคุมภายในพร้อมกัน',
+    keywords: ['eclectic', 'OLI', 'ownership', 'location', 'internalization', 'FDI', 'multinational', 'การลงทุนโดยตรง', 'บริษัทข้ามชาติ'],
+    statistics: ['Multiple Regression Analysis', 'Logistic Regression', 'Factor Analysis', 'Decision Tree Analysis', 'Performance Measurement'],
+    description: 'กรอบแนวคิดที่อธิบายการตัดสินใจลงทุนโดยตรงในต่างประเทศ (FDI) ของบริษัทข้ามชาติโดยใช้ 3 ปัจจัยหลัก: Ownership, Location, และ Internalization'
+},
+
+// 4. Uppsala Internationalization Model
+'uppsala_model': {
+    id: 'uppsala_model',
+    name: 'Uppsala Internationalization Model',
+    author: 'Johanson & Vahlne (1977)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Market Knowledge', 'Market Commitment', 'Psychic Distance', 'Experiential Learning', 'Incremental Steps'],
+    relationships: 'Market Knowledge → Commitment Decisions → Market Operations → Experience → Increased Knowledge → Further Commitment',
+    prediction: 'บริษัทจะขยายธุรกิจไปต่างประเทศแบบค่อยเป็นค่อยไป โดยเริ่มจากประเทศที่มีความใกล้เคียงทางวัฒนธรรมและภาษา',
+    keywords: ['uppsala', 'internationalization', 'psychic', 'distance', 'incremental', 'learning', 'การขยายตัวต่างประเทศ', 'การเรียนรู้', 'ระยะห่างทางจิตใจ'],
+    statistics: ['Stage Analysis', 'Longitudinal Analysis', 'Path Analysis', 'Learning Curve Analysis', 'Market Entry Sequence Analysis'],
+    description: 'แบบจำลองที่อธิบายกระบวนการขยายธุรกิจไปต่างประเทศแบบค่อยเป็นค่อยไป โดยเน้นการเรียนรู้จากประสบการณ์และการลดความเสี่ยง'
+},
+
+// 5. Porter's Diamond Model
+'porters_diamond': {
+    id: 'porters_diamond',
+    name: "Porter's Diamond Model (National Competitive Advantage)",
+    author: 'Michael Porter (1990)',
+    domain: 'international_trade',
+    level: 2,
+    factors: ['Factor Conditions', 'Demand Conditions', 'Related Supporting Industries', 'Firm Strategy & Rivalry', 'Government Role', 'Chance Events'],
+    relationships: 'Factor Conditions + Demand Conditions + Supporting Industries + Strategy/Rivalry → National Competitive Advantage → International Success',
+    prediction: 'ความสามารถในการแข่งขันของอุตสาหกรรมในระดับประเทศขึ้นอยู่กับปฏิสัมพันธ์ของปัจจัย 4 ด้านหลักในรูปแบบเพชร',
+    keywords: ['porter', 'diamond', 'competitive', 'advantage', 'national', 'competitiveness', 'industry', 'cluster', 'ความได้เปรียบการแข่งขัน', 'ระดับประเทศ', 'อุตสาหกรรม'],
+    statistics: ['Competitive Analysis', 'Industry Analysis', 'Factor Analysis', 'Cluster Analysis', 'Performance Benchmarking'],
+    description: 'แบบจำลองเพชรที่อธิบายปัจจัยที่ทำให้ประเทศหรืออุตสาหกรรมมีความสามารถในการแข่งขันในตลาดโลก ผ่าน 4 ปัจจัยหลักที่เชื่อมโยงกัน'
+},
+// 1. Triple Bottom Line (TBL) - อัพเดตเวอร์ชันที่มีอยู่แล้ว
+'triple_bottom_line_extended': {
+    id: 'triple_bottom_line_extended',
+    name: 'Triple Bottom Line Framework (Extended)',
+    author: 'John Elkington (1994)',
+    domain: 'sustainability',
+    level: 2,
+    factors: ['People (Social Performance)', 'Planet (Environmental Performance)', 'Profit (Economic Performance)', 'Stakeholder Engagement', 'Integrated Reporting'],
+    relationships: 'People + Planet + Profit → Integrated Performance → Stakeholder Value → Sustainable Business Model → Long-term Success',
+    prediction: 'องค์กรที่บูรณาการการดำเนินงานทั้ง 3 มิติอย่างสมดุลจะสร้างคุณค่าที่ยั่งยืนและได้รับการยอมรับจากผู้มีส่วนได้ส่วนเสีย',
+    keywords: ['triple', 'bottom', 'line', 'people', 'planet', 'profit', '3BL', 'ความยั่งยืน', 'สังคม', 'สิ่งแวดล้อม', 'เศรษฐกิจ'],
+    statistics: ['Descriptive Statistics', 'Balanced Scorecard Analysis', 'Multi-criteria Decision Analysis', 'Sustainability Index Calculation'],
+    description: 'กรอบแนวคิดการประเมินความสำเร็จของธุรกิจในมิติที่กว้างขึ้น โดยวัดผลทั้งด้านสังคม สิ่งแวดล้อม และเศรษฐกิจ ไม่ใช่เพียงกำไรเท่านั้น'
+},
+
+// 2. Sustainable Development Goals (SDGs)
+'sdgs_framework': {
+    id: 'sdgs_framework',
+    name: 'Sustainable Development Goals Framework (SDGs)',
+    author: 'United Nations (2015)',
+    domain: 'sustainability',
+    level: 2,
+    factors: ['17 Global Goals', 'Policy Alignment', 'Multi-stakeholder Partnership', 'Measurement Indicators', 'Local Implementation'],
+    relationships: 'Global Goals → National Policies → Local Implementation → Multi-stakeholder Collaboration → Sustainable Development Impact',
+    prediction: 'การบูรณาการเป้าหมาย SDGs ในกลยุทธ์องค์กรจะช่วยสร้างผลกระทบเชิงบวกต่อสังคมและสิ่งแวดล้อม พร้อมสร้างโอกาสทางธุรกิจใหม่',
+    keywords: ['SDGs', 'sustainable', 'development', 'goals', 'UN', '2030', 'agenda', 'เป้าหมายการพัฒนาที่ยั่งยืน', 'สหประชาชาติ'],
+    statistics: ['Goal Alignment Analysis', 'Impact Measurement', 'Progress Tracking', 'Multi-dimensional Scaling', 'Policy Analysis'],
+    description: 'กรอบเป้าหมายการพัฒนาที่ยั่งยืน 17 เป้าหมายของสหประชาชาติที่ใช้เป็นแนวทางในการขับเคลื่อนการพัฒนาโลกภายในปี 2030'
+},
+
+// 3. Environmental, Social, and Governance (ESG)
+'esg_framework': {
+    id: 'esg_framework',
+    name: 'Environmental, Social, and Governance Framework (ESG)',
+    author: 'United Nations Principles for Responsible Investment (2004)',
+    domain: 'sustainability',
+    level: 3,
+    factors: ['Environmental Criteria', 'Social Criteria', 'Governance Criteria', 'Risk Management', 'Investment Performance'],
+    relationships: 'ESG Criteria → Risk Assessment → Investment Decisions → Financial Performance → Sustainable Value Creation',
+    prediction: 'องค์กรที่มี ESG Score สูงจะมีความเสี่ยงต่ำกว่าและสร้างผลตอบแทนที่ยั่งยืนในระยะยาว รวมทั้งได้รับความเชื่อมั่นจากนักลงทุน',
+    keywords: ['ESG', 'environmental', 'social', 'governance', 'sustainable', 'investing', 'risk', 'การลงทุนยั่งยืน', 'ธรรมาภิบาล'],
+    statistics: ['ESG Scoring Models', 'Risk Assessment', 'Portfolio Analysis', 'Performance Measurement', 'Factor Analysis'],
+    description: 'กรอบการประเมินความยั่งยืนของธุรกิจที่ใช้ในการตัดสินใจลงทุน โดยประเมิน 3 มิติหลัก: สิ่งแวดล้อม สังคม และธรรมาภิบาล'
+},
+
+// 4. Natural Capitalism
+'natural_capitalism': {
+    id: 'natural_capitalism',
+    name: 'Natural Capitalism Theory',
+    author: 'Paul Hawken, Amory & Hunter Lovins (1999)',
+    domain: 'sustainability',
+    level: 3,
+    factors: ['Natural Capital', 'Human Capital', 'Manufactured Capital', 'Financial Capital', 'Resource Productivity'],
+    relationships: 'Natural Capital Recognition → Resource Efficiency → Biomimicry → Service Economy → Reinvestment in Nature',
+    prediction: 'การรับรู้และประเมินมูลค่าทุนธรรมชาติจะนำไปสู่การใช้ทรัพยากรอย่างมีประสิทธิภาพและการสร้างธุรกิจที่ยั่งยืน',
+    keywords: ['natural', 'capitalism', 'capital', 'resource', 'efficiency', 'biomimicry', 'ทุนธรรมชาติ', 'ประสิทธิภาพทรัพยากร'],
+    statistics: ['Natural Capital Accounting', 'Resource Efficiency Analysis', 'Life Cycle Assessment', 'Economic Valuation'],
+    description: 'แนวคิดเศรษฐกิจที่เน้นการนับรวมทุนธรรมชาติเป็นส่วนหนึ่งของการดำเนินธุรกิจ และการเพิ่มประสิทธิภาพการใช้ทรัพยากร'
+},
+
+// 5. Stakeholder Theory (Sustainability Context)
+'stakeholder_sustainability': {
+    id: 'stakeholder_sustainability',
+    name: 'Stakeholder Theory for Sustainability',
+    author: 'R. Edward Freeman (1984), adapted for sustainability',
+    domain: 'sustainability',
+    level: 2,
+    factors: ['Stakeholder Identification', 'Stakeholder Engagement', 'Shared Value Creation', 'Social License', 'Long-term Relationships'],
+    relationships: 'Stakeholder Analysis → Engagement Strategy → Shared Value → Social License → Sustainable Performance → Stakeholder Satisfaction',
+    prediction: 'การมีส่วนร่วมของผู้มีส่วนได้ส่วนเสียอย่างแท้จริงจะสร้างความน่าเชื่อถือและการยอมรับทางสังคม นำไปสู่ความยั่งยืนระยะยาว',
+    keywords: ['stakeholder', 'engagement', 'sustainability', 'shared', 'value', 'social', 'license', 'ผู้มีส่วนได้ส่วนเสีย', 'การมีส่วนร่วม'],
+    statistics: ['Stakeholder Mapping', 'Engagement Effectiveness', 'Social Impact Assessment', 'Network Analysis'],
+    description: 'การประยุกต์ทฤษฎีผู้มีส่วนได้ส่วนเสียในบริบทความยั่งยืน เน้นการสร้างคุณค่าร่วมและความรับผิดชอบต่อสังคม'
+},
+
+// 6. Systems Thinking for Sustainability
+'systems_thinking_sustainability': {
+    id: 'systems_thinking_sustainability',
+    name: 'Systems Thinking for Sustainability',
+    author: 'Peter Senge, Donella Meadows',
+    domain: 'sustainability',
+    level: 3,
+    factors: ['System Structure', 'Feedback Loops', 'Leverage Points', 'Mental Models', 'Collective Learning'],
+    relationships: 'System Understanding → Leverage Points → Interventions → Feedback → System Change → Sustainable Outcomes',
+    prediction: 'การมองปัญหาความยั่งยืนในเชิงระบบและการแทรกแซงจุดสำคัญจะสร้างการเปลี่ยนแปลงที่ยั่งยืนและมีประสิทธิภาพมากกว่าการแก้ปัญหาแบบแยกส่วน',
+    keywords: ['systems', 'thinking', 'feedback', 'loops', 'leverage', 'points', 'complexity', 'ระบบคิด', 'ความซับซ้อน', 'จุดยกระดับ'],
+    statistics: ['Systems Dynamics Modeling', 'Network Analysis', 'Complexity Metrics', 'Scenario Analysis', 'Causal Loop Analysis'],
+    description: 'การประยุกต์ระบบคิดในการแก้ปัญหาความยั่งยืน โดยมองความเชื่อมโยงและปฏิสัมพันธ์ระหว่างองค์ประกอบต่างๆ ในระบบ'
+},
+
+// 7. Doughnut Economics
+'doughnut_economics': {
+    id: 'doughnut_economics',
+    name: 'Doughnut Economics Model',
+    author: 'Kate Raworth (2012, 2017)',
+    domain: 'sustainability',
+    level: 3,
+    factors: ['Social Foundation', 'Ecological Ceiling', 'Safe Operating Space', 'Regenerative Economy', 'Distributive Economy'],
+    relationships: 'Social Needs + Planetary Boundaries → Safe Operating Space → Regenerative & Distributive Design → Thriving Humanity',
+    prediction: 'การดำเนินเศรษฐกิจภายในขอบเขตที่ปลอดภัย (ระหว่างฐานสังคมและเพดานนิเวศ) จะสร้างความเจริญรุ่งเรืองที่ยั่งยืนสำหรับมนุษยชาติ',
+    keywords: ['doughnut', 'economics', 'planetary', 'boundaries', 'social', 'foundation', 'regenerative', 'เศรษฐกิจโดนัท', 'ขอบเขตโลก'],
+    statistics: ['Sustainability Indicators', 'Boundary Analysis', 'Multi-dimensional Assessment', 'Regional Doughnut Analysis', 'Well-being Metrics'],
+    description: 'โมเดลเศรษฐกิจที่เสนอกรอบการพัฒนาที่ยั่งยืน โดยการดำเนินเศรษฐกิจในพื้นที่ปลอดภัยระหว่างความต้องการพื้นฐานของสังคมและขอบเขตของระบบนิเวศโลก'
+}    
+};
+
+        // Utility Functions
+window.AppUtils = {
+    // Show loading state
+    showLoading: function(message = 'กำลังโหลด...') {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div class="loading">
+                <div class="text-center text-white">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p>${message}</p>
+                </div>
+            </div>
+        `;
+    },
+
+    // Show error message
+    showError: function(message) {
+        const app = document.getElementById('app');
+        app.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center">
+                <div class="text-center text-white max-w-md mx-auto p-8">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h1 class="text-2xl font-bold mb-4">เกิดข้อผิดพลาด</h1>
+                    <div class="error-message">${message}</div>
+                    <button onclick="AppController.restart()" 
+                            class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        เริ่มต้นใหม่
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    // Find relevant theories based on topic and domain
+    findRelevantTheories: function(topic, domain = null, level = null) {
+        const theories = Object.values(window.TheoryDatabase);
+        const topicLower = topic.toLowerCase();
+        const relevantTheories = [];
+
+        theories.forEach(theory => {
+            let score = 0;
+            
+            // Domain matching (highest priority)
+            if (domain && theory.domain === domain) {
+                score += 10;
+            }
+            
+            // Keyword matching
+            theory.keywords.forEach(keyword => {
+                if (topicLower.includes(keyword.toLowerCase())) {
+                    score += 3;
+                }
+            });
+
+            // Level matching
+            if (level && theory.level <= level) {
+                score += 2;
+            }
+
+            if (score > 0) {
+                relevantTheories.push({ ...theory, score });
+            }
+        });
+
+        // If no relevant theories found, return popular theories from domain
+        if (relevantTheories.length === 0 && domain) {
+            return theories
+                .filter(theory => theory.domain === domain)
+                .slice(0, 5)
+                .map(theory => ({ ...theory, score: 1 }));
+        }
+
+        // Sort by score and return top 5
+        return relevantTheories
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 5);
+    },
+
+    // Get step color for visualization
+    getStepColor: function(index) {
+        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'];
+        return colors[index % colors.length];
+    }
+};
+
+// State Management Functions
+window.StateManager = {
+    // Update state and re-render
+    updateState: function(updates) {
+        Object.assign(window.AppState, updates);
+        this.saveState();
+        window.AppController.render();
+    },
+
+    // Save state to localStorage
+    saveState: function() {
+        try {
+            localStorage.setItem('researchAppState', JSON.stringify(window.AppState));
+        } catch (e) {
+            console.warn('Could not save state to localStorage:', e);
+        }
+    },
+
+    // Load state from localStorage
+    loadState: function() {
+        try {
+            const saved = localStorage.getItem('researchAppState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                Object.assign(window.AppState, state);
+                return true;
+            }
+        } catch (e) {
+            console.warn('Could not load state from localStorage:', e);
+        }
+        return false;
+    },
+
+    // Reset state to initial
+    resetState: function() {
+        window.AppState = {
+            currentPage: 'landing',
+            topic: '',
+            level: null,
+            theory: null,
+            selectedDomain: null,
+            activeTab: 'theory',
+            isLoading: false,
+            error: null
+        };
+        this.saveState();
+    }
+};
+
+// Event Handlers
+window.EventHandlers = {
+    // Domain selection
+    selectDomain: function(domainId) {
+        const domainBtns = document.querySelectorAll('.domain-btn');
+        domainBtns.forEach(btn => btn.classList.remove('selected'));
+        
+        const selectedBtn = document.querySelector(`[data-domain="${domainId}"]`);
+        if (selectedBtn) {
+            selectedBtn.classList.add('selected');
+        }
+
+        window.StateManager.updateState({ 
+            selectedDomain: domainId 
+        });
+
+        // Show domain info and skip button
+        this.showDomainInfo(domainId);
+    },
+
+    // Show selected domain information
+    showDomainInfo: function(domainId) {
+        const domain = window.DomainData[domainId];
+        const infoDiv = document.getElementById('domain-info');
+        const skipBtn = document.getElementById('skip-btn');
+        
+        if (infoDiv && domain) {
+            infoDiv.innerHTML = `
+                <div class="bg-white/20 rounded-lg p-4 mb-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-white font-medium">สาขาที่เลือก: </span>
+                            <span class="text-yellow-200 font-bold">${domain.name}</span>
+                            <div class="text-white/80 text-sm mt-1">${domain.description}</div>
+                        </div>
+                        <button onclick="EventHandlers.clearDomain()" class="text-red-300 hover:text-red-100 p-2">
+                            <span class="text-xl">✕</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            infoDiv.classList.remove('hidden');
+        }
+
+        if (skipBtn) {
+            skipBtn.classList.remove('hidden');
+        }
+
+        // Update examples
+        this.updateExamples(domainId);
+    },
+
+    // Clear domain selection
+    clearDomain: function() {
+        const domainBtns = document.querySelectorAll('.domain-btn');
+        domainBtns.forEach(btn => btn.classList.remove('selected'));
+        
+        const infoDiv = document.getElementById('domain-info');
+        const skipBtn = document.getElementById('skip-btn');
+        
+        if (infoDiv) infoDiv.classList.add('hidden');
+        if (skipBtn) skipBtn.classList.add('hidden');
+
+        window.StateManager.updateState({ selectedDomain: null });
+        this.updateExamples(null);
+    },
+
+    // Update examples based on domain
+    updateExamples: function(domainId) {
+    const container = document.getElementById('examples-container');
+    if (!container) return;
+
+    if (domainId && window.DomainData[domainId]) {
+        const domain = window.DomainData[domainId];
+        container.innerHTML = `
+            <h4 class="text-lg font-bold text-white mb-4 text-center">
+                💡 ตัวอย่างโจทย์วิจัย${domain.name}
+            </h4>
+            <div class="grid gap-3">
+                ${domain.examples.map(example => `
+                    <button onclick="EventHandlers.setExample('${example.replace(/'/g, "\\'")}', '${domainId}')" 
+                            class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group w-full">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl group-hover:scale-110 transition-transform">${domain.icon}</span>
+                            <div class="flex-1">
+                                <span class="text-white font-medium">${example}</span>
+                                <div class="text-yellow-200 text-sm mt-1">${domain.name}</div>
+                            </div>
+                        </div>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        // Show general examples
+        container.innerHTML = `
+            <h4 class="text-lg font-bold text-white mb-4 text-center">
+                🎯 ตัวอย่างโจทย์วิจัยยอดนิยม
+            </h4>
+            <div class="grid gap-3">
+                <button onclick="EventHandlers.setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
+                        <div>
+                            <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                            <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                        </div>
+                    </div>
+                </button>
+                <button onclick="EventHandlers.setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                        <div>
+                            <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                            <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
+                        </div>
+                    </div>
+                </button>
+                <button onclick="EventHandlers.setExample('การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ', 'business_analytics')" 
+                        class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">📈</span>
+                        <div>
+                            <span class="text-white font-medium">การใช้ Business Intelligence เพื่อสนับสนุนการตัดสินใจทางธุรกิจ</span>
+                            <div class="text-yellow-200 text-sm mt-1">วิเคราะห์ธุรกิจ</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        `;
+    }
+    },
+
+    // Set example text
+    setExample: function(text, domainId = null) {
+        const textarea = document.getElementById('researchTopic');
+        if (textarea) {
+            textarea.value = text;
+        }
+        if (domainId) {
+            this.selectDomain(domainId);
+        }
+    }
+};
+
+
+        // Page Renderers
+window.PageRenderers = {
+    // Landing Page
+    renderLanding: function() {
+        return `
+            <div class="min-h-screen relative overflow-hidden fade-in">
+                <div class="container mx-auto px-4 py-16 relative z-10">
+                    <div class="text-center mb-16">
+                        <div class="text-8xl mb-6">🎓</div>
+                        <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">
+                            <span class="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                                ระบบปรึกษาการวิจัย
+                            </span>
+                            <br>
+                            <span class="text-4xl font-bold text-white">เชิงปริมาณ</span>
+                        </h1>
+                        <p class="text-2xl text-white/90 font-medium drop-shadow-md">
+                            Research Methodology Advisor - AI Powered
+                        </p>
+                        <p class="text-lg text-white/80 mt-2">
+                            เครื่องมือช่วยวางแผนการวิจัยแบบครบวงจร 84+ ทฤษฎี 12 สาขาวิชา
+                        </p>
+                    </div>
+
+                    <div class="max-w-6xl mx-auto">
+                        <div class="glass rounded-3xl shadow-2xl p-10 card-3d">
+                            <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                                🔍 โจทย์งานวิจัยของคุณ
+                            </h2>
+
+                            <!-- เลือกสาขาวิชา -->
+                            <div class="mb-8">
+                                <label class="block text-white font-semibold mb-4 text-lg">
+                                    🎯 เลือกสาขาวิชาของคุณ
+                                </label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+                                    ${Object.entries(window.DomainData).map(([key, domain]) => `
+                                        <button onclick="EventHandlers.selectDomain('${key}')" 
+                                                data-domain="${key}"
+                                                class="domain-btn bg-white/10 hover:bg-white/20 border border-white/30 rounded-xl p-4 text-center transition-all group hover:scale-105">
+                                            <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">${domain.icon}</div>
+                                            <div class="text-white font-medium text-sm leading-tight">${domain.name}</div>
+                                            <div class="text-white/60 text-xs mt-1">${domain.description}</div>
+                                        </button>
+                                    `).join('')}
+                                </div>
+                                
+                                <!-- แสดงสาขาที่เลือกและปุ่มข้าม -->
+                                <div id="domain-info" class="hidden"></div>
+                                
+                                <!-- ปุ่มข้ามไปเลือกระดับ -->
+                                <div id="skip-btn" class="hidden mb-6">
+                                    <button onclick="AppController.goToLevel()" 
+                                            class="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all text-lg">
+                                        🚀 ข้ามไปเลือกระดับความยากของสถิติงานวิจัยเลย
+                                    </button>
+                                    <p class="text-white/70 text-sm text-center mt-2">
+                                        หรือใส่โจทย์วิจัยเฉพาะเจาะจงด้านล่าง
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <label class="block text-white font-semibold mb-4 text-lg">
+                                    💭 โจทย์วิจัยหรือหัวข้อที่คุณสนใจศึกษา (ทางเลือก):
+                                </label>
+                                <textarea
+                                    id="researchTopic"
+                                    placeholder="เช่น ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา..."
+                                    class="w-full h-40 p-6 border-0 rounded-2xl focus:outline-none resize-none text-gray-800 text-lg"
+                                    style="background: rgba(255,255,255,0.9);"
+                                ></textarea>
+                            </div>
+
+                            <button
+                                onclick="AppController.analyzeTopic()"
+                                class="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl transition-all text-xl mb-8"
+                            >
+                                ✨ วิเคราะห์โจทย์วิจัยด้วย AI
+                            </button>
+
+                            <div class="mt-10">
+                                <div id="examples-container">
+                                    <h4 class="text-lg font-bold text-white mb-4 text-center">
+                                        🎯 ตัวอย่างโจทย์งานวิจัย
+                                    </h4>
+                                    <div class="grid gap-3">
+                                        <button onclick="EventHandlers.setExample('ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา', 'digital_marketing')" 
+                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                            <div class="flex items-center gap-4">
+                                                <span class="text-3xl group-hover:scale-110 transition-transform">📱</span>
+                                                <div>
+                                                    <span class="text-white font-medium">ศึกษาปัจจัยที่มีผลต่อการยอมรับเทคโนโลยีการเรียนออนไลน์ของนักศึกษา</span>
+                                                    <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                        <button onclick="EventHandlers.setExample('วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน', 'social_capital')" 
+                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                            <div class="flex items-center gap-4">
+                                                <span class="text-3xl group-hover:scale-110 transition-transform">🤝</span>
+                                                <div>
+                                                    <span class="text-white font-medium">วิเคราะห์ความสัมพันธ์ระหว่างทุนทางสังคมกับประสิทธิภาพการทำงานของพนักงาน</span>
+                                                    <div class="text-yellow-200 text-sm mt-1">ทุนทางสังคม</div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                        <button onclick="EventHandlers.setExample('ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค', 'digital_marketing')" 
+                                                class="text-left p-4 glass rounded-xl hover:bg-white/20 transition-all group">
+                                            <div class="flex items-center gap-4">
+                                                <span class="text-3xl group-hover:scale-110 transition-transform">🛒</span>
+                                                <div>
+                                                    <span class="text-white font-medium">ศึกษาผลกระทบของการตลาดดิจิทัลต่อความตั้งใจซื้อของผู้บริโภค</span>
+                                                    <div class="text-yellow-200 text-sm mt-1">การตลาดดิจิทัล</div>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Level Selection Page
+    renderLevelSelection: function() {
+        const state = window.AppState;
+        return `
+            <div class="min-h-screen relative overflow-hidden fade-in">
+                <div class="container mx-auto px-4 py-12 relative z-10">
+                    <div class="text-center mb-12">
+                        <h1 class="text-5xl font-extrabold text-white mb-6 drop-shadow-lg">
+                            🎯 เลือกระดับความยากของสถิติงานวิจัย
+                        </h1>
+                        <div class="glass rounded-2xl p-6 max-w-4xl mx-auto">
+                            <p class="text-white/90 mb-3 text-lg">📝 โจทย์วิจัยของคุณ:</p>
+                            <p class="text-white font-bold text-xl">${state.topic}</p>
+                            ${state.selectedDomain ? `
+                                <p class="text-white/90 mt-2">🎯 สาขาวิชา: <span class="font-medium text-yellow-200">${window.DomainData[state.selectedDomain].name}</span></p>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="max-w-7xl mx-auto">
+                        <div class="grid md:grid-cols-3 gap-8">
+                            ${Object.entries(window.LevelData).map(([level, data]) => `
+                                <div class="bg-gradient-to-br ${this.getLevelGradient(level)} rounded-3xl p-8 card-3d">
+                                    <div class="text-center mb-6">
+                                        <div class="text-6xl mb-4">${this.getLevelIcon(level)}</div>
+                                        <h3 class="text-3xl font-bold text-white mb-2">${data.name}</h3>
+                                        <div class="bg-white/30 rounded-full px-4 py-2 inline-block">
+                                            <span class="font-bold text-white">${level == 1 ? 'BEGINNER' : level == 2 ? 'INTERMEDIATE' : 'ADVANCED'}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-4 mb-8">
+                                        <div class="bg-white/20 rounded-xl p-4">
+                                            <span class="text-white font-semibold">⏱️ ขั้นตอน: ${data.steps} ขั้นตอน</span>
+                                        </div>
+                                        <div class="bg-white/20 rounded-xl p-4">
+                                            <span class="text-white font-semibold">📅 ระยะเวลา: ${data.duration}</span>
+                                        </div>
+                                        <div class="bg-white/20 rounded-xl p-4">
+                                            <span class="text-white font-semibold">🎓 เหมาะสำหรับ: ${data.target}</span>
+                                        </div>
+                                        <div class="bg-white/20 rounded-xl p-4">
+                                            <span class="text-white font-semibold">📊 วิธีการ: ${data.methods}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="AppController.selectLevel(${level})" 
+                                            class="w-full ${this.getLevelButtonColor(level)} text-white font-bold py-4 px-6 rounded-2xl transition-all text-lg">
+                                        ✅ เลือกระดับนี้
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-12">
+                        <button onclick="AppController.goBack()" 
+                                class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                            ← กลับไปแก้ไขโจทย์
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Theory Selection Page
+    renderTheorySelection: function() {
+        const state = window.AppState;
+        const relevantTheories = window.AppUtils.findRelevantTheories(
+            state.topic, 
+            state.selectedDomain, 
+            state.level
+        );
+        
+        return `
+            <div class="min-h-screen relative overflow-hidden fade-in">
+                <div class="container mx-auto px-4 py-8 relative z-10">
+                    <div class="max-w-6xl mx-auto">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+                                🧠 เลือกทฤษฎีที่เหมาะสมกับการวิจัย
+                            </h1>
+                            <div class="glass rounded-lg p-4 shadow-sm">
+                                <p class="text-white/90 mb-2">โจทย์วิจัย: <span class="font-medium text-white">${state.topic}</span></p>
+                                <p class="text-white/90">ระดับที่เลือก: <span class="font-medium text-white">ระดับ ${state.level}</span></p>
+                                ${state.selectedDomain ? `
+                                    <p class="text-white/90">สาขาวิชา: <span class="font-medium text-yellow-200">${window.DomainData[state.selectedDomain].name}</span></p>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <div class="grid gap-6">
+                            ${relevantTheories.map((theory) => `
+                                <div class="bg-white rounded-2xl border-2 border-gray-200 p-6 transition-all duration-200 hover:shadow-lg card-3d theory-card">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-800 mb-2">${theory.name}</h3>
+                                            <p class="text-gray-600">ผู้พัฒนา: ${theory.author}</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                                ระดับ ${theory.level === 1 ? 'พื้นฐาน' : theory.level === 2 ? 'กลาง' : 'สูง'}
+                                            </span>
+                                            <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                คะแนน: ${theory.score}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-gray-700 mb-4">${theory.description}</p>
+
+                                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800 mb-2">🎯 ปัจจัยหลัก:</h4>
+                                            <ul class="text-sm text-gray-600 space-y-1">
+                                                ${theory.factors.map(factor => `
+                                                    <li class="flex items-center">
+                                                        <span class="w-2 h-2 bg-amber-400 rounded-full mr-2"></span>
+                                                        ${factor}
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800 mb-2">📊 วิธีการวิเคราะห์:</h4>
+                                            <ul class="text-sm text-gray-600 space-y-1">
+                                                ${theory.statistics.map(stat => `
+                                                    <li class="flex items-center">
+                                                        <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                                        ${stat}
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                        <h4 class="font-semibold text-gray-800 mb-2">🔗 ความสัมพันธ์ระหว่างตัวแปร:</h4>
+                                        <p class="text-sm text-gray-700 font-mono bg-white p-2 rounded border">
+                                            ${theory.relationships}
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-amber-50 rounded-lg p-4 mb-4">
+                                        <h4 class="font-semibold text-amber-800 mb-2">💡 การคาดการณ์:</h4>
+                                        <p class="text-sm text-amber-700">${theory.prediction}</p>
+                                    </div>
+
+                                    <button onclick="AppController.selectTheory('${theory.id}')" 
+                                            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
+                                        ✅ เลือกทฤษฎีนี้
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="text-center mt-8">
+                            <button onclick="AppController.goBack()" 
+                                    class="glass text-white font-semibold py-3 px-8 rounded-2xl transition-all">
+                                ← กลับไปเลือกระดับ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Helper functions for level rendering
+    getLevelGradient: function(level) {
+        const gradients = {
+            1: 'from-green-400 to-blue-500',
+            2: 'from-blue-400 to-purple-500',
+            3: 'from-purple-400 to-pink-500'
+        };
+        return gradients[level] || gradients[1];
+    },
+
+    getLevelIcon: function(level) {
+        const icons = { 1: '📊', 2: '📈', 3: '🎯' };
+        return icons[level] || '📊';
+    },
+
+    getLevelButtonColor: function(level) {
+        const colors = {
+            1: 'bg-green-600 hover:bg-green-700',
+            2: 'bg-blue-600 hover:bg-blue-700',
+            3: 'bg-purple-600 hover:bg-purple-700'
+        };
+        return colors[level] || colors[1];
+    }
+};
+
+
+        // Results Page Renderers
+window.ResultsRenderers = {
+    // Main Results Page with Tabs
+    renderResults: function() {
+        const state = window.AppState;
+        const theory = state.theory;
+        
+        return `
+            <div class="min-h-screen relative overflow-hidden fade-in">
+                <div class="container mx-auto px-4 py-8 relative z-10">
+                    <div class="max-w-7xl mx-auto">
+                        <!-- Header -->
+                        <div class="glass rounded-lg p-6 shadow-sm mb-6">
+                            <h1 class="text-3xl font-bold text-white mb-4">
+                                🎉 แผนการวิจัยของคุณ
+                            </h1>
+                            <div class="grid md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="text-white/90">โจทย์วิจัย:</span>
+                                    <p class="font-medium text-white">${state.topic}</p>
+                                </div>
+                                <div>
+                                    <span class="text-white/90">ระดับ:</span>
+                                    <p class="font-medium text-white">ระดับ ${state.level}</p>
+                                </div>
+                                <div>
+                                    <span class="text-white/90">ทฤษฎี:</span>
+                                    <p class="font-medium text-white">${theory.name}</p>
+                                </div>
+                            </div>
+                            ${state.selectedDomain ? `
+                                <div class="mt-2">
+                                    <span class="text-white/90">สาขาวิชา:</span>
+                                    <span class="font-medium text-yellow-200">${window.DomainData[state.selectedDomain].name}</span>
+                                </div>
+                            ` : ''}
+                            <div class="mt-4 flex gap-3">
+                                <button onclick="AppController.exportPDF()" 
+                                        class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                                    📄 Export PDF
+                                </button>
+                                <button onclick="AppController.restart()" 
+                                        class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    🔄 เริ่มใหม่
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Navigation -->
+                        <div class="glass rounded-lg shadow-sm mb-6">
+                            <div class="flex border-b border-white/20">
+                                <button onclick="AppController.switchTab('theory')" 
+                                        class="flex-1 py-4 px-6 text-center font-medium transition-colors ${state.activeTab === 'theory' ? 'tab-active' : 'tab-inactive'}" 
+                                        data-tab="theory">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="text-lg">📚</span>
+                                        <span>ข้อมูลทฤษฎี</span>
+                                    </div>
+                                </button>
+                                <button onclick="AppController.switchTab('research')" 
+                                        class="flex-1 py-4 px-6 text-center font-medium transition-colors ${state.activeTab === 'research' ? 'tab-active' : 'tab-inactive'}" 
+                                        data-tab="research">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="text-lg">📋</span>
+                                        <span>แผนการวิจัย</span>
+                                    </div>
+                                </button>
+                                <button onclick="AppController.switchTab('statistics')" 
+                                        class="flex-1 py-4 px-6 text-center font-medium transition-colors ${state.activeTab === 'statistics' ? 'tab-active' : 'tab-inactive'}" 
+                                        data-tab="statistics">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="text-lg">📊</span>
+                                        <span>ขั้นตอนสถิติ</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div id="export-content" class="glass rounded-lg shadow-sm">
+                            <div id="tab-content">
+                                ${this.renderTabContent(state.activeTab)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // Render tab content based on active tab
+    renderTabContent: function(activeTab) {
+        switch(activeTab) {
+            case 'theory':
+                return this.renderTheoryTab();
+            case 'research':
+                return this.renderResearchTab();
+            case 'statistics':
+                return this.renderStatisticsTab();
+            default:
+                return this.renderTheoryTab();
+        }
+    },
+
+    // Theory Tab Content
+    renderTheoryTab: function() {
+        const theory = window.AppState.theory;
+        const domain = window.DomainData[theory.domain];
+        
+        return `
+            <div class="p-8">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    📚 ข้อมูลทฤษฎี: ${theory.name}
+                </h2>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                            <h3 class="text-lg font-semibold text-blue-200 mb-3">ข้อมูลพื้นฐาน</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <span class="font-medium text-blue-100">ผู้พัฒนา:</span>
+                                    <p class="text-blue-50">${theory.author}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-blue-100">สาขา:</span>
+                                    <p class="text-blue-50">${domain.name}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium text-blue-100">ระดับ:</span>
+                                    <p class="text-blue-50">ระดับ ${theory.level}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                            <h3 class="text-lg font-semibold text-green-200 mb-3">คำอธิบาย</h3>
+                            <p class="text-green-50">${theory.description}</p>
+                        </div>
+
+                        <div class="bg-purple-500/20 rounded-lg p-6 border border-purple-500/30">
+                            <h3 class="text-lg font-semibold text-purple-200 mb-3">การคาดการณ์</h3>
+                            <p class="text-purple-50">${theory.prediction}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                            <h3 class="text-lg font-semibold text-amber-200 mb-4">ปัจจัยหลัก</h3>
+                            <div class="space-y-3">
+                                ${theory.factors.map((factor, index) => `
+                                    <div class="flex items-start gap-3">
+                                        <span class="bg-amber-400 text-amber-900 px-2 py-1 rounded text-sm font-medium min-w-[24px] text-center">
+                                            ${index + 1}
+                                        </span>
+                                        <span class="text-amber-50">${factor}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-500/20 rounded-lg p-6 border border-gray-500/30">
+                            <h3 class="text-lg font-semibold text-gray-200 mb-3">ความสัมพันธ์</h3>
+                            <div class="bg-white/10 p-4 rounded border">
+                                <code class="text-gray-100 font-mono text-sm break-all">${theory.relationships}</code>
+                            </div>
+                            <p class="text-sm text-gray-300 mt-3">
+                                💡 <strong>สัญลักษณ์:</strong> → หมายถึง "ส่งผลต่อ", + หมายถึง "ร่วมกับ"
+                            </p>
+                        </div>
+
+                        <div class="bg-rose-500/20 rounded-lg p-6 border border-rose-500/30">
+                            <h3 class="text-lg font-semibold text-rose-200 mb-3">วิธีการวิเคราะห์</h3>
+                            <div class="flex flex-wrap gap-2">
+                               ${theory.statistics.map(stat => `
+                                   <span class="bg-rose-400/30 text-rose-100 px-3 py-1 rounded-full text-sm border border-rose-400/50">
+                                       ${stat}
+                                   </span>
+                               `).join('')}
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <div class="mt-8 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-6">
+                   <h3 class="text-lg font-semibold text-yellow-200 mb-3">⚠️ ข้อควรระวัง</h3>
+                   <ul class="text-yellow-100 space-y-2 text-sm">
+                       <li>• ตรวจสอบความเหมาะสมของทฤษฎีกับบริบทการวิจัยของคุณ</li>
+                       <li>• พิจารณาข้อจำกัดและสมมติฐานของทฤษฎี</li>
+                       <li>• ศึกษางานวิจัยล่าสุดที่ใช้ทฤษฎีนี้เพื่อความทันสมัย</li>
+                       <li>• ปรับปรุงตัวแปรให้เหมาะสมกับบริบทเฉพาะของคุณ</li>
+                   </ul>
+               </div>
+           </div>
+       `;
+   },
+
+   // Research Plan Tab Content
+   renderResearchTab: function() {
+       const state = window.AppState;
+       const level = state.level;
+       const levelData = window.LevelData[level];
+       
+       return `
+           <div class="p-8">
+               <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                   📋 แผนการวิจัยที่แนะนำ
+               </h2>
+               
+               <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                   <div class="bg-blue-500/20 rounded-lg p-6 border border-blue-500/30">
+                       <h3 class="text-lg font-semibold text-blue-200 mb-4">🔬 ประเภทและวิธีการวิจัย</h3>
+                       <div class="space-y-4">
+                           <div>
+                               <h4 class="font-medium text-blue-100 mb-2">ประเภทการวิจัย:</h4>
+                               <p class="text-blue-50 text-sm">${level >= 2 ? 'การวิจัยเชิงปริมาณแบบสำรวจ (Quantitative Survey)' : 'การวิจัยเชิงพรรณนา (Descriptive Research)'}</p>
+                           </div>
+                           <div>
+                               <h4 class="font-medium text-blue-100 mb-2">ปรัชญาการวิจัย:</h4>
+                               <p class="text-blue-50 text-sm">ปรัชญาการวิจัยเชิงบวกนิยม (Positivism)</p>
+                           </div>
+                           <div>
+                               <h4 class="font-medium text-blue-100 mb-2">แนวทางการวิจัย:</h4>
+                               <p class="text-blue-50 text-sm">การวิจัยเชิงนิรนัย (Deductive Research)</p>
+                           </div>
+                           <div>
+                               <h4 class="font-medium text-blue-100 mb-2">กลยุทธ์การวิจัย:</h4>
+                               <p class="text-blue-50 text-sm">การสำรวจโดยใช้แบบสอบถาม (Survey Strategy)</p>
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="bg-green-500/20 rounded-lg p-6 border border-green-500/30">
+                       <h3 class="text-lg font-semibold text-green-200 mb-4">👥 กลุ่มตัวอย่างและขอบเขต</h3>
+                       <div class="space-y-4">
+                           <div>
+                               <h4 class="font-medium text-green-100 mb-2">ขนาดกลุ่มตัวอย่าง:</h4>
+                               <p class="text-green-50 text-sm">${level === 1 ? '200-300 คน' : level === 2 ? '300-500 คน' : '500+ คน'}</p>
+                           </div>
+                           <div>
+                               <h4 class="font-medium text-green-100 mb-2">วิธีการสุ่มตัวอย่าง:</h4>
+                               <p class="text-green-50 text-sm">${level >= 2 ? 'การสุ่มตัวอย่างแบบหลายขั้นตอน (Multi-stage Sampling)' : 'การสุ่มตัวอย่างแบบง่าย (Simple Random Sampling)'}</p>
+                           </div>
+                           <div>
+                               <h4 class="font-medium text-green-100 mb-2">ช่วงเวลาการศึกษา:</h4>
+                               <p class="text-green-50 text-sm">${level >= 3 ? 'การศึกษาข้ามเวลา (Cross-sectional with Longitudinal elements)' : 'การศึกษาข้ามหน้าตัด (Cross-sectional Study)'}</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <!-- Timeline -->
+               <div class="bg-amber-500/20 rounded-lg p-6 border border-amber-500/30">
+                   <h3 class="text-lg font-semibold text-amber-200 mb-4">⏰ แผนการดำเนินงานแนะนำ</h3>
+                   <div class="space-y-4">
+                       <div class="flex gap-4 items-start">
+                           <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                               2-3 สัปดาห์
+                           </div>
+                           <div class="flex-1">
+                               <h4 class="font-medium text-amber-100 mb-1">เตรียมการ</h4>
+                               <p class="text-amber-50 text-sm">ศึกษาทฤษฎี • ออกแบบแบบสอบถาม • ทดสอบเครื่องมือ</p>
+                           </div>
+                       </div>
+                       <div class="flex gap-4 items-start">
+                           <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                               4-6 สัปดาห์
+                           </div>
+                           <div class="flex-1">
+                               <h4 class="font-medium text-amber-100 mb-1">เก็บข้อมูล</h4>
+                               <p class="text-amber-50 text-sm">แจกแบบสอบถาม • ติดตามการตอบกลับ • ตรวจสอบความสมบูรณ์</p>
+                           </div>
+                       </div>
+                       <div class="flex gap-4 items-start">
+                           <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                               ${level >= 3 ? '6-8 สัปดาห์' : '3-4 สัปดาห์'}
+                           </div>
+                           <div class="flex-1">
+                               <h4 class="font-medium text-amber-100 mb-1">วิเคราะห์ข้อมูล</h4>
+                               <p class="text-amber-50 text-sm">ทำความสะอาดข้อมูล • วิเคราะห์ทางสถิติ • ตีความผลลัพธ์</p>
+                           </div>
+                       </div>
+                       <div class="flex gap-4 items-start">
+                           <div class="bg-amber-400 text-amber-900 px-3 py-1 rounded-full text-sm font-medium min-w-[100px] text-center">
+                               3-4 สัปดาห์
+                           </div>
+                           <div class="flex-1">
+                               <h4 class="font-medium text-amber-100 mb-1">เขียนรายงาน</h4>
+                               <p class="text-amber-50 text-sm">เขียนร่าง • ปรับปรุงเนื้อหา • จัดทำรูปแบบสุดท้าย</p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       `;
+   },
+
+   // Statistics Tab Content
+   renderStatisticsTab: function() {
+       const state = window.AppState;
+       const level = state.level;
+       const levelData = window.LevelData[level];
+       
+       return `
+           <div class="p-8">
+               <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                   📊 ขั้นตอนการวิเคราะห์ทางสถิติ (ระดับ ${level})
+               </h2>
+               
+               <div class="mb-8 bg-white/5 rounded-lg p-6 border border-white/10">
+                   <h3 class="text-lg font-semibold text-white mb-4">📋 ภาพรวมขั้นตอน</h3>
+                   <p class="text-white/80 mb-4">${levelData.description}</p>
+                   <div class="overflow-x-auto">
+                       <div class="flex gap-2 pb-2 min-w-max">
+                           ${levelData.steps_detail.map((method, index) => `
+                               <div class="flex items-center">
+                                   <div class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap">
+                                       ${index + 1}. ${method}
+                                   </div>
+                                   ${index < levelData.steps_detail.length - 1 ? '<div class="text-white/40 mx-2">→</div>' : ''}
+                               </div>
+                           `).join('')}
+                       </div>
+                   </div>
+               </div>
+
+               <div class="grid gap-6">
+                   ${levelData.steps_detail.map((method, index) => `
+                       <div class="bg-white/5 rounded-lg p-6 border border-white/10 step-card" style="border-left-color: ${window.AppUtils.getStepColor(index)}">
+                           <div class="flex items-start gap-4 mb-4">
+                               <div class="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-lg" style="background: ${window.AppUtils.getStepColor(index)}">
+                                   ${index + 1}
+                               </div>
+                               <div class="flex-1">
+                                   <h3 class="text-xl font-bold text-white mb-2">${method}</h3>
+                                   <p class="text-white/80">${this.getMethodDescription(method)}</p>
+                                   <div class="mt-2 inline-block bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm border border-blue-500/30">
+                                       ⏱️ ระยะเวลา: ${this.getMethodDuration(method, level)}
+                                   </div>
+                               </div>
+                           </div>
+                           
+                           <div class="grid md:grid-cols-2 gap-4 mb-4">
+                               <div class="bg-white/5 rounded p-4 border border-white/20">
+                                   <h4 class="font-medium text-green-300 mb-2">🎯 วัตถุประสงค์:</h4>
+                                   <p class="text-white/70 text-sm">${this.getMethodPurpose(method)}</p>
+                               </div>
+                               <div class="bg-white/5 rounded p-4 border border-white/20">
+                                   <h4 class="font-medium text-blue-300 mb-2">📈 ผลที่ได้:</h4>
+                                   <p class="text-white/70 text-sm">${this.getMethodResults(method)}</p>
+                               </div>
+                           </div>
+                           <div class="grid md:grid-cols-2 gap-4">
+                               <div class="bg-white/5 rounded p-4 border border-white/20">
+                                   <h4 class="font-medium text-purple-300 mb-2">📏 เกณฑ์การตีความ:</h4>
+                                   <p class="text-white/70 text-sm">${this.getMethodCriteria(method)}</p>
+                               </div>
+                               <div class="bg-white/5 rounded p-4 border border-white/20">
+                                   <h4 class="font-medium text-yellow-300 mb-2">⚠️ ข้อควรระวัง:</h4>
+                                   <p class="text-white/70 text-sm">${this.getMethodCaution(method)}</p>
+                               </div>
+                           </div>
+                       </div>
+                   `).join('')}
+               </div>
+
+               <!-- เกณฑ์มาตรฐาน -->
+               <div class="mt-8 bg-gray-500/10 rounded-lg p-6 border border-gray-500/20">
+                   <h3 class="text-lg font-semibold text-gray-200 mb-4">📊 เกณฑ์มาตรฐานการตีความสถิติ</h3>
+                   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                       <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                           <h4 class="font-medium text-green-300 mb-2">ความเชื่อมั่น (Reliability)</h4>
+                           <ul class="text-sm text-white/80 space-y-1">
+                               <li>• Cronbach's Alpha ≥ 0.70</li>
+                               <li>• Composite Reliability ≥ 0.70</li>
+                               <li>• Item-Total Correlation ≥ 0.30</li>
+                           </ul>
+                       </div>
+                       <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                           <h4 class="font-medium text-blue-300 mb-2">ความตรง (Validity)</h4>
+                           <ul class="text-sm text-white/80 space-y-1">
+                               <li>• Factor Loading ≥ 0.50 (EFA)</li>
+                               <li>• Factor Loading ≥ 0.70 (CFA)</li>
+                               <li>• AVE ≥ 0.50</li>
+                           </ul>
+                       </div>
+                       <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                           <h4 class="font-medium text-purple-300 mb-2">ความกลมกลืนของโมเดล</h4>
+                           <ul class="text-sm text-white/80 space-y-1">
+                               <li>• CFI, TLI ≥ 0.95</li>
+                               <li>• RMSEA ≤ 0.08</li>
+                               <li>• χ²/df < 3</li>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       `;
+   },
+
+   // Helper methods for statistical methods details
+   getMethodDescription: function(method) {
+    const descriptions = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ทำความสะอาดข้อมูล ตรวจสอบค่าผิดปกติ และจัดการข้อมูลสูญหาย',
+        'Descriptive Statistics': 'วิเคราะห์ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด และการแจกแจงของข้อมูล',
+        'Reliability Analysis': 'ทดสอบความเชื่อมั่นของแบบสอบถามด้วย Cronbach\'s Alpha และ Item-Total Correlation',
+        'Normality Testing': 'ทดสอบการแจกแจงปกติของข้อมูลเพื่อเลือกสถิติที่เหมาะสม',
+        'T-test/ANOVA': 'เปรียบเทียบความแตกต่างของค่าเฉลี่ยระหว่างกลุ่ม',
+        'Correlation Analysis': 'วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ',
+        'Simple Regression': 'วิเคราะห์ความสัมพันธ์เชิงเส้นระหว่างตัวแปร 2 ตัว',
+        'Data Screening': 'ตรวจสอบข้อมูลอย่างละเอียด รวมถึง Multivariate Outliers และ Normality',
+        'Validity Testing': 'ทดสอบความตรงของเครื่องมือวัดในด้านต่างๆ',
+        'Exploratory Factor Analysis (EFA)': 'การวิเคราะห์องค์ประกอบเชิงสำรวจเพื่อค้นหาโครงสร้างแฝงของตัวแปร',
+        'Assumption Testing': 'ทดสอบสมมติฐานสำหรับการวิเคราะห์ขั้นสูง',
+        'Mediation Analysis': 'วิเคราะห์ตัวแปรคั่นกลางในความสัมพันธ์เชิงสาเหตุ',
+        'Model Interpretation': 'การตีความและนำเสนอผลการวิเคราะห์อย่างละเอียด',
+        'Data Screening & Cleaning': 'การตรวจสอบและทำความสะอาดข้อมูลอย่างละเอียดและเป็นระบบ',
+        'Missing Data Analysis': 'การวิเคราะห์รูปแบบของข้อมูลที่ขาดหายและการจัดการ',
+        'Common Method Bias Testing': 'การทดสอบอคติจากการใช้แหล่งข้อมูลเดียวกัน',
+        'Confirmatory Factor Analysis (CFA)': 'การวิเคราะห์องค์ประกอบเชิงยืนยันเพื่อทดสอบโมเดลการวัด',
+        'Structural Equation Modeling (SEM)': 'การวิเคราะห์โมเดลสมการโครงสร้างเพื่อทดสอบสมมติฐาน',
+        'Mediation & Moderation Analysis': 'การวิเคราะห์ตัวแปรคั่นกลางและตัวแปรกำกับอย่างละเอียด',
+        'Results Interpretation & Reporting': 'การตีความและรายงานผลลัพธ์อย่างครอบคลุมและชัดเจน',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'วิเคราะห์ผลกระทบของตัวแปรอิสระหลายตัวที่มีต่อตัวแปรตามแบบต่อเนื่อง',
+        'Logistic Regression': 'วิเคราะห์ความสัมพันธ์เมื่อตัวแปรตามเป็นประเภทหรือไบนารี (ใช่/ไม่ใช่)',
+        'MANOVA/MANCOVA Analysis': 'เปรียบเทียบค่าเฉลี่ยของหลายตัวแปรตามพร้อมกันระหว่างกลุ่ม มีหรือไม่มีตัวแปรควบคุม',
+        'Cluster Analysis (Basic)': 'จัดกลุ่มข้อมูลโดยไม่รู้ล่วงหน้าว่ามีกี่กลุ่ม ใช้วิธีพื้นฐาน เช่น K-means',
+        'Cluster Analysis (Advanced)': 'การจัดกลุ่มข้อมูลขั้นสูงด้วยเทคนิคต่างๆ เช่น Hierarchical clustering, Two-step clustering',
+        'Discriminant Analysis': 'ทำนายการจัดกลุ่มหรือหมวดหมู่ของข้อมูลใหม่โดยใช้ตัวแปรอิสระหลายตัว',
+        'Conjoint Analysis': 'วิเคราะห์การให้น้ำหนักคุณลักษณะต่างๆ ของผลิตภัณฑ์โดยผู้บริโภค',
+        'Time Series Analysis': 'วิเคราะห์ข้อมูลที่เรียงตามลำดับเวลา เพื่อหาแนวโน้มและทำการพยากรณ์',
+        'Hierarchical Linear Modeling (HLM)': 'วิเคราะห์ข้อมูลที่มีโครงสร้างแบบลำดับชั้น เช่น พนักงานในแผนก ในองค์กร',
+        'Latent Class Analysis (LCA)': 'ค้นหากลุ่มซ่อนเร้น (Latent Class) ในข้อมูลเชิงพฤติกรรมหรือทัศนคติ',
+       
+        // เพิ่มสถิติเฉพาะทางบริหารโครงการ
+        'Project Performance Measurement': 'วัดและประเมินประสิทธิภาพของโครงการด้วยตัวชี้วัดที่หลากหลาย',
+        'Earned Value Analysis': 'วิเคราะห์ค่าที่ได้รับจากการลงทุนในโครงการเปรียบเทียบกับแผน',
+        'Critical Path Analysis': 'วิเคราะห์เส้นทางวิกฤตเพื่อจัดการเวลาและทรัพยากรในโครงการ',
+        'Risk Assessment Models': 'แบบจำลองการประเมินความเสี่ยงเฉพาะสำหรับโครงการ',
+        'Stakeholder Analysis': 'วิเคราะห์ผู้มีส่วนได้ส่วนเสียและระดับอิทธิพลในโครงการ',
+        'Team Performance Analysis': 'วิเคราะห์ประสิทธิภาพการทำงานของทีมโครงการ',
+        'Quality Metrics Analysis': 'วิเคราะห์ตัวชี้วัดคุณภาพของผลผลิตและกระบวนการ',
+        'Change Management Metrics': 'วัดผลการจัดการการเปลี่ยนแปลงในโครงการ',
+        'Knowledge Transfer Assessment': 'ประเมินประสิทธิภาพการถ่ายทอดความรู้ในโครงการ',
+        'Agile Metrics Analysis': 'วิเคราะห์ตัวชี้วัดเฉพาะสำหรับโครงการแบบ Agile เช่น Velocity, Burndown'
+};
+    return descriptions[method] || 'วิเคราะห์ข้อมูลตามวิธีการที่เลือก';
+},
+
+// เพิ่มในส่วน getMethodDuration
+getMethodDuration: function(method, level) {
+    const durations = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': '1-2 วัน',
+        'Descriptive Statistics': '1 วัน',
+        'Reliability Analysis': level >= 3 ? '2-3 วัน' : '1-2 วัน',
+        'Normality Testing': '0.5 วัน',
+        'T-test/ANOVA': '1 วัน',
+        'Correlation Analysis': '1 วัน',
+        'Simple Regression': '1-2 วัน',
+        'Data Screening': '2-3 วัน',
+        'Validity Testing': '2-3 วัน',
+        'Exploratory Factor Analysis (EFA)': level >= 3 ? '3-4 วัน' : '2-3 วัน',
+        'Assumption Testing': '1-2 วัน',
+        'Mediation Analysis': '2-3 วัน',
+        'Model Interpretation': '2-3 วัน',
+        'Data Screening & Cleaning': '3-4 วัน',
+        'Missing Data Analysis': '2-3 วัน',
+        'Common Method Bias Testing': '1-2 วัน',
+        'Confirmatory Factor Analysis (CFA)': '3-4 วัน',
+        'Structural Equation Modeling (SEM)': '4-5 วัน',
+        'Mediation & Moderation Analysis': '3-4 วัน',
+        'Results Interpretation & Reporting': '4-5 วัน',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': '2-3 วัน',
+        'Logistic Regression': '2-3 วัน',
+        'MANOVA/MANCOVA Analysis': '3-4 วัน',
+        'Cluster Analysis (Basic)': '1-2 วัน',
+        'Cluster Analysis (Advanced)': '3-4 วัน',
+        'Discriminant Analysis': '2-3 วัน',
+        'Conjoint Analysis': '4-5 วัน',
+        'Time Series Analysis': '3-5 วัน',
+        'Hierarchical Linear Modeling (HLM)': '5-7 วัน',
+        'Latent Class Analysis (LCA)': '4-6 วัน'
+    };
+    return durations[method] || '1-2 วัน';
+},
+
+// เพิ่มในส่วน getMethodPurpose
+getMethodPurpose: function(method) {
+    const purposes = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ตรวจสอบความถูกต้องและครบถ้วนของข้อมูล จัดการข้อมูลที่ขาดหายหรือผิดปกติ',
+        'Descriptive Statistics': 'อธิบายลักษณะทั่วไปของตัวอย่าง เช่น อายุ เพศ การศึกษา และตัวแปรสำคัญ',
+        'Reliability Analysis': 'ตรวจสอบความสอดคล้องภายในของข้อคำถามในแต่ละมิติ',
+        'Confirmatory Factor Analysis (CFA)': 'ยืนยันโครงสร้างที่ได้จาก EFA และทดสอบความตรงเชิงโครงสร้าง',
+        'Structural Equation Modeling (SEM)': 'ทดสอบความสัมพันธ์เชิงสาเหตุระหว่างตัวแปรตามทฤษฎีที่กำหนด',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'ศึกษาอิทธิพลของตัวแปรอิสระหลายตัวต่อตัวแปรตาม และหาปัจจัยที่สำคัญที่สุด',
+        'Logistic Regression': 'ทำนายความน่าจะเป็นของเหตุการณ์ หรือการจัดประเภทข้อมูล เช่น การซื้อ/ไม่ซื้อ',
+        'MANOVA/MANCOVA Analysis': 'เปรียบเทียบกลุ่มในหลายตัวแปรพร้อมกัน เพื่อควบคุม Type I Error',
+        'Cluster Analysis (Basic)': 'แบ่งกลุ่มลูกค้าหรือตลาดตามลักษณะที่คล้ายกัน เพื่อการแบ่งส่วนตลาด',
+        'Cluster Analysis (Advanced)': 'การจัดกลุ่มขั้นสูงด้วยอัลกอริทึมที่ซับซ้อน เหมาะกับข้อมูลขนาดใหญ่',
+        'Discriminant Analysis': 'สร้างแบบจำลองเพื่อจำแนกหรือทำนายการจัดกลุ่มของข้อมูลใหม่',
+        'Conjoint Analysis': 'วัดความสำคัญของคุณลักษณะสินค้า เพื่อการออกแบบผลิตภัณฑ์และการตั้งราคา',
+        'Time Series Analysis': 'วิเคราะห์แนวโน้มและรูปแบบการเปลี่ยนแปลงตามเวลา เพื่อการวางแผนและพยากรณ์',
+        'Hierarchical Linear Modeling (HLM)': 'วิเคราะห์ข้อมูลที่มีโครงสร้างซ้อนกัน โดยควบคุมผลกระทบของระดับต่างๆ',
+        'Latent Class Analysis (LCA)': 'ค้นหาประเภทผู้บริโภคที่ซ่อนอยู่ตามพฤติกรรมหรือทัศนคติ'
+    };
+    return purposes[method] || 'วิเคราะห์ข้อมูลเพื่อตอบคำถามวิจัย';
+},
+
+// เพิ่มในส่วน getMethodResults
+getMethodResults: function(method) {
+    const results = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ข้อมูลที่สะอาดและพร้อมสำหรับการวิเคราะห์ รายงานคุณภาพข้อมูล',
+        'Descriptive Statistics': 'ค่าเฉลี่ย ส่วนเบียงเบนมาตรฐาน ค่าสูงสุด-ต่ำสุด ความถี่ เปอร์เซ็นต์',
+        'Reliability Analysis': 'ค่า Cronbach\'s Alpha สำหรับแต่ละมิติ รายการข้อคำถามที่ควรปรับปรุง',
+        'Confirmatory Factor Analysis (CFA)': 'Model Fit Indices, Factor Loadings, Modification Indices',
+        'Structural Equation Modeling (SEM)': 'Path Coefficients, R², Model Fit, Direct และ Indirect Effects',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'สมการถดถอย, R², Beta coefficients, p-values, ความสำคัญของตัวแปร',
+        'Logistic Regression': 'Odds Ratios, Classification Table, ROC Curve, Model Chi-square',
+        'MANOVA/MANCOVA Analysis': 'Wilks\' Lambda, Pillai\'s Trace, F-statistics, Effect Sizes',
+        'Cluster Analysis (Basic)': 'จำนวนกลุ่มที่เหมาะสม, Cluster Centers, กลุ่มสมาชิกในแต่ละกลุ่ม',
+        'Cluster Analysis (Advanced)': 'Dendrogram, Silhouette Analysis, กลุ่มที่มีความหมาย, Cluster Profiles',
+        'Discriminant Analysis': 'Classification Functions, Hit Ratio, Canonical Discriminant Functions',
+        'Conjoint Analysis': 'Part-worth Utilities, Relative Importance, Market Simulation',
+        'Time Series Analysis': 'Trend Analysis, Seasonal Patterns, Forecasting Models, Accuracy Measures',
+        'Hierarchical Linear Modeling (HLM)': 'Fixed Effects, Random Effects, ICC, Cross-level Interactions',
+        'Latent Class Analysis (LCA)': 'Class Probabilities, Item Response Probabilities, Model Fit Statistics'
+    };
+    return results[method] || 'ผลการวิเคราะห์ตามวิธีการที่เลือก';
+},
+
+// เพิ่มในส่วน getMethodCriteria
+getMethodCriteria: function(method) {
+    const criteria = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ข้อมูลสูญหาย < 5%, ไม่มีค่าผิดปกติที่รุนแรง, รูปแบบข้อมูลสอดคล้อง',
+        'Reliability Analysis': 'Alpha ≥ 0.70 ยอมรับได้, ≥ 0.80 ดี, ≥ 0.90 ดีมาก',
+        'Confirmatory Factor Analysis (CFA)': 'χ²/df < 3, CFI/TLI ≥ 0.95, RMSEA ≤ 0.08, SRMR ≤ 0.08',
+        'Structural Equation Modeling (SEM)': 'Model Fit ตามเกณฑ์, Path Coefficients มีนัยสำคัญ, R² > 0.25=อธิบายได้ดี',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'R² > 0.13=อธิบายได้, p < 0.05, VIF < 5 (ไม่มี Multicollinearity)',
+        'Logistic Regression': 'Model Chi-square มีนัยสำคัญ, Classification Accuracy > 70%, Hosmer-Lemeshow p > 0.05',
+        'MANOVA/MANCOVA Analysis': 'Wilks\' Lambda มีนัยสำคัญ, Box\'s M p > 0.001, Homogeneity of variance',
+        'Cluster Analysis (Basic)': 'Elbow Method, ความแตกต่างระหว่างกลุ่มชัดเจน, ขนาดกลุ่มสมเหตุสมผล',
+        'Cluster Analysis (Advanced)': 'Silhouette Coefficient > 0.5, Calinski-Harabasz Index สูง',
+        'Discriminant Analysis': 'Box\'s M p > 0.001, Classification Accuracy > 75%, Eigenvalue > 0.4',
+        'Conjoint Analysis': 'Kendall\'s tau > 0.7, R² > 0.8, Logical part-worth utilities',
+        'Time Series Analysis': 'MAPE < 10%=ดีมาก, 10-20%=ดี, 20-50%=พอใช้, Ljung-Box p > 0.05',
+        'Hierarchical Linear Modeling (HLM)': 'ICC > 0.05, Model fit better than null model, Random effects มีนัยสำคัญ',
+        'Latent Class Analysis (LCA)': 'BIC ต่ำที่สุด, Entropy > 0.8, Class sizes > 5% ของตัวอย่าง'
+    };
+    return criteria[method] || 'ตามเกณฑ์มาตรฐานทางสถิติ';
+},
+
+// เพิ่มในส่วน getMethodCaution
+getMethodCaution: function(method) {
+    const cautions = {
+        // สถิติเดิม (เก็บไว้)
+        'Data Preparation': 'ระวังการลบข้อมูลมากเกินไป อาจส่งผลต่อความเป็นตัวแทนของกลุ่มตัวอย่าง',
+        'Reliability Analysis': 'หาก Alpha ต่ำเกินไป ต้องทบทวนข้อคำถามหรือลบข้อคำถามที่ไม่เหมาะสม',
+        'Confirmatory Factor Analysis (CFA)': 'การปรับแก้โมเดลต้องมีเหตุผลทางทฤษฎี ไม่ใช่เพียงเพื่อปรับปรุงค่าสถิติ',
+        'Structural Equation Modeling (SEM)': 'SEM ต้องการขนาดตัวอย่างใหญ่และโมเดลทฤษฎีที่แข็งแกร่ง',
+        
+        // สถิติใหม่ที่เพิ่ม
+        'Multiple Regression Analysis': 'ระวัง Multicollinearity, ตรวจสอบ Residuals และ Outliers',
+        'Logistic Regression': 'ต้องการขนาดตัวอย่างใหญ่, ระวัง Complete Separation ของข้อมูล',
+        'MANOVA/MANCOVA Analysis': 'ตัวแปรตามต้องมีความสัมพันธ์กัน แต่ไม่สูงเกินไป, ข้อมูลต้องเป็น Multivariate Normal',
+        'Cluster Analysis (Basic)': 'ผลลัพธ์ขึ้นกับการเลือกจำนวนกลุ่มและวิธีการวัดระยะห่าง',
+        'Cluster Analysis (Advanced)': 'ระวังการตีความกลุ่มที่ได้ ต้องมีความหมายในเชิงธุรกิจ',
+        'Discriminant Analysis': 'ข้อมูลต้องเป็น Multivariate Normal, กลุ่มต้องมี Covariance Matrix เท่ากัน',
+        'Conjoint Analysis': 'การออกแบบ Stimuli ต้องครอบคลุมและสมจริง, ระวังความซับซ้อนเกินไป',
+        'Time Series Analysis': 'ข้อมูลต้องมีความต่อเนื่อง, ระวัง Structural Breaks และ Seasonality',
+        'Hierarchical Linear Modeling (HLM)': 'ต้องมีข้อมูลเพียงพอในแต่ละระดับ, ระวัง Convergence Problems',
+        'Latent Class Analysis (LCA)': 'การตีความ Class ต้องสมเหตุสมผล, ระวัง Local Maxima ในการประมาณค่า'
+    };
+    return cautions[method] || 'ปฏิบัติตามหลักการทางสถิติอย่างเคร่งครัด';
+}
+};
+
+
+        // Main Application Controller
+window.AppController = {
+    // Initialize the application
+    init: function() {
+        try {
+            console.log('Initializing Research Advisor App...');
+            
+            // Load saved state if available
+            window.StateManager.loadState();
+            
+            // Initial render
+            this.render();
+            
+            // Set up global error handler
+            window.addEventListener('error', this.handleError.bind(this));
+            
+            console.log('App initialized successfully');
+        } catch (error) {
+            console.error('Failed to initialize app:', error);
+            window.AppUtils.showError('ไม่สามารถเริ่มต้นระบบได้ กรุณารีเฟรชหน้าเว็บ');
+        }
+    },
+
+    // Main render function
+    render: function() {
+        try {
+            const state = window.AppState;
+            const app = document.getElementById('app');
+            
+            if (!app) {
+                throw new Error('App container not found');
+            }
+
+            let content = '';
+            
+            switch(state.currentPage) {
+                case 'landing':
+                    content = window.PageRenderers.renderLanding();
+                    break;
+                case 'level':
+                    content = window.PageRenderers.renderLevelSelection();
+                    break;
+                case 'theory':
+                    content = window.PageRenderers.renderTheorySelection();
+                    break;
+                case 'results':
+                    content = window.ResultsRenderers.renderResults();
+                    break;
+                default:
+                    content = window.PageRenderers.renderLanding();
+            }
+            
+            app.innerHTML = content;
+            
+            // Post-render setup
+            this.setupEventListeners();
+            
+        } catch (error) {
+            console.error('Render error:', error);
+            window.AppUtils.showError('เกิดข้อผิดพลาดในการแสดงผล กรุณาลองใหม่อีกครั้ง');
+        }
+    },
+
+    // Set up event listeners after render
+    setupEventListeners: function() {
+        // Set domain info and examples if domain is selected
+        const state = window.AppState;
+        if (state.selectedDomain && state.currentPage === 'landing') {
+            window.EventHandlers.showDomainInfo(state.selectedDomain);
+        }
+        
+        // Set topic value if exists
+        const topicInput = document.getElementById('researchTopic');
+        if (topicInput && state.topic) {
+            topicInput.value = state.topic;
+        }
+    },
+
+    // Analyze topic and proceed to level selection
+    analyzeTopic: function() {
+        try {
+            const topicInput = document.getElementById('researchTopic');
+            const topic = topicInput ? topicInput.value.trim() : '';
+            const state = window.AppState;
+            
+            // If no topic but domain selected, use generic topic
+            if (!topic && state.selectedDomain) {
+                const domain = window.DomainData[state.selectedDomain];
+                window.StateManager.updateState({
+                    topic: `การศึกษาเกี่ยวกับ${domain.name}`,
+                    currentPage: 'level'
+                });
+            } else if (topic) {
+                window.StateManager.updateState({
+                    topic: topic,
+                    currentPage: 'level'
+                });
+            } else {
+                this.showMessage('กรุณาเลือกสาขาวิชาหรือใส่โจทย์วิจัย 📝', 'error');
+                return;
+            }
+            
+        } catch (error) {
+            console.error('Error in analyzeTopic:', error);
+            this.showMessage('เกิดข้อผิดพลาดในการวิเคราะห์โจทย์', 'error');
+        }
+    },
+
+    // Go to level selection (skip from domain)
+    goToLevel: function() {
+        try {
+            const state = window.AppState;
+            if (state.selectedDomain) {
+                const domain = window.DomainData[state.selectedDomain];
+                window.StateManager.updateState({
+                    topic: state.topic || `การศึกษาเกี่ยวกับ${domain.name}`,
+                    currentPage: 'level'
+                });
+            } else {
+                this.showMessage('กรุณาเลือกสาขาวิชาก่อน', 'error');
+            }
+        } catch (error) {
+            console.error('Error in goToLevel:', error);
+            this.showMessage('เกิดข้อผิดพลาด', 'error');
+        }
+    },
+
+    // Select research level
+    selectLevel: function(level) {
+        try {
+            window.StateManager.updateState({
+                level: parseInt(level),
+                currentPage: 'theory'
+            });
+        } catch (error) {
+            console.error('Error in selectLevel:', error);
+            this.showMessage('เกิดข้อผิดพลาดในการเลือกระดับ', 'error');
+        }
+    },
+
+    // Select theory
+    selectTheory: function(theoryId) {
+        try {
+            const theory = window.TheoryDatabase[theoryId];
+            if (!theory) {
+                throw new Error('Theory not found: ' + theoryId);
+            }
+            
+            window.StateManager.updateState({
+                theory: theory,
+                currentPage: 'results',
+                activeTab: 'theory'
+            });
+        } catch (error) {
+            console.error('Error in selectTheory:', error);
+            this.showMessage('เกิดข้อผิดพลาดในการเลือกทฤษฎี', 'error');
+        }
+    },
+
+    // Switch tabs in results page
+    switchTab: function(tabName) {
+        try {
+            window.StateManager.updateState({
+                activeTab: tabName
+            });
+            
+            // Update tab content without full re-render
+            const tabContent = document.getElementById('tab-content');
+            if (tabContent) {
+                tabContent.innerHTML = window.ResultsRenderers.renderTabContent(tabName);
+            }
+            
+            // Update tab appearance
+            const tabs = document.querySelectorAll('[data-tab]');
+            tabs.forEach(tab => {
+                const isActive = tab.dataset.tab === tabName;
+                tab.className = tab.className
+                    .replace('tab-active', '')
+                    .replace('tab-inactive', '') + 
+                    (isActive ? ' tab-active' : ' tab-inactive');
+            });
+            
+        } catch (error) {
+            console.error('Error in switchTab:', error);
+            this.showMessage('เกิดข้อผิดพลาดในการเปลี่ยนแท็บ', 'error');
+        }
+    },
+
+    // Go back to previous page
+    goBack: function() {
+        try {
+            const state = window.AppState;
+            let previousPage = 'landing';
+            
+            switch(state.currentPage) {
+                case 'level':
+                    previousPage = 'landing';
+                    break;
+                case 'theory':
+                    previousPage = 'level';
+                    break;
+                case 'results':
+                    previousPage = 'theory';
+                    break;
+            }
+            
+            window.StateManager.updateState({
+                currentPage: previousPage
+            });
+        } catch (error) {
+            console.error('Error in goBack:', error);
+            this.showMessage('เกิดข้อผิดพลาด', 'error');
+        }
+    },
+
+    // Restart application
+    restart: function() {
+        try {
+            window.StateManager.resetState();
+            this.render();
+        } catch (error) {
+            console.error('Error in restart:', error);
+            window.location.reload();
+        }
+    },
+
+    // Export to PDF
+    exportPDF: function() {
+        try {
+            const exportContent = document.getElementById('export-content');
+            if (!exportContent) {
+                this.showMessage('ไม่พบเนื้อหาที่จะ Export', 'error');
+                return;
+            }
+
+            // Show loading
+            this.showLoadingOverlay('กำลังสร้าง PDF...');
+
+            // Use setTimeout to allow UI update
+            setTimeout(async () => {
+                try {
+                    // Create canvas from HTML
+                    const canvas = await html2canvas(exportContent, {
+                        scale: 1.5,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        width: exportContent.scrollWidth,
+                        height: exportContent.scrollHeight,
+                        logging: false
+                    });
+
+                    // Create PDF
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    
+                    const imgWidth = 210;
+                    const pageHeight = 295;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    let heightLeft = imgHeight;
+                    let position = 0;
+
+                    // Add first page
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    // Add additional pages if needed
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+
+                    // Generate filename
+                    const state = window.AppState;
+                    const theoryName = state.theory.name.replace(/[^a-zA-Z0-9]/g, '_');
+                    const date = new Date().toISOString().split('T')[0];
+                    const fileName = `Research_Plan_${theoryName}_${date}.pdf`;
+
+                    // Save PDF
+                    pdf.save(fileName);
+
+                    // Hide loading and show success
+                    this.hideLoadingOverlay();
+                    this.showSuccessMessage('PDF ถูกสร้างเรียบร้อยแล้ว!');
+
+                } catch (pdfError) {
+                    console.error('PDF generation error:', pdfError);
+                    this.hideLoadingOverlay();
+                    this.showMessage('เกิดข้อผิดพลาดในการสร้าง PDF กรุณาลองใหม่อีกครั้ง', 'error');
+                }
+            }, 500);
+
+        } catch (error) {
+            console.error('Export PDF error:', error);
+            this.showMessage('เกิดข้อผิดพลาดในการสร้าง PDF', 'error');
+        }
+    },
+
+    // Show loading overlay
+    showLoadingOverlay: function(message = 'กำลังโหลด...') {
+        const overlay = document.createElement('div');
+        overlay.id = 'loading-overlay';
+        overlay.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+                <div style="color: white; text-align: center;">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <div style="font-size: 1.5rem; font-weight: bold;">${message}</div>
+                    <div style="margin-top: 0.5rem;">กรุณารอสักครู่</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    },
+
+    // Hide loading overlay
+    hideLoadingOverlay: function() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            document.body.removeChild(overlay);
+        }
+    },
+
+    // Show success message
+    showSuccessMessage: function(message) {
+        const successDiv = document.createElement('div');
+        successDiv.innerHTML = `
+            <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(34, 197, 94, 0.95); color: white; padding: 2rem; border-radius: 1rem; text-align: center; z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <div style="font-size: 1.2rem; font-weight: bold;">${message}</div>
+                <div style="margin-top: 0.5rem; font-size: 0.9rem;">ไฟล์ได้รับการดาวน์โหลดแล้ว</div>
+            </div>
+        `;
+        document.body.appendChild(successDiv);
+        
+        setTimeout(() => {
+            if (document.body.contains(successDiv)) {
+                document.body.removeChild(successDiv);
+            }
+        }, 3000);
+    },
+
+    // Show general message
+    showMessage: function(message, type = 'info') {
+        const messageDiv = document.createElement('div');
+        const bgColor = type === 'error' ? 'rgba(239, 68, 68, 0.95)' : 
+                       type === 'success' ? 'rgba(34, 197, 94, 0.95)' : 
+                       'rgba(59, 130, 246, 0.95)';
+        const icon = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+        
+        messageDiv.innerHTML = `
+            <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: ${bgColor}; color: white; padding: 1.5rem; border-radius: 1rem; text-align: center; z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.3); max-width: 400px;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">${icon}</div>
+                <div style="font-size: 1rem;">${message}</div>
+            </div>
+        `;
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            if (document.body.contains(messageDiv)) {
+                document.body.removeChild(messageDiv);
+            }
+        }, 3000);
+    },
+
+    // Handle global errors
+    handleError: function(event) {
+        console.error('Global error:', event.error);
+        this.showMessage('เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
+    }
+};
+
+// PDF Export Utilities
+window.PDFUtils = {
+    // Check if PDF libraries are loaded
+    checkLibraries: function() {
+        return typeof window.jspdf !== 'undefined' && typeof html2canvas !== 'undefined';
+    },
+
+    // Generate PDF filename
+    generateFilename: function() {
+        const state = window.AppState;
+        const theoryName = state.theory ? state.theory.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Research';
+        const date = new Date().toISOString().split('T')[0];
+        return `Research_Plan_${theoryName}_${date}.pdf`;
+    },
+
+    // Optimize element for PDF export
+    optimizeForExport: function(element) {
+        // Add styles for better PDF rendering
+        const style = document.createElement('style');
+        style.innerHTML = `
+            #export-content * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            #export-content {
+                background: white !important;
+                color: black !important;
+            }
+            #export-content .glass {
+                background: rgba(255,255,255,0.95) !important;
+                border: 1px solid #e5e7eb !important;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        return () => {
+            document.head.removeChild(style);
+        };
+    }
+};
+
+
+        // Application Initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing App...');
+    
+    // Check if all required libraries are loaded
+    const checkLibraries = () => {
+        if (typeof window.jspdf === 'undefined') {
+            console.warn('jsPDF not loaded yet, retrying...');
+            return false;
+        }
+        if (typeof html2canvas === 'undefined') {
+            console.warn('html2canvas not loaded yet, retrying...');
+            return false;
+        }
+        return true;
+    };
+    
+    // Initialize app when libraries are ready
+    const initWhenReady = () => {
+        if (checkLibraries()) {
+            window.AppController.init();
+        } else {
+            setTimeout(initWhenReady, 100);
+        }
+    };
+    
+    initWhenReady();
+});
+
+// Fallback initialization
+window.addEventListener('load', function() {
+    console.log('Window Loaded - Checking App State...');
+    
+    // If app is not initialized yet, try again
+    const app = document.getElementById('app');
+    if (app && app.innerHTML.trim() === '') {
+        console.log('App not initialized, starting fallback initialization...');
+        window.AppController.init();
+    }
+});
+
+// Handle page unload
+window.addEventListener('beforeunload', function() {
+    // Save state before page unload
+    window.StateManager.saveState();
+});
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(event) {
+    if (event.state) {
+        Object.assign(window.AppState, event.state);
+        window.AppController.render();
+    }
+});
+
+// Global error handlers
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    event.preventDefault();
+});
+
+// Performance monitoring
+if (typeof console !== 'undefined' && console.time) {
+    console.time('App Load Time');
+    window.addEventListener('load', function() {
+        console.timeEnd('App Load Time');
+    });
+}
+
+// Console welcome message
+console.log(`
+🎓 ระบบปรึกษาการวิจัยเชิงปริมาณ
+📚 Research Methodology Advisor
+🚀 Version 1.0
+💻 Ready to help with your research!
+`);
+
+// End of script
+</script>
+</body>
+</html>

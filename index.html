@@ -3,67 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>โปรเจ็คพยากรณ์เลขหวย</title>
+  <title>พยากรณ์เลขหวยจักรวาล</title>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(to bottom, #e0f7fa, #fff);
+      background: radial-gradient(circle, #e0f2f1, #d0f0e0);
       color: #1b4332;
-      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
     .container {
-      max-width: 600px;
-      margin: auto;
-      background: #ffffffdd;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 480px;
+      width: 100%;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
       text-align: center;
       color: #2d6a4f;
-      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
     }
     .form-group {
       margin-bottom: 1rem;
     }
     label {
+      font-weight: bold;
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: bold;
     }
-    input[type="date"],
-    select,
-    button {
+    input[type="date"], select, button {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
       font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
     button {
-      background-color: #40916c;
+      background: #2d6a4f;
       color: white;
       border: none;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
+      font-weight: bold;
+      margin-top: 1rem;
     }
     button:hover {
-      background-color: #2d6a4f;
+      background: #1e5631;
     }
     .result {
       margin-top: 2rem;
+      font-size: 2rem;
       text-align: center;
-      font-size: 1.5rem;
       color: #d00000;
+      font-weight: bold;
+      animation: fadeIn 0.5s ease;
+    }
+    .subtext {
+      text-align: center;
+      margin-top: 1rem;
+      color: #555;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>พยากรณ์เลขหวย</h1>
+    <h1>🔮 พยากรณ์เลขหวยจักรวาล</h1>
     <div class="form-group">
       <label for="drawDate">เลือกวันที่หวยออก:</label>
       <input type="date" id="drawDate">
@@ -72,21 +89,49 @@
       <label for="region">เลือกภูมิภาค:</label>
       <select id="region">
         <option value="north">ภาคเหนือ</option>
-        <option value="northeast">ภาคตะวันออกเฉียงเหนือ</option>
+        <option value="northeast">ภาคอีสาน</option>
         <option value="central">ภาคกลาง</option>
         <option value="south">ภาคใต้</option>
       </select>
     </div>
-    <button onclick="predictLottery()">ทำนายเลข</button>
+    <button onclick="predictLuckyNumber()">✨ ทำนายเลขนำโชค</button>
     <div class="result" id="result"></div>
+    <div class="subtext" id="subtext"></div>
   </div>
 
   <script>
-    function predictLottery() {
-      const digits = () => Math.floor(Math.random() * 10);
-      const number = `${digits()}${digits()}${digits()}`;
-      const resultDiv = document.getElementById('result');
-      resultDiv.textContent = `เลขนำโชคของคุณคือ: ${number}`;
+    function predictLuckyNumber() {
+      const date = document.getElementById("drawDate").value;
+      const region = document.getElementById("region").value;
+      const result = document.getElementById("result");
+      const subtext = document.getElementById("subtext");
+
+      if (!date) {
+        result.textContent = "กรุณาเลือกวันที่ก่อนทำนาย";
+        subtext.textContent = "";
+        return;
+      }
+
+      const seed = date.replace(/-/g, '') + region;
+      let hash = 0;
+      for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const rng = Math.abs(hash);
+      const number = (rng % 1000).toString().padStart(3, '0');
+
+      result.textContent = `เลขนำโชคของคุณคือ: ${number}`;
+      subtext.textContent = `จักรวาลได้สั่นสะเทือนในวันที่ ${date.split('-').reverse().join('/')} สำหรับภาค${regionName(region)}`;
+    }
+
+    function regionName(regionCode) {
+      switch(regionCode) {
+        case 'north': return 'เหนือ';
+        case 'northeast': return 'อีสาน';
+        case 'central': return 'กลาง';
+        case 'south': return 'ใต้';
+        default: return '';
+      }
     }
   </script>
 </body>

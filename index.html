@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบดูดวงโหราศาสตร์</title>
-    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Kodchasan:wght@200;300;400;500;600;700&family=Sarabun:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>🔮 ระบบพยากรณ์เลขหวยและโหรา</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,1177 +14,900 @@
         }
 
         body {
-            font-family: 'Charm', serif;
-            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 25%, #45B7D1 50%, #96CEB4 75%, #FECA57 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
-            color: #2C3E50;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .mystical-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .floating-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .floating-symbol {
-            position: absolute;
-            font-size: 1.5rem;
-            color: rgba(255, 215, 0, 0.3);
-            animation: float 8s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+            color: #2d3748;
+            line-height: 1.6;
         }
 
         .container {
-            position: relative;
-            z-index: 3;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 50px;
-            padding: 40px;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            font-family: 'Charm', serif;
-            background: linear-gradient(45deg, #FFD700, #FF6B6B, #4ECDC4, #FFD700);
-            background-size: 400% 400%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: textGradient 6s ease infinite;
-            margin-bottom: 15px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        @keyframes textGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3)); }
+            to { filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.6)); }
         }
 
         .header p {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
+            color: #666;
             font-weight: 400;
-            color: #2C3E50;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
 
-        .tab-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-button {
-            padding: 15px 30px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 15px;
-            font-family: 'Charm', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            color: #2C3E50;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-        }
-
-        .tab-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .tab-button:hover::before {
-            left: 100%;
-        }
-
-        .tab-button:hover {
-            transform: translateY(-3px) rotateX(10deg) rotateY(5deg);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.2),
-                0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        .tab-button.active {
-            background: linear-gradient(145deg, #FFD700, #FFA500);
-            color: #2C3E50;
-            transform: translateY(-2px);
-            box-shadow: 
-                0 15px 30px rgba(255, 165, 0, 0.4),
-                inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .main-content {
-            display: none;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .main-content.active {
-            display: block;
-        }
-
-        .content-grid {
+        .main-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         .card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            padding: 35px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Sarabun', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Sarabun', sans-serif;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-            transform-style: preserve-3d;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
-            animation: cardRotate 15s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
-        .card:hover::before {
-            opacity: 1;
+        .btn:active {
+            transform: translateY(0);
         }
 
-        @keyframes cardRotate {
+        .result-area {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lottery-numbers {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .lottery-ball {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            animation: spin 1s ease-in-out;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg) scale(0); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+
+        .fortune-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin-loader 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin-loader {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        .card:hover {
-            transform: translateY(-10px) rotateX(5deg) rotateY(3deg);
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.2),
-                0 0 30px rgba(255, 215, 0, 0.2);
-        }
-
-        .card h2 {
-            font-size: 2rem;
-            margin-bottom: 25px;
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #2C3E50;
-            font-size: 1.1rem;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 15px;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+        .history {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            color: #2C3E50;
-            font-size: 1rem;
-            font-family: 'Kodchasan', sans-serif;
-            font-weight: 500;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.1),
-                0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(44, 62, 80, 0.6);
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            box-shadow: 
-                0 0 20px rgba(255, 107, 107, 0.4),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-color: #FF6B6B;
-            transform: translateY(-2px);
-        }
-
-        .btn {
-            background: linear-gradient(145deg, #FF6B6B, #4ECDC4);
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            font-family: 'Charm', serif;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 100%;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                0 10px 20px rgba(255, 107, 107, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform-style: preserve-3d;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-5px) rotateX(10deg);
-            box-shadow: 
-                0 20px 40px rgba(255, 107, 107, 0.4),
-                0 0 30px rgba(78, 205, 196, 0.3);
-            background: linear-gradient(145deg, #4ECDC4, #FF6B6B);
-        }
-
-        .zodiac-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .zodiac-item {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(15px);
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            box-shadow: 
-                0 10px 20px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        .zodiac-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .zodiac-item:hover::before {
-            opacity: 1;
-        }
-
-        .zodiac-item:hover {
-            transform: translateY(-8px) rotateX(10deg) rotateY(5deg) scale(1.05);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.2),
-                0 0 25px rgba(255, 215, 0, 0.3);
-            border-color: #FFD700;
-        }
-
-        .zodiac-item.selected {
-            background: linear-gradient(145deg, #FFD700, #FFA500);
-            border-color: #FF6B6B;
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 
-                0 20px 40px rgba(255, 165, 0, 0.4),
-                0 0 30px rgba(255, 107, 107, 0.3);
-        }
-
-        .zodiac-emoji {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            display: block;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-        }
-
-        .zodiac-item span:last-child {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #2C3E50;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .result-section {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 40px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            margin-top: 40px;
-            display: none;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-
-        .result-section.show {
-            display: block;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .prediction-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-            backdrop-filter: blur(15px);
             border-radius: 20px;
             padding: 25px;
-            margin-bottom: 25px;
-            border-left: 5px solid;
-            border-image: linear-gradient(45deg, #FF6B6B, #4ECDC4) 1;
-            box-shadow: 
-                0 15px 30px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .prediction-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.15),
-                0 0 20px rgba(255, 107, 107, 0.2);
-        }
-
-        .prediction-card h3 {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .prediction-card p {
-            color: #2C3E50;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .lucky-numbers {
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .lucky-number {
-            background: linear-gradient(145deg, #FFD700, #FFA500);
-            color: #2C3E50;
-            padding: 12px 18px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            min-width: 50px;
-            text-align: center;
-            box-shadow: 
-                0 8px 16px rgba(255, 165, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            transform-style: preserve-3d;
-        }
-
-        .lucky-number:hover {
-            transform: translateY(-3px) rotateX(10deg);
-            box-shadow: 
-                0 15px 30px rgba(255, 165, 0, 0.4),
-                0 0 15px rgba(255, 215, 0, 0.3);
+        .history-item:last-child {
+            border-bottom: none;
         }
 
         @media (max-width: 768px) {
-            .content-grid {
+            .main-grid {
                 grid-template-columns: 1fr;
             }
             
             .header h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
-            .zodiac-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .lottery-numbers {
+                gap: 8px;
             }
-
-            .tab-container {
-                flex-wrap: wrap;
+            
+            .lottery-ball {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
             }
-
-            .tab-button {
-                flex: 1;
-                min-width: 120px;
-            }
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 30px;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #2C3E50;
-            font-size: 1.1rem;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
-    <div class="mystical-overlay"></div>
-    <div class="floating-elements" id="floatingElements"></div>
-    
     <div class="container">
         <div class="header">
-            <div class="header-content">
-                <h1>🌟 ระบบดูดวงโหราศาสตร์ 🌟</h1>
-                <p>ค้นพบดวงชะตาและเส้นทางแห่งอนาคตของคุณ</p>
-            </div>
+            <h1>🔮 ระบบพยากรณ์เลขหวยและโหรา</h1>
+            <p>เทคโนโลยี AI ผสานภูมิปัญญาโบราณ เพื่อความโชคดีของคุณ</p>
         </div>
 
-        <div class="tab-container">
-            <button class="tab-button active" data-tab="personal">📊 ข้อมูลส่วนตัว</button>
-            <button class="tab-button" data-tab="zodiac">⭐ เลือกราศี</button>
-            <button class="tab-button" data-tab="fortune">🔮 ดูดวงรายวัน</button>
-            <button class="tab-button" data-tab="compatibility">💕 ดูดวงความรัก</button>
-        </div>
-
-        <!-- Personal Info Tab -->
-        <div class="main-content active" id="personal">
-            <div class="content-grid">
-                <div class="card">
-                    <h2>📊 กรอกข้อมูลส่วนตัว</h2>
-                    <form id="personalForm">
-                        <div class="form-group">
-                            <label for="name">ชื่อ-นามสกุล</label>
-                            <input type="text" id="name" placeholder="กรุณากรอกชื่อ-นามสกุล" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="birthdate">วันเกิด</label>
-                            <input type="date" id="birthdate" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="birthtime">เวลาเกิด</label>
-                            <input type="time" id="birthtime">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="gender">เพศ</label>
-                            <select id="gender" required>
-                                <option value="">เลือกเพศ</option>
-                                <option value="male">ชาย</option>
-                                <option value="female">หญิง</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn">🔮 ดูดวงตอนนี้</button>
-                    </form>
+        <div class="main-grid">
+            <!-- ระบบพยากรณ์เลขหวย -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🎰</div>
+                    <h2 class="card-title">พยากรณ์เลขหวย</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ชื่อ-นามสกุล</label>
+                    <input type="text" id="fullName" class="form-input" placeholder="กรอกชื่อเต็มของคุณ">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">วันเกิด</label>
+                    <input type="date" id="birthDate" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ประเภทหวย</label>
+                    <select id="lotteryType" class="form-select">
+                        <option value="government">หวยรัฐบาล (3 ตัว)</option>
+                        <option value="underground">หวยใต้ดิน (2 ตัว)</option>
+                        <option value="lotto">ลอตโต้ (6 ตัว)</option>
+                    </select>
                 </div>
 
-                <div class="card">
-                    <h2>🎯 เลือกประเภทการดูดวง</h2>
-                    <div class="zodiac-grid">
-                        <div class="zodiac-item" data-type="general">
-                            <span class="zodiac-emoji">🌟</span>
-                            <span>ดวงโดยรวม</span>
-                        </div>
-                        <div class="zodiac-item" data-type="love">
-                            <span class="zodiac-emoji">💖</span>
-                            <span>ความรัก</span>
-                        </div>
-                        <div class="zodiac-item" data-type="money">
-                            <span class="zodiac-emoji">💰</span>
-                            <span>การเงิน</span>
-                        </div>
-                        <div class="zodiac-item" data-type="health">
-                            <span class="zodiac-emoji">🏥</span>
-                            <span>สุขภาพ</span>
-                        </div>
+                <button class="btn" onclick="generateLottery()">
+                    🔮 พยากรณ์เลขมงคล
+                </button>
+
+                <div class="loading" id="lotteryLoading">
+                    <div class="spinner"></div>
+                    กำลังคำนวณเลขมงคล...
+                </div>
+
+                <div class="result-area" id="lotteryResult">
+                    <p style="color: #666;">กรอกข้อมูลและคลิกปุ่มเพื่อเริ่มพยากรณ์</p>
+                </div>
+
+                <div class="stats-grid" id="lotteryStats" style="display: none;">
+                    <div class="stat-item">
+                        <div class="stat-number" id="luckPercentage">0%</div>
+                        <div class="stat-label">โชคลาภวันนี้</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="fortuneScore">0</div>
+                        <div class="stat-label">คะแนนมงคล</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Zodiac Tab -->
-        <div class="main-content" id="zodiac">
-            <div class="card" style="grid-column: 1 / -1;">
-                <h2>⭐ เลือกราศีของคุณ</h2>
-                <div class="zodiac-grid" id="zodiacGrid">
-                    <div class="zodiac-item" data-zodiac="aries">
-                        <span class="zodiac-emoji">♈</span>
-                        <span>ราศีเมษ</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="taurus">
-                        <span class="zodiac-emoji">♉</span>
-                        <span>ราศีพฤษภ</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="gemini">
-                        <span class="zodiac-emoji">♊</span>
-                        <span>ราศีมิถุน</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="cancer">
-                        <span class="zodiac-emoji">♋</span>
-                        <span>ราศีกรกฎ</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="leo">
-                        <span class="zodiac-emoji">♌</span>
-                        <span>ราศีสิงห์</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="virgo">
-                        <span class="zodiac-emoji">♍</span>
-                        <span>ราศีกันย์</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="libra">
-                        <span class="zodiac-emoji">♎</span>
-                        <span>ราศีตุลย์</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="scorpio">
-                        <span class="zodiac-emoji">♏</span>
-                        <span>ราศีพิจิก</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="sagittarius">
-                        <span class="zodiac-emoji">♐</span>
-                        <span>ราศีธนู</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="capricorn">
-                        <span class="zodiac-emoji">♑</span>
-                        <span>ราศีมกร</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="aquarius">
-                        <span class="zodiac-emoji">♒</span>
-                        <span>ราศีกุมภ์</span>
-                    </div>
-                    <div class="zodiac-item" data-zodiac="pisces">
-                        <span class="zodiac-emoji">♓</span>
-                        <span>ราศีมีน</span>
-                    </div>
+            <!-- ระบบโหราศาสตร์ -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⭐</div>
+                    <h2 class="card-title">โหราพยากรณ์</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ราศี</label>
+                    <select id="zodiacSign" class="form-select">
+                        <option value="">เลือกราศีของคุณ</option>
+                        <option value="aries">ราศีเมษ</option>
+                        <option value="taurus">ราศีพฤษภ</option>
+                        <option value="gemini">ราศีเมถุน</option>
+                        <option value="cancer">ราศีกรกฎ</option>
+                        <option value="leo">ราศีสิงห์</option>
+                        <option value="virgo">ราศีกันย์</option>
+                        <option value="libra">ราศีตุลย์</option>
+                        <option value="scorpio">ราศีพิจิก</option>
+                        <option value="sagittarius">ราศีธนู</option>
+                        <option value="capricorn">ราศีมกร</option>
+                        <option value="aquarius">ราศีกุมภ์</option>
+                        <option value="pisces">ราศีมีน</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ประเภทการพยากรณ์</label>
+                    <select id="fortuneType" class="form-select">
+                        <option value="daily">รายวัน</option>
+                        <option value="weekly">รายสัปดาห์</option>
+                        <option value="monthly">รายเดือน</option>
+                        <option value="love">ด้านความรัก</option>
+                        <option value="career">ด้านการงาน</option>
+                        <option value="finance">ด้านการเงิน</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="generateFortune()">
+                    ⭐ ดูดวงชะตา
+                </button>
+
+                <div class="loading" id="fortuneLoading">
+                    <div class="spinner"></div>
+                    กำลังอ่านดวงชะตา...
+                </div>
+
+                <div class="result-area" id="fortuneResult">
+                    <p style="color: #666;">เลือกราศีและประเภทการพยากรณ์</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Fortune Tab -->
-        <div class="main-content" id="fortune">
-            <div class="card" style="grid-column: 1 / -1;">
-                <h2>🔮 ดูดวงรายวัน</h2>
-                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 30px; color: #2C3E50;">
-                    เลือกราศีของคุณเพื่อดูดวงประจำวันนี้</p>
-                <div class="zodiac-grid">
-                    <div class="zodiac-item daily-fortune" data-zodiac="aries">
-                        <span class="zodiac-emoji">♈</span>
-                        <span>ราศีเมษ</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="taurus">
-                        <span class="zodiac-emoji">♉</span>
-                        <span>ราศีพฤษภ</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="gemini">
-                        <span class="zodiac-emoji">♊</span>
-                        <span>ราศีมิถุน</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="cancer">
-                        <span class="zodiac-emoji">♋</span>
-                        <span>ราศีกรกฎ</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="leo">
-                        <span class="zodiac-emoji">♌</span>
-                        <span>ราศีสิงห์</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="virgo">
-                        <span class="zodiac-emoji">♍</span>
-                        <span>ราศีกันย์</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="libra">
-                        <span class="zodiac-emoji">♎</span>
-                        <span>ราศีตุลย์</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="scorpio">
-                        <span class="zodiac-emoji">♏</span>
-                        <span>ราศีพิจิก</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="sagittarius">
-                        <span class="zodiac-emoji">♐</span>
-                        <span>ราศีธนู</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="capricorn">
-                        <span class="zodiac-emoji">♑</span>
-                        <span>ราศีมกร</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="aquarius">
-                        <span class="zodiac-emoji">♒</span>
-                        <span>ราศีกุมภ์</span>
-                    </div>
-                    <div class="zodiac-item daily-fortune" data-zodiac="pisces">
-                        <span class="zodiac-emoji">♓</span>
-                        <span>ราศีมีน</span>
-                    </div>
+            <!-- ระบบเลขเด็ด -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🍀</div>
+                    <h2 class="card-title">เลขเด็ดประจำวัน</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">แหล่งที่มาเลขเด็ด</label>
+                    <select id="luckySource" class="form-select">
+                        <option value="temple">วัดดัง</option>
+                        <option value="dream">ทำนายฝัน</option>
+                        <option value="nature">สัญญาณธรรมชาติ</option>
+                        <option value="calendar">ปฏิทินมงคล</option>
+                        <option value="combination">รวมทุกแหล่ง</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="generateLuckyNumbers()">
+                    🍀 ขอเลขเด็ด
+                </button>
+
+                <div class="loading" id="luckyLoading">
+                    <div class="spinner"></div>
+                    กำลังรวบรวมเลขเด็ด...
+                </div>
+
+                <div class="result-area" id="luckyResult">
+                    <p style="color: #666;">คลิกปุ่มเพื่อรับเลขเด็ดประจำวัน</p>
+                </div>
+            </div>
+
+            <!-- ระบบวิเคราะห์ฮวงจุ้ย -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🏠</div>
+                    <h2 class="card-title">วิเคราะห์ฮวงจุ้ย</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ทิศบ้าน</label>
+                    <select id="houseDirection" class="form-select">
+                        <option value="">เลือกทิศหน้าบ้าน</option>
+                        <option value="north">ทิศเหนือ</option>
+                        <option value="northeast">ทิศตะวันออกเฉียงเหนือ</option>
+                        <option value="east">ทิศตะวันออก</option>
+                        <option value="southeast">ทิศตะวันออกเฉียงใต้</option>
+                        <option value="south">ทิศใต้</option>
+                        <option value="southwest">ทิศตะวันตกเฉียงใต้</option>
+                        <option value="west">ทิศตะวันตก</option>
+                        <option value="northwest">ทิศตะวันตกเฉียงเหนือ</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ปีเกิด (พ.ศ.)</label>
+                    <input type="number" id="birthYear" class="form-input" placeholder="เช่น 2540" min="2480" max="2580">
+                </div>
+
+                <button class="btn" onclick="analyzeFengShui()">
+                    🏠 วิเคราะห์ฮวงจุ้ย
+                </button>
+
+                <div class="loading" id="fengshuiLoading">
+                    <div class="spinner"></div>
+                    กำลังวิเคราะห์ฮวงจุ้ย...
+                </div>
+
+                <div class="result-area" id="fengshuiResult">
+                    <p style="color: #666;">กรอกข้อมูลเพื่อวิเคราะห์ฮวงจุ้ย</p>
                 </div>
             </div>
         </div>
 
-        <!-- Compatibility Tab -->
-        <div class="main-content" id="compatibility">
-            <div class="content-grid">
-                <div class="card">
-                    <h2>💕 ราศีของคุณ</h2>
-                    <div class="zodiac-grid">
-                        <div class="zodiac-item compatibility-self" data-zodiac="aries">
-                            <span class="zodiac-emoji">♈</span>
-                            <span>เมษ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="taurus">
-                            <span class="zodiac-emoji">♉</span>
-                            <span>พฤษภ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="gemini">
-                            <span class="zodiac-emoji">♊</span>
-                            <span>มิถุน</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="cancer">
-                            <span class="zodiac-emoji">♋</span>
-                            <span>กรกฎ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="leo">
-                            <span class="zodiac-emoji">♌</span>
-                            <span>สิงห์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="virgo">
-                            <span class="zodiac-emoji">♍</span>
-                            <span>กันย์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="libra">
-                            <span class="zodiac-emoji">♎</span>
-                            <span>ตุลย์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="scorpio">
-                            <span class="zodiac-emoji">♏</span>
-                            <span>พิจิก</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="sagittarius">
-                            <span class="zodiac-emoji">♐</span>
-                            <span>ธนู</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="capricorn">
-                            <span class="zodiac-emoji">♑</span>
-                            <span>มกร</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="aquarius">
-                            <span class="zodiac-emoji">♒</span>
-                            <span>กุมภ์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-self" data-zodiac="pisces">
-                            <span class="zodiac-emoji">♓</span>
-                            <span>มีน</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>💖 ราศีคู่ของคุณ</h2>
-                    <div class="zodiac-grid">
-                        <div class="zodiac-item compatibility-partner" data-zodiac="aries">
-                            <span class="zodiac-emoji">♈</span>
-                            <span>เมษ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="taurus">
-                            <span class="zodiac-emoji">♉</span>
-                            <span>พฤษภ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="gemini">
-                            <span class="zodiac-emoji">♊</span>
-                            <span>มิถุน</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="cancer">
-                            <span class="zodiac-emoji">♋</span>
-                            <span>กรกฎ</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="leo">
-                            <span class="zodiac-emoji">♌</span>
-                            <span>สิงห์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="virgo">
-                            <span class="zodiac-emoji">♍</span>
-                            <span>กันย์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="libra">
-                            <span class="zodiac-emoji">♎</span>
-                            <span>ตุลย์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="scorpio">
-                            <span class="zodiac-emoji">♏</span>
-                            <span>พิจิก</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="sagittarius">
-                            <span class="zodiac-emoji">♐</span>
-                            <span>ธนู</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="capricorn">
-                            <span class="zodiac-emoji">♑</span>
-                            <span>มกร</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="aquarius">
-                            <span class="zodiac-emoji">♒</span>
-                            <span>กุมภ์</span>
-                        </div>
-                        <div class="zodiac-item compatibility-partner" data-zodiac="pisces">
-                            <span class="zodiac-emoji">♓</span>
-                            <span>มีน</span>
-                        </div>
-                    </div>
-                    <button class="btn" id="checkCompatibility" style="margin-top: 20px;">💕 ตรวจสอบความเข้ากัน</button>
-                </div>
+        <!-- ประวัติการพยากรณ์ -->
+        <div class="history">
+            <h3 style="margin-bottom: 20px; color: #2d3748;">📜 ประวัติการพยากรณ์</h3>
+            <div id="historyList">
+                <p style="text-align: center; color: #666;">ยังไม่มีประวัติการพยากรณ์</p>
             </div>
-        </div>
-
-        <div class="result-section" id="resultSection">
-            <h2 style="text-align: center; background: linear-gradient(45deg, #FF6B6B, #4ECDC4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 30px;">🌟 ผลการทำนาย 🌟</h2>
-            
-            <div class="prediction-card">
-                <h3>💫 ดวงชะตาโดยรวม</h3>
-                <p id="generalFortune">กำลังคำนวณ...</p>
-            </div>
-            
-            <div class="prediction-card">
-                <h3>💰 การเงิน</h3>
-                <p id="financeFortune">กำลังคำนวณ...</p>
-            </div>
-            
-            <div class="prediction-card">
-                <h3>💖 ความรัก</h3>
-                <p id="loveFortune">กำลังคำนวณ...</p>
-            </div>
-            
-            <div class="prediction-card">
-                <h3>🏥 สุขภาพ</h3>
-                <p id="healthFortune">กำลังคำนวณ...</p>
-            </div>
-            
-            <div class="prediction-card">
-                <h3>🍀 เลขนำโชค</h3>
-                <div class="lucky-numbers" id="luckyNumbers"></div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>🌙 ระบบดูดวงโหราศาสตร์ขั้นสูง - เพื่อการทำนายที่แม่นยำ 🌙</p>
         </div>
     </div>
 
     <script>
-        // สร้างเอฟเฟกต์ floating elements
-        function createFloatingElements() {
-            const container = document.getElementById('floatingElements');
-            const symbols = ['✨', '🌟', '⭐', '💫', '🔮', '🌙', '☀️', '🪐'];
-            
-            for (let i = 0; i < 15; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-symbol';
-                element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 8 + 's';
-                element.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                container.appendChild(element);
-            }
-        }
+        // ข้อมูลโหราศาสตร์และการพยากรณ์
+        const zodiacData = {
+            aries: { name: 'เมษ', element: 'ไfire', luckyNumbers: [1, 8, 17], color: 'แดง' },
+            taurus: { name: 'พฤษภ', element: 'ดิน', luckyNumbers: [2, 6, 24], color: 'เขียว' },
+            gemini: { name: 'เมถุน', element: 'ลม', luckyNumbers: [5, 14, 23], color: 'เหลือง' },
+            cancer: { name: 'กรกฎ', element: 'น้ำ', luckyNumbers: [2, 7, 11], color: 'เงิน' },
+            leo: { name: 'สิงห์', element: 'ไฟ', luckyNumbers: [1, 3, 10], color: 'ทอง' },
+            virgo: { name: 'กันย์', element: 'ดิน', luckyNumbers: [6, 15, 27], color: 'น้ำเงิน' },
+            libra: { name: 'ตุลย์', element: 'ลม', luckyNumbers: [6, 15, 24], color: 'ชมพู' },
+            scorpio: { name: 'พิจิก', element: 'น้ำ', luckyNumbers: [4, 13, 27], color: 'แดงเข้ม' },
+            sagittarius: { name: 'ธนู', element: 'ไฟ', luckyNumbers: [3, 9, 21], color: 'ม่วง' },
+            capricorn: { name: 'มกร', element: 'ดิน', luckyNumbers: [8, 10, 26], color: 'น้ำตาล' },
+            aquarius: { name: 'กุมภ์', element: 'ลม', luckyNumbers: [4, 11, 22], color: 'ฟ้า' },
+            pisces: { name: 'มีน', element: 'น้ำ', luckyNumbers: [7, 12, 29], color: 'เขียวทะเล' }
+        };
 
-        // ข้อมูลการทำนาย
-        const predictions = {
-            general: [
-                "วันนี้เป็นวันที่ดีสำหรับการเริ่มต้นสิ่งใหม่ๆ ดวงดาวส่องแสงให้กับการตัดสินใจที่สำคัญ พลังงานจากจักรวาลจะช่วยให้คุณมีความมั่นใจในการดำเนินชีวิต",
-                "พลังงานบวกจะเข้ามาในชีวิต ควรใช้โอกาสนี้ในการพัฒนาตนเอง เสริมสร้างทักษะใหม่ๆ และขยายขอบเขตความคิด",
-                "ช่วงนี้จะมีความท้าทายแต่จะนำมาซึ่งการเติบโตที่ยิ่งใหญ่ อุปสรรคที่เข้ามาจะกลายเป็นบันไดสู่ความสำเร็จ",
-                "ดวงชะตาแสดงให้เห็นถึงความสำเร็จที่จะเกิดขึ้นในอนาคตอันใกล้ ความพยายามในอดีตจะได้รับผลตอบแทนที่คุ้มค่า",
-                "จักรวาลส่งสัญญาณบวกมาให้คุณ เป็นช่วงเวลาที่เหมาะสำหรับการทำสิ่งที่หยุดอยู่ให้เคลื่อนไหวต่อไป"
+        const fortuneMessages = {
+            daily: [
+                'วันนี้เป็นวันที่ดีสำหรับการเริ่มต้นใหม่ ดวงการเงินเรื่องราวราบรื่น',
+                'พลังดาวพระมีผลดี ทำให้ท่านมีโอกาสได้รับข่าวดีทางการงาน',
+                'วันนี้ควรระวังเรื่องการสื่อสาร อาจเกิดความเข้าใจผิดได้',
+                'ดวงความรักส่องแสง มีโอกาสพบเจอคนใหม่ที่น่าสนใจ',
+                'วันนี้เหมาะกับการทำบุญทำทาน จะช่วยเสริมดวงชะตาให้ดียิ่งขึ้น'
             ],
-            finance: [
-                "การเงินมีแนวโน้มที่ดี ควรลงทุนอย่างรอบคอบและศึกษาข้อมูลให้ละเอียด โอกาสทองกำลังรอคุณอยู่",
-                "มีโอกาสได้รับเงินจากแหล่งที่ไม่คาดคิด อาจมาจากการลงทุนเก่าหรือความช่วยเหลือจากผู้คน",
-                "ระวังการใช้จ่ายฟุ่มเฟือย ควรออมเงินเพื่ออนาคต การวางแผนการเงินจะช่วยให้มีความมั่นคงในระยะยาว",
-                "ดวงการเงินเปิดกว้าง เหมาะสำหรับการขยายธุรกิจหรือการลงทุนในสิ่งที่คุณมีความเชี่ยวชาญ",
-                "รายได้จะมีเสถียรภาพมากขึ้น แต่ควรระมัดระวังในเรื่องการให้เงินกู้ยืมแก่ผู้อื่น"
+            weekly: [
+                'สัปดาห์นี้เป็นช่วงเวลาแห่งการเปลี่ยนแปลงในทางที่ดี',
+                'ดวงการงานขาขึ้น มีโอกาสได้รับการเลื่อนตำแหน่งหรือเพิ่มเงินเดือน',
+                'ความรักกำลังจะบานเบิก คนโสดมีโอกาสเจอครึ่งหัวใจ',
+                'สัปดาห์นี้ควรระวังเรื่องสุขภาพ พักผ่อนให้เพียงพอ',
+                'การเงินมีโอกาสได้รับเงินไม่คาดคิด จากการลงทุนหรือโชคลาภ'
             ],
             love: [
-                "ความรักจะเบ่งบานราวดอกไม้ในฤดูใบไม้ผลิ หัวใจที่เปิดกว้างจะพบกับสิ่งงดงาม",
-                "คนโสดจะพบรักแท้ คนมีคู่ควรใส่ใจกันมากขึ้น การสื่อสารที่ดีจะเสริมสร้างความสัมพันธ์",
-                "ช่วงนี้ควรเปิดใจรับฟังคนรัก อย่าใจเย็นเกินไป ความเข้าใจซึ่งกันและกันคือกุญแจสำคัญ",
-                "ดวงความรักส่องแสง เหมาะสำหรับการสร้างครอบครัวหรือการตัดสินใจที่สำคัญในชีวิตคู่",
-                "มีโอกาสพบเจอกับคนที่มีความคิดคล้ายคลึงกัน ความรักที่แท้จริงอาจเริ่มต้นจากมิตรภาพที่ดี"
-            ],
-            health: [
-                "สุขภาพแข็งแรงดี ควรออกกำลังกายสม่ำเสมอและรักษาความสมดุลระหว่างการทำงานและพักผ่อน",
-                "ระวังเรื่องการนอนหลับ ควรพักผ่อนให้เพียงพอ การนอนหลับที่มีคุณภาพจะเสริมสร้างพลังใจ",
-                "สุขภาพจิตใจดี แต่ควรหลีกเลี่ยงความเครียด การฝึกสมาธิหรือโยคะจะช่วยให้จิตใจสงบ",
-                "ช่วงนี้ร่างกายแข็งแรง เหมาะสำหรับการดูแลสุขภาพและเริ่มต้นกิจกรรมใหม่ๆ",
-                "ควรใส่ใจเรื่องอาหารการกิน เลือกรับประทานอาหารที่มีประโยชน์และดื่มน้ำให้เพียงพอ"
+                'ความรักกำลังเบ่งบาน คนมีแฟนจะมีความสุขกับคนรัก',
+                'ช่วงนี้อาจเกิดเรื่องเข้าใจผิดกับคนรัก ควรพูดคุยกันอย่างตรงไปตรงมา',
+                'โสดๆ เตรียมตัวให้พร้อม ความรักกำลังจะเดินทางมาหาคุณ',
+                'ควรใช้เวลากับครอบครัวมากขึ้น จะทำให้ความสัมพันธ์แน่นแฟ้นยิ่งขึ้น'
             ]
         };
 
-        const dailyPredictions = {
-            aries: "วันนี้เป็นวันแห่งการเริ่มต้น คุณจะมีพลังงานสูงและความกระตือรือร้น เหมาะสำหรับการลงมือทำสิ่งใหม่ๆ",
-            taurus: "ความเสถียรและความมั่นคงเป็นสิ่งสำคัญในวันนี้ ควรมุ่งเน้นไปที่การสร้างพื้นฐานที่แข็งแกร่ง",
-            gemini: "การสื่อสารและการเรียนรู้จะเป็นจุดเด่นของวันนี้ เปิดใจรับฟังข้อมูลใหม่ๆ",
-            cancer: "อารมณ์และความรู้สึกจะมีบทบาทสำคัญ ใส่ใจครอบครัวและคนใกล้ชิดมากขึ้น",
-            leo: "ความเป็นผู้นำและความมั่นใจจะปรากฏชัดในวันนี้ เป็นโอกาสดีที่จะแสดงความสามารถ",
-            virgo: "ความละเอียดรอบคอบและการวิเคราะห์จะช่วยให้ประสบความสำเร็จ ใส่ใจในรายละเอียดเล็กๆ น้อยๆ",
-            libra: "ความสมดุลและความยุติธรรมเป็นสิ่งสำคัญ เป็นวันที่ดีสำหรับการตัดสินใจที่สำคัญ",
-            scorpio: "ความลึกซึ้งและการค้นหาความจริงจะนำทางในวันนี้ อย่าลังเลที่จะขุดคุ้ยหาคำตอบ",
-            sagittarius: "การผจญภัยและการเรียนรู้สิ่งใหม่จะทำให้รู้สึกมีชีวิตชีวา วางแผนการเดินทางหรือกิจกรรมใหม่",
-            capricorn: "ความมุ่งมั่นและการทำงานหนักจะได้รับผลตอบแทน มุ่งเน้นไปที่เป้าหมายระยะยาว",
-            aquarius: "ความคิดสร้างสรรค์และนวัตกรรมจะเป็นกุญแจสู่ความสำเร็จ กล้าที่จะคิดนอกกรอบ",
-            pisces: "สัญชาตญาณและความเมตตากรุณาจะเป็นแนวทางในวันนี้ เชื่อใจในความรู้สึกของตัวเอง"
-        };
-
-        const compatibilityData = {
-            aries: { taurus: 70, gemini: 85, cancer: 60, leo: 95, virgo: 65, libra: 80, scorpio: 75, sagittarius: 90, capricorn: 55, aquarius: 85, pisces: 70 },
-            taurus: { aries: 70, gemini: 75, cancer: 90, leo: 65, virgo: 95, libra: 85, scorpio: 80, sagittarius: 60, capricorn: 90, aquarius: 55, pisces: 85 },
-            gemini: { aries: 85, taurus: 75, cancer: 70, leo: 80, virgo: 60, libra: 95, scorpio: 65, sagittarius: 85, capricorn: 55, aquarius: 90, pisces: 75 },
-            cancer: { aries: 60, taurus: 90, gemini: 70, leo: 75, virgo: 85, libra: 80, scorpio: 95, sagittarius: 65, capricorn: 85, aquarius: 60, pisces: 90 },
-            leo: { aries: 95, taurus: 65, gemini: 80, cancer: 75, virgo: 70, libra: 85, scorpio: 60, sagittarius: 90, capricorn: 65, aquarius: 85, pisces: 75 },
-            virgo: { aries: 65, taurus: 95, gemini: 60, cancer: 85, leo: 70, libra: 75, scorpio: 85, sagittarius: 55, capricorn: 90, aquarius: 60, pisces: 80 },
-            libra: { aries: 80, taurus: 85, gemini: 95, cancer: 80, leo: 85, virgo: 75, scorpio: 70, sagittarius: 80, capricorn: 65, aquarius: 90, pisces: 85 },
-            scorpio: { aries: 75, taurus: 80, gemini: 65, cancer: 95, leo: 60, virgo: 85, libra: 70, sagittarius: 75, capricorn: 80, aquarius: 65, pisces: 90 },
-            sagittarius: { aries: 90, taurus: 60, gemini: 85, cancer: 65, leo: 90, virgo: 55, libra: 80, scorpio: 75, capricorn: 60, aquarius: 85, pisces: 70 },
-            capricorn: { aries: 55, taurus: 90, gemini: 55, cancer: 85, leo: 65, virgo: 90, libra: 65, scorpio: 80, sagittarius: 60, aquarius: 65, pisces: 75 },
-            aquarius: { aries: 85, taurus: 55, gemini: 90, cancer: 60, leo: 85, virgo: 60, libra: 90, scorpio: 65, sagittarius: 85, capricorn: 65, pisces: 80 },
-            pisces: { aries: 70, taurus: 85, gemini: 75, cancer: 90, leo: 75, virgo: 80, libra: 85, scorpio: 90, sagittarius: 70, capricorn: 75, aquarius: 80 }
-        };
-
-        let selectedZodiac = '';
-        let selectedType = '';
-        let selectedSelfZodiac = '';
-        let selectedPartnerZodiac = '';
-
-        // Tab management
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetTab = this.dataset.tab;
-                
-                // Remove active class from all tabs and contents
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.main-content').forEach(content => content.classList.remove('active'));
-                
-                // Add active class to clicked tab and corresponding content
-                this.classList.add('active');
-                document.getElementById(targetTab).classList.add('active');
-            });
-        });
-
-        // Zodiac selection for main form
-        document.querySelectorAll('[data-zodiac]').forEach(item => {
-            item.addEventListener('click', function() {
-                if (this.classList.contains('daily-fortune')) {
-                    // Daily fortune logic
-                    showDailyFortune(this.dataset.zodiac);
-                } else if (this.classList.contains('compatibility-self')) {
-                    // Self zodiac selection for compatibility
-                    document.querySelectorAll('.compatibility-self').forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedSelfZodiac = this.dataset.zodiac;
-                } else if (this.classList.contains('compatibility-partner')) {
-                    // Partner zodiac selection for compatibility
-                    document.querySelectorAll('.compatibility-partner').forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedPartnerZodiac = this.dataset.zodiac;
-                } else {
-                    // Regular zodiac selection
-                    document.querySelectorAll('#zodiacGrid .zodiac-item').forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedZodiac = this.dataset.zodiac;
+        // ฟังก์ชันสร้างเลขสุ่ม
+        function generateRandomNumbers(count, max) {
+            const numbers = [];
+            while (numbers.length < count) {
+                const num = Math.floor(Math.random() * max) + 1;
+                if (!numbers.includes(num)) {
+                    numbers.push(num);
                 }
-            });
-        });
+            }
+            return numbers.sort((a, b) => a - b);
+        }
 
-        // Type selection
-        document.querySelectorAll('[data-type]').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('[data-type]').forEach(i => i.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedType = this.dataset.type;
-            });
-        });
+        // ฟังก์ชันคำนวณเลขจากชื่อและวันเกิด
+        function calculatePersonalNumbers(name, birthDate) {
+            let sum = 0;
+            for (let char of name) {
+                sum += char.charCodeAt(0);
+            }
+            
+            if (birthDate) {
+                const date = new Date(birthDate);
+                sum += date.getDate() + date.getMonth() + 1 + date.getFullYear();
+            }
+            
+            return sum;
+        }
 
-        // Personal form submission
-        document.getElementById('personalForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // ฟังก์ชันพยากรณ์เลขหวย
+        function generateLottery() {
+            const fullName = document.getElementById('fullName').value;
+            const birthDate = document.getElementById('birthDate').value;
+            const lotteryType = document.getElementById('lotteryType').value;
             
-            const name = document.getElementById('name').value;
-            const birthdate = document.getElementById('birthdate').value;
-            const gender = document.getElementById('gender').value;
+            if (!fullName.trim()) {
+                alert('กรุณากรอกชื่อ-นามสกุล');
+                return;
+            }
+
+            showLoading('lotteryLoading');
             
-            if (!name || !birthdate || !gender) {
+            setTimeout(() => {
+                let numbers = [];
+                let displayText = '';
+                
+                const personalSum = calculatePersonalNumbers(fullName, birthDate);
+                
+                switch (lotteryType) {
+                    case 'government':
+                        numbers = generateRandomNumbers(3, 999);
+                        displayText = numbers.map(n => n.toString().padStart(3, '0')).join(' - ');
+                        break;
+                    case 'underground':
+                        numbers = generateRandomNumbers(2, 99);
+                        displayText = numbers.map(n => n.toString().padStart(2, '0')).join(' - ');
+                        break;
+                    case 'lotto':
+                        numbers = generateRandomNumbers(6, 49);
+                        break;
+                }
+
+                // ปรับแต่งเลขตามข้อมูลส่วนตัว
+                if (numbers.length > 0) {
+                    const adjustment = personalSum % 10;
+                    numbers[0] = ((numbers[0] + adjustment) % (lotteryType === 'lotto' ? 49 : (lotteryType === 'government' ? 999 : 99))) + 1;
+                }
+
+                hideLoading('lotteryLoading');
+                displayLotteryResult(numbers, lotteryType, fullName);
+                
+                // แสดงสถิติ
+                showLotteryStats();
+                
+                // บันทึกประวัติ
+                addToHistory(`หวย${lotteryType === 'government' ? 'รัฐบาล' : lotteryType === 'underground' ? 'ใต้ดิน' : 'ลอตโต้'}`, displayText || numbers.join(', '));
+            }, 2000);
+        }
+
+        function displayLotteryResult(numbers, type, name) {
+            const resultDiv = document.getElementById('lotteryResult');
+            
+            if (type === 'lotto') {
+                const ballsHtml = numbers.map((num, index) => 
+                    `<div class="lottery-ball" style="animation-delay: ${index * 0.2}s">${num}</div>`
+                ).join('');
+                
+                resultDiv.innerHTML = `
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #2d3748;">🎰 เลขมงคลสำหรับคุณ${name}</h4>
+                        <div class="lottery-numbers">${ballsHtml}</div>
+                        <p style="color: #666; margin-top: 15px;">ขอให้โชคดีครับ/ค่ะ!</p>
+                    </div>
+                `;
+            } else {
+                const displayNumbers = type === 'government' ? 
+                    numbers.map(n => n.toString().padStart(3, '0')).join(' - ') :
+                    numbers.map(n => n.toString().padStart(2, '0')).join(' - ');
+                
+                resultDiv.innerHTML = `
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #2d3748;">🎰 เลขมงคลสำหรับคุณ${name}</h4>
+                        <div style="font-size: 2rem; font-weight: 700; color: #667eea; text-align: center; margin: 20px 0;">
+                            ${displayNumbers}
+                        </div>
+                        <p style="color: #666;">ขอให้โชคดีครับ/ค่ะ!</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showLotteryStats() {
+            const statsDiv = document.getElementById('lotteryStats');
+            const luckPercentage = Math.floor(Math.random() * 30) + 70; // 70-99%
+            const fortuneScore = Math.floor(Math.random() * 50) + 50; // 50-99
+            
+            document.getElementById('luckPercentage').textContent = luckPercentage + '%';
+            document.getElementById('fortuneScore').textContent = fortuneScore;
+            statsDiv.style.display = 'grid';
+        }
+
+        // ฟังก์ชันโหราพยากรณ์
+        function generateFortune() {
+            const zodiacSign = document.getElementById('zodiacSign').value;
+            const fortuneType = document.getElementById('fortuneType').value;
+            
+            if (!zodiacSign) {
+                alert('กรุณาเลือกราศี');
+                return;
+            }
+
+            showLoading('fortuneLoading');
+            
+            setTimeout(() => {
+                const zodiac = zodiacData[zodiacSign];
+                const messages = fortuneMessages[fortuneType] || fortuneMessages.daily;
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                const resultDiv = document.getElementById('fortuneResult');
+                resultDiv.innerHTML = `
+                    <div class="fortune-text">
+                        <h4 style="margin-bottom: 15px; color: #2d3748;">⭐ ดวงชะตาราศี${zodiac.name}</h4>
+                        <p style="margin-bottom: 15px;">${randomMessage}</p>
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                            <strong>🍀 เลขนำโชค:</strong> ${zodiac.luckyNumbers.join(', ')}<br>
+                            <strong>🎨 สีมงคล:</strong> ${zodiac.color}<br>
+                            <strong>🌟 ธาตุประจำราศี:</strong> ${zodiac.element}
+                        </div>
+                    </div>
+                `;
+                
+                hideLoading('fortuneLoading');
+                addToHistory(`โหราราศี${zodiac.name}`, `${fortuneType === 'daily' ? 'รายวัน' : fortuneType === 'weekly' ? 'รายสัปดาห์' : fortuneType === 'monthly' ? 'รายเดือน' : fortuneType}`);
+            }, 1500);
+        }
+
+        // ฟังก์ชันเลขเด็ด
+        function generateLuckyNumbers() {
+            const source = document.getElementById('luckySource').value;
+            
+            showLoading('luckyLoading');
+            
+            setTimeout(() => {
+                const luckyNums = generateRandomNumbers(5, 99);
+                const sourceNames = {
+                    temple: 'วัดดัง',
+                    dream: 'ทำนายฝัน',
+                    nature: 'สัญญาณธรรมชาติ',
+                    calendar: 'ปฏิทินมงคล',
+                    combination: 'รวมทุกแหล่ง'
+                };
+                
+                const resultDiv = document.getElementById('luckyResult');
+                resultDiv.innerHTML = `
+                    <div>
+                        <h4 style="margin-bottom: 15px; color: #2d3748;">🍀 เลขเด็ดจาก${sourceNames[source]}</h4>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 15px 0;">
+                            ${luckyNums.map((num, index) => 
+                                `<div class="lottery-ball" style="background: linear-gradient(45deg, #f093fb, #f5576c); animation-delay: ${index * 0.3}s">
+                                    ${num.toString().padStart(2, '0')}
+                                </div>`
+                            ).join('')}
+                        </div>
+                        <p style="color: #666; text-align: center;">แนะนำให้นำไปใช้ประกอบการซื้อหวย</p>
+                    </div>
+                `;
+                
+                hideLoading('luckyLoading');
+                addToHistory(`เลขเด็ด${sourceNames[source]}`, luckyNums.map(n => n.toString().padStart(2, '0')).join(', '));
+            }, 1800);
+        }
+
+        // ฟังก์ชันวิเคราะห์ฮวงจุ้ย
+        function analyzeFengShui() {
+            const direction = document.getElementById('houseDirection').value;
+            const birthYear = document.getElementById('birthYear').value;
+            
+            if (!direction || !birthYear) {
                 alert('กรุณากรอกข้อมูลให้ครบถ้วน');
                 return;
             }
 
-            showPrediction(name, birthdate, gender, selectedZodiac, selectedType);
-        });
+            showLoading('fengshuiLoading');
+            
+            setTimeout(() => {
+                const directions = {
+                    north: { name: 'เหนือ', element: 'น้ำ', color: 'น้ำเงิน', advice: 'เหมาะกับการตั้งโต๊ะทำงาน วางพันธุ์ไม้น้ำ' },
+                    northeast: { name: 'ตะวันออกเฉียงเหนือ', element: 'ดิน', color: 'เหลือง', advice: 'เหมาะกับการวางของศักดิ์สิทธิ์ ห้องสมุด' },
+                    east: { name: 'ตะวันออก', element: 'ไม้', color: 'เขียว', advice: 'เหมาะกับห้องนอนของลูก ปลูกต้นไม้' },
+                    southeast: { name: 'ตะวันออกเฉียงใต้', element: 'ไม้', color: 'เขียวอ่อน', advice: 'เหมาะกับการวางตู้เซฟ การเงินเจริญ' },
+                    south: { name: 'ใต้', element: 'ไฟ', color: 'แดง', advice: 'เหมาะกับห้องรับแขก ไฟแสงสว่าง' },
+                    southwest: { name: 'ตะวันตกเฉียงใต้', element: 'ดิน', color: 'น้ำตาล', advice: 'เหมาะกับห้องนอนใหญ่ ความรักมั่นคง' },
+                    west: { name: 'ตะวันตก', element: 'โลหะ', color: 'ขาว', advice: 'เหมาะกับห้องทำงาน วางของโลหะ' },
+                    northwest: { name: 'ตะวันตกเฉียงเหนือ', element: 'โลหะ', color: 'เงิน', advice: 'เหมาะกับห้องหัวหน้าครอบครัว มีอำนาจ' }
+                };
+                
+                const houseDirection = directions[direction];
+                const yearElement = getYearElement(parseInt(birthYear));
+                const compatibility = checkElementCompatibility(houseDirection.element, yearElement);
+                
+                const resultDiv = document.getElementById('fengshuiResult');
+                resultDiv.innerHTML = `
+                    <div class="fortune-text">
+                        <h4 style="margin-bottom: 15px; color: #2d3748;">🏠 การวิเคราะห์ฮวงจุ้ย</h4>
+                        <div style="text-align: left;">
+                            <p><strong>🧭 ทิศบ้าน:</strong> ${houseDirection.name}</p>
+                            <p><strong>🌟 ธาตุประจำทิศ:</strong> ${houseDirection.element}</p>
+                            <p><strong>🎨 สีมงคล:</strong> ${houseDirection.color}</p>
+                            <p><strong>👤 ธาตุประจำปีเกิด:</strong> ${yearElement}</p>
+                            <p><strong>⚖️ ความเข้ากัน:</strong> ${compatibility}</p>
+                        </div>
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px; text-align: left;">
+                            <strong>💡 คำแนะนำ:</strong><br>
+                            ${houseDirection.advice}
+                        </div>
+                    </div>
+                `;
+                
+                hideLoading('fengshuiLoading');
+                addToHistory(`ฮวงจุ้ยทิศ${houseDirection.name}`, `ธาตุ${houseDirection.element} - ${compatibility}`);
+            }, 2200);
+        }
 
-        // Compatibility check
-        document.getElementById('checkCompatibility').addEventListener('click', function() {
-            if (!selectedSelfZodiac || !selectedPartnerZodiac) {
-                alert('กรุณาเลือกราศีของทั้งสองคน');
+        // ฟังก์ชันช่วยเหลือ
+        function getYearElement(year) {
+            const elements = ['โลหะ', 'น้ำ', 'ไม้', 'ไฟ', 'ดิน'];
+            return elements[(year - 2480) % 5];
+        }
+
+        function checkElementCompatibility(houseElement, yearElement) {
+            const compatibility = {
+                'ไฟ': { good: ['ไม้'], bad: ['น้ำ'], neutral: ['ไฟ', 'ดิน', 'โลหะ'] },
+                'ดิน': { good: ['ไฟ'], bad: ['ไม้'], neutral: ['ดิน', 'โลหะ', 'น้ำ'] },
+                'โลหะ': { good: ['ดิน'], bad: ['ไฟ'], neutral: ['โลหะ', 'น้ำ', 'ไม้'] },
+                'น้ำ': { good: ['โลหะ'], bad: ['ดิน'], neutral: ['น้ำ', 'ไม้', 'ไฟ'] },
+                'ไม้': { good: ['น้ำ'], bad: ['โลหะ'], neutral: ['ไม้', 'ไฟ', 'ดิน'] }
+            };
+            
+            const relation = compatibility[houseElement];
+            if (relation.good.includes(yearElement)) return 'เข้ากันดีมาก 🟢';
+            if (relation.bad.includes(yearElement)) return 'ขัดแย้งกัน 🔴';
+            return 'เป็นกลาง 🟡';
+        }
+
+        function showLoading(elementId) {
+            document.getElementById(elementId).classList.add('show');
+        }
+
+        function hideLoading(elementId) {
+            document.getElementById(elementId).classList.remove('show');
+        }
+
+        // ระบบประวัติ
+        let history = [];
+
+        function addToHistory(type, result) {
+            const now = new Date();
+            const timeStr = now.toLocaleString('th-TH', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            history.unshift({
+                type,
+                result,
+                time: timeStr
+            });
+            
+            // เก็บไว้แค่ 10 รายการล่าสุด
+            if (history.length > 10) {
+                history = history.slice(0, 10);
+            }
+            
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const historyDiv = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align: center; color: #666;">ยังไม่มีประวัติการพยากรณ์</p>';
                 return;
             }
             
-            showCompatibility(selectedSelfZodiac, selectedPartnerZodiac);
+            historyDiv.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div>
+                        <strong>${item.type}</strong><br>
+                        <span style="color: #666; font-size: 0.9rem;">${item.result}</span>
+                    </div>
+                    <div style="color: #999; font-size: 0.8rem;">
+                        ${item.time}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // เริ่มต้นระบบ
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตั้งค่าวันที่เริ่มต้น
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate());
+            document.getElementById('birthDate').max = maxDate.toISOString().split('T')[0];
+            
+            // เพิ่มเอฟเฟกต์พิเศษ
+            addSparkleEffect();
         });
 
-        function showDailyFortune(zodiac) {
-            const prediction = dailyPredictions[zodiac];
+        // เอฟเฟกต์ประกายดาว
+        function addSparkleEffect() {
+            const sparkles = ['✨', '⭐', '🌟', '💫'];
             
-            document.getElementById('generalFortune').textContent = prediction;
-            document.getElementById('financeFortune').textContent = predictions.finance[Math.floor(Math.random() * predictions.finance.length)];
-            document.getElementById('loveFortune').textContent = predictions.love[Math.floor(Math.random() * predictions.love.length)];
-            document.getElementById('healthFortune').textContent = predictions.health[Math.floor(Math.random() * predictions.health.length)];
-
-            const luckyNumbers = [];
-            for (let i = 0; i < 6; i++) {
-                luckyNumbers.push(Math.floor(Math.random() * 99) + 1);
-            }
-
-            const luckyNumbersContainer = document.getElementById('luckyNumbers');
-            luckyNumbersContainer.innerHTML = '';
-            luckyNumbers.forEach(num => {
-                const numberElement = document.createElement('div');
-                numberElement.className = 'lucky-number';
-                numberElement.textContent = num;
-                luckyNumbersContainer.appendChild(numberElement);
-            });
-
-            document.getElementById('resultSection').classList.add('show');
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.innerHTML = sparkles[Math.floor(Math.random() * sparkles.length)];
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                sparkle.style.fontSize = '1.5rem';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.animation = 'sparkle 3s ease-out forwards';
+                sparkle.style.zIndex = '1000';
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    document.body.removeChild(sparkle);
+                }, 3000);
+            }, 5000);
         }
 
-        function showCompatibility(selfZodiac, partnerZodiac) {
-            const compatibility = compatibilityData[selfZodiac][partnerZodiac];
-            let compatibilityText = '';
-            
-            if (compatibility >= 90) {
-                compatibilityText = `ความเข้ากันได้: ${compatibility}% - คู่แท้! ทั้งคู่มีความเข้าใจกันอย่างลึกซึ้ง มีโอกาสสร้างความสัมพันธ์ที่ยั่งยืนและมีความสุข`;
-            } else if (compatibility >= 80) {
-                compatibilityText = `ความเข้ากันได้: ${compatibility}% - เข้ากันได้ดีมาก! มีจุดร่วมมากมายและสามารถเสริมซึ่งกันและกันได้ดี`;
-            } else if (compatibility >= 70) {
-                compatibilityText = `ความเข้ากันได้: ${compatibility}% - เข้ากันได้ดี มีความเป็นไปได้สูงในการสร้างความสัมพันธ์ที่ดี`;
-            } else if (compatibility >= 60) {
-                compatibilityText = `ความเข้ากันได้: ${compatibility}% - เข้ากันได้ปานกลาง ต้องใช้ความเข้าใจและการปรับตัวซึ่งกันและกัน`;
-            } else {
-                compatibilityText = `ความเข้ากันได้: ${compatibility}% - ต้องใช้ความพยายามมาก แต่ไม่ใช่เรื่องเป็นไปไม่ได้หากมีความรักที่แท้จริง`;
-            }
-            
-            document.getElementById('generalFortune').textContent = compatibilityText;
-            document.getElementById('financeFortune').textContent = 'การเงินของทั้งคู่จะมีเสถียรภาพดีหากช่วยเหลือกันและกัน การวางแผนร่วมกันจะนำไปสู่ความมั่นคง';
-            document.getElementById('loveFortune').textContent = 'ความรักจะเติบโตขึ้นเมื่อเวลาผ่านไป การเข้าใจและยอมรับในความแตกต่างจะทำให้ความสัมพันธ์แข็งแกร่ง';
-            document.getElementById('healthFortune').textContent = 'สุขภาพจิตใจของทั้งคู่จะดีขึ้นเมื่ออยู่ด้วยกัน การดูแลเอาใจใส่ซึ่งกันและกันจะเสริมสร้างพลังบวก';
-
-            const luckyNumbers = [];
-            for (let i = 0; i < 6; i++) {
-                luckyNumbers.push(Math.floor(Math.random() * 99) + 1);
-            }
-
-            const luckyNumbersContainer = document.getElementById('luckyNumbers');
-            luckyNumbersContainer.innerHTML = '';
-            luckyNumbers.forEach(num => {
-                const numberElement = document.createElement('div');
-                numberElement.className = 'lucky-number';
-                numberElement.textContent = num;
-                luckyNumbersContainer.appendChild(numberElement);
-            });
-
-            document.getElementById('resultSection').classList.add('show');
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function showPrediction(name, birthdate, gender, zodiac, type) {
-            let generalPrediction = predictions.general[Math.floor(Math.random() * predictions.general.length)];
-            
-            if (type) {
-                switch(type) {
-                    case 'general':
-                        generalPrediction = predictions.general[Math.floor(Math.random() * predictions.general.length)];
-                        break;
-                    case 'love':
-                        generalPrediction = predictions.love[Math.floor(Math.random() * predictions.love.length)];
-                        break;
-                    case 'money':
-                        generalPrediction = predictions.finance[Math.floor(Math.random() * predictions.finance.length)];
-                        break;
-                    case 'health':
-                        generalPrediction = predictions.health[Math.floor(Math.random() * predictions.health.length)];
-                        break;
+        // เพิ่ม CSS สำหรับเอฟเฟกต์ประกายดาว
+        const sparkleCSS = `
+            @keyframes sparkle {
+                0% {
+                    opacity: 1;
+                    transform: scale(0) rotate(0deg);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1) rotate(180deg);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0) rotate(360deg);
                 }
             }
-            
-            const financePrediction = predictions.finance[Math.floor(Math.random() * predictions.finance.length)];
-            const lovePrediction = predictions.love[Math.floor(Math.random() * predictions.love.length)];
-            const healthPrediction = predictions.health[Math.floor(Math.random() * predictions.health.length)];
-
-            const luckyNumbers = [];
-            for (let i = 0; i < 6; i++) {
-                luckyNumbers.push(Math.floor(Math.random() * 99) + 1);
-            }
-
-            document.getElementById('generalFortune').textContent = `คุณ${name}, ${generalPrediction}`;
-            document.getElementById('financeFortune').textContent = financePrediction;
-            document.getElementById('loveFortune').textContent = lovePrediction;
-            document.getElementById('healthFortune').textContent = healthPrediction;
-
-            const luckyNumbersContainer = document.getElementById('luckyNumbers');
-            luckyNumbersContainer.innerHTML = '';
-            luckyNumbers.forEach(num => {
-                const numberElement = document.createElement('div');
-                numberElement.className = 'lucky-number';
-                numberElement.textContent = num;
-                luckyNumbersContainer.appendChild(numberElement);
-            });
-
-            document.getElementById('resultSection').classList.add('show');
-            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Initialize
-        createFloatingElements();
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = sparkleCSS;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

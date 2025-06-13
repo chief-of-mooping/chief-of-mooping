@@ -1,0 +1,1377 @@
+[
+  {
+    "id": "pmbok_theory",
+    "name_th": "",
+    "name_en": "Project Management Body of Knowledge (PMBOK)",
+    "description": "มาตรฐานการบริหารโครงการสากลที่ครอบคลุม 10 สาขาความรู้และ 5 กลุ่มกระบวนการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "PMBOK",
+      "project",
+      "management",
+      "scope",
+      "time",
+      "cost",
+      "quality",
+      "โครงการ",
+      "การจัดการ",
+      "ขอบเขต"
+    ],
+    "commonVariables": [],
+    "references": [
+      "PMI (2021)"
+    ]
+  },
+  {
+    "id": "agile_theory",
+    "name_th": "",
+    "name_en": "Agile Project Management Theory",
+    "description": "วิธีการบริหารโครงการที่เน้นความยืดหยุ่น การทำงานแบบวนซ้ำ และการตอบสนองการเปลี่ยนแปลง",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "agile",
+      "iterative",
+      "collaboration",
+      "change",
+      "flexibility",
+      "คล่องตัว",
+      "ทำซ้ำ",
+      "ความร่วมมือ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Beck et al. (2001)"
+    ]
+  },
+  {
+    "id": "scrum_theory",
+    "name_th": "",
+    "name_en": "Scrum Theory",
+    "description": "กรอบการทำงานแบบ Agile ที่เน้นการทำงานเป็นทีม การตรวจสอบ และการปรับตัว",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "scrum",
+      "sprint",
+      "backlog",
+      "team",
+      "empirical",
+      "สกรัม",
+      "สปรินต์",
+      "ทีม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Schwaber & Sutherland (2020)"
+    ]
+  },
+  {
+    "id": "theory_of_constraints",
+    "name_th": "",
+    "name_en": "Theory of Constraints (TOC)",
+    "description": "ทฤษฎีที่มุ่งเน้นการระบุและจัดการข้อจำกัดที่สำคัญที่สุดในระบบ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "constraints",
+      "bottleneck",
+      "optimization",
+      "throughput",
+      "ข้อจำกัด",
+      "คอขวด",
+      "การเพิ่มประสิทธิภาพ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Goldratt (1984)"
+    ]
+  },
+  {
+    "id": "critical_chain_theory",
+    "name_th": "",
+    "name_en": "Critical Chain Theory",
+    "description": "การบริหารโครงการที่เน้นการจัดการทรัพยากรและเวลาผ่าน Critical Chain และ Buffer",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "critical",
+      "chain",
+      "buffer",
+      "resource",
+      "constraints",
+      "มิติวิกฤต",
+      "ทรัพยากร",
+      "ข้อจำกัด"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Goldratt (1997)"
+    ]
+  },
+  {
+    "id": "earned_value_management",
+    "name_th": "",
+    "name_en": "Earned Value Management Theory (EVM)",
+    "description": "วิธีการวัดและควบคุมประสิทธิภาพโครงการด้านเวลา ต้นทุน และขอบเขตงาน",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "earned",
+      "value",
+      "performance",
+      "cost",
+      "schedule",
+      "control",
+      "ค่าที่ได้รับ",
+      "ประสิทธิภาพ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Fleming & Koppelman (2010)"
+    ]
+  },
+  {
+    "id": "systems_theory_pm",
+    "name_th": "",
+    "name_en": "Systems Theory in Project Management",
+    "description": "การมองโครงการเป็นระบบที่ประกอบด้วยองค์ประกอบที่เชื่อมโยงและมีปฏิสัมพันธ์กัน",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "systems",
+      "theory",
+      "components",
+      "interactions",
+      "holistic",
+      "ระบบ",
+      "องค์ประกอบ",
+      "ปฏิสัมพันธ์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Bertalanffy (1968)"
+    ]
+  },
+  {
+    "id": "contingency_theory_pm",
+    "name_th": "",
+    "name_en": "Contingency Theory in Project Management",
+    "description": "ทฤษฎีที่เน้นการปรับวิธีการบริหารโครงการให้เหมาะสมกับสถานการณ์และบริบท",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "contingency",
+      "situational",
+      "context",
+      "adaptive",
+      "environment",
+      "สถานการณ์",
+      "บริบท",
+      "การปรับตัว"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Fiedler (1967)"
+    ]
+  },
+  {
+    "id": "transformational_leadership_pm",
+    "name_th": "",
+    "name_en": "Transformational Leadership in Projects",
+    "description": "การประยุกต์ภาวะผู้นำการเปลี่ยนแปลงในการบริหารทีมโครงการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "transformational",
+      "leadership",
+      "motivation",
+      "innovation",
+      "influence",
+      "ภาวะผู้นำ",
+      "แรงจูงใจ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Bass (1985)"
+    ]
+  },
+  {
+    "id": "transactional_leadership_pm",
+    "name_th": "",
+    "name_en": "Transactional Leadership in Projects",
+    "description": "การนำภาวะผู้นำแบบแลกเปลี่ยนมาใช้ในการควบคุมและจูงใจทีมโครงการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "transactional",
+      "leadership",
+      "reward",
+      "monitoring",
+      "control",
+      "การแลกเปลี่ยน",
+      "รางวัล",
+      "การควบคุม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Burns (1978)"
+    ]
+  },
+  {
+    "id": "situational_leadership_pm",
+    "name_th": "",
+    "name_en": "Situational Leadership in Projects",
+    "description": "การปรับรูปแบบภาวะผู้นำให้เหมาะสมกับระดับความพร้อมของสมาชิกทีม",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "situational",
+      "leadership",
+      "readiness",
+      "adaptation",
+      "style",
+      "สถานการณ์",
+      "ความพร้อม",
+      "การปรับตัว"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Hersey & Blanchard (1969)"
+    ]
+  },
+  {
+    "id": "stakeholder_theory_pm",
+    "name_th": "",
+    "name_en": "Stakeholder Theory in Projects",
+    "description": "การระบุ วิเคราะห์ และจัดการความสัมพันธ์กับผู้มีส่วนได้ส่วนเสียในโครงการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "stakeholder",
+      "engagement",
+      "power",
+      "interest",
+      "relationship",
+      "ผู้มีส่วนได้ส่วนเสีย",
+      "การมีส่วนร่วม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Freeman (1984)"
+    ]
+  },
+  {
+    "id": "emotional_intelligence_pm",
+    "name_th": "",
+    "name_en": "Emotional Intelligence in Project Management",
+    "description": "การประยุกต์ใช้ปัญญาอารมณ์ในการบริหารโครงการและจัดการทีมงาน",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "emotional",
+      "intelligence",
+      "EQ",
+      "communication",
+      "relationship",
+      "ปัญญาอารมณ์",
+      "การสื่อสาร"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Goleman (1995)"
+    ]
+  },
+  {
+    "id": "risk_management_theory_pm",
+    "name_th": "",
+    "name_en": "Risk Management Theory in Projects",
+    "description": "กระบวนการระบุ วิเคราะห์ ตอบสนอง และควบคุมความเสี่ยงในโครงการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "risk",
+      "management",
+      "identification",
+      "analysis",
+      "response",
+      "ความเสี่ยง",
+      "การจัดการ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "PMI (2019)"
+    ]
+  },
+  {
+    "id": "tqm_theory",
+    "name_th": "",
+    "name_en": "Total Quality Management (TQM) Theory",
+    "description": "แนวทางการจัดการคุณภาพแบบองค์รวมที่เน้นการปรับปรุงอย่างต่อเนื่อง",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "TQM",
+      "quality",
+      "continuous",
+      "improvement",
+      "customer",
+      "คุณภาพ",
+      "การปรับปรุง",
+      "ลูกค้า"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Deming (1986)"
+    ]
+  },
+  {
+    "id": "six_sigma_theory",
+    "name_th": "",
+    "name_en": "Six Sigma Theory",
+    "description": "วิธีการปรับปรุงคุณภาพที่ใช้เครื่องมือทางสถิติเพื่อลดความผันแปรและข้อบกพร่อง",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "six",
+      "sigma",
+      "DMAIC",
+      "quality",
+      "defect",
+      "statistical",
+      "สิกซ์ซิกม่า",
+      "คุณภาพ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Motorola (1986)"
+    ]
+  },
+  {
+    "id": "knowledge_management_pm",
+    "name_th": "",
+    "name_en": "Knowledge Management Theory in Projects",
+    "description": "การจัดการความรู้ในโครงการเพื่อการเรียนรู้และปรับปรุงอย่างต่อเนื่อง",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "knowledge",
+      "management",
+      "sharing",
+      "learning",
+      "lessons",
+      "ความรู้",
+      "การจัดการ",
+      "การแบ่งปัน"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Nonaka & Takeuchi (1995)"
+    ]
+  },
+  {
+    "id": "organizational_learning_pm",
+    "name_th": "",
+    "name_en": "Organizational Learning Theory in Projects",
+    "description": "การเรียนรู้ระดับองค์กรผ่านประสบการณ์และการสะท้อนผลจากโครงการ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "organizational",
+      "learning",
+      "reflection",
+      "mental",
+      "models",
+      "องค์กร",
+      "การเรียนรู้",
+      "การสะท้อน"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Argyris & Schön (1978)"
+    ]
+  },
+  {
+    "id": "dynamic_capabilities_pm",
+    "name_th": "",
+    "name_en": "Dynamic Capabilities Theory in Projects",
+    "description": "ความสามารถในการรับรู้ จับโอกาส และปรับเปลี่ยนเพื่อรักษาความได้เปรียบ",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "dynamic",
+      "capabilities",
+      "adaptation",
+      "innovation",
+      "transformation",
+      "ความสามารถพลวัตร"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Teece et al. (1997)"
+    ]
+  },
+  {
+    "id": "absorptive_capacity_pm",
+    "name_th": "",
+    "name_en": "Absorptive Capacity Theory in Projects",
+    "description": "ความสามารถในการรับรู้ ดูดซับ และประยุกต์ความรู้ภายนอกเพื่อสร้างนวัตกรรม",
+    "disciplines": [
+      "project_management"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "absorptive",
+      "capacity",
+      "knowledge",
+      "acquisition",
+      "innovation",
+      "การดูดซับ",
+      "ความรู้",
+      "นวัตกรรม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Cohen & Levinthal (1990)"
+    ]
+  },
+  {
+    "id": "tam",
+    "name_th": "",
+    "name_en": "Technology Acceptance Model (TAM)",
+    "description": "ทฤษฎีที่อธิบายพฤติกรรมการยอมรับเทคโนโลยีของผู้ใช้ โดยเน้นที่การรับรู้ประโยชน์และความง่ายในการใช้งาน เหมาะสำหรับศึกษาการยอมรับระบบสารสนเทศ แอปพลิเคชัน และเทคโนโลยีใหม่ๆ",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "technology",
+      "acceptance",
+      "digital",
+      "adoption",
+      "system",
+      "user",
+      "เทคโนโลยี",
+      "ยอมรับ",
+      "ระบบ",
+      "ดิจิทัล"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Davis (1989)"
+    ]
+  },
+  {
+    "id": "utaut",
+    "name_th": "",
+    "name_en": "Unified Theory of Acceptance and Use of Technology (UTAUT)",
+    "description": "ทฤษฎีที่พัฒนามาจาก TAM โดยรวมทฤษฎีต่างๆ 8 ทฤษฎีเข้าด้วยกัน เน้นปัจจัยที่หลากหลายในการยอมรับเทคโนโลยี",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "technology",
+      "acceptance",
+      "performance",
+      "effort",
+      "social",
+      "เทคโนโลยี",
+      "ประสิทธิภาพ",
+      "ความคาดหวัง"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Venkatesh et al. (2003)"
+    ]
+  },
+  {
+    "id": "tpb",
+    "name_th": "",
+    "name_en": "Theory of Planned Behavior (TPB)",
+    "description": "ทฤษฎีที่อธิบายความตั้งใจและพฤติกรรมของบุคคลผ่านทัศนคติ บรรทัดฐาน และการควบคุมที่รับรู้ เหมาะสำหรับศึกษาพฤติกรรมผู้บริโภคออนไลน์",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "behavior",
+      "intention",
+      "attitude",
+      "norm",
+      "control",
+      "พฤติกรรม",
+      "ความตั้งใจ",
+      "ทัศนคติ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Ajzen (1991)"
+    ]
+  },
+  {
+    "id": "customer_journey",
+    "name_th": "",
+    "name_en": "Customer Journey Theory",
+    "description": "ทฤษฎีที่อธิบายกระบวนการและขั้นตอนต่างๆ ที่ลูกค้าผ่านตั้งแต่รู้จักแบรนด์จนกลายเป็นลูกค้าที่ภักดี รวมถึงจุดสัมผัสและประสบการณ์ในแต่ละขั้นตอน",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "customer",
+      "journey",
+      "touchpoint",
+      "experience",
+      "awareness",
+      "consideration",
+      "ลูกค้า",
+      "การเดินทาง",
+      "ประสบการณ์",
+      "จุดสัมผัส"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Lemon & Verhoef (2016)"
+    ]
+  },
+  {
+    "id": "marketing_mix_4p",
+    "name_th": "",
+    "name_en": "Marketing Mix 4P Theory",
+    "description": "ทฤษฎีการตลาดพื้นฐานที่อธิบายการใช้เครื่องมือการตลาด 4 องค์ประกอบหลัก เป็นรากฐานสำคัญของการวางแผนกลยุทธ์การตลาด",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "easy",
+    "keywords": [
+      "marketing",
+      "mix",
+      "4P",
+      "product",
+      "price",
+      "place",
+      "promotion",
+      "การตลาด",
+      "ผลิตภัณฑ์",
+      "ราคา",
+      "การส่งเสริม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "McCarthy (1960)"
+    ]
+  },
+  {
+    "id": "marketing_mix_7p",
+    "name_th": "",
+    "name_en": "Marketing Mix 7P Theory (Services Marketing)",
+    "description": "ทฤษฎีการตลาดบริการที่ขยายจาก 4P โดยเพิ่มองค์ประกอบ People, Process และ Physical Evidence เพื่อให้เหมาะสมกับลักษณะของธุรกิจบริการ",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "marketing",
+      "mix",
+      "7P",
+      "service",
+      "people",
+      "process",
+      "physical",
+      "evidence",
+      "การตลาด",
+      "บริการ",
+      "บุคลากร",
+      "กระบวนการ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Booms & Bitner (1981)"
+    ]
+  },
+  {
+    "id": "brand_management",
+    "name_th": "",
+    "name_en": "Brand Management Theory",
+    "description": "ทฤษฎีการจัดการแบรนด์ที่อธิบายการสร้างคุณค่าแบรนด์ผ่านการพัฒนาความรู้จัก ภาพลักษณ์ และความภักดีของลูกค้า",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "brand",
+      "management",
+      "awareness",
+      "image",
+      "equity",
+      "loyalty",
+      "แบรนด์",
+      "การจัดการ",
+      "ความรู้จัก",
+      "ภาพลักษณ์",
+      "ความภักดี"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Keller (2013)"
+    ]
+  },
+  {
+    "id": "stp",
+    "name_th": "",
+    "name_en": "STP Theory (Segmentation, Targeting, Positioning)",
+    "description": "ทฤษฎีกลยุทธ์การตลาดที่อธิบายกระบวนการแบ่งกลุ่มตลาด การเลือกกลุ่มเป้าหมาย และการสร้างตำแหน่งทางการตลาดที่แตกต่าง",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "STP",
+      "segmentation",
+      "targeting",
+      "positioning",
+      "market",
+      "competitive",
+      "การแบ่งกลุ่ม",
+      "กลุ่มเป้าหมาย",
+      "ตำแหน่ง",
+      "ตลาด"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Kotler & Keller (2016)"
+    ]
+  },
+  {
+    "id": "diffusion_innovation",
+    "name_th": "",
+    "name_en": "Diffusion of Innovation Theory",
+    "description": "ทฤษฎีที่อธิบายกระบวนการแพร่กระจายของนวัตกรรมในสังคม เหมาะสำหรับศึกษาการยอมรับเทคโนโลยีใหม่และผลิตภัณฑ์ดิจิทัล",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "innovation",
+      "diffusion",
+      "adoption",
+      "technology",
+      "spread",
+      "นวัตกรรม",
+      "การแพร่กระจาย",
+      "การยอมรับ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Rogers (2003)"
+    ]
+  },
+  {
+    "id": "trust_digital",
+    "name_th": "",
+    "name_en": "Trust Theory in Digital Environment",
+    "description": "ทฤษฎีที่อธิบายความไว้วางใจในสภาพแวดล้อมดิจิทัล เหมาะสำหรับศึกษาการซื้อขายออนไลน์และบริการดิจิทัล",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "trust",
+      "digital",
+      "online",
+      "security",
+      "confidence",
+      "ความไว้วางใจ",
+      "ออนไลน์",
+      "ความปลอดภัย"
+    ],
+    "commonVariables": [],
+    "references": [
+      "McKnight et al. (2002)"
+    ]
+  },
+  {
+    "id": "ecommerce_adoption",
+    "name_th": "",
+    "name_en": "E-commerce Adoption Model",
+    "description": "ทฤษฎีที่อธิบายการยอมรับและการใช้งานระบบอีคอมเมิร์ซ โดยเน้นความไว้วางใจและความเสี่ยงที่รับรู้",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "ecommerce",
+      "adoption",
+      "online",
+      "purchase",
+      "trust",
+      "อีคอมเมิร์ซ",
+      "การซื้อขาย",
+      "ออนไลน์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Gefen & Straub (2000)"
+    ]
+  },
+  {
+    "id": "social_commerce",
+    "name_th": "",
+    "name_en": "Social Commerce Theory",
+    "description": "ทฤษฎีที่อธิบายการซื้อขายผ่านสื่อสังคมออนไลน์ โดยเน้นอิทธิพลของเครือข่ายสังคมต่อพฤติกรรมการซื้อ",
+    "disciplines": [
+      "digital_marketing"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "social",
+      "commerce",
+      "media",
+      "community",
+      "relationship",
+      "สังคม",
+      "การค้า",
+      "ชุมชน",
+      "ความสัมพันธ์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Liang & Turban (2011)"
+    ]
+  },
+  {
+    "id": "social_capital",
+    "name_th": "",
+    "name_en": "Social Capital Theory",
+    "description": "ทฤษฎีที่อธิบายคุณค่าของความสัมพันธ์ทางสังคมและเครือข่ายที่ส่งผลต่อผลลัพธ์ต่างๆ",
+    "disciplines": [
+      "social_capital"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "social",
+      "capital",
+      "network",
+      "relationship",
+      "trust",
+      "สังคม",
+      "ทุน",
+      "เครือข่าย",
+      "ความสัมพันธ์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Coleman (1988), Bourdieu (1986)"
+    ]
+  },
+  {
+    "id": "rbv",
+    "name_th": "",
+    "name_en": "Resource-Based View (RBV)",
+    "description": "ทฤษฎีที่เน้นความสำคัญของทรัพยากรภายในองค์กรในการสร้างความได้เปรียบทางการแข่งขัน",
+    "disciplines": [
+      "management"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "resource",
+      "competitive",
+      "advantage",
+      "valuable",
+      "rare",
+      "ทรัพยากร",
+      "การแข่งขัน",
+      "ความได้เปรียบ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Barney (1991)"
+    ]
+  },
+  {
+    "id": "capm",
+    "name_th": "",
+    "name_en": "Capital Asset Pricing Model (CAPM)",
+    "description": "แบบจำลองการตั้งราคาสินทรัพย์ทุนที่อธิบายความสัมพันธ์ระหว่างความเสี่ยงและผลตอบแทน",
+    "disciplines": [
+      "finance"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "asset",
+      "pricing",
+      "risk",
+      "return",
+      "beta",
+      "สินทรัพย์",
+      "ราคา",
+      "ความเสี่ยง",
+      "ผลตอบแทน"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Sharpe (1964)"
+    ]
+  },
+  {
+    "id": "expectancy_theory",
+    "name_th": "",
+    "name_en": "Expectancy Theory",
+    "description": "ทฤษฎีแรงจูงใจที่อธิบายการตัดสินใจของบุคคลในการทำงาน",
+    "disciplines": [
+      "hr"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "expectancy",
+      "motivation",
+      "performance",
+      "valence",
+      "instrumentality",
+      "แรงจูงใจ",
+      "ประสิทธิภาพ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Vroom (1964)"
+    ]
+  },
+  {
+    "id": "supply_chain_management",
+    "name_th": "",
+    "name_en": "Supply Chain Management Theory",
+    "description": "ทฤษฎีการจัดการห่วงโซ่อุปทานที่เน้นการบูรณาการและความร่วมมือระหว่างคู่ค้า",
+    "disciplines": [
+      "supply_chain"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "supply",
+      "chain",
+      "integration",
+      "coordination",
+      "collaboration",
+      "ห่วงโซ่อุปทาน",
+      "การบูรณาการ",
+      "ประสานงาน"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Christopher (1992)"
+    ]
+  },
+  {
+    "id": "triple_bottom_line",
+    "name_th": "",
+    "name_en": "Triple Bottom Line Theory",
+    "description": "ทฤษฎีผลตอบแทนสามด้านที่เน้นการสร้างคุณค่าอย่างยั่งยืนใน 3 มิติ",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "triple",
+      "bottom",
+      "line",
+      "sustainability",
+      "economic",
+      "environmental",
+      "social",
+      "ยั่งยืน",
+      "สิ่งแวดล้อม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Elkington (1997)"
+    ]
+  },
+  {
+    "id": "business_intelligence",
+    "name_th": "",
+    "name_en": "Business Intelligence Theory",
+    "description": "ทฤษฎีระบบสารสนเทศเพื่อการตัดสินใจที่เปลี่ยนข้อมูลเป็นความรู้",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "business",
+      "intelligence",
+      "data",
+      "analytics",
+      "decision",
+      "ธุรกิจ",
+      "ข้อมูล",
+      "การวิเคราะห์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Watson & Wixom (2007)"
+    ]
+  },
+  {
+    "id": "big_data_analytics",
+    "name_th": "",
+    "name_en": "Big Data Analytics Theory",
+    "description": "ทฤษฎีการวิเคราะห์ข้อมูลขนาดใหญ่ที่มีความหลากหลายและความเร็วสูง",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "big",
+      "data",
+      "analytics",
+      "volume",
+      "velocity",
+      "variety",
+      "ข้อมูลขนาดใหญ่",
+      "การวิเคราะห์"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Chen et al. (2012)"
+    ]
+  },
+  {
+    "id": "predictive_analytics",
+    "name_th": "",
+    "name_en": "Predictive Analytics Theory",
+    "description": "ทฤษฎีการวิเคราะห์เชิงพยากรณ์เพื่อคาดการณ์เหตุการณ์ในอนาคต",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "predictive",
+      "analytics",
+      "forecasting",
+      "models",
+      "machine",
+      "learning",
+      "พยากรณ์",
+      "แบบจำลอง"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Shmueli & Koppius (2011)"
+    ]
+  },
+  {
+    "id": "customer_analytics",
+    "name_th": "",
+    "name_en": "Customer Analytics Theory",
+    "description": "ทฤษฎีการวิเคราะห์ลูกค้าเพื่อเข้าใจพฤติกรรมและสร้างคุณค่า",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "customer",
+      "analytics",
+      "segmentation",
+      "lifetime",
+      "value",
+      "churn",
+      "ลูกค้า",
+      "การแบ่งกลุ่ม",
+      "คุณค่า"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Kumar & Reinartz (2016)"
+    ]
+  },
+  {
+    "id": "digital_transformation",
+    "name_th": "",
+    "name_en": "Digital Transformation Theory",
+    "description": "ทฤษฎีการเปลี่ยนผ่านสู่ดิจิทัลเพื่อสร้างความสามารถในการแข่งขันใหม่",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "digital",
+      "transformation",
+      "technology",
+      "innovation",
+      "capabilities",
+      "ดิจิทัล",
+      "เทคโนโลยี",
+      "นวัตกรรม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Westerman et al. (2014)"
+    ]
+  },
+  {
+    "id": "ai_adoption",
+    "name_th": "",
+    "name_en": "Artificial Intelligence Adoption Theory",
+    "description": "ทฤษฎีการนำปัญญาประดิษฐ์มาใช้ในองค์กรเพื่อเพิ่มประสิทธิภาพ",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "artificial",
+      "intelligence",
+      "AI",
+      "automation",
+      "machine",
+      "learning",
+      "ปัญญาประดิษฐ์",
+      "อัตโนมัติ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Davenport & Ronanki (2018)"
+    ]
+  },
+  {
+    "id": "data_driven_decision",
+    "name_th": "",
+    "name_en": "Data-Driven Decision Making Theory",
+    "description": "ทฤษฎีการตัดสินใจที่อิงข้อมูลเพื่อเพิ่มประสิทธิภาพและความแม่นยำ",
+    "disciplines": [
+      "business_analytics"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "data",
+      "driven",
+      "decision",
+      "making",
+      "analytics",
+      "performance",
+      "ข้อมูล",
+      "การตัดสินใจ",
+      "ประสิทธิภาพ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Brynjolfsson et al. (2011)"
+    ]
+  },
+  {
+    "id": "comparative_advantage",
+    "name_th": "",
+    "name_en": "Comparative Advantage Theory",
+    "description": "ทฤษฎีพื้นฐานการค้าระหว่างประเทศที่อธิบายว่าประเทศควรเชี่ยวชาญผลิตสินค้าที่มีความได้เปรียบเชิงเปรียบเทียบ แม้จะไม่มีความได้เปรียบสัมบูรณ์",
+    "disciplines": [
+      "international_trade"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "comparative",
+      "advantage",
+      "trade",
+      "specialization",
+      "opportunity",
+      "cost",
+      "ความได้เปรียบ",
+      "การค้า",
+      "การเชี่ยวชาญ",
+      "ต้นทุนเสียโอกาส"
+    ],
+    "commonVariables": [],
+    "references": [
+      "David Ricardo (1817)"
+    ]
+  },
+  {
+    "id": "heckscher_ohlin",
+    "name_th": "",
+    "name_en": "Heckscher-Ohlin Theory (H-O Model)",
+    "description": "ทฤษฎีที่อธิบายรูปแบบการค้าระหว่างประเทศโดยอิงจากความแตกต่างของปัจจัยการผลิต (เงินทุน แรงงาน ทรัพยากรธรรมชาติ) ที่แต่ละประเทศมี",
+    "disciplines": [
+      "international_trade"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "heckscher",
+      "ohlin",
+      "factor",
+      "endowments",
+      "capital",
+      "labor",
+      "intensive",
+      "ปัจจัยการผลิต",
+      "เงินทุน",
+      "แรงงาน"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Eli Heckscher & Bertil Ohlin (1919-1933)"
+    ]
+  },
+  {
+    "id": "eclectic_paradigm",
+    "name_th": "",
+    "name_en": "Eclectic Paradigm (OLI Framework)",
+    "description": "กรอบแนวคิดที่อธิบายการตัดสินใจลงทุนโดยตรงในต่างประเทศ (FDI) ของบริษัทข้ามชาติโดยใช้ 3 ปัจจัยหลัก: Ownership, Location, และ Internalization",
+    "disciplines": [
+      "international_trade"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "eclectic",
+      "OLI",
+      "ownership",
+      "location",
+      "internalization",
+      "FDI",
+      "multinational",
+      "การลงทุนโดยตรง",
+      "บริษัทข้ามชาติ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "John Dunning (1977)"
+    ]
+  },
+  {
+    "id": "uppsala_model",
+    "name_th": "",
+    "name_en": "Uppsala Internationalization Model",
+    "description": "แบบจำลองที่อธิบายกระบวนการขยายธุรกิจไปต่างประเทศแบบค่อยเป็นค่อยไป โดยเน้นการเรียนรู้จากประสบการณ์และการลดความเสี่ยง",
+    "disciplines": [
+      "international_trade"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "uppsala",
+      "internationalization",
+      "psychic",
+      "distance",
+      "incremental",
+      "learning",
+      "การขยายตัวต่างประเทศ",
+      "การเรียนรู้",
+      "ระยะห่างทางจิตใจ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Johanson & Vahlne (1977)"
+    ]
+  },
+  {
+    "id": "triple_bottom_line_extended",
+    "name_th": "",
+    "name_en": "Triple Bottom Line Framework (Extended)",
+    "description": "กรอบแนวคิดการประเมินความสำเร็จของธุรกิจในมิติที่กว้างขึ้น โดยวัดผลทั้งด้านสังคม สิ่งแวดล้อม และเศรษฐกิจ ไม่ใช่เพียงกำไรเท่านั้น",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "triple",
+      "bottom",
+      "line",
+      "people",
+      "planet",
+      "profit",
+      "3BL",
+      "ความยั่งยืน",
+      "สังคม",
+      "สิ่งแวดล้อม",
+      "เศรษฐกิจ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "John Elkington (1994)"
+    ]
+  },
+  {
+    "id": "sdgs_framework",
+    "name_th": "",
+    "name_en": "Sustainable Development Goals Framework (SDGs)",
+    "description": "กรอบเป้าหมายการพัฒนาที่ยั่งยืน 17 เป้าหมายของสหประชาชาติที่ใช้เป็นแนวทางในการขับเคลื่อนการพัฒนาโลกภายในปี 2030",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "SDGs",
+      "sustainable",
+      "development",
+      "goals",
+      "UN",
+      "2030",
+      "agenda",
+      "เป้าหมายการพัฒนาที่ยั่งยืน",
+      "สหประชาชาติ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "United Nations (2015)"
+    ]
+  },
+  {
+    "id": "esg_framework",
+    "name_th": "",
+    "name_en": "Environmental, Social, and Governance Framework (ESG)",
+    "description": "กรอบการประเมินความยั่งยืนของธุรกิจที่ใช้ในการตัดสินใจลงทุน โดยประเมิน 3 มิติหลัก: สิ่งแวดล้อม สังคม และธรรมาภิบาล",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "ESG",
+      "environmental",
+      "social",
+      "governance",
+      "sustainable",
+      "investing",
+      "risk",
+      "การลงทุนยั่งยืน",
+      "ธรรมาภิบาล"
+    ],
+    "commonVariables": [],
+    "references": [
+      "United Nations Principles for Responsible Investment (2004)"
+    ]
+  },
+  {
+    "id": "natural_capitalism",
+    "name_th": "",
+    "name_en": "Natural Capitalism Theory",
+    "description": "แนวคิดเศรษฐกิจที่เน้นการนับรวมทุนธรรมชาติเป็นส่วนหนึ่งของการดำเนินธุรกิจ และการเพิ่มประสิทธิภาพการใช้ทรัพยากร",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "natural",
+      "capitalism",
+      "capital",
+      "resource",
+      "efficiency",
+      "biomimicry",
+      "ทุนธรรมชาติ",
+      "ประสิทธิภาพทรัพยากร"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Paul Hawken, Amory & Hunter Lovins (1999)"
+    ]
+  },
+  {
+    "id": "stakeholder_sustainability",
+    "name_th": "",
+    "name_en": "Stakeholder Theory for Sustainability",
+    "description": "การประยุกต์ทฤษฎีผู้มีส่วนได้ส่วนเสียในบริบทความยั่งยืน เน้นการสร้างคุณค่าร่วมและความรับผิดชอบต่อสังคม",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "moderate",
+    "keywords": [
+      "stakeholder",
+      "engagement",
+      "sustainability",
+      "shared",
+      "value",
+      "social",
+      "license",
+      "ผู้มีส่วนได้ส่วนเสีย",
+      "การมีส่วนร่วม"
+    ],
+    "commonVariables": [],
+    "references": [
+      "R. Edward Freeman (1984), adapted for sustainability"
+    ]
+  },
+  {
+    "id": "systems_thinking_sustainability",
+    "name_th": "",
+    "name_en": "Systems Thinking for Sustainability",
+    "description": "การประยุกต์ระบบคิดในการแก้ปัญหาความยั่งยืน โดยมองความเชื่อมโยงและปฏิสัมพันธ์ระหว่างองค์ประกอบต่างๆ ในระบบ",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "systems",
+      "thinking",
+      "feedback",
+      "loops",
+      "leverage",
+      "points",
+      "complexity",
+      "ระบบคิด",
+      "ความซับซ้อน",
+      "จุดยกระดับ"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Peter Senge, Donella Meadows"
+    ]
+  },
+  {
+    "id": "doughnut_economics",
+    "name_th": "",
+    "name_en": "Doughnut Economics Model",
+    "description": "โมเดลเศรษฐกิจที่เสนอกรอบการพัฒนาที่ยั่งยืน โดยการดำเนินเศรษฐกิจในพื้นที่ปลอดภัยระหว่างความต้องการพื้นฐานของสังคมและขอบเขตของระบบนิเวศโลก",
+    "disciplines": [
+      "sustainability"
+    ],
+    "level": "advanced",
+    "keywords": [
+      "doughnut",
+      "economics",
+      "planetary",
+      "boundaries",
+      "social",
+      "foundation",
+      "regenerative",
+      "เศรษฐกิจโดนัท",
+      "ขอบเขตโลก"
+    ],
+    "commonVariables": [],
+    "references": [
+      "Kate Raworth (2012, 2017)"
+    ]
+  }
+]

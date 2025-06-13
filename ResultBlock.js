@@ -1,0 +1,1 @@
+// React component to display matched results

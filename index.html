@@ -1,138 +1,41 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>พยากรณ์เลขหวยจักรวาล</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <title>ผู้ช่วยนักวิจัยอัจฉริยะ Next-Gen</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/app-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      margin: 0;
       font-family: 'Sarabun', sans-serif;
-      background: radial-gradient(circle, #e0f2f1, #d0f0e0);
-      color: #1b4332;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      padding: 2rem;
-      max-width: 480px;
-      width: 100%;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      text-align: center;
-      color: #2d6a4f;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    input[type="date"], select, button {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background: #2d6a4f;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      font-weight: bold;
-      margin-top: 1rem;
-    }
-    button:hover {
-      background: #1e5631;
-    }
-    .result {
-      margin-top: 2rem;
-      font-size: 2rem;
-      text-align: center;
-      color: #d00000;
-      font-weight: bold;
-      animation: fadeIn 0.5s ease;
-    }
-    .subtext {
-      text-align: center;
-      margin-top: 1rem;
-      color: #555;
-      font-size: 0.95rem;
+      background-color: #f9fafb;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>🔮 พยากรณ์เลขหวยจักรวาล</h1>
-    <div class="form-group">
-      <label for="drawDate">เลือกวันที่หวยออก:</label>
-      <input type="date" id="drawDate">
-    </div>
-    <div class="form-group">
-      <label for="region">เลือกภูมิภาค:</label>
-      <select id="region">
-        <option value="north">ภาคเหนือ</option>
-        <option value="northeast">ภาคอีสาน</option>
-        <option value="central">ภาคกลาง</option>
-        <option value="south">ภาคใต้</option>
-      </select>
-    </div>
-    <button onclick="predictLuckyNumber()">✨ ทำนายเลขนำโชค</button>
-    <div class="result" id="result"></div>
-    <div class="subtext" id="subtext"></div>
-  </div>
+<body class="min-h-screen flex flex-col justify-between">
+  <main class="flex-grow p-6 max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">ผู้ช่วยนักวิจัยอัจฉริยะ Next-Gen</h1>
 
-  <script>
-    function predictLuckyNumber() {
-      const date = document.getElementById("drawDate").value;
-      const region = document.getElementById("region").value;
-      const result = document.getElementById("result");
-      const subtext = document.getElementById("subtext");
+    <div id="root"></div>
+  </main>
 
-      if (!date) {
-        result.textContent = "กรุณาเลือกวันที่ก่อนทำนาย";
-        subtext.textContent = "";
-        return;
-      }
+  <footer class="text-center text-sm text-gray-500 py-4 border-t">
+    สร้างโดยทีมวิจัย | ระบบนี้ใช้ข้อมูลตามเป้าหมายการพัฒนาที่ยั่งยืน (SDGs)
+  </footer>
 
-      const seed = date.replace(/-/g, '') + region;
-      let hash = 0;
-      for (let i = 0; i < seed.length; i++) {
-        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      const rng = Math.abs(hash);
-      const number = (rng % 1000).toString().padStart(3, '0');
+  <script type="module">
+    import React from "https://cdn.skypack.dev/react";
+    import ReactDOM from "https://cdn.skypack.dev/react-dom";
+    import RenderApp from "./render.js";
 
-      result.textContent = `เลขนำโชคของคุณคือ: ${number}`;
-      subtext.textContent = `จักรวาลได้สั่นสะเทือนในวันที่ ${date.split('-').reverse().join('/')} สำหรับภาค${regionName(region)}`;
-    }
-
-    function regionName(regionCode) {
-      switch(regionCode) {
-        case 'north': return 'เหนือ';
-        case 'northeast': return 'อีสาน';
-        case 'central': return 'กลาง';
-        case 'south': return 'ใต้';
-        default: return '';
-      }
-    }
+    ReactDOM.render(
+      React.createElement(RenderApp),
+      document.getElementById("root")
+    );
   </script>
 </body>
 </html>

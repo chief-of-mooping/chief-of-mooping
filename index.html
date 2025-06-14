@@ -1,20 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>การตรวจสอบย้อนกลับห่วงโซ่อุปทานกาแฟเชียงราย</title>
-  <link href="style.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>การตรวจสอบย้อนกลับกาแฟเชียงราย</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; padding: 20px; max-width: 800px; margin: auto; }
+    h1 { text-align: center; color: #2c3e50; }
+    .block { background: white; border-left: 6px solid #3498db; padding: 12px; margin-bottom: 16px; box-shadow: 0 0 5px #ccc; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; }
+    button { margin-top: 12px; padding: 10px 16px; background: #3498db; color: white; border: none; cursor: pointer; }
+    button:hover { background: #2980b9; }
+    .hash { font-size: 0.85em; color: #666; word-wrap: break-word; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>ระบบตรวจสอบย้อนกลับ (Blockchain)</h1>
-    <textarea id="dataInput" placeholder="ป้อนข้อมูล เช่น สถานที่, เวลา, ผู้เกี่ยวข้อง..."></textarea>
-    <button onclick="addBlock()">เพิ่มข้อมูล</button>
-    <div id="chainDisplay"></div>
+
+  <h1>☕ การตรวจสอบย้อนกลับกาแฟเชียงราย</h1>
+
+  <div>
+    <label>กิจกรรม:</label>
+    <input id="activity" placeholder="เช่น เก็บเกี่ยว, ตากแห้ง, คั่วกาแฟ...">
+
+    <label>สถานที่ / ผู้ผลิต:</label>
+    <input id="location" placeholder="ชื่อฟาร์มหรือผู้เกี่ยวข้อง">
+
+    <label>วันที่:</label>
+    <input id="date" type="date">
+
+    <button onclick="addBlock()">➕ เพิ่มข้อมูลบล็อก</button>
   </div>
-  <script src="blockchain.js"></script>
-  <script src="render.js"></script>
+
+  <h2>⛓️ บล็อกทั้งหมด:</h2>
+  <div id="chainContainer"></div>
+
+<script>
+  class Block {
+    constructor(index, timestamp, activity, location, date, previousHash = '') {
+      this.index = index;
+      this.timestamp = timestamp;
+      this.activity = activity;
+      this.location = location;
+      this.date = date;
+      this.previousHash = previousHash;
+      this.hash = this.calculateHash();
+    }
+
+    calculateHash() {
+      const data = this.index + this.timestamp + this.activity + this.location + this.date + this.previousHash;
+      return sha256(data);
+    }
+  }
+
+  class Blockchain {
+    constructor() {
+      this.chain = [this.createGenesisBlock()];
+    }
+
+    createGenesisBlock() {
+      return new Block(0, new Date().toISOString(), "เริ่มต้นบล็อก", "เชียงราย", "2025-01-01", "0");
+    }
+
+    getLatestBlock() {
+      return this.chain[this.chain.length - 1];
+    }
+
+    addBlock(newBlock) {
+      newBlock.previousHash = this.getLatestBlock().hash;
+      newBlock.hash = newBlock.calculateHash();
+      this.chain.push(newBlock);
+    }
+  }
+
+  const coffeeChain = new Blockchain();
+
+  function addBlock() {
+    const activity = document.getElementById('activity').value;
+    const location = document.getElementById('location').value;
+    const date = document.getElementById('date').value;
+    if (!activity || !location || !date) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+
+    const newBlock = new Block(coffeeChain.chain.length, new Date().toISOString(), activity, location, date);
+    coffeeChain.addBlock(newBlock);
+    renderChain();
+  }
+
+  function renderChain() {
+    const container = document.getElementById('chainContainer');
+    container.innerHTML = '';
+    coffeeChain.chain.forEach(block => {
+      const div = document.createElement('div');
+      div.className = 'block';
+      div.innerHTML = `
+        <strong>🧱 บล็อก #${block.index}</strong><br>
+        📌 กิจกรรม: ${block.activity}<br>
+        🗺️ สถานที่: ${block.location}<br>
+        📅 วันที่: ${block.date}<br>
+        <div class="hash">🔗 Hash: ${block.hash}</div>
+        <div class="hash">↩️ Previous: ${block.previousHash}</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // เรียกดูเมื่อเปิดเว็บครั้งแรก
+  renderChain();
+
+  // ฟังก์ชัน sha256 จาก crypto.subtle (async → base64)
+  function sha256(str) {
+    const buffer = new TextEncoder().encode(str);
+    return crypto.subtle.digest("SHA-256", buffer).then(hash => {
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+    });
+  }
+</script>
+
 </body>
 </html>

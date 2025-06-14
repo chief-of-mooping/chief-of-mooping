@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+<strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
+                    สถานที่: ${block.data.location}<br>
+                    ผู้ดำเนินการ: ${block.data.operator}<br>
+                    รายละ<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -12,10 +15,12 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Times New Roman', 'Noto Serif Thai', 'TH Sarabun New', serif;
             background: linear-gradient(135deg, #2c1810 0%, #5d4037 30%, #8d6e63 60%, #a1887f 100%);
             min-height: 100vh;
             color: #2c1810;
+            font-size: 16px;
+            line-height: 1.6;
         }
         
         .container {
@@ -27,18 +32,24 @@
         .header {
             text-align: center;
             color: #f3e5ab;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(243, 229, 171, 0.3);
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
         
         .header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             opacity: 0.9;
+            font-style: italic;
+            font-weight: 300;
         }
         
         .dashboard {
@@ -50,43 +61,51 @@
         
         .card {
             background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.15);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 2px solid #d7ccc8;
+            border: 1px solid #d7ccc8;
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(44, 24, 16, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(44, 24, 16, 0.2);
         }
         
         .card h3 {
             color: #3e2723;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d7ccc8;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: #4e342e;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 2px solid #d7ccc8;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 4px;
+            font-size: 15px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             background: #fefdfb;
+            font-family: inherit;
         }
         
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -96,18 +115,21 @@
         }
         
         .btn {
-            background: linear-gradient(135deg, #5d4037 0%, #8d6e63 50%, #a1887f 100%);
+            background: linear-gradient(135deg, #5d4037 0%, #4e342e 100%);
             color: #f3e5ab;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
             transition: transform 0.2s ease, box-shadow 0.3s ease;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
             box-shadow: 0 4px 15px rgba(93, 64, 55, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: inherit;
         }
         
         .btn:hover {
@@ -115,13 +137,27 @@
             box-shadow: 0 6px 20px rgba(93, 64, 55, 0.4);
         }
         
+        .btn:active {
+            transform: translateY(0);
+        }
+        
         .blockchain {
             background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.15);
             margin-bottom: 20px;
-            border: 2px solid #d7ccc8;
+            border: 1px solid #d7ccc8;
+        }
+        
+        .blockchain h3 {
+            color: #3e2723;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #d7ccc8;
         }
         
         .block {
@@ -167,19 +203,28 @@
         }
         
         .block-data {
-            background: rgba(243, 229, 171, 0.2);
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: rgba(243, 229, 171, 0.15);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
             border: 1px solid rgba(243, 229, 171, 0.3);
+            line-height: 1.8;
+        }
+        
+        .block-data strong {
+            color: #f3e5ab;
+            font-weight: 600;
         }
         
         .block-hash {
-            font-family: monospace;
-            font-size: 0.8rem;
-            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 10px;
             opacity: 0.7;
             word-break: break-all;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 4px;
         }
         
         .supply-chain {
@@ -221,20 +266,47 @@
         
         .search-section {
             background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.15);
+            margin-bottom: 30px;
+            border: 1px solid #d7ccc8;
+        }
+        
+        .search-section h3 {
+            color: #3e2723;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d7ccc8;
+        }
+        
+        .search-section p {
+            color: #5d4037;
+            text-align: center;
+            font-style: italic;
             margin-bottom: 20px;
-            border: 2px solid #d7ccc8;
         }
         
         .coffee-info {
             background: rgba(243, 229, 171, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 20px;
             display: none;
-            border: 2px solid rgba(141, 110, 99, 0.3);
+            border: 1px solid rgba(141, 110, 99, 0.3);
+        }
+        
+        .coffee-info h4 {
+            color: #3e2723;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(141, 110, 99, 0.3);
         }
         
         .coffee-info.show {
@@ -251,14 +323,19 @@
         
         .info-item {
             background: linear-gradient(145deg, #fefdfb 0%, #f5f5f5 100%);
-            padding: 10px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 4px;
             border-left: 3px solid #8d6e63;
             box-shadow: 0 2px 8px rgba(44, 24, 16, 0.1);
+            margin-bottom: 10px;
         }
         
         .info-item strong {
             color: #3e2723;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
         
         @media (max-width: 768px) {
@@ -285,17 +362,17 @@
         
         <div class="dashboard">
             <div class="card">
-                <h3>📝 เพิ่มข้อมูลในห่วงโซ่อุปทาน</h3>
+                <h3>บันทึกข้อมูลในห่วงโซ่อุปทาน</h3>
                 <div class="form-group">
                     <label for="stage">ขั้นตอน:</label>
                     <select id="stage">
-                        <option value="farm">🚜 การปลูก (Farm)</option>
-                        <option value="harvest">🌾 การเก็บเกี่ยว (Harvest)</option>
-                        <option value="processing">⚙️ การแปรรูป (Processing)</option>
-                        <option value="roasting">🔥 การคั่ว (Roasting)</option>
-                        <option value="packaging">📦 การบรรจุ (Packaging)</option>
-                        <option value="distribution">🚚 การจัดจำหน่าย (Distribution)</option>
-                        <option value="retail">🏪 การขายปลีก (Retail)</option>
+                        <option value="farm">การปลูก (Farm)</option>
+                        <option value="harvest">การเก็บเกี่ยว (Harvest)</option>
+                        <option value="processing">การแปรรูป (Processing)</option>
+                        <option value="roasting">การคั่ว (Roasting)</option>
+                        <option value="packaging">การบรรจุ (Packaging)</option>
+                        <option value="distribution">การจัดจำหน่าย (Distribution)</option>
+                        <option value="retail">การขายปลีก (Retail)</option>
                     </select>
                 </div>
                 
@@ -324,19 +401,19 @@
                     </select>
                 </div>
                 
-                <button class="btn" onclick="addToBlockchain()">เพิ่มข้อมูลลง Blockchain</button>
+                <button class="btn" onclick="addToBlockchain()">บันทึกข้อมูลลงระบบ</button>
             </div>
             
             <div class="card">
-                <h3>🔍 ตรวจสอบกาแฟ</h3>
+                <h3>ตรวจสอบประวัติสินค้า</h3>
                 <div class="form-group">
                     <label for="searchId">รหัสกาแฟ:</label>
                     <input type="text" id="searchId" placeholder="ใส่รหัสกาแฟที่ต้องการตรวจสอบ">
                 </div>
-                <button class="btn" onclick="searchCoffee()">ค้นหาประวัติ</button>
+                <button class="btn" onclick="searchCoffee()">ค้นหาประวัติสินค้า</button>
                 
                 <div class="coffee-info" id="coffeeInfo">
-                    <h4>📋 ประวัติกาแฟ</h4>
+                    <h4>ประวัติสินค้า</h4>
                     <div class="info-grid" id="coffeeDetails">
                         <!-- ข้อมูลจะแสดงที่นี่ -->
                     </div>
@@ -345,12 +422,12 @@
         </div>
         
         <div class="search-section">
-            <h3>🔗 Blockchain Explorer</h3>
+            <h3>ตัวสำรวจ Blockchain</h3>
             <p>ข้อมูลทั้งหมดในระบบ Blockchain จะแสดงด้านล่าง แต่ละ Block จะมีข้อมูลที่ไม่สามารถแก้ไขได้</p>
         </div>
         
         <div class="blockchain" id="blockchain">
-            <h3>⛓️ Chiang Rai Coffee Blockchain</h3>
+            <h3>Chiang Rai Coffee Blockchain</h3>
             <div id="blocks">
                 <!-- Blocks จะแสดงที่นี่ -->
             </div>
@@ -388,10 +465,13 @@
             }
             
             mineBlock(difficulty) {
-                const target = Array(difficulty + 1).join("0");
-                while (this.hash.substring(0, difficulty) !== target) {
+                // ลดความยาก mining สำหรับ demo
+                const target = Array(Math.min(difficulty, 1) + 1).join("0");
+                let attempts = 0;
+                while (this.hash.substring(0, Math.min(difficulty, 1)) !== target && attempts < 1000) {
                     this.nonce++;
                     this.hash = this.calculateHash();
+                    attempts++;
                 }
             }
         }
@@ -399,7 +479,7 @@
         class Blockchain {
             constructor() {
                 this.chain = [this.createGenesisBlock()];
-                this.difficulty = 2;
+                this.difficulty = 0; // ลดจาก 2 เป็น 0 สำหรับความเร็ว
                 this.coffeeRecords = new Map(); // เก็บประวัติกาแฟ
             }
             
@@ -423,7 +503,10 @@
             
             addBlock(newBlock) {
                 newBlock.previousHash = this.getLatestBlock().hash;
-                newBlock.mineBlock(this.difficulty);
+                // ใช้ setTimeout เพื่อไม่ให้ UI หยุด
+                setTimeout(() => {
+                    newBlock.mineBlock(this.difficulty);
+                }, 10);
                 this.chain.push(newBlock);
                 
                 // เก็บประวัติกาแฟ
@@ -460,21 +543,14 @@
         
         // เพิ่มข้อมูลตัวอย่าง
         function initializeBlockchain() {
+            // ลดข้อมูลตัวอย่างเพื่อโหลดเร็วขึ้น
             const sampleData = [
                 {
                     coffeeId: "CR001",
                     stage: "farm",
                     location: "ดอยช้าง, เชียงราย",
                     operator: "นายสมชาย ใจดี",
-                    details: "กาแฟอาราบิก้า พันธุ์คาตูรา ปลูกในพื้นที่สูง 1,200 เมตร",
-                    quality: "Premium"
-                },
-                {
-                    coffeeId: "CR001",
-                    stage: "harvest",
-                    location: "ดอยช้าง, เชียงราย",
-                    operator: "นายสมชาย ใจดี",
-                    details: "เก็บเกี่ยวด้วยมือ เฉพาะผลสุก",
+                    details: "กาแฟอาราบิก้า พันธุ์คาตูรา",
                     quality: "Premium"
                 },
                 {
@@ -482,17 +558,21 @@
                     stage: "processing",
                     location: "โรงงานแปรรูปดอยตุง",
                     operator: "มูลนิธิแม่ฟ้าหลวง",
-                    details: "วิธี Washed Process ใช้เวลา 72 ชั่วโมง",
+                    details: "วิธี Washed Process",
                     quality: "Premium"
                 }
             ];
             
-            sampleData.forEach(data => {
-                const block = new Block(chiangRaiCoffeeChain.chain.length, data, "");
-                chiangRaiCoffeeChain.addBlock(block);
+            // ใช้ setTimeout เพื่อไม่บล็อก UI
+            sampleData.forEach((data, index) => {
+                setTimeout(() => {
+                    const block = new Block(chiangRaiCoffeeChain.chain.length, data, "");
+                    chiangRaiCoffeeChain.addBlock(block);
+                    if (index === sampleData.length - 1) {
+                        updateBlockchainDisplay();
+                    }
+                }, index * 100);
             });
-            
-            updateBlockchainDisplay();
         }
         
         // เพิ่มข้อมูลใหม่
@@ -509,7 +589,7 @@
                     return;
                 }
                 
-                // สร้างรหัสกาแฟ (ในระบบจริงควรมีระบบการสร้าง ID ที่ดีกว่า)
+                // สร้างรหัสกาแฟ
                 const coffeeId = 'CR' + String(Date.now()).slice(-6);
                 
                 const newData = {
@@ -521,18 +601,31 @@
                     quality: quality
                 };
                 
-                const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
-                chiangRaiCoffeeChain.addBlock(newBlock);
+                // แสดง loading
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'กำลังเพิ่มข้อมูล...';
+                btn.disabled = true;
                 
-                // Clear form
-                document.getElementById('location').value = '';
-                document.getElementById('operator').value = '';
-                document.getElementById('details').value = '';
+                setTimeout(() => {
+                    const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
+                    chiangRaiCoffeeChain.addBlock(newBlock);
+                    
+                    // Clear form
+                    document.getElementById('location').value = '';
+                    document.getElementById('operator').value = '';
+                    document.getElementById('details').value = '';
+                    
+                    // แสดงรหัสกาแฟที่สร้างใหม่
+                    alert(`เพิ่มข้อมูลสำเร็จ!\nรหัสกาแฟ: ${coffeeId}`);
+                    
+                    updateBlockchainDisplay();
+                    
+                    // รีเซ็ตปุ่ม
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }, 100);
                 
-                // แสดงรหัสกาแฟที่สร้างใหม่
-                alert(`เพิ่มข้อมูลสำเร็จ!\nรหัสกาแฟ: ${coffeeId}`);
-                
-                updateBlockchainDisplay();
             } catch (error) {
                 console.error('Error adding to blockchain:', error);
                 alert('เกิดข้อผิดพลาด: ' + error.message);
@@ -561,13 +654,13 @@
             coffeeDetails.innerHTML = '';
             history.forEach((block, index) => {
                 const stageNames = {
-                    'farm': '🚜 การปลูก',
-                    'harvest': '🌾 การเก็บเกี่ยว',
-                    'processing': '⚙️ การแปรรูป',
-                    'roasting': '🔥 การคั่ว',
-                    'packaging': '📦 การบรรจุ',
-                    'distribution': '🚚 การจัดจำหน่าย',
-                    'retail': '🏪 การขายปลีก'
+                    'farm': 'การปลูก',
+                    'harvest': 'การเก็บเกี่ยว',
+                    'processing': 'การแปรรูป',
+                    'roasting': 'การคั่ว',
+                    'packaging': 'การบรรจุ',
+                    'distribution': 'การจัดจำหน่าย',
+                    'retail': 'การขายปลีก'
                 };
                 
                 const stageDiv = document.createElement('div');
@@ -589,21 +682,26 @@
         // แสดง Blockchain
         function updateBlockchainDisplay() {
             const blocksContainer = document.getElementById('blocks');
+            if (!blocksContainer) return;
+            
             blocksContainer.innerHTML = '';
+            
+            // ใช้ DocumentFragment เพื่อปรับปรุงประสิทธิภาพ
+            const fragment = document.createDocumentFragment();
             
             chiangRaiCoffeeChain.chain.forEach((block, index) => {
                 const blockDiv = document.createElement('div');
                 blockDiv.className = 'block';
                 
                 const stageNames = {
-                    'farm': '🚜 การปลูก',
-                    'harvest': '🌾 การเก็บเกี่ยว',
-                    'processing': '⚙️ การแปรรูป',
-                    'roasting': '🔥 การคั่ว',
-                    'packaging': '📦 การบรรจุ',
-                    'distribution': '🚚 การจัดจำหน่าย',
-                    'retail': '🏪 การขายปลีก',
-                    'system': '⚙️ ระบบ'
+                    'farm': 'การปลูก',
+                    'harvest': 'การเก็บเกี่ยว',
+                    'processing': 'การแปรรูป',
+                    'roasting': 'การคั่ว',
+                    'packaging': 'การบรรจุ',
+                    'distribution': 'การจัดจำหน่าย',
+                    'retail': 'การขายปลีก',
+                    'system': 'ระบบ'
                 };
                 
                 blockDiv.innerHTML = `
@@ -619,12 +717,13 @@
                         <strong>รายละเอียด:</strong> ${block.data.details}<br>
                         <strong>คุณภาพ:</strong> ${block.data.quality}
                     </div>
-                    <div class="block-hash">Hash: ${block.hash}</div>
-                    <div class="block-hash">Previous Hash: ${block.previousHash}</div>
+                    <div class="block-hash">Hash: ${block.hash.substring(0, 16)}...</div>
                 `;
                 
-                blocksContainer.appendChild(blockDiv);
+                fragment.appendChild(blockDiv);
             });
+            
+            blocksContainer.appendChild(fragment);
         }
         
         // เริ่มต้นระบบ

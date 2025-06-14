@@ -1,8 +1,0 @@
-{
-  "name": "Next-Gen Research Assistant",
-  "short_name": "ResearchAI",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000"
-}

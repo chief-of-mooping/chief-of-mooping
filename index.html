@@ -13,9 +13,9 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2c1810 0%, #5d4037 30%, #8d6e63 60%, #a1887f 100%);
             min-height: 100vh;
-            color: #333;
+            color: #2c1810;
         }
         
         .container {
@@ -26,8 +26,9 @@
         
         .header {
             text-align: center;
-            color: white;
+            color: #f3e5ab;
             margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
         .header h1 {
@@ -48,19 +49,21 @@
         }
         
         .card {
-            background: white;
+            background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #d7ccc8;
         }
         
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(44, 24, 16, 0.3);
         }
         
         .card h3 {
-            color: #4a5568;
+            color: #3e2723;
             margin-bottom: 15px;
             font-size: 1.3rem;
         }
@@ -73,47 +76,52 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #2d3748;
+            color: #4e342e;
         }
         
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #d7ccc8;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: #fefdfb;
         }
         
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #8d6e63;
+            box-shadow: 0 0 8px rgba(141, 110, 99, 0.3);
         }
         
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #5d4037 0%, #8d6e63 50%, #a1887f 100%);
+            color: #f3e5ab;
             border: none;
             padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
             width: 100%;
             margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(93, 64, 55, 0.3);
         }
         
         .btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(93, 64, 55, 0.4);
         }
         
         .blockchain {
-            background: white;
+            background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
             margin-bottom: 20px;
+            border: 2px solid #d7ccc8;
         }
         
         .block {
@@ -159,10 +167,11 @@
         }
         
         .block-data {
-            background: rgba(255,255,255,0.2);
+            background: rgba(243, 229, 171, 0.2);
             padding: 10px;
             border-radius: 5px;
             margin-top: 10px;
+            border: 1px solid rgba(243, 229, 171, 0.3);
         }
         
         .block-hash {
@@ -181,43 +190,51 @@
         }
         
         .stage {
-            background: white;
+            background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
             border-radius: 10px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(44, 24, 16, 0.15);
+            border-left: 4px solid #8d6e63;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stage:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 24, 16, 0.2);
         }
         
         .stage.active {
-            border-left-color: #48bb78;
-            background: #f0fff4;
+            border-left-color: #4caf50;
+            background: linear-gradient(145deg, #f1f8e9 0%, #e8f5e8 100%);
         }
         
         .stage h4 {
-            color: #4a5568;
+            color: #3e2723;
             margin-bottom: 8px;
         }
         
         .stage p {
             font-size: 0.9rem;
-            color: #718096;
+            color: #5d4037;
         }
         
         .search-section {
-            background: white;
+            background: linear-gradient(145deg, #faf7f0 0%, #efebe9 100%);
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(44, 24, 16, 0.2);
             margin-bottom: 20px;
+            border: 2px solid #d7ccc8;
         }
         
         .coffee-info {
-            background: #f7fafc;
+            background: rgba(243, 229, 171, 0.1);
             border-radius: 10px;
             padding: 15px;
             margin-top: 15px;
             display: none;
+            border: 2px solid rgba(141, 110, 99, 0.3);
         }
         
         .coffee-info.show {
@@ -233,14 +250,15 @@
         }
         
         .info-item {
-            background: white;
+            background: linear-gradient(145deg, #fefdfb 0%, #f5f5f5 100%);
             padding: 10px;
             border-radius: 8px;
-            border-left: 3px solid #667eea;
+            border-left: 3px solid #8d6e63;
+            box-shadow: 0 2px 8px rgba(44, 24, 16, 0.1);
         }
         
         .info-item strong {
-            color: #2d3748;
+            color: #3e2723;
         }
         
         @media (max-width: 768px) {
@@ -352,18 +370,21 @@
             }
             
             calculateHash() {
-                const crypto = window.crypto || window.msCrypto;
-                const encoder = new TextEncoder();
-                const data = this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce;
-                
-                // ใช้ simple hash function สำหรับ demo
-                let hash = 0;
-                for (let i = 0; i < data.length; i++) {
-                    const char = data.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // Convert to 32bit integer
+                try {
+                    const data = this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce;
+                    
+                    // ใช้ simple hash function สำหรับ demo
+                    let hash = 0;
+                    for (let i = 0; i < data.length; i++) {
+                        const char = data.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash; // Convert to 32bit integer
+                    }
+                    return Math.abs(hash).toString(16).padStart(8, '0');
+                } catch (error) {
+                    console.error('Hash calculation error:', error);
+                    return '00000000';
                 }
-                return Math.abs(hash).toString(16);
             }
             
             mineBlock(difficulty) {
@@ -476,41 +497,46 @@
         
         // เพิ่มข้อมูลใหม่
         function addToBlockchain() {
-            const stage = document.getElementById('stage').value;
-            const location = document.getElementById('location').value;
-            const operator = document.getElementById('operator').value;
-            const details = document.getElementById('details').value;
-            const quality = document.getElementById('quality').value;
-            
-            if (!location || !operator) {
-                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-                return;
+            try {
+                const stage = document.getElementById('stage').value;
+                const location = document.getElementById('location').value;
+                const operator = document.getElementById('operator').value;
+                const details = document.getElementById('details').value;
+                const quality = document.getElementById('quality').value;
+                
+                if (!location || !operator) {
+                    alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                    return;
+                }
+                
+                // สร้างรหัสกาแฟ (ในระบบจริงควรมีระบบการสร้าง ID ที่ดีกว่า)
+                const coffeeId = 'CR' + String(Date.now()).slice(-6);
+                
+                const newData = {
+                    coffeeId: coffeeId,
+                    stage: stage,
+                    location: location,
+                    operator: operator,
+                    details: details,
+                    quality: quality
+                };
+                
+                const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
+                chiangRaiCoffeeChain.addBlock(newBlock);
+                
+                // Clear form
+                document.getElementById('location').value = '';
+                document.getElementById('operator').value = '';
+                document.getElementById('details').value = '';
+                
+                // แสดงรหัสกาแฟที่สร้างใหม่
+                alert(`เพิ่มข้อมูลสำเร็จ!\nรหัสกาแฟ: ${coffeeId}`);
+                
+                updateBlockchainDisplay();
+            } catch (error) {
+                console.error('Error adding to blockchain:', error);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
             }
-            
-            // สร้างรหัสกาแฟ (ในระบบจริงควรมีระบบการสร้าง ID ที่ดีกว่า)
-            const coffeeId = 'CR' + String(Date.now()).slice(-6);
-            
-            const newData = {
-                coffeeId: coffeeId,
-                stage: stage,
-                location: location,
-                operator: operator,
-                details: details,
-                quality: quality
-            };
-            
-            const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
-            chiangRaiCoffeeChain.addBlock(newBlock);
-            
-            // Clear form
-            document.getElementById('location').value = '';
-            document.getElementById('operator').value = '';
-            document.getElementById('details').value = '';
-            
-            // แสดงรหัสกาแฟที่สร้างใหม่
-            alert(`เพิ่มข้อมูลสำเร็จ!\nรหัสกาแฟ: ${coffeeId}`);
-            
-            updateBlockchainDisplay();
         }
         
         // ค้นหาประวัติกาแฟ
@@ -603,7 +629,24 @@
         
         // เริ่มต้นระบบ
         document.addEventListener('DOMContentLoaded', function() {
-            initializeBlockchain();
+            try {
+                initializeBlockchain();
+                console.log('Blockchain initialized successfully');
+            } catch (error) {
+                console.error('Error initializing blockchain:', error);
+                alert('เกิดข้อผิดพลาดในการเริ่มต้นระบบ: ' + error.message);
+            }
+        });
+        
+        // Fallback หาก DOMContentLoaded ไม่ทำงาน
+        window.addEventListener('load', function() {
+            if (!document.getElementById('blocks').innerHTML) {
+                try {
+                    initializeBlockchain();
+                } catch (error) {
+                    console.error('Error on window load:', error);
+                }
+            }
         });
     </script>
 </body>

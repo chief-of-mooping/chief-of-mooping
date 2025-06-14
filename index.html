@@ -604,7 +604,7 @@
                 // แสดง loading
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = 'กำลังเพิ่มข้อมูล...';
+                btn.textContent = 'กำลังบันทึกข้อมูล...';
                 btn.disabled = true;
                 
                 setTimeout(() => {
@@ -617,7 +617,7 @@
                     document.getElementById('details').value = '';
                     
                     // แสดงรหัสกาแฟที่สร้างใหม่
-                    alert(`เพิ่มข้อมูลสำเร็จ!\nรหัสกาแฟ: ${coffeeId}`);
+                    alert(`บันทึกข้อมูลเรียบร้อยแล้ว\nรหัสสินค้า: ${coffeeId}`);
                     
                     updateBlockchainDisplay();
                     
@@ -667,11 +667,11 @@
                 stageDiv.className = 'info-item';
                 stageDiv.innerHTML = `
                     <strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
-                    📍 ${block.data.location}<br>
-                    👤 ${block.data.operator}<br>
-                    📝 ${block.data.details}<br>
-                    ⭐ ${block.data.quality}<br>
-                    🕐 ${block.timestamp}
+                    สถานที่: ${block.data.location}<br>
+                    ผู้ดำเนินการ: ${block.data.operator}<br>
+                    รายละเอียด: ${block.data.details}<br>
+                    คุณภาพ: ${block.data.quality}<br>
+                    เวลา: ${block.timestamp}
                 `;
                 coffeeDetails.appendChild(stageDiv);
             });

@@ -1063,26 +1063,26 @@
             let details = '';
             switch(stage) {
                 case 'farm':
-                    details = `${varieties[Math.floor(Math.random() * varieties.length)]} AI monitoring ระบบอัตโนมัติ ความชื้นดิน ${30 + Math.floor(Math.random() * 20)}%`;
+                    details = varieties[Math.floor(Math.random() * varieties.length)] + ' AI monitoring ระบบอัตโนมัติ ความชื้นดิน ' + (30 + Math.floor(Math.random() * 20)) + '%';
                     break;
                 case 'harvest':
-                    details = `เก็บเกี่ยวด้วย IoT sensors ผลสุก ${88 + Math.floor(Math.random() * 12)}% ปริมาณ ${75 + Math.floor(Math.random() * 150)} กิโลกรัม`;
+                    details = 'เก็บเกี่ยวด้วย IoT sensors ผลสุก ' + (88 + Math.floor(Math.random() * 12)) + '% ปริมาณ ' + (75 + Math.floor(Math.random() * 150)) + ' กิโลกรัม';
                     break;
                 case 'processing':
                     const processes = ['AI-Controlled Washed', 'Smart Natural Process', 'Precision Honey Process'];
-                    details = `${processes[Math.floor(Math.random() * processes.length)]} อุณหภูมิควบคุมอัตโนมัติ ${22 + Math.floor(Math.random() * 8)}°C`;
+                    details = processes[Math.floor(Math.random() * processes.length)] + ' อุณหภูมิควบคุมอัตโนมัติ ' + (22 + Math.floor(Math.random() * 8)) + '°C';
                     break;
                 case 'roasting':
-                    details = `AI-Optimized Roasting Profile อุณหภูมิ ${185 + Math.floor(Math.random() * 35)}°C เวลา ${10 + Math.floor(Math.random() * 5)} นาที`;
+                    details = 'AI-Optimized Roasting Profile อุณหภูมิ ' + (185 + Math.floor(Math.random() * 35)) + '°C เวลา ' + (10 + Math.floor(Math.random() * 5)) + ' นาที';
                     break;
                 case 'packaging':
-                    details = `Automated Packaging ขนาด ${250 + Math.floor(Math.random() * 500)}g QR Code tracking ปัจจุบัน`;
+                    details = 'Automated Packaging ขนาด ' + (250 + Math.floor(Math.random() * 500)) + 'g QR Code tracking ปัจจุบัน';
                     break;
                 case 'distribution':
-                    details = `Smart Logistics จัดส่ง ${Math.floor(Math.random() * 15) + 1} จุด GPS tracking อุณหภูมิ ${16 + Math.floor(Math.random() * 8)}°C`;
+                    details = 'Smart Logistics จัดส่ง ' + (Math.floor(Math.random() * 15) + 1) + ' จุด GPS tracking อุณหภูมิ ' + (16 + Math.floor(Math.random() * 8)) + '°C';
                     break;
                 case 'retail':
-                    details = `Digital POS System ราคา ${180 + Math.floor(Math.random() * 280)} บาท/แพ็ค Real-time inventory`;
+                    details = 'Digital POS System ราคา ' + (180 + Math.floor(Math.random() * 280)) + ' บาท/แพ็ค Real-time inventory';
                     break;
             }
             
@@ -1093,9 +1093,9 @@
                 operator: operator,
                 details: details,
                 quality: quality,
-                batchSize: `${60 + Math.floor(Math.random() * 180)} kg`,
-                temperature: `${22 + Math.floor(Math.random() * 12)}°C`,
-                humidity: `${45 + Math.floor(Math.random() * 25)}%`,
+                batchSize: (60 + Math.floor(Math.random() * 180)) + ' kg',
+                temperature: (22 + Math.floor(Math.random() * 12)) + '°C',
+                humidity: (45 + Math.floor(Math.random() * 25)) + '%',
                 isAIGenerated: true
             };
         }
@@ -1137,12 +1137,11 @@
             const statusElement = document.getElementById('autoUpdateStatus');
             if (statusElement) {
                 const lastUpdateFormatted = lastAutoUpdate.toLocaleTimeString('th-TH');
-                statusElement.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <div style="width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite;"></div>
-                        <span>🤖 AI Auto-Update: ACTIVE | Last Update: ${lastUpdateFormatted} | Next: <span id="nextUpdateTime">30:00</span></span>
-                    </div>
-                `;
+                statusElement.innerHTML = 
+                    '<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">' +
+                        '<div style="width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite;"></div>' +
+                        '<span>🤖 AI Auto-Update: ACTIVE | Last Update: ' + lastUpdateFormatted + ' | Next: <span id="nextUpdateTime">30:00</span></span>' +
+                    '</div>';
                 startCountdownTimer();
             }
         }
@@ -1191,7 +1190,7 @@
                     updateAutoUpdateStatus();
                     
                     // Show notification
-                    showAlert(`🤖 AI Auto-Update: เพิ่มข้อมูลใหม่ ${aiRecord.coffeeId} - ${getStageNameThai(aiRecord.stage)}`, 'success');
+                    showAlert('🤖 AI Auto-Update: เพิ่มข้อมูลใหม่ ' + aiRecord.coffeeId + ' - ' + getStageNameThai(aiRecord.stage), 'success');
                     
                     // Add visual effect to new block
                     setTimeout(() => {
@@ -1221,7 +1220,7 @@
                         updateStats();
                         updateAutoUpdateStatus();
                         
-                        showAlert(`🤖 Demo Auto-Update: ${aiRecord.coffeeId} - ${getStageNameThai(aiRecord.stage)}`, 'success');
+                        showAlert('🤖 Demo Auto-Update: ' + aiRecord.coffeeId + ' - ' + getStageNameThai(aiRecord.stage), 'success');
                     }
                 }, 2 * 60 * 1000); // Every 2 minutes for demo
             }, 10000); // Start after 10 seconds
@@ -1259,7 +1258,7 @@
                         if (index === sampleData.length - 1) {
                             updateBlockchainDisplay();
                             updateStats();
-                            showAlert(`🚀 ระบบเริ่มต้นพร้อม ${sampleData.length + 1} บล็อก (3 เดือนย้อนหลัง)`, 'success');
+                            showAlert('🚀 ระบบเริ่มต้นพร้อม ' + (sampleData.length + 1) + ' บล็อก (3 เดือนย้อนหลัง)', 'success');
                             
                             // Start auto-update system
                             setTimeout(() => {
@@ -1314,49 +1313,52 @@
                     operator: operator,
                     details: details,
                     quality: quality,
-                    batchSize: `${50 + Math.floor(Math.random() * 200)} kg`,
-                    temperature: `${20 + Math.floor(Math.random() * 15)}°C`,
-                    humidity: `${40 + Math.floor(Math.random() * 30)}%`,
+                    batchSize: (50 + Math.floor(Math.random() * 200)) + ' kg',
+                    temperature: (20 + Math.floor(Math.random() * 15)) + '°C',
+                    humidity: (40 + Math.floor(Math.random() * 30)) + '%',
                     isManual: true
                 };
                 
                 // Show loading
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '⏳ กำลังบันทึกข้อมูล...';
-                btn.disabled = true;
-                
-                setTimeout(() => {
-                    const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
-                    chiangRaiCoffeeChain.addBlock(newBlock);
+                const btns = document.querySelectorAll('button');
+                const addBtn = Array.from(btns).find(btn => btn.textContent.includes('Add to Blockchain'));
+                if (addBtn) {
+                    const originalText = addBtn.textContent;
+                    addBtn.textContent = '⏳ กำลังบันทึกข้อมูล...';
+                    addBtn.disabled = true;
                     
-                    // Clear form
-                    document.getElementById('location').value = '';
-                    document.getElementById('operator').value = '';
-                    document.getElementById('details').value = '';
-                    
-                    showAlert(`✅ บันทึกข้อมูลเรียบร้อย | รหัส: ${coffeeId}`, 'success');
-                    
-                    updateBlockchainDisplay();
-                    updateStats();
-                    
-                    // Reset button
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    
-                    // Highlight new block
                     setTimeout(() => {
-                        const blocks = document.querySelectorAll('.block');
-                        if (blocks.length > 0) {
-                            blocks[0].style.background = 'rgba(102, 126, 234, 0.3)';
-                            blocks[0].style.border = '2px solid #667eea';
-                            setTimeout(() => {
-                                blocks[0].style.background = '';
-                                blocks[0].style.border = '';
-                            }, 3000);
-                        }
-                    }, 500);
-                }, 1000);
+                        const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
+                        chiangRaiCoffeeChain.addBlock(newBlock);
+                        
+                        // Clear form
+                        document.getElementById('location').value = '';
+                        document.getElementById('operator').value = '';
+                        document.getElementById('details').value = '';
+                        
+                        showAlert('✅ บันทึกข้อมูลเรียบร้อย | รหัส: ' + coffeeId, 'success');
+                        
+                        updateBlockchainDisplay();
+                        updateStats();
+                        
+                        // Reset button
+                        addBtn.textContent = originalText;
+                        addBtn.disabled = false;
+                        
+                        // Highlight new block
+                        setTimeout(() => {
+                            const blocks = document.querySelectorAll('.block');
+                            if (blocks.length > 0) {
+                                blocks[0].style.background = 'rgba(102, 126, 234, 0.3)';
+                                blocks[0].style.border = '2px solid #667eea';
+                                setTimeout(() => {
+                                    blocks[0].style.background = '';
+                                    blocks[0].style.border = '';
+                                }, 3000);
+                            }
+                        }, 500);
+                    }, 1000);
+                }
                 
             } catch (error) {
                 console.error('Error adding to blockchain:', error);
@@ -1416,13 +1418,25 @@
                         💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
                         ⏰ เวลา: ${block.timestamp}
                     `;
+                } else {
+                    stageDiv.innerHTML = `
+                        <strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
+                        📍 สถานที่: ${block.data.location}<br>
+                        👤 ผู้ดำเนินการ: ${block.data.operator}<br>
+                        📋 รายละเอียด: ${block.data.details}<br>
+                        ⭐ คุณภาพ: ${block.data.quality}<br>
+                        📦 ขนาดแบทช์: ${block.data.batchSize || 'N/A'}<br>
+                        🌡️ อุณหภูมิ: ${block.data.temperature || 'N/A'}<br>
+                        💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
+                        ⏰ เวลา: ${block.timestamp}
+                    `;
                 }
                 
                 coffeeDetails.appendChild(stageDiv);
             });
             
             coffeeInfo.classList.add('show');
-            showAlert(`✅ พบประวัติกาแฟ ${history.length} รายการ`, 'success');
+            showAlert('✅ พบประวัติกาแฟ ' + history.length + ' รายการ', 'success');
         }
         
         // Filter blocks
@@ -1479,40 +1493,37 @@
                     'system': '🏛️ ระบบ'
                 };
                 
-                let blockHeader = `
-                    <div class="block-header">
-                        <div class="block-id">🔗 Block #${block.index}</div>
-                        <div class="block-time">⏰ ${block.timestamp}</div>
-                    </div>
-                `;
+                let blockHeader = 
+                    '<div class="block-header">' +
+                        '<div class="block-id">🔗 Block #' + block.index + '</div>' +
+                        '<div class="block-time">⏰ ' + (block.timestamp || 'N/A') + '</div>' +
+                    '</div>';
                 
                 if (block.data.isAIGenerated) {
-                    blockHeader = `
-                        <div class="block-header">
-                            <div class="block-id">
-                                🤖 Block #${block.index} 
-                                <span style="background: rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 8px;">AI Generated</span>
-                            </div>
-                            <div class="block-time">⏰ ${block.timestamp}</div>
-                        </div>
-                    `;
+                    blockHeader = 
+                        '<div class="block-header">' +
+                            '<div class="block-id">' +
+                                '🤖 Block #' + block.index + ' ' +
+                                '<span style="background: rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 8px;">AI Generated</span>' +
+                            '</div>' +
+                            '<div class="block-time">⏰ ' + (block.timestamp || 'N/A') + '</div>' +
+                        '</div>';
                 }
                 
-                blockDiv.innerHTML = `
-                    ${blockHeader}
-                    <div class="block-data">
-                        <strong>🏷️ รหัสกาแฟ:</strong> ${block.data.coffeeId}<br>
-                        <strong>📋 ขั้นตอน:</strong> ${stageNames[block.data.stage] || block.data.stage}<br>
-                        <strong>📍 สถานที่:</strong> ${block.data.location}<br>
-                        <strong>👤 ผู้ดำเนินการ:</strong> ${block.data.operator}<br>
-                        <strong>📝 รายละเอียด:</strong> ${block.data.details}<br>
-                        <strong>⭐ คุณภาพ:</strong> ${block.data.quality}<br>
-                        ${block.data.batchSize ? `<strong>📦 ขนาดแบทช์:</strong> ${block.data.batchSize}<br>` : ''}
-                        ${block.data.temperature ? `<strong>🌡️ อุณหภูมิ:</strong> ${block.data.temperature}<br>` : ''}
-                        ${block.data.humidity ? `<strong>💧 ความชื้น:</strong> ${block.data.humidity}<br>` : ''}
-                    </div>
-                    <div class="block-hash">🔐 Hash: ${block.hash}</div>
-                `;
+                blockDiv.innerHTML = 
+                    blockHeader +
+                    '<div class="block-data">' +
+                        '<strong>🏷️ รหัสกาแฟ:</strong> ' + (block.data.coffeeId || 'N/A') + '<br>' +
+                        '<strong>📋 ขั้นตอน:</strong> ' + (stageNames[block.data.stage] || block.data.stage) + '<br>' +
+                        '<strong>📍 สถานที่:</strong> ' + (block.data.location || 'N/A') + '<br>' +
+                        '<strong>👤 ผู้ดำเนินการ:</strong> ' + (block.data.operator || 'N/A') + '<br>' +
+                        '<strong>📝 รายละเอียด:</strong> ' + (block.data.details || 'N/A') + '<br>' +
+                        '<strong>⭐ คุณภาพ:</strong> ' + (block.data.quality || 'N/A') + '<br>' +
+                        (block.data.batchSize ? '<strong>📦 ขนาดแบทช์:</strong> ' + block.data.batchSize + '<br>' : '') +
+                        (block.data.temperature ? '<strong>🌡️ อุณหภูมิ:</strong> ' + block.data.temperature + '<br>' : '') +
+                        (block.data.humidity ? '<strong>💧 ความชื้น:</strong> ' + block.data.humidity + '<br>' : '') +
+                    '</div>' +
+                    '<div class="block-hash">🔐 Hash: ' + (block.hash || 'N/A') + '</div>';
                 
                 blocksContainer.appendChild(blockDiv);
             });
@@ -1559,6 +1570,7 @@
             document.getElementById('stageFilter').value = '';
             filterBlocks();
         }
+        
         function toggleAutoUpdate() {
             isAutoUpdateEnabled = !isAutoUpdateEnabled;
             const statusElement = document.getElementById('autoUpdateStatus');
@@ -1599,6 +1611,15 @@
                 });
             }
             
+            const searchIdElement = document.getElementById('searchId');
+            if (searchIdElement) {
+                searchIdElement.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchCoffee();
+                    }
+                });
+            }
+            
             // Auto-filter on stage change
             const stageFilterElement = document.getElementById('stageFilter');
             if (stageFilterElement) {
@@ -1617,16 +1638,4 @@
         });
     </script>
 </body>
-</html>าพ: ${block.data.quality}<br>
-                        📦 ขนาดแบทช์: ${block.data.batchSize || 'N/A'}<br>
-                        🌡️ อุณหภูมิ: ${block.data.temperature || 'N/A'}<br>
-                        💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
-                        ⏰ เวลา: ${block.timestamp}
-                    `;
-                } else {
-                    stageDiv.innerHTML = `
-                        <strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
-                        📍 สถานที่: ${block.data.location}<br>
-                        👤 ผู้ดำเนินการ: ${block.data.operator}<br>
-                        📋 รายละเอียด: ${block.data.details}<br>
-                        ⭐ คุณภ
+</html>

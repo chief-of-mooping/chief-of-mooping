@@ -9,7 +9,7 @@
 export class Block {
     constructor(index, data, previousHash, customTimestamp = null) {
         this.index = index;
-        this.timestamp = customTimestamp || this.generateTimestamp();
+        this.timestamp = customTimestamp || this.generateRealisticTimestamp();
         this.data = data;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
@@ -17,12 +17,12 @@ export class Block {
     }
     
     /**
-     * Generate realistic timestamp for demo purposes
+     * Generate realistic timestamp with different dates (แก้ปัญหา timestamp เหมือนกัน)
      */
-    generateTimestamp() {
+    generateRealisticTimestamp() {
         const now = new Date();
-        // For sample data, generate timestamps in the past (last 30 days)
-        const randomDaysAgo = Math.floor(Math.random() * 30);
+        // สำหรับ sample data ให้สุ่มเวลาย้อนหลัง 1-30 วัน
+        const randomDaysAgo = Math.floor(Math.random() * 30) + 1;
         const randomHours = Math.floor(Math.random() * 24);
         const randomMinutes = Math.floor(Math.random() * 60);
         
@@ -271,7 +271,7 @@ export class Blockchain {
 }
 
 /**
- * Sample Data Generator for Demo Purposes
+ * Sample Data Generator for Demo Purposes (แก้ปัญหา timestamp เหมือนกัน)
  */
 export class SampleDataGenerator {
     constructor() {
@@ -295,6 +295,188 @@ export class SampleDataGenerator {
             'บริษัท เชียงราย คอฟฟี่',
             'ร้านกาแฟภูเขา',
             'โรงคั่วดอยตุง'
+        ];
+        this.varieties = [
+            'อาราบิก้า พันธุ์คาตูรา', 
+            'อาราบิก้า พันธุ์ทิปิก้า', 
+            'อาราบิก้า พันธุ์บูร์บง',
+            'อาราบิก้า พันธุ์เคนท์'
+        ];
+        this.qualities = ['Premium', 'Grade A', 'Grade B', 'Standard'];
+    }
+    
+    /**
+     * Generate realistic sample data with different timestamps
+     */
+    generateSampleData(count = 20) {
+        const sampleData = [];
+        const now = new Date();
+        
+        for (let i = 0; i < count; i++) {
+            const coffeeId = this.coffeeIds[Math.floor(Math.random() * this.coffeeIds.length)];
+            const stage = this.stages[Math.floor(Math.random() * this.stages.length)];
+            const location = this.locations[Math.floor(Math.random() * this.locations.length)];
+            const operator = this.operators[Math.floor(Math.random() * this.operators.length)];
+            const quality = this.qualities[Math.floor(Math.random() * this.qualities.length)];
+            
+            const details = this.generateStageDetails(stage);
+            
+            sampleData.push({
+                coffeeId,
+                stage,
+                location,
+                operator,
+                details,
+                quality,
+                batchSize: `${50 + Math.floor(Math.random() * 200)} kg`,
+                temperature: `${20 + Math.floor(Math.random() * 15)}°C`,
+                humidity: `${40 + Math.floor(Math.random() * 30)}%`,
+                isAIGenerated: false
+            });
+        }
+        
+        console.log('Generated sample data:', sampleData.length, 'records');
+        return sampleData;
+    }
+    
+    /**
+     * Generate realistic details for each stage
+     */
+    generateStageDetails(stage) {
+        switch(stage) {
+            case 'farm':
+                return `${this.varieties[Math.floor(Math.random() * this.varieties.length)]} ปลูกในระดับความสูง ${1000 + Math.floor(Math.random() * 500)} เมตร พื้นที่ ${5 + Math.floor(Math.random() * 20)} ไร่`;
+            
+            case 'harvest':
+                return `เก็บเกี่ยวด้วยมือ ผลสุก ${85 + Math.floor(Math.random() * 15)}% ปริมาณ ${50 + Math.floor(Math.random() * 200)} กิโลกรัม ความชื้น ${10 + Math.floor(Math.random() * 5)}%`;
+            
+            case 'processing':
+                const processes = ['Washed Process', 'Natural Process', 'Honey Process', 'Semi-Washed Process'];
+                return `${processes[Math.floor(Math.random() * processes.length)]} อุณหภูมิ ${20 + Math.floor(Math.random() * 10)}°C เวลาหมัก ${12 + Math.floor(Math.random() * 24)} ชั่วโมง`;
+            
+            case 'roasting':
+                const roastLevels = ['Light Roast', 'Medium Roast', 'Medium-Dark Roast', 'Dark Roast'];
+                return `${roastLevels[Math.floor(Math.random() * roastLevels.length)]} อุณหภูมิ ${180 + Math.floor(Math.random() * 40)}°C เวลา ${8 + Math.floor(Math.random() * 8)} นาที`;
+            
+            case 'packaging':
+                const packagingTypes = ['ถุงวาล์ว', 'ถุงซิป', 'กระป๋อง', 'ถุงกระดาษ'];
+                return `${packagingTypes[Math.floor(Math.random() * packagingTypes.length)]} ขนาด ${250 + Math.floor(Math.random() * 750)}g วันผลิต ${new Date().toLocaleDateString('th-TH')}`;
+            
+            case 'distribution':
+                return `จัดส่งไปยัง ${Math.floor(Math.random() * 20) + 1} จุดจำหน่าย อุณหภูมิขนส่ง ${15 + Math.floor(Math.random() * 10)}°C ระยะทาง ${50 + Math.floor(Math.random() * 500)} กิโลเมตร`;
+            
+            case 'retail':
+                return `วางจำหน่ายในร้าน ราคา ${150 + Math.floor(Math.random() * 350)} บาท/แพ็ค สต็อก ${10 + Math.floor(Math.random() * 50)} แพ็ค`;
+            
+            default:
+                return `ข้อมูลเพิ่มเติมสำหรับขั้นตอน ${stage}`;
+        }
+    }
+    
+    /**
+     * Generate AI-like record for auto-updates
+     */
+    generateAIRecord() {
+        const coffeeId = this.coffeeIds[Math.floor(Math.random() * this.coffeeIds.length)];
+        const stage = this.stages.slice(0, 5)[Math.floor(Math.random() * 5)]; // Only early stages for AI
+        const aiOperators = ['ฟาร์ม AI อัจฉริยะ', 'ศูนย์แปรรูป IoT', 'โรงคั่วอัตโนมัติ', 'ระบบตรวจสอบ AI'];
+        
+        const now = new Date();
+        const timestamp = now.toLocaleString('th-TH', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        return {
+            coffeeId,
+            stage,
+            location: this.locations[Math.floor(Math.random() * this.locations.length)],
+            operator: aiOperators[Math.floor(Math.random() * aiOperators.length)],
+            details: `สร้างโดย AI: การตรวจสอบ ${stage} อัจฉริยะด้วยเซ็นเซอร์ IoT และการเรียนรู้ของเครื่อง`,
+            quality: 'Premium',
+            batchSize: (80 + Math.floor(Math.random() * 120)) + ' kg',
+            temperature: (22 + Math.floor(Math.random() * 8)) + '°C',
+            humidity: (45 + Math.floor(Math.random() * 20)) + '%',
+            timestamp,
+            isAIGenerated: true
+        };
+    }
+}
+
+/**
+ * Utility functions for blockchain operations
+ */
+export const BlockchainUtils = {
+    /**
+     * Format timestamp for display
+     */
+    formatTimestamp(timestamp) {
+        try {
+            const date = new Date(timestamp.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$2/$1/$3'));
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (error) {
+            return timestamp;
+        }
+    },
+    
+    /**
+     * Validate coffee ID format
+     */
+    isValidCoffeeId(coffeeId) {
+        return /^CR\d{3,6}$/.test(coffeeId);
+    },
+    
+    /**
+     * Generate new coffee ID
+     */
+    generateCoffeeId() {
+        return 'CR' + String(Date.now()).slice(-6);
+    },
+    
+    /**
+     * Get stage emoji
+     */
+    getStageEmoji(stage) {
+        const stageEmojis = {
+            'farm': '🌱',
+            'harvest': '🌾',
+            'processing': '⚙️',
+            'roasting': '🔥',
+            'packaging': '📦',
+            'distribution': '🚛',
+            'retail': '🏪',
+            'system': '🏛️'
+        };
+        return stageEmojis[stage] || '📋';
+    },
+    
+    /**
+     * Get Thai stage name
+     */
+    getStageName(stage) {
+        const stageNames = {
+            'farm': 'การปลูก',
+            'harvest': 'การเก็บเกี่ยว',
+            'processing': 'การแปรรูป',
+            'roasting': 'การคั่ว',
+            'packaging': 'การบรรจุ',
+            'distribution': 'การจัดจำหน่าย',
+            'retail': 'การขายปลีก',
+            'system': 'ระบบ'
+        };
+        return stageNames[stage] || stage;
+    }
+};'โรงคั่วดอยตุง'
         ];
         this.varieties = [
             'อาราบิก้า พันธุ์คาตูรา', 

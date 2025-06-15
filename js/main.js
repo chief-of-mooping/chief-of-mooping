@@ -3,13 +3,9 @@
  * ===========================================================
  */
 
-// Import all modules
 import { Blockchain, Block, SampleDataGenerator } from './blockchain.js';
 import { StrategicAnalyzer, ImpactCalculator } from './analyzer.js';
 import { UIManager, AIUpdateManager } from './ui.js';
-
-// Make Block class globally available for other modules
-window.Block = Block;
 
 /**
  * Main Application Class
@@ -29,9 +25,6 @@ class ChiangRaiCoffeeApp {
         // App state
         this.isInitialized = false;
         this.autoUpdateEnabled = true;
-        
-        // Bind methods for global access
-        this.bindGlobalMethods();
     }
     
     /**
@@ -46,6 +39,9 @@ class ChiangRaiCoffeeApp {
             
             // Initialize UI
             this.initializeUI();
+            
+            // Bind global methods first
+            this.bindGlobalMethods();
             
             // Load sample data
             await this.loadSampleData();
@@ -76,7 +72,7 @@ class ChiangRaiCoffeeApp {
         // Create sample data generator
         this.sampleDataGenerator = new SampleDataGenerator();
         
-        console.log('Core components initialized');
+        console.log('✅ Core components initialized');
     }
     
     /**
@@ -97,7 +93,71 @@ class ChiangRaiCoffeeApp {
             this.sampleDataGenerator
         );
         
-        console.log('UI components initialized');
+        console.log('✅ UI components initialized');
+    }
+    
+    /**
+     * Bind methods for global access (CRITICAL: ทำก่อน loadSampleData)
+     */
+    bindGlobalMethods() {
+        // Make app instance globally available
+        window.app = this;
+        
+        // Make functions globally available for HTML onclick handlers
+        window.addToBlockchain = () => {
+            if (this.uiManager) {
+                this.uiManager.addToBlockchain();
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        window.searchCoffee = () => {
+            if (this.uiManager) {
+                this.uiManager.searchCoffee();
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        window.searchSample = (id) => {
+            if (this.uiManager) {
+                this.uiManager.searchSample(id);
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        window.filterBlocks = () => {
+            if (this.uiManager) {
+                this.uiManager.filterBlocks();
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        window.quickFilter = (term) => {
+            if (this.uiManager) {
+                this.uiManager.quickFilter(term);
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        window.clearFilter = () => {
+            if (this.uiManager) {
+                this.uiManager.clearFilter();
+            } else {
+                console.error('UIManager not initialized');
+            }
+        };
+        
+        // Debug functions
+        window.getBlockchainStats = () => this.blockchain?.getStats();
+        window.getAnalyzerMetrics = () => this.analyzer?.updateAllMetrics();
+        window.exportBlockchainData = () => this.blockchain?.exportData();
+        
+        console.log('✅ Global methods bound successfully');
     }
     
     /**
@@ -105,16 +165,51 @@ class ChiangRaiCoffeeApp {
      */
     async loadSampleData() {
         try {
+            console.log('📊 Starting sample data generation...');
             const sampleData = this.sampleDataGenerator.generateSampleData(20);
+            console.log('📊 Generated sample data:', sampleData.length, 'records');
             
-            // Use UI manager to handle progressive loading
-            this.uiManager.initializeSampleData(sampleData);
+            // Show loading message
+            if (this.uiManager) {
+                this.uiManager.showAlert('🚀 เริ่มต้นระบบ Blockchain...', 'success');
+            }
             
-            console.log(`Generated ${sampleData.length} sample records`);
+            // Load sample data progressively
+            for (let i = 0; i < sampleData.length; i++) {
+                const data = sampleData[i];
+                
+                // Add delay for animation
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                try {
+                    const block = new Block(this.blockchain.chain.length, data, "");
+                    this.blockchain.addBlock(block);
+                    
+                    // Update UI progressively
+                    if (this.uiManager) {
+                        this.uiManager.updateBlockchainDisplay();
+                        this.uiManager.updateStats();
+                    }
+                    
+                    console.log(`✅ Added block ${i + 1}/${sampleData.length}: ${data.coffeeId} (${data.stage})`);
+                    
+                } catch (blockError) {
+                    console.error(`❌ Error adding block ${i + 1}:`, blockError);
+                }
+            }
+            
+            // Show completion message
+            if (this.uiManager) {
+                this.uiManager.showAlert(`✅ ระบบเริ่มต้นพร้อม ${sampleData.length + 1} บล็อก`, 'success');
+            }
+            
+            console.log('✅ Sample data loaded successfully');
             
         } catch (error) {
-            console.error('Error loading sample data:', error);
-            this.uiManager.showAlert('⚠️ เริ่มต้นระบบด้วยข้อมูลพื้นฐาน', 'error');
+            console.error('❌ Error loading sample data:', error);
+            if (this.uiManager) {
+                this.uiManager.showAlert('⚠️ เริ่มต้นระบบด้วยข้อมูลพื้นฐาน', 'error');
+            }
         }
     }
     
@@ -125,9 +220,13 @@ class ChiangRaiCoffeeApp {
         if (!this.autoUpdateEnabled) return;
         
         setTimeout(() => {
-            this.aiUpdateManager.start(25000); // 25 seconds interval
-            this.uiManager.showAlert('🤖 ระบบอัปเดตอัตโนมัติ AI เริ่มทำงานแล้ว', 'success');
-        }, 5000); // Start after 5 seconds
+            if (this.aiUpdateManager) {
+                this.aiUpdateManager.start(25000); // 25 seconds interval
+                if (this.uiManager) {
+                    this.uiManager.showAlert('🤖 ระบบอัปเดตอัตโนมัติ AI เริ่มทำงานแล้ว', 'success');
+                }
+            }
+        }, 3000); // Start after 3 seconds
     }
     
     /**
@@ -136,12 +235,13 @@ class ChiangRaiCoffeeApp {
     handleInitializationError(error) {
         const fallbackMessage = '❌ เกิดข้อผิดพลาดในการเริ่มต้นระบบ: ' + error.message;
         
+        console.error(fallbackMessage);
+        
         // Try to show error in UI if possible
         if (this.uiManager) {
             this.uiManager.showAlert(fallbackMessage, 'error');
         } else {
-            // Fallback to console and basic DOM manipulation
-            console.error(fallbackMessage);
+            // Fallback to basic DOM manipulation
             this.showBasicAlert(fallbackMessage);
         }
     }
@@ -167,28 +267,10 @@ class ChiangRaiCoffeeApp {
         document.body.appendChild(alertDiv);
         
         setTimeout(() => {
-            document.body.removeChild(alertDiv);
+            if (document.body.contains(alertDiv)) {
+                document.body.removeChild(alertDiv);
+            }
         }, 5000);
-    }
-    
-    /**
-     * Bind methods for global access (for onclick handlers)
-     */
-    bindGlobalMethods() {
-        // Make functions globally available for HTML onclick handlers
-        window.addToBlockchain = () => this.uiManager?.addToBlockchain();
-        window.searchCoffee = () => this.uiManager?.searchCoffee();
-        window.searchSample = (id) => this.uiManager?.searchSample(id);
-        window.filterBlocks = () => this.uiManager?.filterBlocks();
-        window.quickFilter = (term) => this.uiManager?.quickFilter(term);
-        window.clearFilter = () => this.uiManager?.clearFilter();
-        
-        // Debug functions
-        window.getBlockchainStats = () => this.blockchain?.getStats();
-        window.getAnalyzerMetrics = () => this.analyzer?.updateAllMetrics();
-        window.exportBlockchainData = () => this.blockchain?.exportData();
-        
-        console.log('Global methods bound successfully');
     }
     
     /**
@@ -201,139 +283,6 @@ class ChiangRaiCoffeeApp {
             aiSystemStatus: this.aiUpdateManager?.getStatus(),
             autoUpdateEnabled: this.autoUpdateEnabled
         };
-    }
-    
-    /**
-     * Toggle AI auto-update system
-     */
-    toggleAISystem() {
-        if (this.aiUpdateManager?.getStatus().isRunning) {
-            this.aiUpdateManager.stop();
-            this.autoUpdateEnabled = false;
-            this.uiManager?.showAlert('⏸️ ระบบ AI หยุดทำงานชั่วคราว', 'info');
-        } else {
-            this.aiUpdateManager?.start();
-            this.autoUpdateEnabled = true;
-            this.uiManager?.showAlert('▶️ ระบบ AI เริ่มทำงานอีกครั้ง', 'success');
-        }
-    }
-    
-    /**
-     * Reset blockchain data
-     */
-    resetBlockchain() {
-        if (confirm('คุณต้องการรีเซ็ตข้อมูล Blockchain ทั้งหมดหรือไม่?')) {
-            try {
-                // Stop AI system
-                this.aiUpdateManager?.stop();
-                
-                // Reinitialize blockchain
-                this.blockchain = new Blockchain();
-                this.analyzer = new StrategicAnalyzer(this.blockchain);
-                this.impactCalculator = new ImpactCalculator(this.blockchain);
-                
-                // Update UI manager references
-                this.uiManager.blockchain = this.blockchain;
-                this.uiManager.analyzer = this.analyzer;
-                this.uiManager.impactCalculator = this.impactCalculator;
-                
-                // Reload sample data
-                this.loadSampleData();
-                
-                // Restart AI system
-                setTimeout(() => {
-                    this.startAISystem();
-                }, 3000);
-                
-                this.uiManager.showAlert('🔄 รีเซ็ตข้อมูลเรียบร้อย', 'success');
-                
-            } catch (error) {
-                console.error('Error resetting blockchain:', error);
-                this.uiManager?.showAlert('❌ เกิดข้อผิดพลาดในการรีเซ็ต', 'error');
-            }
-        }
-    }
-    
-    /**
-     * Export application data
-     */
-    exportData() {
-        try {
-            const exportData = {
-                blockchain: this.blockchain.exportData(),
-                analysis: this.analyzer.exportReport(),
-                timestamp: new Date().toISOString(),
-                version: '1.0.0'
-            };
-            
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `chiang-rai-coffee-blockchain-${Date.now()}.json`;
-            link.click();
-            
-            this.uiManager?.showAlert('📥 ส่งออกข้อมูลเรียบร้อย', 'success');
-            
-        } catch (error) {
-            console.error('Error exporting data:', error);
-            this.uiManager?.showAlert('❌ เกิดข้อผิดพลาดในการส่งออกข้อมูล', 'error');
-        }
-    }
-    
-    /**
-     * Check blockchain integrity
-     */
-    validateBlockchain() {
-        try {
-            const isValid = this.blockchain.isChainValid();
-            const stats = this.blockchain.getStats();
-            
-            if (isValid) {
-                this.uiManager?.showAlert(`✅ Blockchain ถูกต้อง (${stats.totalBlocks} บล็อก)`, 'success');
-            } else {
-                this.uiManager?.showAlert('❌ พบความผิดพลาดใน Blockchain', 'error');
-            }
-            
-            return isValid;
-            
-        } catch (error) {
-            console.error('Error validating blockchain:', error);
-            this.uiManager?.showAlert('❌ เกิดข้อผิดพลาดในการตรวจสอบ', 'error');
-            return false;
-        }
-    }
-    
-    /**
-     * Performance monitoring
-     */
-    getPerformanceMetrics() {
-        return {
-            blockchainSize: this.blockchain?.chain.length || 0,
-            coffeeRecords: this.blockchain?.coffeeRecords.size || 0,
-            uniqueOperators: this.blockchain?.operators.size || 0,
-            uniqueLocations: this.blockchain?.locations.size || 0,
-            memoryUsage: this.getMemoryUsage(),
-            lastUpdate: new Date().toISOString()
-        };
-    }
-    
-    /**
-     * Get memory usage estimate
-     */
-    getMemoryUsage() {
-        try {
-            if (performance && performance.memory) {
-                return {
-                    used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + ' MB',
-                    total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024) + ' MB'
-                };
-            }
-            return 'ไม่สามารถตรวจสอบได้';
-        } catch (error) {
-            return 'ไม่รองรับ';
-        }
     }
 }
 
@@ -355,26 +304,20 @@ class AppLifecycle {
             
             // Wait for DOM to be ready
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => {
-                    this.app.initialize();
+                document.addEventListener('DOMContentLoaded', async () => {
+                    await this.app.initialize();
                 });
             } else {
                 // DOM is already ready
-                setTimeout(() => {
-                    this.app.initialize();
+                setTimeout(async () => {
+                    await this.app.initialize();
                 }, 100);
             }
             
-            // Bind app to window for debugging
-            window.chiangRaiApp = this.app;
-            
-            // Add global utility functions
-            this.bindUtilityFunctions();
-            
-            console.log('Application startup completed');
+            console.log('✅ Application startup completed');
             
         } catch (error) {
-            console.error('Failed to start application:', error);
+            console.error('❌ Failed to start application:', error);
             this.handleStartupError(error);
         }
     }
@@ -424,68 +367,12 @@ class AppLifecycle {
     }
     
     /**
-     * Bind additional utility functions
-     */
-    static bindUtilityFunctions() {
-        // Development and debugging functions
-        window.appStatus = () => this.app?.getStatus();
-        window.toggleAI = () => this.app?.toggleAISystem();
-        window.resetApp = () => this.app?.resetBlockchain();
-        window.exportData = () => this.app?.exportData();
-        window.validateChain = () => this.app?.validateBlockchain();
-        window.getPerformance = () => this.app?.getPerformanceMetrics();
-        
-        // Utility functions for external access
-        window.addCoffeeRecord = (data) => {
-            if (this.app && this.app.isInitialized) {
-                try {
-                    // Use the globally available Block class
-                    const block = new window.Block(
-                        this.app.blockchain.chain.length,
-                        data,
-                        ""
-                    );
-                    this.app.blockchain.addBlock(block);
-                    this.app.uiManager.updateBlockchainDisplay();
-                    this.app.uiManager.updateStats();
-                    return true;
-                } catch (error) {
-                    console.error('Error adding coffee record:', error);
-                    return false;
-                }
-            }
-            return false;
-        };
-        
-        // Search functions
-        window.findCoffee = (coffeeId) => {
-            return this.app?.blockchain?.getCoffeeHistory(coffeeId) || [];
-        };
-        
-        window.searchByOperator = (operator) => {
-            return this.app?.blockchain?.chain.filter(block => 
-                block.data.operator && 
-                block.data.operator.toLowerCase().includes(operator.toLowerCase())
-            ) || [];
-        };
-        
-        window.searchByLocation = (location) => {
-            return this.app?.blockchain?.chain.filter(block => 
-                block.data.location && 
-                block.data.location.toLowerCase().includes(location.toLowerCase())
-            ) || [];
-        };
-        
-        console.log('Utility functions bound successfully');
-    }
-    
-    /**
      * Stop the application
      */
     static stop() {
-        if (this.app) {
-            this.app.aiUpdateManager?.stop();
-            console.log('Application stopped');
+        if (this.app && this.app.aiUpdateManager) {
+            this.app.aiUpdateManager.stop();
+            console.log('✅ Application stopped');
         }
     }
     
@@ -498,42 +385,22 @@ class AppLifecycle {
 }
 
 /**
- * Error Handling and Logging
+ * Application Entry Point - เริ่มต้นทันทีเมื่อโหลด module
  */
-class ErrorHandler {
-    static logs = [];
+(function initializeApp() {
+    console.log('🌟 Chiang Rai Coffee Blockchain v1.0.0');
+    console.log('📱 Starting initialization sequence...');
     
-    /**
-     * Initialize error handling
-     */
-    static initialize() {
-        // Catch unhandled errors
-        window.addEventListener('error', (event) => {
-            this.logError('JavaScript Error', event.error);
-        });
-        
-        // Catch unhandled promise rejections
-        window.addEventListener('unhandledrejection', (event) => {
-            this.logError('Unhandled Promise Rejection', event.reason);
-        });
-        
-        console.log('Error handling initialized');
-    }
+    // Start the application
+    AppLifecycle.start();
     
-    /**
-     * Log error with context
-     */
-    static logError(type, error) {
-        const logEntry = {
-            timestamp: new Date().toISOString(),
-            type: type,
-            message: error?.message || String(error),
-            stack: error?.stack,
-            url: window.location.href,
-            userAgent: navigator.userAgent
-        };
-        
-        this.logs.push(logEntry);
+    // Log successful initialization
+    console.log('✅ Application entry point completed');
+})();
+
+// Export for module systems
+export default ChiangRaiCoffeeApp;
+export { AppLifecycle };this.logs.push(logEntry);
         console.error(`[${type}]`, error);
         
         // Keep only last 50 errors

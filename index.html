@@ -3,92 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบตรวจสอบห่วงโซ่อุปทานกาแฟเชียงราย</title>
+    <title>ระบบ Blockchain กาแฟเชียงราย</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #1a2332;
+            --secondary: #2d3748;
+            --accent: #3182ce;
+            --accent-light: #63b3ed;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --error: #e53e3e;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --bg-white: rgba(255, 255, 255, 0.95);
+            --bg-glass: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --radius: 16px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0F0F23;
-            color: #FFFFFF;
+            font-family: 'Kanit', system-ui, -apple-system, sans-serif;
+            background: url('https://github.com/chief-of-mooping/chief-of-mooping/blob/main/coffee-farm-background.png?raw=true') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
             min-height: 100vh;
+            line-height: 1.6;
             overflow-x: hidden;
             position: relative;
         }
-        
-        /* Dynamic animated background */
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .bg-container::before {
+
+        /* Background overlay for better readability */
+        body::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            animation: morphBackground 20s ease-in-out infinite;
-        }
-        
-        @keyframes morphBackground {
-            0%, 100% { 
-                background: 
-                    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            }
-            50% { 
-                background: 
-                    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 20% 80%, rgba(120, 219, 255, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 60% 60%, rgba(120, 119, 198, 0.3) 0%, transparent 50%);
-            }
-        }
-        
-        /* Geometric particles */
-        .particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.02) 0%, 
+                rgba(0, 0, 0, 0.01) 50%, 
+                rgba(0, 0, 0, 0.02) 100%);
             z-index: -1;
-            pointer-events: none;
         }
-        
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .particle:nth-child(1) { width: 80px; height: 80px; top: 20%; left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { width: 40px; height: 40px; top: 60%; left: 20%; animation-delay: 2s; }
-        .particle:nth-child(3) { width: 60px; height: 60px; top: 40%; left: 80%; animation-delay: 4s; }
-        .particle:nth-child(4) { width: 100px; height: 100px; top: 80%; left: 70%; animation-delay: 1s; }
-        .particle:nth-child(5) { width: 50px; height: 50px; top: 10%; left: 60%; animation-delay: 3s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
-        }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -96,188 +63,201 @@
             position: relative;
             z-index: 1;
         }
-        
-        /* Hero section with parallax */
-        .hero {
+
+        /* Header - positioned on top with good contrast */
+        .header {
             text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(102, 126, 234, 0.1) 100%);
-            border-radius: 20px;
-            margin-bottom: 50px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             position: relative;
             overflow: hidden;
         }
-        
-        .hero::before {
+
+        .header::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shine 3s ease-in-out infinite;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 50%, var(--accent-light) 100%);
         }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
-        
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 2;
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 400;
         }
-        
-        .stats {
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
         }
-        
+
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
-        
+
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
         }
-        
+
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #f093fb;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        
-        /* Radar Chart Section */
-        .radar-section {
-            background: rgba(15, 15, 35, 0.9);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 50px;
-            text-align: center;
-        }
-        
-        .radar-section h3 {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Main content area - positioned on left side */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Radar Chart Section - positioned on dark area */
+        .radar-section {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            grid-column: 1 / -1;
+            margin-bottom: 2rem;
+        }
+
+        .radar-section h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .radar-container {
             position: relative;
-            width: 500px;
+            width: 100%;
+            max-width: 500px;
             height: 500px;
-            margin: 0 auto;
+            margin: 0 auto 2rem;
         }
-        
+
         .radar-chart {
             width: 100%;
             height: 100%;
             overflow: visible;
         }
-        
+
         .radar-chart text {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Kanit', system-ui, sans-serif;
             font-weight: 600;
-            fill: #f093fb;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            fill: var(--accent);
+            font-size: 13px;
         }
-        
+
         .radar-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
-        
+
         .metric-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1.5rem;
             border-radius: 12px;
             border-left: 4px solid;
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             text-align: left;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
         }
-        
-        .metric-item.excellent { border-color: #10b981; }
-        .metric-item.good { border-color: #f59e0b; }
-        .metric-item.average { border-color: #ef4444; }
-        
+
+        .metric-item:hover {
+            transform: translateX(4px);
+        }
+
+        .metric-item.excellent { border-left-color: var(--success); }
+        .metric-item.good { border-left-color: var(--warning); }
+        .metric-item.average { border-left-color: var(--error); }
+
         .metric-label {
             font-weight: 600;
             font-size: 0.9rem;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
-        
+
         .metric-value {
-            font-size: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #f093fb;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
         }
-        
+
         .metric-description {
             font-size: 0.8rem;
-            opacity: 0.7;
-            margin-top: 5px;
+            color: var(--text-secondary);
+            line-height: 1.4;
         }
-        
-        /* Main dashboard */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
+
+        /* Cards positioned on darker areas */
         .card {
-            background: rgba(15, 15, 35, 0.9);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
-        
+
         .card::before {
             content: '';
             position: absolute;
@@ -285,243 +265,317 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
         }
-        
+
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent);
         }
-        
+
         .card h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
+        /* Form Elements */
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 1.5rem;
         }
-        
+
         .form-group label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #FFFFFF;
-            font-size: 14px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.6);
         }
-        
-        .form-group input, .form-group select, .form-group textarea {
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #FFFFFF;
-            font-size: 16px;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Kanit', system-ui, sans-serif;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(2px);
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        
-        .form-group input::placeholder, .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-secondary);
         }
-        
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
         }
-        
+
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #FFFFFF;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            color: white;
             border: none;
-            padding: 18px 36px;
-            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 0.9rem;
             font-weight: 600;
+            font-family: 'Kanit', system-ui, sans-serif;
             transition: all 0.3s ease;
             width: 100%;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
+            margin-top: 1rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
+
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
-        
-        /* Blockchain explorer */
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Blockchain Explorer */
         .blockchain-section {
-            background: rgba(15, 15, 35, 0.9);
-            border-radius: 20px;
-            padding: 40px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-lg);
+            grid-column: 1 / -1;
         }
-        
+
         .blockchain-section h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
         }
-        
+
         .search-controls {
             display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 1rem;
+            margin-bottom: 2rem;
             align-items: center;
+            flex-wrap: wrap;
         }
-        
+
         .search-input {
             flex: 1;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #FFFFFF;
-            backdrop-filter: blur(10px);
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Kanit', system-ui, sans-serif;
+            backdrop-filter: blur(4px);
         }
-        
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+        }
+
         .filter-select {
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #FFFFFF;
-            backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Kanit', system-ui, sans-serif;
             min-width: 150px;
+            backdrop-filter: blur(4px);
         }
-        
-        /* Block styles */
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Kanit', system-ui, sans-serif;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.clear {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .filter-btn.clear:hover {
+            background: #c53030;
+        }
+
+        /* Blocks */
         .blocks-container {
             max-height: 600px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 0.5rem;
         }
-        
+
         .blocks-container::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
-        
+
         .blocks-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
         }
-        
+
         .blocks-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
+            background: var(--accent);
+            border-radius: 3px;
         }
-        
+
         .block {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
             transition: all 0.3s ease;
-            position: relative;
-            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
         }
-        
+
         .block:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateX(10px);
+            border-color: var(--accent);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-lg);
         }
-        
+
+        .block.ai-generated {
+            border-left: 4px solid var(--success);
+            background: rgba(56, 161, 105, 0.05);
+        }
+
         .block-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
         }
-        
+
         .block-id {
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
-            font-size: 1.1rem;
-            color: #f093fb;
+            font-size: 1rem;
+            color: var(--accent);
         }
-        
+
         .block-time {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
-        
+
+        .ai-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
         .block-data {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            line-height: 1.8;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        
+
         .block-data strong {
-            color: #667eea;
+            color: var(--accent);
             font-weight: 600;
         }
-        
+
         .block-hash {
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            color: rgba(255, 255, 255, 0.5);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            margin-top: 1rem;
+            color: var(--text-secondary);
             word-break: break-all;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        
-        /* Coffee info modal */
+
+        /* Coffee Info */
         .coffee-info {
-            background: rgba(15, 15, 35, 0.95);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
             display: none;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-        }
-        
-        .coffee-info.show {
-            display: block;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: var(--shadow);
             animation: slideIn 0.5s ease;
         }
-        
+
+        .coffee-info.show {
+            display: block;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -532,329 +586,349 @@
                 transform: translateY(0);
             }
         }
-        
+
         .coffee-info h4 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 1rem;
         }
-        
+
         .info-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             transition: transform 0.3s ease;
         }
-        
+
         .info-item:hover {
-            transform: translateX(5px);
+            transform: translateX(4px);
         }
-        
+
         .info-item strong {
-            color: #f093fb;
+            color: var(--accent);
             font-weight: 600;
         }
-        
-        /* Alert system */
+
+        /* Alerts */
         .alert {
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin: 15px 0;
-            font-weight: 500;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 600;
             display: none;
             backdrop-filter: blur(10px);
+            border: 2px solid;
         }
-        
+
         .alert.success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(56, 161, 105, 0.2);
+            color: var(--success);
+            border-color: var(--success);
         }
-        
+
         .alert.error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(229, 62, 62, 0.2);
+            color: var(--error);
+            border-color: var(--error);
         }
-        
+
         .alert.show {
             display: block;
             animation: slideDown 0.3s ease;
         }
-        
+
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-20px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
-        /* Responsive design */
-                @media (max-width: 1024px) {
-            .dashboard {
+
+        /* Add glow animation for new blocks */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(49, 130, 206, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(49, 130, 206, 0.6), 0 0 30px rgba(49, 130, 206, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(49, 130, 206, 0.3); }
+        }
+
+        /* Enhanced hover effects */
+        .block:hover {
+            border-color: var(--accent);
+            transform: translateX(6px) scale(1.01);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
                 grid-template-columns: 1fr;
             }
             
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
             .radar-container {
-                width: 450px;
-                height: 450px;
+                width: 100%;
+                height: 400px;
             }
         }
-        
+
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 1rem;
             }
-            
-            .hero {
-                padding: 60px 20px;
+
+            .header {
+                padding: 1.5rem;
             }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .card, .blockchain-section, .radar-section {
-                padding: 25px;
-            }
-            
+
             .search-controls {
                 flex-direction: column;
             }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
+
+            .search-input {
+                min-width: 100%;
             }
-            
-            .radar-container {
-                width: 350px;
-                height: 350px;
-            }
-            
+
             .radar-metrics {
                 grid-template-columns: 1fr;
             }
-            
-            .radar-chart text {
-                font-size: 12px;
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .radar-container {
+                height: 350px;
+            }
+
+            .filter-buttons {
+                justify-content: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-container"></div>
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-
     <div class="container">
-        <div class="hero">
+        <!-- Header -->
+        <div class="header">
             <h1>⛓️ ระบบ Blockchain กาแฟเชียงราย</h1>
-            <p>ระบบตรวจสอบห่วงโซ่อุปทานกาแฟแบบโปร่งใส</p>
+            <p>ระบบตรวจสอบห่วงโซ่อุปทานกาแฟแบบโปร่งใสและปลอดภัย</p>
             <p>Chiang Rai Coffee Supply Chain Blockchain System</p>
             
-            <div class="stats">
+            <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number" id="totalBlocks">0</span>
-                    <div class="stat-label">Total Blocks</div>
+                    <div class="stat-label">รวมบล็อก</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="totalCoffee">0</span>
-                    <div class="stat-label">Coffee Records</div>
+                    <div class="stat-label">บันทึกกาแฟ</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="totalFarms">0</span>
-                    <div class="stat-label">Partner Farms</div>
+                    <div class="stat-label">ฟาร์มพันธมิตร</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">100%</span>
-                    <div class="stat-label">Transparency</div>
+                    <div class="stat-label">ความโปร่งใส</div>
                 </div>
             </div>
         </div>
 
         <!-- Radar Chart Section -->
         <div class="radar-section">
-            <h3>📊 Strategic Impact Analysis</h3>
-            <p style="opacity: 0.8; margin-bottom: 30px;">Real-time analysis of blockchain system effectiveness</p>
+            <h3>📊 การวิเคราะห์ผลกระทบเชิงกลยุทธ์</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">การวิเคราะห์ประสิทธิผลของระบบบล็อกเชนแบบเรียลไทม์</p>
             
             <div class="radar-container">
                 <svg class="radar-chart" id="radarChart" viewBox="0 0 500 500">
                     <!-- Background circles -->
                     <g class="radar-background">
-                        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                        <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                        <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                        <circle cx="250" cy="250" r="50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="50" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
                     </g>
                     
-                    <!-- Axis lines (Fixed for 6-point radar) -->
+                    <!-- Axis lines -->
                     <g class="radar-axes">
-                        <!-- Top to Bottom -->
-                        <line x1="250" y1="50" x2="250" y2="450" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                        <!-- Top-right to Bottom-left -->
-                        <line x1="423" y1="150" x2="77" y2="350" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                        <!-- Bottom-right to Top-left -->
-                        <line x1="423" y1="350" x2="77" y2="150" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        <line x1="250" y1="50" x2="250" y2="450" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
+                        <line x1="423" y1="150" x2="77" y2="350" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
+                        <line x1="423" y1="350" x2="77" y2="150" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
                     </g>
                     
-                    <!-- Labels (Fixed positions with better spacing) -->
+                    <!-- Labels in Thai -->
                     <g class="radar-labels">
-                        <text x="250" y="35" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Economic Impact</text>
-                        <text x="440" y="145" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Trust &amp; Credibility</text>
-                        <text x="440" y="365" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Sustainability</text>
-                        <text x="250" y="480" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Market Competitiveness</text>
-                        <text x="60" y="365" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Future Readiness</text>
-                        <text x="60" y="145" text-anchor="middle" fill="#f093fb" font-size="14" font-weight="600" font-family="Inter, sans-serif">Ecosystem Strength</text>
+                        <text x="250" y="35" text-anchor="middle">ผลกระทบเศรษฐกิจ</text>
+                        <text x="440" y="145" text-anchor="middle">ความไว้วางใจ</text>
+                        <text x="440" y="365" text-anchor="middle">ความยั่งยืน</text>
+                        <text x="250" y="480" text-anchor="middle">การแข่งขันในตลาด</text>
+                        <text x="60" y="365" text-anchor="middle">ความพร้อมอนาคต</text>
+                        <text x="60" y="145" text-anchor="middle">ความแข็งแกร่งระบบ</text>
                     </g>
                     
                     <!-- Data polygon -->
                     <polygon id="radarPolygon" 
-                             fill="rgba(102, 126, 234, 0.3)" 
-                             stroke="#667eea" 
+                             fill="rgba(49, 130, 206, 0.2)" 
+                             stroke="#3182ce" 
                              stroke-width="3"
-                             points="250,50 423,150 423,350 250,450 77,350 77,150"/>
+                             points="250,110 373,180 373,320 250,390 127,320 127,180"/>
                     
                     <!-- Data points -->
                     <g class="radar-points">
-                        <circle id="point1" cx="250" cy="50" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
-                        <circle id="point2" cx="423" cy="150" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
-                        <circle id="point3" cx="423" cy="350" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
-                        <circle id="point4" cx="250" cy="450" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
-                        <circle id="point5" cx="77" cy="350" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
-                        <circle id="point6" cx="77" cy="150" r="6" fill="#667eea" stroke="#fff" stroke-width="2"/>
+                        <circle id="point1" cx="250" cy="110" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point2" cx="373" cy="180" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point3" cx="373" cy="320" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point4" cx="250" cy="390" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point5" cx="127" cy="320" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point6" cx="127" cy="180" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
                     </g>
                 </svg>
             </div>
             
             <div class="radar-metrics">
                 <div class="metric-item excellent" id="metric1">
-                    <div class="metric-label">💰 Economic Impact</div>
-                    <div class="metric-value" id="economicValue">0%</div>
-                    <div class="metric-description">Fair pricing & reduced intermediaries</div>
+                    <div class="metric-label">💰 ผลกระทบเศรษฐกิจ</div>
+                    <div class="metric-value" id="economicValue">75%</div>
+                    <div class="metric-description">ราคายุติธรรม ลดตัวกลาง</div>
                 </div>
                 <div class="metric-item good" id="metric2">
-                    <div class="metric-label">🛡️ Trust & Credibility</div>
-                    <div class="metric-value" id="trustValue">0%</div>
-                    <div class="metric-description">Complete traceability & verification</div>
+                    <div class="metric-label">🛡️ ความไว้วางใจ</div>
+                    <div class="metric-value" id="trustValue">85%</div>
+                    <div class="metric-description">การตรวจสอบย้อนกลับได้อย่างสมบูรณ์</div>
                 </div>
                 <div class="metric-item good" id="metric3">
-                    <div class="metric-label">🌱 Sustainability Impact</div>
-                    <div class="metric-value" id="sustainabilityValue">0%</div>
-                    <div class="metric-description">Environmental & social responsibility</div>
+                    <div class="metric-label">🌱 ผลกระทบความยั่งยืน</div>
+                    <div class="metric-value" id="sustainabilityValue">70%</div>
+                    <div class="metric-description">ความรับผิดชอบต่อสิ่งแวดล้อมและสังคม</div>
                 </div>
                 <div class="metric-item excellent" id="metric4">
-                    <div class="metric-label">⚡ Market Competitiveness</div>
-                    <div class="metric-value" id="competitivenessValue">0%</div>
-                    <div class="metric-description">Quality assurance & brand value</div>
+                    <div class="metric-label">⚡ การแข่งขันในตลาด</div>
+                    <div class="metric-value" id="competitivenessValue">88%</div>
+                    <div class="metric-description">การรับประกันคุณภาพและมูลค่าแบรนด์</div>
                 </div>
                 <div class="metric-item excellent" id="metric5">
-                    <div class="metric-label">🔮 Future Readiness</div>
-                    <div class="metric-value" id="futurenessValue">0%</div>
-                    <div class="metric-description">AI integration & technology adoption</div>
+                    <div class="metric-label">🔮 ความพร้อมอนาคต</div>
+                    <div class="metric-value" id="futurenessValue">92%</div>
+                    <div class="metric-description">การรวม AI และการยอมรับเทคโนโลยี</div>
                 </div>
                 <div class="metric-item good" id="metric6">
-                    <div class="metric-label">🤝 Ecosystem Strength</div>
-                    <div class="metric-value" id="ecosystemValue">0%</div>
-                    <div class="metric-description">Network effects & collaboration</div>
+                    <div class="metric-label">🤝 ความแข็งแกร่งของระบบ</div>
+                    <div class="metric-value" id="ecosystemValue">78%</div>
+                    <div class="metric-description">เครือข่ายผลกระทบและความร่วมมือ</div>
                 </div>
             </div>
         </div>
 
-        <div class="dashboard">
+        <!-- Main Content -->
+        <div class="main-content">
             <div class="card">
-                <h3>📝 Add Supply Chain Record</h3>
+                <h3>📝 เพิ่มบันทึกห่วงโซ่อุปทาน</h3>
                 
                 <div class="form-group">
-                    <label for="stage">Supply Chain Stage:</label>
+                    <label for="stage">ขั้นตอนห่วงโซ่อุปทาน:</label>
                     <select id="stage">
-                        <option value="farm">🌱 Farm (การปลูก)</option>
-                        <option value="harvest">🌾 Harvest (การเก็บเกี่ยว)</option>
-                        <option value="processing">⚙️ Processing (การแปรรูป)</option>
-                        <option value="roasting">🔥 Roasting (การคั่ว)</option>
-                        <option value="packaging">📦 Packaging (การบรรจุ)</option>
-                        <option value="distribution">🚛 Distribution (การจัดจำหน่าย)</option>
-                        <option value="retail">🏪 Retail (การขายปลีก)</option>
+                        <option value="farm">🌱 ฟาร์ม (การปลูก)</option>
+                        <option value="harvest">🌾 เก็บเกี่ยว (การเก็บเกี่ยว)</option>
+                        <option value="processing">⚙️ แปรรูป (การแปรรูป)</option>
+                        <option value="roasting">🔥 คั่ว (การคั่ว)</option>
+                        <option value="packaging">📦 บรรจุ (การบรรจุ)</option>
+                        <option value="distribution">🚛 จัดจำหน่าย (การจัดจำหน่าย)</option>
+                        <option value="retail">🏪 ขายปลีก (การขายปลีก)</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" placeholder="e.g., ดอยช้าง, เชียงราย">
+                    <label for="location">สถานที่:</label>
+                    <input type="text" id="location" placeholder="เช่น ดอยช้าง, เชียงราย">
                 </div>
                 
                 <div class="form-group">
-                    <label for="operator">Operator:</label>
+                    <label for="operator">ผู้ดำเนินการ:</label>
                     <input type="text" id="operator" placeholder="ชื่อเกษตรกร/บริษัท">
                 </div>
                 
                 <div class="form-group">
-                    <label for="details">Details:</label>
+                    <label for="details">รายละเอียด:</label>
                     <textarea id="details" rows="3" placeholder="รายละเอียดเพิ่มเติม เช่น พันธุ์กาแฟ, วิธีการแปรรูป"></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="quality">Quality Grade:</label>
+                    <label for="quality">เกรดคุณภาพ:</label>
                     <select id="quality">
-                        <option value="Premium">🏆 Premium</option>
-                        <option value="Grade A">🥇 Grade A</option>
-                        <option value="Grade B">🥈 Grade B</option>
-                        <option value="Standard">📋 Standard</option>
+                        <option value="Premium">🏆 พรีเมียม</option>
+                        <option value="Grade A">🥇 เกรด A</option>
+                        <option value="Grade B">🥈 เกรด B</option>
+                        <option value="Standard">📋 มาตรฐาน</option>
                     </select>
                 </div>
                 
                 <div class="alert success" id="successAlert"></div>
                 <div class="alert error" id="errorAlert"></div>
                 
-                <button class="btn" onclick="addToBlockchain()">Add to Blockchain</button>
+                <button class="btn" onclick="addToBlockchain()">เพิ่มใน Blockchain</button>
             </div>
             
             <div class="card">
-                <h3>🔍 Track Coffee History</h3>
+                <h3>🔍 ติดตามประวัติกาแฟ</h3>
                 
-                <div style="margin-bottom: 20px;">
-                    <p style="font-size: 0.9rem; margin-bottom: 10px; color: rgba(255,255,255,0.8);">🚀 ลองค้นหาด้วยรหัสตัวอย่าง:</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button onclick="searchSample('CR001')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">CR001</button>
-                        <button onclick="searchSample('CR002')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">CR002</button>
-                        <button onclick="searchSample('CR003')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">CR003</button>
+                <div style="margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">🚀 ลองค้นหาด้วยรหัสตัวอย่าง:</p>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="filter-btn" onclick="searchSample('CR001')">CR001</button>
+                        <button class="filter-btn" onclick="searchSample('CR002')">CR002</button>
+                        <button class="filter-btn" onclick="searchSample('CR003')">CR003</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="searchId">Coffee ID:</label>
+                    <label for="searchId">รหัสกาแฟ:</label>
                     <input type="text" id="searchId" placeholder="พิมพ์รหัสกาแฟ เช่น CR001">
                 </div>
-                <button class="btn" onclick="searchCoffee()">Search Coffee History</button>
+                <button class="btn" onclick="searchCoffee()">ค้นหาประวัติกาแฟ</button>
                 
                 <div class="coffee-info" id="coffeeInfo">
-                    <h4>☕ Coffee Supply Chain History</h4>
+                    <h4>☕ ประวัติห่วงโซ่อุปทานกาแฟ</h4>
                     <div class="info-grid" id="coffeeDetails">
                         <!-- Coffee details will be displayed here -->
                     </div>
@@ -862,36 +936,34 @@
             </div>
         </div>
         
+        <!-- Blockchain Explorer -->
         <div class="blockchain-section">
-            <h3>🔬 Blockchain Explorer</h3>
-            <p style="text-align: center; margin-bottom: 20px; opacity: 0.8;">
-                All blockchain records are immutable and transparent
+            <h3>🔬 สำรวจ Blockchain</h3>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-secondary);">
+                บันทึก Blockchain ทั้งหมดเป็นอันแน่นอนและโปร่งใส
             </p>
             
             <div class="search-controls">
                 <input type="text" class="search-input" id="blockSearch" placeholder="🔍 ค้นหาด้วยรหัสกาแฟ, สถานที่, หรือชื่อผู้ดำเนินการ...">
                 <select class="filter-select" id="stageFilter">
-                    <option value="">All Stages</option>
-                    <option value="farm">🌱 Farm</option>
-                    <option value="harvest">🌾 Harvest</option>
-                    <option value="processing">⚙️ Processing</option>
-                    <option value="roasting">🔥 Roasting</option>
-                    <option value="packaging">📦 Packaging</option>
-                    <option value="distribution">🚛 Distribution</option>
-                    <option value="retail">🏪 Retail</option>
+                    <option value="">ทุกขั้นตอน</option>
+                    <option value="farm">🌱 ฟาร์ม</option>
+                    <option value="harvest">🌾 เก็บเกี่ยว</option>
+                    <option value="processing">⚙️ แปรรูป</option>
+                    <option value="roasting">🔥 คั่ว</option>
+                    <option value="packaging">📦 บรรจุ</option>
+                    <option value="distribution">🚛 จัดจำหน่าย</option>
+                    <option value="retail">🏪 ขายปลีก</option>
                 </select>
-                <button class="btn" style="width: auto; margin: 0; padding: 15px 30px;" onclick="filterBlocks()">Filter</button>
+                <button class="btn" style="width: auto; margin: 0; padding: 0.75rem 1.5rem;" onclick="filterBlocks()">กรอง</button>
             </div>
             
             <!-- Quick Filter Buttons -->
-            <div style="margin-bottom: 20px; text-align: center;">
-                <p style="font-size: 0.9rem; margin-bottom: 10px; opacity: 0.8;">🚀 ตัวกรองด่วน:</p>
-                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                    <button onclick="quickFilter('CR001')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">CR001</button>
-                    <button onclick="quickFilter('ดอยช้าง')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">ดอยช้าง</button>
-                    <button onclick="quickFilter('Premium')" style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">🏆 Premium</button>
-                    <button onclick="clearFilter()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">🗑️ ล้างตัวกรอง</button>
-                </div>
+            <div class="filter-buttons">
+                <button class="filter-btn" onclick="quickFilter('CR001')">CR001</button>
+                <button class="filter-btn" onclick="quickFilter('ดอยช้าง')">ดอยช้าง</button>
+                <button class="filter-btn" onclick="quickFilter('Premium')">🏆 พรีเมียม</button>
+                <button class="filter-btn clear" onclick="clearFilter()">🗑️ ล้างตัวกรอง</button>
             </div>
             
             <div class="blocks-container" id="blocks">
@@ -954,10 +1026,10 @@
                 const genesisData = {
                     coffeeId: "GENESIS",
                     stage: "system",
-                    location: "Chiang Rai Blockchain Network",
-                    operator: "System Administrator",
-                    details: "Genesis Block - Network Initialization",
-                    quality: "System",
+                    location: "เครือข่าย Blockchain เชียงราย",
+                    operator: "ผู้ดูแลระบบ",
+                    details: "บล็อกต้นกำเนิด - การเริ่มต้นเครือข่าย",
+                    quality: "ระบบ",
                     batchSize: "N/A",
                     temperature: "N/A"
                 };
@@ -1005,22 +1077,6 @@
                 );
             }
             
-            isChainValid() {
-                for (let i = 1; i < this.chain.length; i++) {
-                    const currentBlock = this.chain[i];
-                    const previousBlock = this.chain[i - 1];
-                    
-                    if (currentBlock.hash !== currentBlock.calculateHash()) {
-                        return false;
-                    }
-                    
-                    if (currentBlock.previousHash !== previousBlock.hash) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            
             getStats() {
                 return {
                     totalBlocks: this.chain.length,
@@ -1031,7 +1087,7 @@
             }
         }
         
-        // Strategic Analysis Class (Enhanced with better calculations)
+        // Strategic Analysis Class
         class StrategicAnalyzer {
             constructor(blockchain) {
                 this.blockchain = blockchain;
@@ -1234,21 +1290,18 @@
         const strategicAnalyzer = new StrategicAnalyzer(chiangRaiCoffeeChain);
         let currentDisplayedBlocks = [];
         let autoUpdateInterval;
-        let isAutoUpdateEnabled = true;
         
-        // Sample data generation (Enhanced)
+        // Sample data generation
         function generateSampleData() {
-            const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005', 'CR006', 'CR007', 'CR008'];
+            const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005'];
             const stages = ['farm', 'harvest', 'processing', 'roasting', 'packaging', 'distribution', 'retail'];
             const locations = [
                 'ดอยช้าง, เชียงราย', 'แม่สาย, เชียงราย', 'เชียงแสน, เชียงราย', 
-                'แม่จัน, เชียงราย', 'เวียงแก่น, เชียงราย', 'ป่าแดด, เชียงราย',
-                'เทิง, เชียงราย', 'พาน, เชียงราย'
+                'แม่จัน, เชียงราย', 'เวียงแก่น, เชียงราย'
             ];
             const operators = [
                 'นายสมชาย ใจดี', 'นางสาวมาลี สุขใส', 'นายบุญมี รักษ์ดี',
-                'มูลนิธิแม่ฟ้าหลวง', 'สหกรณ์กาแฟดอยช้าง', 'บริษัท เชียงราย คอฟฟี่',
-                'ฟาร์มกาแฟอาราบิก้า', 'โรงงานแปรรูปดอยตุง', 'สหกรณ์เกษตรกรเชียงราย'
+                'มูลนิธิแม่ฟ้าหลวง', 'สหกรณ์กาแฟดอยช้าง', 'บริษัท เชียงราย คอฟฟี่'
             ];
             const varieties = [
                 'อาราบิก้า พันธุ์คาตูรา', 'อาราบิก้า พันธุ์ทิปิก้า', 'อาราบิก้า พันธุ์บูร์บง'
@@ -1257,8 +1310,8 @@
             
             const sampleData = [];
             
-            // Generate 30 sample records
-            for (let i = 0; i < 30; i++) {
+            // Generate 20 sample records
+            for (let i = 0; i < 20; i++) {
                 const coffeeId = coffeeIds[Math.floor(Math.random() * coffeeIds.length)];
                 const stage = stages[Math.floor(Math.random() * stages.length)];
                 const location = locations[Math.floor(Math.random() * locations.length)];
@@ -1268,30 +1321,27 @@
                 let details = '';
                 switch(stage) {
                     case 'farm':
-                        const sustainableWords = ['อินทรีย์', 'organic', 'sustainable'];
-                        const sustainableWord = Math.random() < 0.3 ? sustainableWords[Math.floor(Math.random() * sustainableWords.length)] + ' ' : '';
-                        details = `${sustainableWord}${varieties[Math.floor(Math.random() * varieties.length)]} ปลูกในระดับความสูง ${1000 + Math.floor(Math.random() * 500)} เมตร`;
+                        details = `${varieties[Math.floor(Math.random() * varieties.length)]} ปลูกในระดับความสูง ${1000 + Math.floor(Math.random() * 500)} เมตร`;
                         break;
                     case 'harvest':
                         details = `เก็บเกี่ยวด้วยมือ ผลสุก ${85 + Math.floor(Math.random() * 15)}% ปริมาณ ${50 + Math.floor(Math.random() * 200)} กิโลกรัม`;
                         break;
                     case 'processing':
-                        const processes = ['Washed Process', 'Natural Process', 'Honey Process', 'Semi-Washed'];
+                        const processes = ['Washed Process', 'Natural Process', 'Honey Process'];
                         details = `${processes[Math.floor(Math.random() * processes.length)]} อุณหภูมิ ${20 + Math.floor(Math.random() * 10)}°C`;
                         break;
                     case 'roasting':
-                        const roastLevels = ['Light Roast', 'Medium Roast', 'Dark Roast', 'City Roast'];
+                        const roastLevels = ['Light Roast', 'Medium Roast', 'Dark Roast'];
                         details = `${roastLevels[Math.floor(Math.random() * roastLevels.length)]} อุณหภูมิ ${180 + Math.floor(Math.random() * 40)}°C`;
                         break;
                     case 'packaging':
-                        const packageTypes = ['ถุงวาล์ว', 'ถุงซิป', 'กระป่องอลูมิเนียม'];
-                        details = `${packageTypes[Math.floor(Math.random() * packageTypes.length)]} ขนาด ${250 + Math.floor(Math.random() * 750)}g`;
+                        details = `ถุงวาล์ว ขนาด ${250 + Math.floor(Math.random() * 750)}g วันผลิต ${new Date().toLocaleDateString('th-TH')}`;
                         break;
                     case 'distribution':
-                        details = `จัดส่งไปยัง ${Math.floor(Math.random() * 20) + 1} จุดจำหน่าย อุณหภูมิขนส่ง ${15 + Math.floor(Math.random() * 10)}°C รถห้องเย็น`;
+                        details = `จัดส่งไปยัง ${Math.floor(Math.random() * 20) + 1} จุดจำหน่าย อุณหภูมิขนส่ง ${15 + Math.floor(Math.random() * 10)}°C`;
                         break;
                     case 'retail':
-                        details = `วางจำหน่ายในร้าน ราคา ${150 + Math.floor(Math.random() * 350)} บาท/แพ็ค สต็อก ${10 + Math.floor(Math.random() * 50)} แพ็ค`;
+                        details = `วางจำหน่ายในร้าน ราคา ${150 + Math.floor(Math.random() * 350)} บาท/แพ็ค`;
                         break;
                 }
                 
@@ -1311,21 +1361,20 @@
             return sampleData;
         }
         
-        // Radar Chart Functions (Updated for new coordinates)
+        // Radar Chart Functions
         function updateRadarChart(metrics) {
             try {
                 const centerX = 250;
                 const centerY = 250;
                 const maxRadius = 200;
                 
-                // Calculate correct positions for 6-point radar chart
                 const angles = [
-                    -Math.PI / 2,      // Top (Economic Impact)
-                    -Math.PI / 6,      // Top Right (Trust & Credibility)
-                    Math.PI / 6,       // Bottom Right (Sustainability)
-                    Math.PI / 2,       // Bottom (Market Competitiveness)
-                    5 * Math.PI / 6,   // Bottom Left (Future Readiness)
-                    7 * Math.PI / 6    // Top Left (Ecosystem Strength)
+                    -Math.PI / 2,      // Top
+                    -Math.PI / 6,      // Top Right
+                    Math.PI / 6,       // Bottom Right
+                    Math.PI / 2,       // Bottom
+                    5 * Math.PI / 6,   // Bottom Left
+                    7 * Math.PI / 6    // Top Left
                 ];
                 
                 const values = [
@@ -1402,7 +1451,7 @@
             const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005'];
             const stages = ['farm', 'harvest', 'processing', 'roasting', 'packaging'];
             const locations = ['ดอยช้าง, เชียงราย', 'แม่สาย, เชียงราย', 'เชียงแสน, เชียงราย'];
-            const operators = ['AI Smart Farm', 'IoT Processing Center', 'Automated Roastery'];
+            const operators = ['ฟาร์ม AI อัจฉริยะ', 'ศูนย์แปรรูป IoT', 'โรงคั่วอัตโนมัติ'];
             
             const coffeeId = coffeeIds[Math.floor(Math.random() * coffeeIds.length)];
             const stage = stages[Math.floor(Math.random() * stages.length)];
@@ -1412,7 +1461,7 @@
                 stage: stage,
                 location: locations[Math.floor(Math.random() * locations.length)],
                 operator: operators[Math.floor(Math.random() * operators.length)],
-                details: `AI-Generated: Smart ${stage} monitoring with IoT sensors`,
+                details: `สร้างโดย AI: การตรวจสอบ ${stage} อัจฉริยะด้วยเซ็นเซอร์ IoT`,
                 quality: 'Premium',
                 batchSize: (80 + Math.floor(Math.random() * 120)) + ' kg',
                 temperature: (22 + Math.floor(Math.random() * 8)) + '°C',
@@ -1425,95 +1474,36 @@
             if (autoUpdateInterval) clearInterval(autoUpdateInterval);
             
             autoUpdateInterval = setInterval(() => {
-                if (isAutoUpdateEnabled) {
+                try {
                     const aiRecord = generateAIRecord();
                     const newBlock = new Block(chiangRaiCoffeeChain.chain.length, aiRecord, "");
                     chiangRaiCoffeeChain.addBlock(newBlock);
                     
+                    // Animate new block addition
                     updateBlockchainDisplay();
                     updateStats();
-                    showAlert('🤖 AI Auto-Update: เพิ่มข้อมูลใหม่ ' + aiRecord.coffeeId, 'success');
+                    
+                    // Show notification
+                    showAlert('🤖 AI อัปเดต: เพิ่มข้อมูล ' + aiRecord.coffeeId + ' (' + aiRecord.stage + ')', 'success');
+                    
+                    // Add visual effect to new block
+                    setTimeout(() => {
+                        const blocks = document.querySelectorAll('.block');
+                        if (blocks.length > 0) {
+                            const newBlock = blocks[0]; // Latest block is first
+                            newBlock.style.animation = 'slideIn 0.5s ease, glow 2s ease';
+                            newBlock.style.transform = 'scale(1.02)';
+                            
+                            setTimeout(() => {
+                                newBlock.style.transform = 'scale(1)';
+                            }, 1000);
+                        }
+                    }, 100);
+                    
+                } catch (error) {
+                    console.error('Error in auto-update:', error);
                 }
-            }, 60000); // Every 1 minute for demo
-        }
-        
-        // Quick filter functions
-        function quickFilter(term) {
-            document.getElementById('blockSearch').value = term;
-            filterBlocks();
-        }
-        
-        function clearFilter() {
-            document.getElementById('blockSearch').value = '';
-            document.getElementById('stageFilter').value = '';
-            filterBlocks();
-        }function generateSampleData() {
-            const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005'];
-            const stages = ['farm', 'harvest', 'processing', 'roasting', 'packaging', 'distribution', 'retail'];
-            const locations = [
-                'ดอยช้าง, เชียงราย', 'แม่สาย, เชียงราย', 'เชียงแสน, เชียงราย', 
-                'แม่จัน, เชียงราย', 'เวียงแก่น, เชียงราย'
-            ];
-            const operators = [
-                'นายสมชาย ใจดี', 'นางสาวมาลี สุขใส', 'นายบุญมี รักษ์ดี',
-                'มูลนิธิแม่ฟ้าหลวง', 'สหกรณ์กาแฟดอยช้าง', 'บริษัท เชียงราย คอฟฟี่'
-            ];
-            const varieties = [
-                'อาราบิก้า พันธุ์คาตูรา', 'อาราบิก้า พันธุ์ทิปิก้า', 'อาราบิก้า พันธุ์บูร์บง'
-            ];
-            const qualities = ['Premium', 'Grade A', 'Grade B', 'Standard'];
-            
-            const sampleData = [];
-            
-            // Generate 20 sample records
-            for (let i = 0; i < 20; i++) {
-                const coffeeId = coffeeIds[Math.floor(Math.random() * coffeeIds.length)];
-                const stage = stages[Math.floor(Math.random() * stages.length)];
-                const location = locations[Math.floor(Math.random() * locations.length)];
-                const operator = operators[Math.floor(Math.random() * operators.length)];
-                const quality = qualities[Math.floor(Math.random() * qualities.length)];
-                
-                let details = '';
-                switch(stage) {
-                    case 'farm':
-                        details = `${varieties[Math.floor(Math.random() * varieties.length)]} ปลูกในระดับความสูง ${1000 + Math.floor(Math.random() * 500)} เมตร`;
-                        break;
-                    case 'harvest':
-                        details = `เก็บเกี่ยวด้วยมือ ผลสุก ${85 + Math.floor(Math.random() * 15)}% ปริมาณ ${50 + Math.floor(Math.random() * 200)} กิโลกรัม`;
-                        break;
-                    case 'processing':
-                        const processes = ['Washed Process', 'Natural Process', 'Honey Process'];
-                        details = `${processes[Math.floor(Math.random() * processes.length)]} อุณหภูมิ ${20 + Math.floor(Math.random() * 10)}°C`;
-                        break;
-                    case 'roasting':
-                        const roastLevels = ['Light Roast', 'Medium Roast', 'Dark Roast'];
-                        details = `${roastLevels[Math.floor(Math.random() * roastLevels.length)]} อุณหภูมิ ${180 + Math.floor(Math.random() * 40)}°C`;
-                        break;
-                    case 'packaging':
-                        details = `ถุงวาล์ว ขนาด ${250 + Math.floor(Math.random() * 750)}g วันผลิต ${new Date().toLocaleDateString('th-TH')}`;
-                        break;
-                    case 'distribution':
-                        details = `จัดส่งไปยัง ${Math.floor(Math.random() * 20) + 1} จุดจำหน่าย อุณหภูมิขนส่ง ${15 + Math.floor(Math.random() * 10)}°C`;
-                        break;
-                    case 'retail':
-                        details = `วางจำหน่ายในร้าน ราคา ${150 + Math.floor(Math.random() * 350)} บาท/แพ็ค`;
-                        break;
-                }
-                
-                sampleData.push({
-                    coffeeId: coffeeId,
-                    stage: stage,
-                    location: location,
-                    operator: operator,
-                    details: details,
-                    quality: quality,
-                    batchSize: `${50 + Math.floor(Math.random() * 200)} kg`,
-                    temperature: `${20 + Math.floor(Math.random() * 15)}°C`,
-                    humidity: `${40 + Math.floor(Math.random() * 30)}%`
-                });
-            }
-            
-            return sampleData;
+            }, 25000); // Every 25 seconds for demo
         }
         
         // Initialize blockchain with sample data
@@ -1521,23 +1511,27 @@
             try {
                 const sampleData = generateSampleData();
                 
+                showAlert('🚀 เริ่มต้นระบบ Blockchain...', 'success');
+                
                 sampleData.forEach((data, index) => {
                     setTimeout(() => {
                         const block = new Block(chiangRaiCoffeeChain.chain.length, data, "");
                         chiangRaiCoffeeChain.addBlock(block);
                         
+                        // Update display progressively
+                        updateBlockchainDisplay();
+                        updateStats();
+                        
                         if (index === sampleData.length - 1) {
-                            updateBlockchainDisplay();
-                            updateStats();
-                            showAlert('🚀 ระบบเริ่มต้นพร้อม ' + (sampleData.length + 1) + ' บล็อก', 'success');
+                            showAlert('✅ ระบบเริ่มต้นพร้อม ' + (sampleData.length + 1) + ' บล็อก', 'success');
                             
                             // Start AI auto-update after initialization
                             setTimeout(() => {
                                 startAutoUpdate();
-                                showAlert('🤖 AI Auto-Update System เริ่มทำงานแล้ว', 'success');
-                            }, 3000);
+                                showAlert('🤖 ระบบอัปเดตอัตโนมัติ AI เริ่มทำงานแล้ว', 'success');
+                            }, 2000);
                         }
-                    }, index * 50);
+                    }, index * 200); // Animation delay
                 });
             } catch (error) {
                 console.error('Error in initializeBlockchain:', error);
@@ -1641,183 +1635,15 @@
                 
                 const stageDiv = document.createElement('div');
                 stageDiv.className = 'info-item';
-                stageDiv.innerHTML = `
-                    <strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
-                    📍 สถานที่: ${block.data.location}<br>
-                    👤 ผู้ดำเนินการ: ${block.data.operator}<br>
-                    📋 รายละเอียด: ${block.data.details}<br>
-                    ⭐ คุณภาพ: ${block.data.quality}<br>
-                    📦 ขนาดแบทช์: ${block.data.batchSize || 'N/A'}<br>
-                    🌡️ อุณหภูมิ: ${block.data.temperature || 'N/A'}<br>
-                    💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
-                    ⏰ เวลา: ${block.timestamp}
-                `;
-                
-                coffeeDetails.appendChild(stageDiv);
-            });
-            
-            coffeeInfo.classList.add('show');
-            showAlert('✅ พบประวัติกาแฟ ' + history.length + ' รายการ', 'success');
-        }
-        
-        // Filter blocks
-        function filterBlocks() {
-            const searchQuery = document.getElementById('blockSearch').value;
-            const stageFilter = document.getElementById('stageFilter').value;
-            
-            let filteredBlocks = chiangRaiCoffeeChain.searchBlocks(searchQuery);
-            
-            if (stageFilter) {
-                filteredBlocks = filteredBlocks.filter(block => block.data.stage === stageFilter);
-            }
-            
-            currentDisplayedBlocks = filteredBlocks;
-            displayBlocks(filteredBlocks);
-        }
-        
-        // Display blocks (Enhanced)
-        function displayBlocks(blocks) {
-            const blocksContainer = document.getElementById('blocks');
-            if (!blocksContainer) return;
-            
-            blocksContainer.innerHTML = '';
-            
-            if (blocks.length === 0) {
-                blocksContainer.innerHTML = '<p style="text-align: center; opacity: 0.6;">ไม่พบข้อมูลที่ตรงกับการค้นหา</p>';
-                return;
-            }
-            
-            // Show latest blocks first
-            const reversedBlocks = [...blocks].reverse();
-            
-            reversedBlocks.forEach((block, index) => {
-                const blockDiv = document.createElement('div');
-                blockDiv.className = 'block';
-                
-                // Add special styling for AI-generated blocks
-                if (block.data.isAIGenerated) {
-                    blockDiv.style.borderLeft = '4px solid #10b981';
-                    blockDiv.style.background = 'rgba(16, 185, 129, 0.05)';
-                }
-                
-                const stageNames = {
-                    'farm': '🌱 การปลูก',
-                    'harvest': '🌾 การเก็บเกี่ยว',
-                    'processing': '⚙️ การแปรรูป',
-                    'roasting': '🔥 การคั่ว',
-                    'packaging': '📦 การบรรจุ',
-                    'distribution': '🚛 การจัดจำหน่าย',
-                    'retail': '🏪 การขายปลีก',
-                    'system': '🏛️ ระบบ'
-                };
-                
-                let blockHeader = `
-                    <div class="block-header">
-                        <div class="block-id">🔗 Block #${block.index}</div>
-                        <div class="block-time">⏰ ${block.timestamp || 'N/A'}</div>
-                    </div>
-                `;
-                
-                if (block.data.isAIGenerated) {
-                    blockHeader = `
-                        <div class="block-header">
-                            <div class="block-id">
-                                🤖 Block #${block.index} 
-                                <span style="background: rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 8px;">AI Generated</span>
-                            </div>
-                            <div class="block-time">⏰ ${block.timestamp || 'N/A'}</div>
-                        </div>
-                    `;
-                }
-                
-                blockDiv.innerHTML = 
-                    blockHeader +
-                    `<div class="block-data">
-                        <strong>🏷️ รหัสกาแฟ:</strong> ${block.data.coffeeId || 'N/A'}<br>
-                        <strong>📋 ขั้นตอน:</strong> ${stageNames[block.data.stage] || block.data.stage}<br>
-                        <strong>📍 สถานที่:</strong> ${block.data.location || 'N/A'}<br>
-                        <strong>👤 ผู้ดำเนินการ:</strong> ${block.data.operator || 'N/A'}<br>
-                        <strong>📝 รายละเอียด:</strong> ${block.data.details || 'N/A'}<br>
-                        <strong>⭐ คุณภาพ:</strong> ${block.data.quality || 'N/A'}<br>
-                        ${block.data.batchSize ? '<strong>📦 ขนาดแบทช์:</strong> ' + block.data.batchSize + '<br>' : ''}
-                        ${block.data.temperature ? '<strong>🌡️ อุณหภูมิ:</strong> ' + block.data.temperature + '<br>' : ''}
-                        ${block.data.humidity ? '<strong>💧 ความชื้น:</strong> ' + block.data.humidity + '<br>' : ''}
-                    </div>
-                    <div class="block-hash">🔐 Hash: ${block.hash || 'N/A'}</div>`;
-                
-                blocksContainer.appendChild(blockDiv);
-            });
-        }
-        
-        // Update blockchain display
-        function updateBlockchainDisplay() {
-            currentDisplayedBlocks = chiangRaiCoffeeChain.chain;
-            displayBlocks(currentDisplayedBlocks);
-        }
-        
-        // Update statistics (Enhanced)
-        function updateStats() {
-            const stats = chiangRaiCoffeeChain.getStats();
-            
-            const totalBlocksElement = document.getElementById('totalBlocks');
-            const totalCoffeeElement = document.getElementById('totalCoffee');
-            const totalFarmsElement = document.getElementById('totalFarms');
-            
-            if (totalBlocksElement) totalBlocksElement.textContent = stats.totalBlocks;
-            if (totalCoffeeElement) totalCoffeeElement.textContent = stats.totalCoffee;
-            if (totalFarmsElement) totalFarmsElement.textContent = stats.totalOperators;
-            
-            // Update radar chart with strategic metrics
-            try {
-                const metrics = strategicAnalyzer.updateAllMetrics();
-                updateRadarChart(metrics);
-            } catch (error) {
-                console.error('Error updating strategic metrics:', error);
-            }
-        }
-        
-        // Enhanced search coffee with AI detection
-        function searchCoffee() {
-            const searchId = document.getElementById('searchId').value.trim();
-            if (!searchId) {
-                showAlert('❌ กรุณาใส่รหัสกาแฟ', 'error');
-                return;
-            }
-            
-            const history = chiangRaiCoffeeChain.getCoffeeHistory(searchId);
-            const coffeeInfo = document.getElementById('coffeeInfo');
-            const coffeeDetails = document.getElementById('coffeeDetails');
-            
-            if (history.length === 0) {
-                showAlert('❌ ไม่พบข้อมูลกาแฟรหัสนี้', 'error');
-                coffeeInfo.classList.remove('show');
-                return;
-            }
-            
-            // Display coffee history
-            coffeeDetails.innerHTML = '';
-            history.forEach((block, index) => {
-                const stageNames = {
-                    'farm': '🌱 การปลูก',
-                    'harvest': '🌾 การเก็บเกี่ยว',
-                    'processing': '⚙️ การแปรรูป',
-                    'roasting': '🔥 การคั่ว',
-                    'packaging': '📦 การบรรจุ',
-                    'distribution': '🚛 การจัดจำหน่าย',
-                    'retail': '🏪 การขายปลีก'
-                };
-                
-                const stageDiv = document.createElement('div');
-                stageDiv.className = 'info-item';
                 
                 // Add special styling for AI-generated records
                 if (block.data.isAIGenerated) {
-                    stageDiv.style.borderLeft = '4px solid #10b981';
+                    stageDiv.style.borderLeftColor = 'var(--success)';
                     stageDiv.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                             <span>🤖</span>
                             <strong>${stageNames[block.data.stage] || block.data.stage}</strong>
-                            <span style="background: rgba(16, 185, 129, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">AI Generated</span>
+                            <span class="ai-badge">สร้างโดย AI</span>
                         </div>
                         📍 สถานที่: ${block.data.location}<br>
                         👤 ผู้ดำเนินการ: ${block.data.operator}<br>
@@ -1855,6 +1681,133 @@
             searchCoffee();
         }
         
+        // Filter blocks
+        function filterBlocks() {
+            const searchQuery = document.getElementById('blockSearch').value;
+            const stageFilter = document.getElementById('stageFilter').value;
+            
+            let filteredBlocks = chiangRaiCoffeeChain.searchBlocks(searchQuery);
+            
+            if (stageFilter) {
+                filteredBlocks = filteredBlocks.filter(block => block.data.stage === stageFilter);
+            }
+            
+            currentDisplayedBlocks = filteredBlocks;
+            displayBlocks(filteredBlocks);
+        }
+        
+        // Display blocks
+        function displayBlocks(blocks) {
+            const blocksContainer = document.getElementById('blocks');
+            if (!blocksContainer) return;
+            
+            blocksContainer.innerHTML = '';
+            
+            if (blocks.length === 0) {
+                blocksContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">ไม่พบข้อมูลที่ตรงกับการค้นหา</p>';
+                return;
+            }
+            
+            // Show latest blocks first
+            const reversedBlocks = [...blocks].reverse();
+            
+            reversedBlocks.forEach((block, index) => {
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'block';
+                
+                // Add special styling for AI-generated blocks
+                if (block.data.isAIGenerated) {
+                    blockDiv.classList.add('ai-generated');
+                }
+                
+                const stageNames = {
+                    'farm': '🌱 การปลูก',
+                    'harvest': '🌾 การเก็บเกี่ยว',
+                    'processing': '⚙️ การแปรรูป',
+                    'roasting': '🔥 การคั่ว',
+                    'packaging': '📦 การบรรจุ',
+                    'distribution': '🚛 การจัดจำหน่าย',
+                    'retail': '🏪 การขายปลีก',
+                    'system': '🏛️ ระบบ'
+                };
+                
+                let blockHeader = `
+                    <div class="block-header">
+                        <div class="block-id">BLOCK #${block.index}</div>
+                        <div class="block-time">${block.timestamp || 'N/A'}</div>
+                    </div>
+                `;
+                
+                if (block.data.isAIGenerated) {
+                    blockHeader = `
+                        <div class="block-header">
+                            <div class="block-id">
+                                🤖 BLOCK #${block.index} 
+                                <span class="ai-badge">AI Generated</span>
+                            </div>
+                            <div class="block-time">${block.timestamp || 'N/A'}</div>
+                        </div>
+                    `;
+                }
+                
+                blockDiv.innerHTML = 
+                    blockHeader +
+                    `<div class="block-data">
+                        <strong>🏷️ รหัสกาแฟ:</strong> ${block.data.coffeeId || 'N/A'}<br>
+                        <strong>📋 ขั้นตอน:</strong> ${stageNames[block.data.stage] || block.data.stage}<br>
+                        <strong>📍 สถานที่:</strong> ${block.data.location || 'N/A'}<br>
+                        <strong>👤 ผู้ดำเนินการ:</strong> ${block.data.operator || 'N/A'}<br>
+                        <strong>📝 รายละเอียด:</strong> ${block.data.details || 'N/A'}<br>
+                        <strong>⭐ คุณภาพ:</strong> ${block.data.quality || 'N/A'}<br>
+                        ${block.data.batchSize ? '<strong>📦 ขนาดแบทช์:</strong> ' + block.data.batchSize + '<br>' : ''}
+                        ${block.data.temperature ? '<strong>🌡️ อุณหภูมิ:</strong> ' + block.data.temperature + '<br>' : ''}
+                        ${block.data.humidity ? '<strong>💧 ความชื้น:</strong> ' + block.data.humidity + '<br>' : ''}
+                    </div>
+                    <div class="block-hash">HASH: ${block.hash || 'N/A'}</div>`;
+                
+                blocksContainer.appendChild(blockDiv);
+            });
+        }
+        
+        // Update blockchain display
+        function updateBlockchainDisplay() {
+            currentDisplayedBlocks = chiangRaiCoffeeChain.chain;
+            displayBlocks(currentDisplayedBlocks);
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const stats = chiangRaiCoffeeChain.getStats();
+            
+            const totalBlocksElement = document.getElementById('totalBlocks');
+            const totalCoffeeElement = document.getElementById('totalCoffee');
+            const totalFarmsElement = document.getElementById('totalFarms');
+            
+            if (totalBlocksElement) totalBlocksElement.textContent = stats.totalBlocks;
+            if (totalCoffeeElement) totalCoffeeElement.textContent = stats.totalCoffee;
+            if (totalFarmsElement) totalFarmsElement.textContent = stats.totalOperators;
+            
+            // Update radar chart with strategic metrics
+            try {
+                const metrics = strategicAnalyzer.updateAllMetrics();
+                updateRadarChart(metrics);
+            } catch (error) {
+                console.error('Error updating strategic metrics:', error);
+            }
+        }
+        
+        // Quick filter functions
+        function quickFilter(term) {
+            document.getElementById('blockSearch').value = term;
+            filterBlocks();
+        }
+        
+        function clearFilter() {
+            document.getElementById('blockSearch').value = '';
+            document.getElementById('stageFilter').value = '';
+            filterBlocks();
+        }
+        
         // Initialize system
         document.addEventListener('DOMContentLoaded', function() {
             try {
@@ -1868,8 +1821,9 @@
             }
         });
         
-        // Search on Enter key
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // Search on Enter key for block search
             const blockSearchElement = document.getElementById('blockSearch');
             if (blockSearchElement) {
                 blockSearchElement.addEventListener('keypress', function(e) {
@@ -1879,6 +1833,7 @@
                 });
             }
             
+            // Search on Enter key for coffee search
             const searchIdElement = document.getElementById('searchId');
             if (searchIdElement) {
                 searchIdElement.addEventListener('keypress', function(e) {
@@ -1888,13 +1843,73 @@
                 });
             }
             
+            // Auto-filter on stage change
             const stageFilterElement = document.getElementById('stageFilter');
             if (stageFilterElement) {
                 stageFilterElement.addEventListener('change', function() {
                     filterBlocks();
                 });
             }
+            
+            // Auto-populate details based on stage
+            const addStageElement = document.getElementById('stage');
+            if (addStageElement) {
+                addStageElement.addEventListener('change', function() {
+                    const stage = this.value;
+                    const detailsElement = document.getElementById('details');
+                    if (detailsElement && !detailsElement.value) {
+                        switch(stage) {
+                            case 'farm':
+                                detailsElement.placeholder = 'เช่น: อาราบิก้า พันธุ์คาตูรา ปลูกในระดับความสูง 1200 เมตร';
+                                break;
+                            case 'harvest':
+                                detailsElement.placeholder = 'เช่น: เก็บเกี่ยวด้วยมือ ผลสุก 90% ปริมาณ 150 กิโลกรัม';
+                                break;
+                            case 'processing':
+                                detailsElement.placeholder = 'เช่น: Washed Process อุณหภูมิ 25°C เวลาหมัก 24 ชั่วโมง';
+                                break;
+                            case 'roasting':
+                                detailsElement.placeholder = 'เช่น: Medium Roast อุณหภูมิ 200°C เวลา 12 นาที';
+                                break;
+                            case 'packaging':
+                                detailsElement.placeholder = 'เช่น: ถุงวาล์ว ขนาด 500g วันผลิต วันนี้';
+                                break;
+                            case 'distribution':
+                                detailsElement.placeholder = 'เช่น: จัดส่งไปยัง 15 จุดจำหน่าย อุณหภูมิขนส่ง 18°C';
+                                break;
+                            case 'retail':
+                                detailsElement.placeholder = 'เช่น: วางจำหน่ายในร้าน ราคา 280 บาท/แพ็ค';
+                                break;
+                        }
+                    }
+                });
+            }
         });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+F to focus search
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                const searchElement = document.getElementById('blockSearch');
+                if (searchElement) {
+                    searchElement.focus();
+                }
+            }
+        });
+        
+        // Export functions for external use
+        if (typeof window !== 'undefined') {
+            window.chiangRaiBlockchain = {
+                addToBlockchain,
+                searchCoffee,
+                searchSample,
+                quickFilter,
+                clearFilter,
+                filterBlocks,
+                updateStats
+            };
+        }
     </script>
 </body>
 </html>

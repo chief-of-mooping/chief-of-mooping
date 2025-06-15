@@ -3,9 +3,13 @@
  * ===========================================================
  */
 
+// Import all modules
 import { Blockchain, Block, SampleDataGenerator } from './blockchain.js';
 import { StrategicAnalyzer, ImpactCalculator } from './analyzer.js';
 import { UIManager, AIUpdateManager } from './ui.js';
+
+// Make Block class globally available for other modules
+window.Block = Block;
 
 /**
  * Main Application Class
@@ -435,7 +439,8 @@ class AppLifecycle {
         window.addCoffeeRecord = (data) => {
             if (this.app && this.app.isInitialized) {
                 try {
-                    const block = new Block(
+                    // Use the globally available Block class
+                    const block = new window.Block(
                         this.app.blockchain.chain.length,
                         data,
                         ""

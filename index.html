@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบตรวจสอบย้อนกลับห่วงโซ่อุปทานกาแฟเชียงรายด้วยเทคโนโลยีบล็อกเชน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a2332;
+            --secondary: #2d3748;
+            --accent: #3182ce;
+            --accent-light: #63b3ed;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --error: #e53e3e;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --bg-white: rgba(255, 255, 255, 0.95);
+            --bg-glass: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', system-ui, -apple-system, sans-serif;
+            background: url('https://github.com/chief-of-mooping/chief-of-mooping/blob/main/coffee-farm-background.png?raw=true') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background overlay for better readability */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.02) 0%, 
+                rgba(0, 0, 0, 0.01) 50%, 
+                rgba(0, 0, 0, 0.02) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header - positioned on top with good contrast */
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 50%, var(--accent-light) 100%);
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Main content area - positioned on left side */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Impact Outcomes Section */
+        .impact-section {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+
+        .impact-section h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .outcome-category {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .outcome-category:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .outcome-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .outcome-icon {
+            font-size: 1.5rem;
+        }
+
+        .outcome-header h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .outcome-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .outcome-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .outcome-item:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .outcome-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .outcome-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            margin: 0 0.5rem;
+        }
+
+        .outcome-change.positive {
+            background: rgba(56, 161, 105, 0.2);
+            color: var(--success);
+        }
+
+        .outcome-change.negative {
+            background: rgba(229, 62, 62, 0.2);
+            color: var(--error);
+        }
+
+        .outcome-change.neutral {
+            background: rgba(214, 158, 46, 0.2);
+            color: var(--warning);
+        }
+
+        .outcome-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-align: right;
+            flex: 1;
+        }
+
+        .impact-summary {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .summary-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(4px);
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .summary-item strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .radar-section {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            grid-column: 1 / -1;
+            margin-bottom: 2rem;
+        }
+
+        .radar-section h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .radar-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            margin: 0 auto 2rem;
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .radar-chart text {
+            font-family: 'Kanit', system-ui, sans-serif;
+            font-weight: 600;
+            fill: var(--accent);
+            font-size: 13px;
+        }
+
+        .radar-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: left;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-item:hover {
+            transform: translateX(4px);
+        }
+
+        .metric-item.excellent { border-left-color: var(--success); }
+        .metric-item.good { border-left-color: var(--warning); }
+        .metric-item.average { border-left-color: var(--error); }
+
+        .metric-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-description {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Cards positioned on darker areas */
+        .card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+            -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Kanit', system-ui, sans-serif;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Kanit', system-ui, sans-serif;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Blockchain Explorer */
+        .blockchain-section {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-lg);
+            grid-column: 1 / -1;
+        }
+
+        .blockchain-section h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Kanit', system-ui, sans-serif;
+            backdrop-filter: blur(4px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Kanit', system-ui, sans-serif;
+            min-width: 150px;
+            backdrop-filter: blur(4px);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Kanit', system-ui, sans-serif;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .filter-btn.clear {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .filter-btn.clear:hover {
+            background: #c53030;
+        }
+
+        /* Blocks */
+        .blocks-container {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .blocks-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .blocks-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .blocks-container::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .block {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .block:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .block.ai-generated {
+            border-left: 4px solid var(--success);
+            background: rgba(56, 161, 105, 0.05);
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .block-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        .block-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .ai-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .block-data {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .block-data strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .block-hash {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Coffee Info */
+        .coffee-info {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: var(--shadow);
+            animation: slideIn 0.5s ease;
+        }
+
+        .coffee-info.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .coffee-info h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateX(4px);
+        }
+
+        .info-item strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 600;
+            display: none;
+            backdrop-filter: blur(10px);
+            border: 2px solid;
+        }
+
+        .alert.success {
+            background: rgba(56, 161, 105, 0.2);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .alert.error {
+            background: rgba(229, 62, 62, 0.2);
+            color: var(--error);
+            border-color: var(--error);
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add glow animation for new blocks */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(49, 130, 206, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(49, 130, 206, 0.6), 0 0 30px rgba(49, 130, 206, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(49, 130, 206, 0.3); }
+        }
+
+        /* Enhanced hover effects */
+        .block:hover {
+            border-color: var(--accent);
+            transform: translateX(6px) scale(1.01);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .radar-container {
+                width: 100%;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1.5rem;
+            }
+
+            .search-controls {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .radar-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .radar-container {
+                height: 350px;
+            }
+
+            .filter-buttons {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>⛓️ ระบบตรวจสอบย้อนกลับห่วงโซ่อุปทานกาแฟเชียงรายด้วยเทคโนโลยีบล็อกเชน</h1>
+            <p style="font-size: 32px;">
+  A Blockchain-based Traceability System for Chiang Rai Coffee
+</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalBlocks">0</span>
+                    <div class="stat-label">รวมบล็อก</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalCoffee">0</span>
+                    <div class="stat-label">บันทึกกาแฟ</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalFarms">0</span>
+                    <div class="stat-label">ฟาร์มพันธมิตร</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">ความโปร่งใส</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact Outcomes Section -->
+        <div class="impact-section">
+            <h3>🎯 ผลกระทบที่เกิดขึ้นจริง (Real Impact Outcomes)</h3>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-secondary);">
+                การเปลี่ยนแปลงที่วัดได้จากการใช้ระบบ Blockchain
+            </p>
+            
+            <div class="outcomes-grid">
+                <div class="outcome-category">
+                    <div class="outcome-header">
+                        <span class="outcome-icon">💰</span>
+                        <h4>ผลกระทบทางเศรษฐกิจ</h4>
+                    </div>
+                    <div class="outcome-items">
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="avgPrice">180 บาท/กก.</div>
+                            <div class="outcome-change positive">+25%</div>
+                            <div class="outcome-label">ราคาเฉลี่ยกาแฟ</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="farmerIncome">45,000 บาท</div>
+                            <div class="outcome-change positive">+35%</div>
+                            <div class="outcome-label">รายได้เกษตรกร/เดือน</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="intermediaryReduction">50%</div>
+                            <div class="outcome-change positive">-2 ขั้นตอน</div>
+                            <div class="outcome-label">ลดตัวกลาง</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outcome-category">
+                    <div class="outcome-header">
+                        <span class="outcome-icon">🤝</span>
+                        <h4>ผลกระทบทางสังคม</h4>
+                    </div>
+                    <div class="outcome-items">
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="farmersInSystem">247 ราย</div>
+                            <div class="outcome-change neutral">เป้า 500</div>
+                            <div class="outcome-label">เกษตรกรในระบบ</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="householdsBenefited">1,235</div>
+                            <div class="outcome-change positive">+15%</div>
+                            <div class="outcome-label">ครัวเรือนได้ประโยชน์</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="satisfactionScore">8.5/10</div>
+                            <div class="outcome-change positive">+1.2</div>
+                            <div class="outcome-label">ความพึงพอใจ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outcome-category">
+                    <div class="outcome-header">
+                        <span class="outcome-icon">🛡️</span>
+                        <h4>ความไว้วางใจ & โปร่งใส</h4>
+                    </div>
+                    <div class="outcome-items">
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="traceabilityTime">5 วินาที</div>
+                            <div class="outcome-change positive">100%</div>
+                            <div class="outcome-label">การตรวจสอบย้อนกลับ</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="fakeCoffeeReduction">87%</div>
+                            <div class="outcome-change positive">23%→3%</div>
+                            <div class="outcome-label">ลดกาแฟปลอม</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="brandPremium">35%</div>
+                            <div class="outcome-change positive">+45%</div>
+                            <div class="outcome-label">มูลค่าแบรนด์</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outcome-category">
+                    <div class="outcome-header">
+                        <span class="outcome-icon">🌱</span>
+                        <h4>ผลกระทบสิ่งแวดล้อม</h4>
+                    </div>
+                    <div class="outcome-items">
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="carbonReduction">25%</div>
+                            <div class="outcome-change positive">-CO₂</div>
+                            <div class="outcome-label">ลด Carbon Footprint</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="chemicalReduction">40%</div>
+                            <div class="outcome-change positive">-สารเคมี</div>
+                            <div class="outcome-label">ลดการใช้สารเคมี</div>
+                        </div>
+                        <div class="outcome-item">
+                            <div class="outcome-value" id="organicArea">120%</div>
+                            <div class="outcome-change positive">+พื้นที่</div>
+                            <div class="outcome-label">พื้นที่ออร์แกนิค</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="impact-summary">
+                <div class="summary-item">
+                    <span class="summary-icon">🎯</span>
+                    <div>
+                        <strong>เป้าหมายหลัก:</strong> สร้างระบบนิเวศกาแฟที่ยุติธรรม โปร่งใส และยั่งยืน
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">📈</span>
+                    <div>
+                        <strong>ผลสำเร็จ:</strong> เกษตรกรได้รับประโยชน์เพิ่มขึ้น 35% และผู้บริโภคเชื่อมั่นมากขึ้น 45%
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-icon">🚀</span>
+                    <div>
+                        <strong>อนาคต:</strong> ขยายผลไปยังพืชผลอื่นและเป็นต้นแบบ Blockchain Agriculture ของภูมิภาค
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Radar Chart Section -->
+        <div class="radar-section">
+            <h3>การวิเคราะห์ผลกระทบเชิงกลยุทธ์</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">การวิเคราะห์ประสิทธิผลของระบบบล็อกเชนแบบเรียลไทม์</p>
+            
+            <div class="radar-container">
+                <svg class="radar-chart" id="radarChart" viewBox="0 0 500 500">
+                    <!-- Background circles -->
+                    <g class="radar-background">
+                        <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                        <circle cx="250" cy="250" r="50" fill="none" stroke="rgba(49, 130, 206, 0.2)" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Axis lines -->
+                    <g class="radar-axes">
+                        <line x1="250" y1="50" x2="250" y2="450" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
+                        <line x1="423" y1="150" x2="77" y2="350" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
+                        <line x1="423" y1="350" x2="77" y2="150" stroke="rgba(49, 130, 206, 0.3)" stroke-width="2"/>
+                    </g>
+                    
+                    <!-- Labels in Thai -->
+                    <g class="radar-labels">
+                        <text x="250" y="35" text-anchor="middle">ผลกระทบเศรษฐกิจ</text>
+                        <text x="440" y="145" text-anchor="middle">ความไว้วางใจ</text>
+                        <text x="440" y="365" text-anchor="middle">ความยั่งยืน</text>
+                        <text x="250" y="480" text-anchor="middle">การแข่งขันในตลาด</text>
+                        <text x="60" y="365" text-anchor="middle">ความพร้อมอนาคต</text>
+                        <text x="60" y="145" text-anchor="middle">ความแข็งแกร่งเครือข่าย</text>
+                    </g>
+                    
+                    <!-- Data polygon -->
+                    <polygon id="radarPolygon" 
+                             fill="rgba(49, 130, 206, 0.2)" 
+                             stroke="#3182ce" 
+                             stroke-width="3"
+                             points="250,110 373,180 373,320 250,390 127,320 127,180"/>
+                    
+                    <!-- Data points -->
+                    <g class="radar-points">
+                        <circle id="point1" cx="250" cy="110" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point2" cx="373" cy="180" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point3" cx="373" cy="320" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point4" cx="250" cy="390" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point5" cx="127" cy="320" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                        <circle id="point6" cx="127" cy="180" r="5" fill="#3182ce" stroke="#fff" stroke-width="3"/>
+                    </g>
+                </svg>
+            </div>
+            
+            <div class="radar-metrics">
+                <div class="metric-item excellent" id="metric1">
+                    <div class="metric-label">💰 ผลกระทบเศรษฐกิจ</div>
+                    <div class="metric-value" id="economicValue">75%</div>
+                    <div class="metric-description">ราคายุติธรรม ลดตัวกลาง</div>
+                </div>
+                <div class="metric-item good" id="metric2">
+                    <div class="metric-label">🛡️ ความไว้วางใจ</div>
+                    <div class="metric-value" id="trustValue">85%</div>
+                    <div class="metric-description">การตรวจสอบย้อนกลับได้อย่างสมบูรณ์</div>
+                </div>
+                <div class="metric-item good" id="metric3">
+                    <div class="metric-label">🌱 ผลกระทบความยั่งยืน</div>
+                    <div class="metric-value" id="sustainabilityValue">70%</div>
+                    <div class="metric-description">ความรับผิดชอบต่อสิ่งแวดล้อมและสังคม</div>
+                </div>
+                <div class="metric-item excellent" id="metric4">
+                    <div class="metric-label">⚡ การแข่งขันในตลาด</div>
+                    <div class="metric-value" id="competitivenessValue">88%</div>
+                    <div class="metric-description">การรับประกันคุณภาพและมูลค่าแบรนด์</div>
+                </div>
+                <div class="metric-item excellent" id="metric5">
+                    <div class="metric-label">🔮 ความพร้อมอนาคต</div>
+                    <div class="metric-value" id="futurenessValue">92%</div>
+                    <div class="metric-description">การรวม AI และการยอมรับเทคโนโลยี</div>
+                </div>
+                <div class="metric-item good" id="metric6">
+                    <div class="metric-label">🤝 ความแข็งแกร่งเครือข่าย</div>
+                    <div class="metric-value" id="ecosystemValue">78%</div>
+                    <div class="metric-description">เครือข่ายผลกระทบและความร่วมมือ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="card">
+                <h3>📝 เพิ่มบันทึกห่วงโซ่อุปทาน</h3>
+                
+                <div class="form-group">
+                    <label for="stage">ขั้นตอนห่วงโซ่อุปทาน:</label>
+                    <select id="stage">
+                        <option value="farm">🌱 ฟาร์ม (การปลูก)</option>
+                        <option value="harvest">🌾 เก็บเกี่ยว (การเก็บเกี่ยว)</option>
+                        <option value="processing">⚙️ แปรรูป (การแปรรูป)</option>
+                        <option value="roasting">🔥 คั่ว (การคั่ว)</option>
+                        <option value="packaging">📦 บรรจุ (การบรรจุ)</option>
+                        <option value="distribution">🚛 จัดจำหน่าย (การจัดจำหน่าย)</option>
+                        <option value="retail">🏪 ขายปลีก (การขายปลีก)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">สถานที่:</label>
+                    <input type="text" id="location" placeholder="เช่น ดอยช้าง, เชียงราย">
+                </div>
+                
+                <div class="form-group">
+                    <label for="operator">ผู้ดำเนินการ:</label>
+                    <input type="text" id="operator" placeholder="ชื่อเกษตรกร/บริษัท">
+                </div>
+                
+                <div class="form-group">
+                    <label for="details">รายละเอียด:</label>
+                    <textarea id="details" rows="3" placeholder="รายละเอียดเพิ่มเติม เช่น พันธุ์กาแฟ, วิธีการแปรรูป"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quality">เกรดคุณภาพ:</label>
+                    <select id="quality">
+                        <option value="Premium">🏆 พรีเมียม</option>
+                        <option value="Grade A">🥇 เกรด A</option>
+                        <option value="Grade B">🥈 เกรด B</option>
+                        <option value="Standard">📋 มาตรฐาน</option>
+                    </select>
+                </div>
+                
+                <div class="alert success" id="successAlert"></div>
+                <div class="alert error" id="errorAlert"></div>
+                
+                <button class="btn" onclick="addToBlockchain()">เพิ่มใน Blockchain</button>
+            </div>
+            
+            <div class="card">
+                <h3>🔍 ติดตามประวัติกาแฟ</h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">🚀 ลองค้นหาด้วยรหัสตัวอย่าง:</p>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="filter-btn" onclick="searchSample('CR001')">CR001</button>
+                        <button class="filter-btn" onclick="searchSample('CR002')">CR002</button>
+                        <button class="filter-btn" onclick="searchSample('CR003')">CR003</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="searchId">รหัสกาแฟ:</label>
+                    <input type="text" id="searchId" placeholder="พิมพ์รหัสกาแฟ เช่น CR001">
+                </div>
+                <button class="btn" onclick="searchCoffee()">ค้นหาประวัติกาแฟ</button>
+                
+                <div class="coffee-info" id="coffeeInfo">
+                    <h4>☕ ประวัติห่วงโซ่อุปทานกาแฟ</h4>
+                    <div class="info-grid" id="coffeeDetails">
+                        <!-- Coffee details will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Blockchain Explorer -->
+        <div class="blockchain-section">
+            <h3>🔬 สำรวจ Blockchain</h3>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-secondary);">
+                บันทึก Blockchain ทั้งหมดเป็นอันแน่นอนและโปร่งใส
+            </p>
+            
+            <div class="search-controls">
+                <input type="text" class="search-input" id="blockSearch" placeholder="🔍 ค้นหาด้วยรหัสกาแฟ, สถานที่, หรือชื่อผู้ดำเนินการ...">
+                <select class="filter-select" id="stageFilter">
+                    <option value="">ทุกขั้นตอน</option>
+                    <option value="farm">🌱 ฟาร์ม</option>
+                    <option value="harvest">🌾 เก็บเกี่ยว</option>
+                    <option value="processing">⚙️ แปรรูป</option>
+                    <option value="roasting">🔥 คั่ว</option>
+                    <option value="packaging">📦 บรรจุ</option>
+                    <option value="distribution">🚛 จัดจำหน่าย</option>
+                    <option value="retail">🏪 ขายปลีก</option>
+                </select>
+                <button class="btn" style="width: auto; margin: 0; padding: 0.75rem 1.5rem;" onclick="filterBlocks()">กรอง</button>
+            </div>
+            
+            <!-- Quick Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn" onclick="quickFilter('CR001')">CR001</button>
+                <button class="filter-btn" onclick="quickFilter('ดอยช้าง')">ดอยช้าง</button>
+                <button class="filter-btn" onclick="quickFilter('Premium')">🏆 พรีเมียม</button>
+                <button class="filter-btn clear" onclick="clearFilter()">🗑️ ล้างตัวกรอง</button>
+            </div>
+            
+            <div class="blocks-container" id="blocks">
+                <!-- Blocks will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Advanced Blockchain System
+        class Block {
+            constructor(index, data, previousHash) {
+                this.index = index;
+                this.timestamp = new Date().toLocaleString('th-TH');
+                this.data = data;
+                this.previousHash = previousHash;
+                this.hash = this.calculateHash();
+                this.nonce = 0;
+            }
+            
+            calculateHash() {
+                try {
+                    const data = this.index + this.timestamp + JSON.stringify(this.data) + this.previousHash + this.nonce;
+                    
+                    // Simple hash function
+                    let hash = 0;
+                    for (let i = 0; i < data.length; i++) {
+                        const char = data.charCodeAt(i);
+                        hash = ((hash << 5) - hash) + char;
+                        hash = hash & hash;
+                    }
+                    return Math.abs(hash).toString(16).padStart(8, '0');
+                } catch (error) {
+                    console.error('Hash calculation error:', error);
+                    return '00000000';
+                }
+            }
+            
+            mineBlock(difficulty) {
+                const target = Array(Math.min(difficulty, 2) + 1).join("0");
+                let attempts = 0;
+                while (this.hash.substring(0, Math.min(difficulty, 2)) !== target && attempts < 1000) {
+                    this.nonce++;
+                    this.hash = this.calculateHash();
+                    attempts++;
+                }
+            }
+        }
+        
+        class Blockchain {
+            constructor() {
+                this.chain = [this.createGenesisBlock()];
+                this.difficulty = 1;
+                this.coffeeRecords = new Map();
+                this.operators = new Set();
+                this.locations = new Set();
+            }
+            
+            createGenesisBlock() {
+                const genesisData = {
+                    coffeeId: "GENESIS",
+                    stage: "system",
+                    location: "เครือข่าย Blockchain เชียงราย",
+                    operator: "ผู้ดูแลระบบ",
+                    details: "บล็อกต้นกำเนิด - การเริ่มต้นเครือข่าย",
+                    quality: "ระบบ",
+                    batchSize: "N/A",
+                    temperature: "N/A"
+                };
+                return new Block(0, genesisData, "0");
+            }
+            
+            getLatestBlock() {
+                return this.chain[this.chain.length - 1];
+            }
+            
+            addBlock(newBlock) {
+                newBlock.previousHash = this.getLatestBlock().hash;
+                newBlock.mineBlock(this.difficulty);
+                this.chain.push(newBlock);
+                
+                // Update records
+                const coffeeId = newBlock.data.coffeeId;
+                if (!this.coffeeRecords.has(coffeeId)) {
+                    this.coffeeRecords.set(coffeeId, []);
+                }
+                this.coffeeRecords.get(coffeeId).push(newBlock);
+                
+                // Update tracking sets
+                this.operators.add(newBlock.data.operator);
+                this.locations.add(newBlock.data.location);
+            }
+            
+            getCoffeeHistory(coffeeId) {
+                return this.coffeeRecords.get(coffeeId) || [];
+            }
+            
+            getBlocksByStage(stage) {
+                return this.chain.filter(block => block.data.stage === stage);
+            }
+            
+            searchBlocks(query) {
+                if (!query) return this.chain;
+                
+                const searchTerm = query.toLowerCase();
+                return this.chain.filter(block => 
+                    block.data.coffeeId.toLowerCase().includes(searchTerm) ||
+                    block.data.location.toLowerCase().includes(searchTerm) ||
+                    block.data.operator.toLowerCase().includes(searchTerm) ||
+                    block.data.details.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            getStats() {
+                return {
+                    totalBlocks: this.chain.length,
+                    totalCoffee: this.coffeeRecords.size,
+                    totalOperators: this.operators.size,
+                    totalLocations: this.locations.size
+                };
+            }
+        }
+        
+        // Strategic Analysis Class
+        class StrategicAnalyzer {
+            constructor(blockchain) {
+                this.blockchain = blockchain;
+                this.metrics = {
+                    economic: 75,
+                    trust: 85,
+                    sustainability: 70,
+                    competitiveness: 88,
+                    futureReadiness: 92,
+                    ecosystem: 78
+                };
+            }
+            
+            calculateEconomicImpact() {
+                try {
+                    const totalRecords = this.blockchain.chain.length - 1;
+                    if (totalRecords === 0) return 75;
+                    
+                    const coffeeIds = Array.from(this.blockchain.coffeeRecords.keys());
+                    let directTradeScore = 0;
+                    
+                    coffeeIds.forEach(coffeeId => {
+                        const history = this.blockchain.getCoffeeHistory(coffeeId);
+                        const stages = history.length;
+                        directTradeScore += Math.min(stages / 7, 1);
+                    });
+                    
+                    const avgDirectTrade = coffeeIds.length > 0 ? directTradeScore / coffeeIds.length : 0.7;
+                    const retailBlocks = this.blockchain.getBlocksByStage('retail').length;
+                    const farmBlocks = this.blockchain.getBlocksByStage('farm').length;
+                    const transparencyFactor = Math.min(retailBlocks, farmBlocks) > 0 ? 0.3 : 0.2;
+                    
+                    const result = Math.round((avgDirectTrade * 70 + transparencyFactor * 100 + 20));
+                    return Math.min(Math.max(result, 60), 95);
+                } catch (error) {
+                    console.error('Error calculating economic impact:', error);
+                    return 75;
+                }
+            }
+            
+            calculateTrustCredibility() {
+                try {
+                    const totalCoffeeIds = this.blockchain.coffeeRecords.size;
+                    if (totalCoffeeIds === 0) return 85;
+                    
+                    let completeJourneys = 0;
+                    let totalCompleteness = 0;
+                    
+                    this.blockchain.coffeeRecords.forEach((history, coffeeId) => {
+                        const stages = history.length;
+                        const completeness = Math.min(stages / 7, 1);
+                        totalCompleteness += completeness;
+                        
+                        if (stages >= 3) {
+                            completeJourneys++;
+                        }
+                    });
+                    
+                    const avgCompleteness = totalCompleteness / totalCoffeeIds;
+                    const completeJourneyRatio = completeJourneys / totalCoffeeIds;
+                    
+                    const result = Math.round((avgCompleteness * 50 + completeJourneyRatio * 30 + 30) * 100);
+                    return Math.min(Math.max(result, 70), 95);
+                } catch (error) {
+                    console.error('Error calculating trust credibility:', error);
+                    return 85;
+                }
+            }
+            
+            calculateSustainabilityImpact() {
+                try {
+                    const totalRecords = this.blockchain.chain.length - 1;
+                    if (totalRecords === 0) return 70;
+                    
+                    let sustainabilityScore = 0;
+                    const sustainabilityKeywords = ['อินทรีย์', 'organic', 'sustainable', 'eco', 'green'];
+                    
+                    this.blockchain.chain.forEach(block => {
+                        if (block.data.coffeeId === 'GENESIS') return;
+                        
+                        const details = (block.data.details || '').toLowerCase();
+                        const hasSustainabilityKeyword = sustainabilityKeywords.some(keyword => 
+                            details.includes(keyword.toLowerCase())
+                        );
+                        
+                        if (hasSustainabilityKeyword) {
+                            sustainabilityScore += 2;
+                        }
+                        
+                        if (block.data.temperature && block.data.humidity) {
+                            sustainabilityScore += 1;
+                        }
+                    });
+                    
+                    const sustainabilityRatio = sustainabilityScore / (totalRecords * 2);
+                    const result = Math.round(sustainabilityRatio * 60 + 40);
+                    return Math.min(Math.max(result, 60), 90);
+                } catch (error) {
+                    console.error('Error calculating sustainability impact:', error);
+                    return 70;
+                }
+            }
+            
+            calculateMarketCompetitiveness() {
+                try {
+                    const totalRecords = this.blockchain.chain.length - 1;
+                    if (totalRecords === 0) return 88;
+                    
+                    let premiumCount = 0;
+                    let totalQualityRecords = 0;
+                    
+                    this.blockchain.chain.forEach(block => {
+                        if (block.data.coffeeId === 'GENESIS') return;
+                        
+                        if (block.data.quality) {
+                            totalQualityRecords++;
+                            if (block.data.quality === 'Premium' || block.data.quality === 'Grade A') {
+                                premiumCount++;
+                            }
+                        }
+                    });
+                    
+                    const qualityRatio = totalQualityRecords > 0 ? premiumCount / totalQualityRecords : 0.6;
+                    const result = Math.round(qualityRatio * 60 + 30);
+                    return Math.min(Math.max(result, 75), 95);
+                } catch (error) {
+                    console.error('Error calculating market competitiveness:', error);
+                    return 88;
+                }
+            }
+            
+            calculateFutureReadiness() {
+                try {
+                    const totalRecords = this.blockchain.chain.length - 1;
+                    if (totalRecords === 0) return 92;
+                    
+                    let aiRecords = 0;
+                    let techAdoptionScore = 0;
+                    
+                    this.blockchain.chain.forEach(block => {
+                        if (block.data.coffeeId === 'GENESIS') return;
+                        
+                        if (block.data.isAIGenerated) {
+                            aiRecords++;
+                        }
+                        
+                        const details = (block.data.details || '').toLowerCase();
+                        const techKeywords = ['ai', 'iot', 'sensor', 'smart', 'automated', 'digital'];
+                        
+                        if (techKeywords.some(keyword => details.includes(keyword))) {
+                            techAdoptionScore += 1;
+                        }
+                    });
+                    
+                    const aiRatio = aiRecords / totalRecords;
+                    const techRatio = Math.min(techAdoptionScore / totalRecords, 1);
+                    
+                    const result = Math.round((aiRatio * 40 + techRatio * 30 + 40));
+                    return Math.min(Math.max(result, 80), 98);
+                } catch (error) {
+                    console.error('Error calculating future readiness:', error);
+                    return 92;
+                }
+            }
+            
+            calculateEcosystemStrength() {
+                try {
+                    const totalOperators = this.blockchain.operators.size;
+                    const totalLocations = this.blockchain.locations.size;
+                    const totalCoffeeIds = this.blockchain.coffeeRecords.size;
+                    
+                    if (totalOperators === 0) return 78;
+                    
+                    const operatorDiversity = Math.min(totalOperators / 10, 1);
+                    const locationDiversity = Math.min(totalLocations / 8, 1);
+                    const coffeeVariety = Math.min(totalCoffeeIds / 8, 1);
+                    
+                    const result = Math.round((operatorDiversity * 30 + locationDiversity * 30 + coffeeVariety * 20 + 25) * 100);
+                    return Math.min(Math.max(result, 65), 90);
+                } catch (error) {
+                    console.error('Error calculating ecosystem strength:', error);
+                    return 78;
+                }
+            }
+            
+            updateAllMetrics() {
+                this.metrics.economic = this.calculateEconomicImpact();
+                this.metrics.trust = this.calculateTrustCredibility();
+                this.metrics.sustainability = this.calculateSustainabilityImpact();
+                this.metrics.competitiveness = this.calculateMarketCompetitiveness();
+                this.metrics.futureReadiness = this.calculateFutureReadiness();
+                this.metrics.ecosystem = this.calculateEcosystemStrength();
+                
+                return this.metrics;
+            }
+        }
+        
+        // Global variables
+        const chiangRaiCoffeeChain = new Blockchain();
+        const strategicAnalyzer = new StrategicAnalyzer(chiangRaiCoffeeChain);
+        let currentDisplayedBlocks = [];
+        let autoUpdateInterval;
+        
+        // Sample data generation
+        function generateSampleData() {
+            const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005'];
+            const stages = ['farm', 'harvest', 'processing', 'roasting', 'packaging', 'distribution', 'retail'];
+            const locations = [
+                'ดอยช้าง, เชียงราย', 'แม่สาย, เชียงราย', 'เชียงแสน, เชียงราย', 
+                'แม่จัน, เชียงราย', 'เวียงแก่น, เชียงราย'
+            ];
+            const operators = [
+                'นายสมชาย ใจดี', 'นางสาวมาลี สุขใส', 'นายบุญมี รักษ์ดี',
+                'มูลนิธิแม่ฟ้าหลวง', 'สหกรณ์กาแฟดอยช้าง', 'บริษัท เชียงราย คอฟฟี่'
+            ];
+            const varieties = [
+                'อาราบิก้า พันธุ์คาตูรา', 'อาราบิก้า พันธุ์ทิปิก้า', 'อาราบิก้า พันธุ์บูร์บง'
+            ];
+            const qualities = ['Premium', 'Grade A', 'Grade B', 'Standard'];
+            
+            const sampleData = [];
+            
+            // Generate 20 sample records
+            for (let i = 0; i < 20; i++) {
+                const coffeeId = coffeeIds[Math.floor(Math.random() * coffeeIds.length)];
+                const stage = stages[Math.floor(Math.random() * stages.length)];
+                const location = locations[Math.floor(Math.random() * locations.length)];
+                const operator = operators[Math.floor(Math.random() * operators.length)];
+                const quality = qualities[Math.floor(Math.random() * qualities.length)];
+                
+                let details = '';
+                switch(stage) {
+                    case 'farm':
+                        details = `${varieties[Math.floor(Math.random() * varieties.length)]} ปลูกในระดับความสูง ${1000 + Math.floor(Math.random() * 500)} เมตร`;
+                        break;
+                    case 'harvest':
+                        details = `เก็บเกี่ยวด้วยมือ ผลสุก ${85 + Math.floor(Math.random() * 15)}% ปริมาณ ${50 + Math.floor(Math.random() * 200)} กิโลกรัม`;
+                        break;
+                    case 'processing':
+                        const processes = ['Washed Process', 'Natural Process', 'Honey Process'];
+                        details = `${processes[Math.floor(Math.random() * processes.length)]} อุณหภูมิ ${20 + Math.floor(Math.random() * 10)}°C`;
+                        break;
+                    case 'roasting':
+                        const roastLevels = ['Light Roast', 'Medium Roast', 'Dark Roast'];
+                        details = `${roastLevels[Math.floor(Math.random() * roastLevels.length)]} อุณหภูมิ ${180 + Math.floor(Math.random() * 40)}°C`;
+                        break;
+                    case 'packaging':
+                        details = `ถุงวาล์ว ขนาด ${250 + Math.floor(Math.random() * 750)}g วันผลิต ${new Date().toLocaleDateString('th-TH')}`;
+                        break;
+                    case 'distribution':
+                        details = `จัดส่งไปยัง ${Math.floor(Math.random() * 20) + 1} จุดจำหน่าย อุณหภูมิขนส่ง ${15 + Math.floor(Math.random() * 10)}°C`;
+                        break;
+                    case 'retail':
+                        details = `วางจำหน่ายในร้าน ราคา ${150 + Math.floor(Math.random() * 350)} บาท/แพ็ค`;
+                        break;
+                }
+                
+                sampleData.push({
+                    coffeeId: coffeeId,
+                    stage: stage,
+                    location: location,
+                    operator: operator,
+                    details: details,
+                    quality: quality,
+                    batchSize: `${50 + Math.floor(Math.random() * 200)} kg`,
+                    temperature: `${20 + Math.floor(Math.random() * 15)}°C`,
+                    humidity: `${40 + Math.floor(Math.random() * 30)}%`
+                });
+            }
+            
+            return sampleData;
+        }
+        
+        // Radar Chart Functions
+        function updateRadarChart(metrics) {
+            try {
+                const centerX = 250;
+                const centerY = 250;
+                const maxRadius = 200;
+                
+                const angles = [
+                    -Math.PI / 2,      // Top
+                    -Math.PI / 6,      // Top Right
+                    Math.PI / 6,       // Bottom Right
+                    Math.PI / 2,       // Bottom
+                    5 * Math.PI / 6,   // Bottom Left
+                    7 * Math.PI / 6    // Top Left
+                ];
+                
+                const values = [
+                    metrics.economic,
+                    metrics.trust,
+                    metrics.sustainability,
+                    metrics.competitiveness,
+                    metrics.futureReadiness,
+                    metrics.ecosystem
+                ];
+                
+                const positions = angles.map((angle, index) => ({
+                    x: centerX + Math.cos(angle) * (values[index] / 100) * maxRadius,
+                    y: centerY + Math.sin(angle) * (values[index] / 100) * maxRadius
+                }));
+                
+                // Update polygon
+                const polygon = document.getElementById('radarPolygon');
+                if (polygon) {
+                    const points = positions.map(pos => `${pos.x},${pos.y}`).join(' ');
+                    polygon.setAttribute('points', points);
+                }
+                
+                // Update points
+                positions.forEach((pos, index) => {
+                    const point = document.getElementById(`point${index + 1}`);
+                    if (point) {
+                        point.setAttribute('cx', pos.x);
+                        point.setAttribute('cy', pos.y);
+                    }
+                });
+                
+                // Update metric values
+                const valueElements = [
+                    'economicValue', 'trustValue', 'sustainabilityValue', 
+                    'competitivenessValue', 'futurenessValue', 'ecosystemValue'
+                ];
+                
+                valueElements.forEach((elementId, index) => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.textContent = values[index] + '%';
+                    }
+                });
+                
+                // Update metric styling
+                const metricIds = ['metric1', 'metric2', 'metric3', 'metric4', 'metric5', 'metric6'];
+                metricIds.forEach((metricId, index) => {
+                    updateMetricStyling(metricId, values[index]);
+                });
+                
+            } catch (error) {
+                console.error('Error updating radar chart:', error);
+            }
+        }
+        
+        function updateMetricStyling(metricId, value) {
+            const element = document.getElementById(metricId);
+            if (!element) return;
+            
+            element.classList.remove('excellent', 'good', 'average');
+            
+            if (value >= 80) {
+                element.classList.add('excellent');
+            } else if (value >= 60) {
+                element.classList.add('good');
+            } else {
+                element.classList.add('average');
+            }
+        }
+        
+        // AI Auto-Update System
+        function generateAIRecord() {
+            const coffeeIds = ['CR001', 'CR002', 'CR003', 'CR004', 'CR005'];
+            const stages = ['farm', 'harvest', 'processing', 'roasting', 'packaging'];
+            const locations = ['ดอยช้าง, เชียงราย', 'แม่สาย, เชียงราย', 'เชียงแสน, เชียงราย'];
+            const operators = ['ฟาร์ม AI อัจฉริยะ', 'ศูนย์แปรรูป IoT', 'โรงคั่วอัตโนมัติ'];
+            
+            const coffeeId = coffeeIds[Math.floor(Math.random() * coffeeIds.length)];
+            const stage = stages[Math.floor(Math.random() * stages.length)];
+            
+            return {
+                coffeeId: coffeeId,
+                stage: stage,
+                location: locations[Math.floor(Math.random() * locations.length)],
+                operator: operators[Math.floor(Math.random() * operators.length)],
+                details: `สร้างโดย AI: การตรวจสอบ ${stage} อัจฉริยะด้วยเซ็นเซอร์ IoT`,
+                quality: 'Premium',
+                batchSize: (80 + Math.floor(Math.random() * 120)) + ' kg',
+                temperature: (22 + Math.floor(Math.random() * 8)) + '°C',
+                humidity: (45 + Math.floor(Math.random() * 20)) + '%',
+                isAIGenerated: true
+            };
+        }
+        
+        function startAutoUpdate() {
+            if (autoUpdateInterval) clearInterval(autoUpdateInterval);
+            
+            autoUpdateInterval = setInterval(() => {
+                try {
+                    const aiRecord = generateAIRecord();
+                    const newBlock = new Block(chiangRaiCoffeeChain.chain.length, aiRecord, "");
+                    chiangRaiCoffeeChain.addBlock(newBlock);
+                    
+                    // Animate new block addition
+                    updateBlockchainDisplay();
+                    updateStats();
+                    
+                    // Show notification
+                    showAlert('🤖 AI อัปเดต: เพิ่มข้อมูล ' + aiRecord.coffeeId + ' (' + aiRecord.stage + ')', 'success');
+                    
+                    // Add visual effect to new block
+                    setTimeout(() => {
+                        const blocks = document.querySelectorAll('.block');
+                        if (blocks.length > 0) {
+                            const newBlock = blocks[0]; // Latest block is first
+                            newBlock.style.animation = 'slideIn 0.5s ease, glow 2s ease';
+                            newBlock.style.transform = 'scale(1.02)';
+                            
+                            setTimeout(() => {
+                                newBlock.style.transform = 'scale(1)';
+                            }, 1000);
+                        }
+                    }, 100);
+                    
+                } catch (error) {
+                    console.error('Error in auto-update:', error);
+                }
+            }, 25000); // Every 25 seconds for demo
+        }
+        
+        // Initialize blockchain with sample data
+        function initializeBlockchain() {
+            try {
+                const sampleData = generateSampleData();
+                
+                showAlert('🚀 เริ่มต้นระบบ Blockchain...', 'success');
+                
+                sampleData.forEach((data, index) => {
+                    setTimeout(() => {
+                        const block = new Block(chiangRaiCoffeeChain.chain.length, data, "");
+                        chiangRaiCoffeeChain.addBlock(block);
+                        
+                        // Update display progressively
+                        updateBlockchainDisplay();
+                        updateStats();
+                        
+                        if (index === sampleData.length - 1) {
+                            showAlert('✅ ระบบเริ่มต้นพร้อม ' + (sampleData.length + 1) + ' บล็อก', 'success');
+                            
+                            // Start AI auto-update after initialization
+                            setTimeout(() => {
+                                startAutoUpdate();
+                                showAlert('🤖 ระบบอัปเดตอัตโนมัติ AI เริ่มทำงานแล้ว', 'success');
+                            }, 2000);
+                        }
+                    }, index * 200); // Animation delay
+                });
+            } catch (error) {
+                console.error('Error in initializeBlockchain:', error);
+                updateBlockchainDisplay();
+                updateStats();
+                showAlert('⚠️ เริ่มต้นระบบด้วยข้อมูลพื้นฐาน', 'error');
+            }
+        }
+        
+        // Alert system
+        function showAlert(message, type) {
+            const alertElement = document.getElementById(type + 'Alert');
+            if (alertElement) {
+                alertElement.textContent = message;
+                alertElement.classList.add('show');
+                
+                setTimeout(() => {
+                    alertElement.classList.remove('show');
+                }, 5000);
+            }
+        }
+        
+        // Add new record to blockchain
+        function addToBlockchain() {
+            try {
+                const stage = document.getElementById('stage').value;
+                const location = document.getElementById('location').value;
+                const operator = document.getElementById('operator').value;
+                const details = document.getElementById('details').value;
+                const quality = document.getElementById('quality').value;
+                
+                if (!location || !operator) {
+                    showAlert('❌ กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+                    return;
+                }
+                
+                // Generate coffee ID
+                const coffeeId = 'CR' + String(Date.now()).slice(-6);
+                
+                const newData = {
+                    coffeeId: coffeeId,
+                    stage: stage,
+                    location: location,
+                    operator: operator,
+                    details: details,
+                    quality: quality,
+                    batchSize: (50 + Math.floor(Math.random() * 200)) + ' kg',
+                    temperature: (20 + Math.floor(Math.random() * 15)) + '°C',
+                    humidity: (40 + Math.floor(Math.random() * 30)) + '%'
+                };
+                
+                const newBlock = new Block(chiangRaiCoffeeChain.chain.length, newData, "");
+                chiangRaiCoffeeChain.addBlock(newBlock);
+                
+                // Clear form
+                document.getElementById('location').value = '';
+                document.getElementById('operator').value = '';
+                document.getElementById('details').value = '';
+                
+                showAlert('✅ บันทึกข้อมูลเรียบร้อย | รหัส: ' + coffeeId, 'success');
+                
+                updateBlockchainDisplay();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error adding to blockchain:', error);
+                showAlert('❌ เกิดข้อผิดพลาด: ' + error.message, 'error');
+            }
+        }
+        
+        // Search coffee history
+        function searchCoffee() {
+            const searchId = document.getElementById('searchId').value.trim();
+            if (!searchId) {
+                showAlert('❌ กรุณาใส่รหัสกาแฟ', 'error');
+                return;
+            }
+            
+            const history = chiangRaiCoffeeChain.getCoffeeHistory(searchId);
+            const coffeeInfo = document.getElementById('coffeeInfo');
+            const coffeeDetails = document.getElementById('coffeeDetails');
+            
+            if (history.length === 0) {
+                showAlert('❌ ไม่พบข้อมูลกาแฟรหัสนี้', 'error');
+                coffeeInfo.classList.remove('show');
+                return;
+            }
+            
+            // Display coffee history
+            coffeeDetails.innerHTML = '';
+            history.forEach((block, index) => {
+                const stageNames = {
+                    'farm': '🌱 การปลูก',
+                    'harvest': '🌾 การเก็บเกี่ยว',
+                    'processing': '⚙️ การแปรรูป',
+                    'roasting': '🔥 การคั่ว',
+                    'packaging': '📦 การบรรจุ',
+                    'distribution': '🚛 การจัดจำหน่าย',
+                    'retail': '🏪 การขายปลีก'
+                };
+                
+                const stageDiv = document.createElement('div');
+                stageDiv.className = 'info-item';
+                
+                // Add special styling for AI-generated records
+                if (block.data.isAIGenerated) {
+                    stageDiv.style.borderLeftColor = 'var(--success)';
+                    stageDiv.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span>🤖</span>
+                            <strong>${stageNames[block.data.stage] || block.data.stage}</strong>
+                            <span class="ai-badge">สร้างโดย AI</span>
+                        </div>
+                        📍 สถานที่: ${block.data.location}<br>
+                        👤 ผู้ดำเนินการ: ${block.data.operator}<br>
+                        📋 รายละเอียด: ${block.data.details}<br>
+                        ⭐ คุณภาพ: ${block.data.quality}<br>
+                        📦 ขนาดแบทช์: ${block.data.batchSize || 'N/A'}<br>
+                        🌡️ อุณหภูมิ: ${block.data.temperature || 'N/A'}<br>
+                        💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
+                        ⏰ เวลา: ${block.timestamp}
+                    `;
+                } else {
+                    stageDiv.innerHTML = `
+                        <strong>${stageNames[block.data.stage] || block.data.stage}</strong><br>
+                        📍 สถานที่: ${block.data.location}<br>
+                        👤 ผู้ดำเนินการ: ${block.data.operator}<br>
+                        📋 รายละเอียด: ${block.data.details}<br>
+                        ⭐ คุณภาพ: ${block.data.quality}<br>
+                        📦 ขนาดแบทช์: ${block.data.batchSize || 'N/A'}<br>
+                        🌡️ อุณหภูมิ: ${block.data.temperature || 'N/A'}<br>
+                        💧 ความชื้น: ${block.data.humidity || 'N/A'}<br>
+                        ⏰ เวลา: ${block.timestamp}
+                    `;
+                }
+                
+                coffeeDetails.appendChild(stageDiv);
+            });
+            
+            coffeeInfo.classList.add('show');
+            showAlert('✅ พบประวัติกาแฟ ' + history.length + ' รายการ', 'success');
+        }
+        
+        // Search coffee with sample ID
+        function searchSample(coffeeId) {
+            document.getElementById('searchId').value = coffeeId;
+            searchCoffee();
+        }
+        
+        // Filter blocks
+        function filterBlocks() {
+            const searchQuery = document.getElementById('blockSearch').value;
+            const stageFilter = document.getElementById('stageFilter').value;
+            
+            let filteredBlocks = chiangRaiCoffeeChain.searchBlocks(searchQuery);
+            
+            if (stageFilter) {
+                filteredBlocks = filteredBlocks.filter(block => block.data.stage === stageFilter);
+            }
+            
+            currentDisplayedBlocks = filteredBlocks;
+            displayBlocks(filteredBlocks);
+        }
+        
+        // Display blocks
+        function displayBlocks(blocks) {
+            const blocksContainer = document.getElementById('blocks');
+            if (!blocksContainer) return;
+            
+            blocksContainer.innerHTML = '';
+            
+            if (blocks.length === 0) {
+                blocksContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">ไม่พบข้อมูลที่ตรงกับการค้นหา</p>';
+                return;
+            }
+            
+            // Show latest blocks first
+            const reversedBlocks = [...blocks].reverse();
+            
+            reversedBlocks.forEach((block, index) => {
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'block';
+                
+                // Add special styling for AI-generated blocks
+                if (block.data.isAIGenerated) {
+                    blockDiv.classList.add('ai-generated');
+                }
+                
+                const stageNames = {
+                    'farm': '🌱 การปลูก',
+                    'harvest': '🌾 การเก็บเกี่ยว',
+                    'processing': '⚙️ การแปรรูป',
+                    'roasting': '🔥 การคั่ว',
+                    'packaging': '📦 การบรรจุ',
+                    'distribution': '🚛 การจัดจำหน่าย',
+                    'retail': '🏪 การขายปลีก',
+                    'system': '🏛️ ระบบ'
+                };
+                
+                let blockHeader = `
+                    <div class="block-header">
+                        <div class="block-id">BLOCK #${block.index}</div>
+                        <div class="block-time">${block.timestamp || 'N/A'}</div>
+                    </div>
+                `;
+                
+                if (block.data.isAIGenerated) {
+                    blockHeader = `
+                        <div class="block-header">
+                            <div class="block-id">
+                                🤖 BLOCK #${block.index} 
+                                <span class="ai-badge">AI Generated</span>
+                            </div>
+                            <div class="block-time">${block.timestamp || 'N/A'}</div>
+                        </div>
+                    `;
+                }
+                
+                blockDiv.innerHTML = 
+                    blockHeader +
+                    `<div class="block-data">
+                        <strong>🏷️ รหัสกาแฟ:</strong> ${block.data.coffeeId || 'N/A'}<br>
+                        <strong>📋 ขั้นตอน:</strong> ${stageNames[block.data.stage] || block.data.stage}<br>
+                        <strong>📍 สถานที่:</strong> ${block.data.location || 'N/A'}<br>
+                        <strong>👤 ผู้ดำเนินการ:</strong> ${block.data.operator || 'N/A'}<br>
+                        <strong>📝 รายละเอียด:</strong> ${block.data.details || 'N/A'}<br>
+                        <strong>⭐ คุณภาพ:</strong> ${block.data.quality || 'N/A'}<br>
+                        ${block.data.batchSize ? '<strong>📦 ขนาดแบทช์:</strong> ' + block.data.batchSize + '<br>' : ''}
+                        ${block.data.temperature ? '<strong>🌡️ อุณหภูมิ:</strong> ' + block.data.temperature + '<br>' : ''}
+                        ${block.data.humidity ? '<strong>💧 ความชื้น:</strong> ' + block.data.humidity + '<br>' : ''}
+                    </div>
+                    <div class="block-hash">HASH: ${block.hash || 'N/A'}</div>`;
+                
+                blocksContainer.appendChild(blockDiv);
+            });
+        }
+        
+        // Update blockchain display
+        function updateBlockchainDisplay() {
+            currentDisplayedBlocks = chiangRaiCoffeeChain.chain;
+            displayBlocks(currentDisplayedBlocks);
+        }
+        
+        // Update impact outcomes dynamically
+        function updateImpactOutcomes() {
+            const stats = chiangRaiCoffeeChain.getStats();
+            const totalRecords = stats.totalBlocks - 1; // Exclude genesis block
+            
+            // Calculate dynamic outcomes based on blockchain data
+            const avgPriceIncrease = Math.min(totalRecords * 2 + 15, 35); // 15-35% increase
+            const farmerIncomeIncrease = Math.min(totalRecords * 3 + 20, 45); // 20-45% increase
+            const farmersInSystem = Math.min(stats.totalOperators * 35, 500); // Up to 500 farmers
+            const satisfactionScore = Math.min(7.5 + (totalRecords / 20), 9.5); // 7.5-9.5 score
+            
+            // Update DOM elements
+            const updates = {
+                'avgPrice': `${150 + avgPriceIncrease} บาท/กก.`,
+                'farmerIncome': `${35000 + (farmerIncomeIncrease * 500)} บาท`,
+                'farmersInSystem': `${farmersInSystem} ราย`,
+                'satisfactionScore': `${satisfactionScore.toFixed(1)}/10`,
+                'traceabilityTime': `${Math.max(10 - totalRecords / 5, 3)} วินาที`,
+                'carbonReduction': `${Math.min(totalRecords + 15, 30)}%`,
+                'chemicalReduction': `${Math.min(totalRecords * 2 + 25, 50)}%`,
+                'organicArea': `${Math.min(totalRecords * 5 + 80, 150)}%`
+            };
+            
+            Object.entries(updates).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            });
+        }
+        function updateStats() {
+            const stats = chiangRaiCoffeeChain.getStats();
+            
+            const totalBlocksElement = document.getElementById('totalBlocks');
+            const totalCoffeeElement = document.getElementById('totalCoffee');
+            const totalFarmsElement = document.getElementById('totalFarms');
+            
+            if (totalBlocksElement) totalBlocksElement.textContent = stats.totalBlocks;
+            if (totalCoffeeElement) totalCoffeeElement.textContent = stats.totalCoffee;
+            if (totalFarmsElement) totalFarmsElement.textContent = stats.totalOperators;
+            
+            // Update radar chart with strategic metrics
+            try {
+                const metrics = strategicAnalyzer.updateAllMetrics();
+                updateRadarChart(metrics);
+            } catch (error) {
+                console.error('Error updating strategic metrics:', error);
+            }
+        }
+        
+        // Quick filter functions
+        function quickFilter(term) {
+            document.getElementById('blockSearch').value = term;
+            filterBlocks();
+        }
+        
+        function clearFilter() {
+            document.getElementById('blockSearch').value = '';
+            document.getElementById('stageFilter').value = '';
+            filterBlocks();
+        }
+        
+        // Initialize system
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                setTimeout(() => {
+                    initializeBlockchain();
+                    console.log('✅ Blockchain initialized successfully');
+                }, 100);
+            } catch (error) {
+                console.error('Error initializing blockchain:', error);
+                showAlert('❌ เกิดข้อผิดพลาดในการเริ่มต้นระบบ: ' + error.message, 'error');
+            }
+        });
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search on Enter key for block search
+            const blockSearchElement = document.getElementById('blockSearch');
+            if (blockSearchElement) {
+                blockSearchElement.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        filterBlocks();
+                    }
+                });
+            }
+            
+            // Search on Enter key for coffee search
+            const searchIdElement = document.getElementById('searchId');
+            if (searchIdElement) {
+                searchIdElement.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchCoffee();
+                    }
+                });
+            }
+            
+            // Auto-filter on stage change
+            const stageFilterElement = document.getElementById('stageFilter');
+            if (stageFilterElement) {
+                stageFilterElement.addEventListener('change', function() {
+                    filterBlocks();
+                });
+            }
+            
+            // Auto-populate details based on stage
+            const addStageElement = document.getElementById('stage');
+            if (addStageElement) {
+                addStageElement.addEventListener('change', function() {
+                    const stage = this.value;
+                    const detailsElement = document.getElementById('details');
+                    if (detailsElement && !detailsElement.value) {
+                        switch(stage) {
+                            case 'farm':
+                                detailsElement.placeholder = 'เช่น: อาราบิก้า พันธุ์คาตูรา ปลูกในระดับความสูง 1200 เมตร';
+                                break;
+                            case 'harvest':
+                                detailsElement.placeholder = 'เช่น: เก็บเกี่ยวด้วยมือ ผลสุก 90% ปริมาณ 150 กิโลกรัม';
+                                break;
+                            case 'processing':
+                                detailsElement.placeholder = 'เช่น: Washed Process อุณหภูมิ 25°C เวลาหมัก 24 ชั่วโมง';
+                                break;
+                            case 'roasting':
+                                detailsElement.placeholder = 'เช่น: Medium Roast อุณหภูมิ 200°C เวลา 12 นาที';
+                                break;
+                            case 'packaging':
+                                detailsElement.placeholder = 'เช่น: ถุงวาล์ว ขนาด 500g วันผลิต วันนี้';
+                                break;
+                            case 'distribution':
+                                detailsElement.placeholder = 'เช่น: จัดส่งไปยัง 15 จุดจำหน่าย อุณหภูมิขนส่ง 18°C';
+                                break;
+                            case 'retail':
+                                detailsElement.placeholder = 'เช่น: วางจำหน่ายในร้าน ราคา 280 บาท/แพ็ค';
+                                break;
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+F to focus search
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                const searchElement = document.getElementById('blockSearch');
+                if (searchElement) {
+                    searchElement.focus();
+                }
+            }
+        });
+        
+        // Export functions for external use
+        if (typeof window !== 'undefined') {
+            window.chiangRaiBlockchain = {
+                addToBlockchain,
+                searchCoffee,
+                searchSample,
+                quickFilter,
+                clearFilter,
+                filterBlocks,
+                updateStats
+            };
+        }
+    </script>
+</body>
+</html>

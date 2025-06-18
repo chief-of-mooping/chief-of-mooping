@@ -3,17 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Check-in นิสิต</title>
+  <title>Dashboard รายงานเช็คชื่อ</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    #export-btn { margin-top: 1rem; }
+  </style>
 </head>
 <body>
-  <h1>เข้าสู่ระบบเพื่อเช็คชื่อ</h1>
-  <p id="user-info"></p>
-  <button id="login-btn">🔐 Login ด้วยบัญชี @up.ac.th</button>
-  <button id="logout-btn" style="display:none;">Logout</button>
-  <p id="result"></p>
+  <h1>📊 รายงานการเช็คชื่อ</h1>
+  <input type="date" id="date-input" />
+  <button onclick="loadCheckins()">โหลดข้อมูล</button>
+  <button id="export-btn" onclick="exportCSV()">📤 Export CSV</button>
+  <table id="checkin-table" style="display:none;">
+    <thead>
+      <tr>
+        <th>รหัสนิสิต</th>
+        <th>ชื่อ</th>
+        <th>Email</th>
+        <th>เวลาเช็คชื่อ</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p id="status"></p>
 
   <script>
     const firebaseConfig = {
@@ -26,71 +44,53 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const studentList = ["65011610", "65011621", "65011632", "65011643", "65011665", "65011687", "65011698", "65012464", "65012778", "65072024", "65072025", "65072034", "65072046", "65072074", "65072081", "65072094", "65072100", "65072131", "65072148", "65072157", "65072158", "65072159", "65072170", "65072180", "65072206", "65077015", "66023670", "66070123", "66072004", "66072006", "66072011", "66072017", "66072018", "66072026", "66072044", "66072056", "66072075", "66072078", "66072096", "66072099", "66072104", "66072107", "66072108", "66072113", "66072116", "66072139", "66072148", "66072174", "66072175", "66072179", "66202196"]
-
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const resultP = document.getElementById('result');
-    const userInfo = document.getElementById('user-info');
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    let sessionId = "";
-
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token));
-        sessionId = decoded.session;
-      } catch (err) {
-        resultP.textContent = "❌ Token ไม่ถูกต้อง";
+    async function loadCheckins() {
+      const date = document.getElementById('date-input').value;
+      if (!date) {
+        alert('กรุณาเลือกวันที่');
+        return;
       }
-    } else {
-      resultP.textContent = "❌ ไม่พบ token ใน URL";
+
+      const tbody = document.querySelector('#checkin-table tbody');
+      tbody.innerHTML = '';
+
+      try {
+        const snapshot = await db.collection("checkins").doc(date).collection("students").get();
+        if (snapshot.empty) {
+          document.getElementById('status').textContent = 'ไม่พบข้อมูลสำหรับวันที่เลือก';
+          document.getElementById('checkin-table').style.display = 'none';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${doc.id}</td>
+            <td>${data.name || ''}</td>
+            <td>${data.email}</td>
+            <td>${data.checkin_time?.toDate().toLocaleString('th-TH') || '-'}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        document.getElementById('checkin-table').style.display = 'table';
+        document.getElementById('status').textContent = '';
+      } catch (err) {
+        document.getElementById('status').textContent = 'เกิดข้อผิดพลาด: ' + err.message;
+      }
     }
 
-    loginBtn.onclick = () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider);
-    };
-
-    logoutBtn.onclick = () => auth.signOut();
-
-    auth.onAuthStateChanged(async (user) => {
-      if (user && user.email.endsWith('@up.ac.th')) {
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline';
-        userInfo.textContent = `👋 สวัสดี ${user.email}`;
-
-        const studentId = user.email.split('@')[0];
-        if (!studentList.includes(studentId)) {
-          resultP.textContent = "❌ ไม่พบรหัสนิสิตในรายชื่อ";
-          return;
-        }
-
-        if (!sessionId) {
-          resultP.textContent = "❌ ไม่พบ session สำหรับเช็คชื่อ";
-          return;
-        }
-
-        try {
-          await db.collection("checkins").doc(sessionId).collection("students").doc(studentId).set({
-            email: user.email,
-            name: user.displayName,
-            checkin_time: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          resultP.textContent = "✅ เช็คชื่อเรียบร้อยแล้ว";
-        } catch (err) {
-          resultP.textContent = "❌ บันทึกข้อมูลล้มเหลว: " + err.message;
-        }
-      } else {
-        userInfo.textContent = "";
-        loginBtn.style.display = 'inline';
-        logoutBtn.style.display = 'none';
-      }
-    });
+    function exportCSV() {
+      const rows = Array.from(document.querySelectorAll('#checkin-table tr'));
+      const csv = rows.map(row => Array.from(row.children).map(td => '"' + td.innerText + '"').join(",")).join("\n");
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'checkin_report.csv';
+      link.click();
+    }
   </script>
 </body>
 </html>

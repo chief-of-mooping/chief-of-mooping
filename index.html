@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Check-in UP</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <h1>ระบบเช็คชื่อผ่าน QR Code (UP)</h1>
+  <div id="user-area"></div>
+  <div id="qr"></div>
+  <p id="status"></p>
+  <button id="login-btn">🔐 Login ด้วย @up.ac.th</button>
+  <button id="logout-btn" style="display:none;">Logout</button>
+  <button id="checkin-btn" style="display:none;">✅ เช็คชื่อ</button>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeD73Yg2QhPXl0dD40uvCsVejpf38OYeY",
+      authDomain: "qr-checkin-up.firebaseapp.com",
+      projectId: "qr-checkin-up",
+      storageBucket: "qr-checkin-up.firebasestorage.app",
+      messagingSenderId: "780428257804",
+      appId: "1:780428257804:web:31b68ff043623144679c29"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const checkinBtn = document.getElementById('checkin-btn');
+    const userArea = document.getElementById('user-area');
+    const statusP = document.getElementById('status');
+    const qrDiv = document.getElementById('qr');
+
+    const studentList = ["65011610", "65011621", "65011632", "65011643", "65011665", "65011687", "65011698", "65012464", "65012778", "65072024", "65072025", "65072034", "65072046", "65072074", "65072081", "65072094", "65072100", "65072131", "65072148", "65072157", "65072158", "65072159", "65072170", "65072180", "65072206", "65077015", "66023670", "66070123", "66072004", "66072006", "66072011", "66072017", "66072018", "66072026", "66072044", "66072056", "66072075", "66072078", "66072096", "66072099", "66072104", "66072107", "66072108", "66072113", "66072116", "66072139", "66072148", "66072174", "66072175", "66072179", "66202196"]
+
+    let currentUser = null;
+
+    loginBtn.onclick = () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider);
+    };
+
+    logoutBtn.onclick = () => auth.signOut();
+
+    auth.onAuthStateChanged(user => {
+      if (user && user.email.endsWith('@up.ac.th')) {
+        currentUser = user;
+        userArea.innerHTML = `<p>👋 สวัสดี ${user.email}</p>`;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline';
+        checkinBtn.style.display = 'inline';
+      } else {
+        if (user) auth.signOut();
+        currentUser = null;
+        userArea.innerHTML = '';
+        loginBtn.style.display = 'inline';
+        logoutBtn.style.display = 'none';
+        checkinBtn.style.display = 'none';
+      }
+    });
+
+    checkinBtn.onclick = async () => {
+      if (!currentUser) return;
+      const studentId = currentUser.email.split('@')[0];
+      if (!studentList.includes(studentId)) {
+        statusP.textContent = "❌ ไม่พบรหัสนิสิตในรายชื่อ";
+        return;
+      }
+      const today = new Date().toISOString().split('T')[0];
+      await db.collection("checkins").doc(today).collection("students").doc(studentId).set({
+        email: currentUser.email,
+        name: currentUser.displayName,
+        checkin_time: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      statusP.textContent = "✅ เช็คชื่อเรียบร้อยแล้ว";
+    };
+
+    // QR Code Section
+    function generateQR() {
+      const sessionId = new Date().toISOString().split('T')[0];
+      const token = btoa(JSON.stringify({ session: sessionId, timestamp: Date.now() }));
+      qrDiv.innerHTML = '';
+      QRCode.toCanvas(document.createElement('canvas'), token, (err, canvas) => {
+        if (!err) qrDiv.appendChild(canvas);
+      });
+    }
+
+    setInterval(generateQR, 30000);
+    generateQR();
+  </script>
+</body>
+</html>

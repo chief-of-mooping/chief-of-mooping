@@ -1,33 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR Check-in UP</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <title>ระบบศูนย์กลางเช็คชื่อ</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 1rem; }
+    .card {
+      border: 1px solid #ccc;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .card h2 { margin-top: 0; }
+    .btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #0066cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    .btn:hover { background-color: #004f99; }
+  </style>
 </head>
 <body>
-  <h1>QR สำหรับเช็คชื่อ (สแกนแล้วเข้าสู่ระบบ)</h1>
-  <div id="qr"></div>
-  <p id="status"></p>
+  <h1>📚 ระบบศูนย์กลางเช็คชื่อนิสิต ม.พะเยา</h1>
 
-  <script>
-    function generateQR() {
-      const sessionId = new Date().toISOString().split('T')[0];
-      const token = btoa(JSON.stringify({ session: sessionId, timestamp: Date.now() }));
-      const targetUrl = `https://kittisak.github.io/qr-checkin-up/checkin.html?token=${token}`;
+  <div class="card">
+    <h2>🧾 เริ่มคาบเรียน (แสดง QR Code)</h2>
+    <p>สำหรับอาจารย์เพื่อแสดง QR ให้นิสิตสแกน</p>
+    <a href="index.html" class="btn">➡️ เปิดหน้าแสดง QR</a>
+  </div>
 
-      const qrDiv = document.getElementById('qr');
-      qrDiv.innerHTML = '';
-      const canvas = document.createElement('canvas');
-      QRCode.toCanvas(canvas, targetUrl, (err) => {
-        if (!err) qrDiv.appendChild(canvas);
-        else document.getElementById('status').textContent = 'เกิดข้อผิดพลาดในการสร้าง QR';
-      });
-    }
+  <div class="card">
+    <h2>📱 สแกน QR เพื่อลงชื่อ</h2>
+    <p>สำหรับนิสิต ใช้โทรศัพท์สแกน QR → ระบบจะพาไปหน้าลงชื่ออัตโนมัติ</p>
+    <code>QR จะลิงก์ไปยัง <strong>checkin.html?token=...</strong></code>
+  </div>
 
-    setInterval(generateQR, 30000);
-    generateQR();
-  </script>
+  <div class="card">
+    <h2>📊 ดูรายงานการเช็คชื่อ</h2>
+    <p>ดูรายชื่อคนที่มาเรียน แยกตามวันที่ พร้อม export ได้</p>
+    <a href="dashboard.html" class="btn">📈 เปิดรายงาน</a>
+  </div>
+
+  <footer style="margin-top: 2rem; font-size: 0.85rem; text-align: center; color: #888;">
+    Powered by Firebase + GitHub Pages | เวอร์ชันทดลองใช้สำหรับ ม.พะเยา
+  </footer>
 </body>
 </html>

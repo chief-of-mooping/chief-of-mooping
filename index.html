@@ -1,96 +1,33 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard รายงานเช็คชื่อ</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
-    #export-btn { margin-top: 1rem; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Check-in UP</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>📊 รายงานการเช็คชื่อ</h1>
-  <input type="date" id="date-input" />
-  <button onclick="loadCheckins()">โหลดข้อมูล</button>
-  <button id="export-btn" onclick="exportCSV()">📤 Export CSV</button>
-  <table id="checkin-table" style="display:none;">
-    <thead>
-      <tr>
-        <th>รหัสนิสิต</th>
-        <th>ชื่อ</th>
-        <th>Email</th>
-        <th>เวลาเช็คชื่อ</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <h1>QR สำหรับเช็คชื่อ (สแกนแล้วเข้าสู่ระบบ)</h1>
+  <div id="qr"></div>
   <p id="status"></p>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeD73Yg2QhPXl0dD40uvCsVejpf38OYeY",
-      authDomain: "qr-checkin-up.firebaseapp.com",
-      projectId: "qr-checkin-up",
-      storageBucket: "qr-checkin-up.firebasestorage.app",
-      messagingSenderId: "780428257804",
-      appId: "1:780428257804:web:31b68ff043623144679c29"
-    };
+    function generateQR() {
+      const sessionId = new Date().toISOString().split('T')[0];
+      const token = btoa(JSON.stringify({ session: sessionId, timestamp: Date.now() }));
+      const targetUrl = `https://kittisak.github.io/qr-checkin-up/checkin.html?token=${token}`;
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    async function loadCheckins() {
-      const date = document.getElementById('date-input').value;
-      if (!date) {
-        alert('กรุณาเลือกวันที่');
-        return;
-      }
-
-      const tbody = document.querySelector('#checkin-table tbody');
-      tbody.innerHTML = '';
-
-      try {
-        const snapshot = await db.collection("checkins").doc(date).collection("students").get();
-        if (snapshot.empty) {
-          document.getElementById('status').textContent = 'ไม่พบข้อมูลสำหรับวันที่เลือก';
-          document.getElementById('checkin-table').style.display = 'none';
-          return;
-        }
-
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${doc.id}</td>
-            <td>${data.name || ''}</td>
-            <td>${data.email}</td>
-            <td>${data.checkin_time?.toDate().toLocaleString('th-TH') || '-'}</td>
-          `;
-          tbody.appendChild(row);
-        });
-        document.getElementById('checkin-table').style.display = 'table';
-        document.getElementById('status').textContent = '';
-      } catch (err) {
-        document.getElementById('status').textContent = 'เกิดข้อผิดพลาด: ' + err.message;
-      }
+      const qrDiv = document.getElementById('qr');
+      qrDiv.innerHTML = '';
+      const canvas = document.createElement('canvas');
+      QRCode.toCanvas(canvas, targetUrl, (err) => {
+        if (!err) qrDiv.appendChild(canvas);
+        else document.getElementById('status').textContent = 'เกิดข้อผิดพลาดในการสร้าง QR';
+      });
     }
 
-    function exportCSV() {
-      const rows = Array.from(document.querySelectorAll('#checkin-table tr'));
-      const csv = rows.map(row => Array.from(row.children).map(td => '"' + td.innerText + '"').join(",")).join("\n");
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'checkin_report.csv';
-      link.click();
-    }
+    setInterval(generateQR, 30000);
+    generateQR();
   </script>
 </body>
 </html>

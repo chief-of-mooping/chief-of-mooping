@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR Check-in UP</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in นิสิต</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>QR สำหรับเช็คชื่อ (สแกนแล้วเข้าสู่ระบบ)</h1>
-  <div id="qr"></div>
-  <p id="status"></p>
+  <h1>เข้าสู่ระบบเพื่อเช็คชื่อ</h1>
+  <p id="user-info"></p>
+  <button id="login-btn">🔐 Login ด้วยบัญชี @up.ac.th</button>
+  <button id="logout-btn" style="display:none;">Logout</button>
+  <p id="result"></p>
 
   <script>
     const firebaseConfig = {
@@ -25,21 +26,71 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const qrDiv = document.getElementById('qr');
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    function generateQR() {
-      const sessionId = new Date().toISOString().split('T')[0];
-      const token = btoa(JSON.stringify({ session: sessionId, timestamp: Date.now() }));
-      const targetUrl = `https://kittisak.github.io/qr-checkin-up/checkin.html?token=${token}`;
+    const studentList = ["65011610", "65011621", "65011632", "65011643", "65011665", "65011687", "65011698", "65012464", "65012778", "65072024", "65072025", "65072034", "65072046", "65072074", "65072081", "65072094", "65072100", "65072131", "65072148", "65072157", "65072158", "65072159", "65072170", "65072180", "65072206", "65077015", "66023670", "66070123", "66072004", "66072006", "66072011", "66072017", "66072018", "66072026", "66072044", "66072056", "66072075", "66072078", "66072096", "66072099", "66072104", "66072107", "66072108", "66072113", "66072116", "66072139", "66072148", "66072174", "66072175", "66072179", "66202196"]
 
-      qrDiv.innerHTML = '';
-      QRCode.toCanvas(document.createElement('canvas'), targetUrl, (err, canvas) => {
-        if (!err) qrDiv.appendChild(canvas);
-      });
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const resultP = document.getElementById('result');
+    const userInfo = document.getElementById('user-info');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    let sessionId = "";
+
+    if (token) {
+      try {
+        const decoded = JSON.parse(atob(token));
+        sessionId = decoded.session;
+      } catch (err) {
+        resultP.textContent = "❌ Token ไม่ถูกต้อง";
+      }
+    } else {
+      resultP.textContent = "❌ ไม่พบ token ใน URL";
     }
 
-    setInterval(generateQR, 30000);
-    generateQR();
+    loginBtn.onclick = () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider);
+    };
+
+    logoutBtn.onclick = () => auth.signOut();
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user && user.email.endsWith('@up.ac.th')) {
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline';
+        userInfo.textContent = `👋 สวัสดี ${user.email}`;
+
+        const studentId = user.email.split('@')[0];
+        if (!studentList.includes(studentId)) {
+          resultP.textContent = "❌ ไม่พบรหัสนิสิตในรายชื่อ";
+          return;
+        }
+
+        if (!sessionId) {
+          resultP.textContent = "❌ ไม่พบ session สำหรับเช็คชื่อ";
+          return;
+        }
+
+        try {
+          await db.collection("checkins").doc(sessionId).collection("students").doc(studentId).set({
+            email: user.email,
+            name: user.displayName,
+            checkin_time: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          resultP.textContent = "✅ เช็คชื่อเรียบร้อยแล้ว";
+        } catch (err) {
+          resultP.textContent = "❌ บันทึกข้อมูลล้มเหลว: " + err.message;
+        }
+      } else {
+        userInfo.textContent = "";
+        loginBtn.style.display = 'inline';
+        logoutBtn.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
